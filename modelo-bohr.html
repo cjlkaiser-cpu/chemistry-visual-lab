@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo de Bohr - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e2e8f0;
+            display: flex;
+        }
+
+        .chalk-font {
+            font-family: 'Covered By Your Grace', cursive;
+        }
+
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Canvas Section */
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .title-bar {
+            margin-bottom: 15px;
+        }
+
+        .title-bar h1 {
+            font-size: 1.8rem;
+            color: #22d3ee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title-bar h1 a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .title-bar h1 a:hover {
+            color: #22d3ee;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        #canvas {
+            flex: 1;
+            width: 100%;
+            min-height: 0;
+            background: radial-gradient(ellipse at center, #0f172a 0%, #020617 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        /* Control Panel */
+        .controls {
+            width: 320px;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border-left: 1px solid rgba(34, 211, 238, 0.2);
+            padding: 20px;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #22d3ee;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        /* Sliders */
+        .slider-group {
+            margin-bottom: 16px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .slider-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .slider-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #22d3ee;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #334155;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+        }
+
+        /* Buttons */
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+            color: #0f172a;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .btn-excite {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+        }
+
+        .btn-excite:hover {
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+        }
+
+        /* Element Selector */
+        .element-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .element-btn {
+            padding: 8px 4px;
+            border: 2px solid #334155;
+            border-radius: 6px;
+            background: #1e293b;
+            color: #94a3b8;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .element-btn:hover {
+            border-color: #22d3ee;
+            color: #22d3ee;
+        }
+
+        .element-btn.active {
+            background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+            color: #0f172a;
+            border-color: #22d3ee;
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .info-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            color: #22d3ee;
+            margin-top: 2px;
+        }
+
+        /* Equation */
+        .equation-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .equation {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #f1f5f9;
+        }
+
+        .equation sub {
+            font-size: 0.7em;
+        }
+
+        /* Spectrum Display */
+        .spectrum-container {
+            background: #000;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 12px;
+        }
+
+        .spectrum-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+
+        #spectrum-canvas {
+            width: 100%;
+            height: 40px;
+            border-radius: 4px;
+        }
+
+        /* Toggle */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .toggle-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #334155;
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+        }
+
+        .toggle input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Transition indicator */
+        .transition-indicator {
+            background: rgba(249, 115, 22, 0.1);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 12px;
+            text-align: center;
+            display: none;
+        }
+
+        .transition-indicator.active {
+            display: block;
+        }
+
+        .transition-text {
+            font-size: 0.85rem;
+            color: #fb923c;
+        }
+
+        .photon-info {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #fbbf24;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-section">
+        <div class="title-bar">
+            <h1><a href="index.html">&larr;</a> Modelo de Bohr</h1>
+            <p class="subtitle">Saltos electr&oacute;nicos y espectros de emisi&oacute;n</p>
+        </div>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <h3>Elemento</h3>
+            <div class="element-grid">
+                <button class="element-btn active" data-z="1">H</button>
+                <button class="element-btn" data-z="2">He</button>
+                <button class="element-btn" data-z="3">Li</button>
+                <button class="element-btn" data-z="4">Be</button>
+                <button class="element-btn" data-z="5">B</button>
+                <button class="element-btn" data-z="6">C</button>
+                <button class="element-btn" data-z="7">N</button>
+                <button class="element-btn" data-z="8">O</button>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Configuraci&oacute;n</h3>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Nivel inicial n<sub>i</sub></span>
+                    <span class="slider-value" id="niDisplay">3</span>
+                </div>
+                <input type="range" id="niSlider" min="2" max="7" value="3">
+            </div>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Nivel final n<sub>f</sub></span>
+                    <span class="slider-value" id="nfDisplay">1</span>
+                </div>
+                <input type="range" id="nfSlider" min="1" max="6" value="1">
+            </div>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Velocidad de animaci&oacute;n</span>
+                    <span class="slider-value" id="speedDisplay">1.0x</span>
+                </div>
+                <input type="range" id="speedSlider" min="0.2" max="3" step="0.1" value="1">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Controles</h3>
+            <div class="btn-row">
+                <button class="btn btn-excite" id="exciteBtn">Excitar Electr&oacute;n</button>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-primary" id="emitBtn">Emitir Fot&oacute;n</button>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-secondary" id="resetBtn">Reiniciar</button>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Visualizaci&oacute;n</h3>
+            <div class="toggle-group">
+                <span class="toggle-label">Mostrar &oacute;rbitas</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showOrbits" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Mostrar n&uacute;meros cu&aacute;nticos</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showQuantum" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Mostrar energ&iacute;as</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showEnergy" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Ecuaci&oacute;n de Rydberg</h3>
+            <div class="equation-box">
+                <div class="equation">
+                    1/&lambda; = R<sub>H</sub>Z&sup2;(1/n<sub>f</sub>&sup2; - 1/n<sub>i</sub>&sup2;)
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Datos de Transici&oacute;n</h3>
+            <div class="info-card">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Longitud de Onda</div>
+                        <div class="info-value" id="wavelengthValue">121.5 nm</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Energ&iacute;a</div>
+                        <div class="info-value" id="energyValue">10.2 eV</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Frecuencia</div>
+                        <div class="info-value" id="frequencyValue">2.47 PHz</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Serie</div>
+                        <div class="info-value" id="seriesValue">Lyman</div>
+                    </div>
+                </div>
+            </div>
+            <div class="transition-indicator" id="transitionIndicator">
+                <div class="transition-text">Transici&oacute;n en progreso...</div>
+                <div class="photon-info" id="photonInfo">&lambda; = 121.5 nm</div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Espectro de Emisi&oacute;n</h3>
+            <div class="spectrum-container">
+                <div class="spectrum-label">Espectro visible (380-700 nm)</div>
+                <canvas id="spectrum-canvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Constants
+        const R_H = 1.097e7; // Rydberg constant (m^-1)
+        const h = 6.626e-34; // Planck constant (J·s)
+        const c = 3e8; // Speed of light (m/s)
+        const eV = 1.602e-19; // Electron volt (J)
+
+        // Element data
+        const elements = {
+            1: { symbol: 'H', name: 'Hidr\u00f3geno', electrons: [1], color: '#22d3ee' },
+            2: { symbol: 'He', name: 'Helio', electrons: [2], color: '#fbbf24' },
+            3: { symbol: 'Li', name: 'Litio', electrons: [2, 1], color: '#f87171' },
+            4: { symbol: 'Be', name: 'Berilio', electrons: [2, 2], color: '#a3e635' },
+            5: { symbol: 'B', name: 'Boro', electrons: [2, 3], color: '#fb923c' },
+            6: { symbol: 'C', name: 'Carbono', electrons: [2, 4], color: '#94a3b8' },
+            7: { symbol: 'N', name: 'Nitr\u00f3geno', electrons: [2, 5], color: '#60a5fa' },
+            8: { symbol: 'O', name: 'Ox\u00edgeno', electrons: [2, 6], color: '#f472b6' }
+        };
+
+        // Series names
+        const seriesNames = {
+            1: 'Lyman (UV)',
+            2: 'Balmer (Vis)',
+            3: 'Paschen (IR)',
+            4: 'Brackett (IR)',
+            5: 'Pfund (IR)',
+            6: 'Humphreys (IR)'
+        };
+
+        // Canvas setup
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const spectrumCanvas = document.getElementById('spectrum-canvas');
+        const spectrumCtx = spectrumCanvas.getContext('2d');
+
+        // State
+        let W, H;
+        let currentZ = 1;
+        let ni = 3;
+        let nf = 1;
+        let speed = 1;
+        let showOrbits = true;
+        let showQuantum = true;
+        let showEnergy = true;
+
+        // Animation state
+        let electrons = [];
+        let photons = [];
+        let transitioning = false;
+        let transitionProgress = 0;
+        let transitionElectron = null;
+        let emittedLines = [];
+
+        // Initialize
+        function init() {
+            const rect = canvas.getBoundingClientRect();
+            W = rect.width;
+            H = rect.height;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = W * dpr;
+            canvas.height = H * dpr;
+            ctx.scale(dpr, dpr);
+
+            // Spectrum canvas
+            const specRect = spectrumCanvas.getBoundingClientRect();
+            spectrumCanvas.width = specRect.width * dpr;
+            spectrumCanvas.height = specRect.height * dpr;
+            spectrumCtx.scale(dpr, dpr);
+
+            setupElectrons();
+            updateTransitionInfo();
+            drawSpectrum();
+            draw();
+        }
+
+        function setupElectrons() {
+            electrons = [];
+            const elem = elements[currentZ];
+            let electronIndex = 0;
+
+            elem.electrons.forEach((count, shellIndex) => {
+                const n = shellIndex + 1;
+                for (let i = 0; i < count; i++) {
+                    electrons.push({
+                        n: n,
+                        angle: (2 * Math.PI * i) / count + Math.random() * 0.5,
+                        speed: 0.02 / n,
+                        originalN: n
+                    });
+                    electronIndex++;
+                }
+            });
+        }
+
+        function getOrbitRadius(n) {
+            const maxRadius = Math.min(W, H) * 0.35;
+            return 30 + (n * n) * (maxRadius - 30) / 49; // n^2 scaling
+        }
+
+        function calculateWavelength(Z, ni, nf) {
+            if (ni <= nf) return Infinity;
+            const invLambda = R_H * Z * Z * (1/(nf*nf) - 1/(ni*ni));
+            return 1 / invLambda; // meters
+        }
+
+        function calculateEnergy(Z, ni, nf) {
+            const lambda = calculateWavelength(Z, ni, nf);
+            if (lambda === Infinity) return 0;
+            return (h * c / lambda) / eV; // eV
+        }
+
+        function wavelengthToColor(wavelength) {
+            // wavelength in nm
+            let r, g, b;
+            if (wavelength < 380) {
+                // UV - shown as purple
+                r = 0.5; g = 0; b = 1;
+            } else if (wavelength < 440) {
+                r = (440 - wavelength) / 60;
+                g = 0;
+                b = 1;
+            } else if (wavelength < 490) {
+                r = 0;
+                g = (wavelength - 440) / 50;
+                b = 1;
+            } else if (wavelength < 510) {
+                r = 0;
+                g = 1;
+                b = (510 - wavelength) / 20;
+            } else if (wavelength < 580) {
+                r = (wavelength - 510) / 70;
+                g = 1;
+                b = 0;
+            } else if (wavelength < 645) {
+                r = 1;
+                g = (645 - wavelength) / 65;
+                b = 0;
+            } else if (wavelength <= 700) {
+                r = 1;
+                g = 0;
+                b = 0;
+            } else {
+                // IR - shown as dark red
+                r = 0.5; g = 0; b = 0;
+            }
+
+            return `rgb(${Math.floor(r*255)}, ${Math.floor(g*255)}, ${Math.floor(b*255)})`;
+        }
+
+        function updateTransitionInfo() {
+            const lambda = calculateWavelength(currentZ, ni, nf);
+            const energy = calculateEnergy(currentZ, ni, nf);
+            const freq = c / lambda;
+
+            if (lambda !== Infinity && ni > nf) {
+                const lambdaNm = lambda * 1e9;
+                document.getElementById('wavelengthValue').textContent =
+                    lambdaNm < 1000 ? `${lambdaNm.toFixed(1)} nm` : `${(lambdaNm/1000).toFixed(2)} \u00b5m`;
+                document.getElementById('energyValue').textContent = `${energy.toFixed(2)} eV`;
+                document.getElementById('frequencyValue').textContent =
+                    freq > 1e15 ? `${(freq/1e15).toFixed(2)} PHz` : `${(freq/1e12).toFixed(1)} THz`;
+                document.getElementById('seriesValue').textContent = seriesNames[nf] || `n=${nf}`;
+                document.getElementById('photonInfo').textContent = `\u03bb = ${lambdaNm.toFixed(1)} nm`;
+            } else {
+                document.getElementById('wavelengthValue').textContent = '-';
+                document.getElementById('energyValue').textContent = '-';
+                document.getElementById('frequencyValue').textContent = '-';
+                document.getElementById('seriesValue').textContent = '-';
+            }
+        }
+
+        function drawSpectrum() {
+            const w = spectrumCanvas.width / (window.devicePixelRatio || 1);
+            const h = spectrumCanvas.height / (window.devicePixelRatio || 1);
+
+            // Draw visible spectrum background
+            const grad = spectrumCtx.createLinearGradient(0, 0, w, 0);
+            for (let i = 0; i <= 10; i++) {
+                const wl = 380 + (i / 10) * 320;
+                grad.addColorStop(i / 10, wavelengthToColor(wl));
+            }
+            spectrumCtx.fillStyle = grad;
+            spectrumCtx.globalAlpha = 0.3;
+            spectrumCtx.fillRect(0, 0, w, h);
+            spectrumCtx.globalAlpha = 1;
+
+            // Draw emission lines
+            emittedLines.forEach(line => {
+                if (line.wavelength >= 380 && line.wavelength <= 700) {
+                    const x = ((line.wavelength - 380) / 320) * w;
+                    spectrumCtx.strokeStyle = wavelengthToColor(line.wavelength);
+                    spectrumCtx.lineWidth = 3;
+                    spectrumCtx.globalAlpha = Math.min(1, line.intensity);
+                    spectrumCtx.beginPath();
+                    spectrumCtx.moveTo(x, 0);
+                    spectrumCtx.lineTo(x, h);
+                    spectrumCtx.stroke();
+                    spectrumCtx.globalAlpha = 1;
+                }
+            });
+
+            // Decay intensity
+            emittedLines = emittedLines.map(l => ({ ...l, intensity: l.intensity * 0.995 }))
+                                       .filter(l => l.intensity > 0.1);
+        }
+
+        function exciteElectron() {
+            if (transitioning) return;
+
+            // Find an electron to excite
+            const electronToExcite = electrons.find(e => e.n < ni);
+            if (electronToExcite) {
+                transitioning = true;
+                transitionProgress = 0;
+                transitionElectron = electronToExcite;
+                transitionElectron.targetN = ni;
+                transitionElectron.startN = transitionElectron.n;
+                transitionElectron.excitation = true;
+
+                document.getElementById('transitionIndicator').classList.add('active');
+                document.querySelector('.transition-text').textContent = 'Excitando electr\u00f3n...';
+            }
+        }
+
+        function emitPhoton() {
+            if (transitioning) return;
+
+            // Find an excited electron
+            const excitedElectron = electrons.find(e => e.n > nf && e.n >= ni);
+            if (!excitedElectron) {
+                // Excite first if needed
+                const electronToUse = electrons.find(e => e.n === nf || e.n < ni);
+                if (electronToUse) {
+                    electronToUse.n = ni;
+                }
+            }
+
+            const electronToDecay = electrons.find(e => e.n >= ni && e.n > nf);
+            if (electronToDecay && ni > nf) {
+                transitioning = true;
+                transitionProgress = 0;
+                transitionElectron = electronToDecay;
+                transitionElectron.targetN = nf;
+                transitionElectron.startN = electronToDecay.n;
+                transitionElectron.excitation = false;
+
+                document.getElementById('transitionIndicator').classList.add('active');
+                document.querySelector('.transition-text').textContent = 'Emitiendo fot\u00f3n...';
+
+                // Create photon
+                const lambda = calculateWavelength(currentZ, transitionElectron.startN, nf);
+                const lambdaNm = lambda * 1e9;
+                photons.push({
+                    x: W / 2,
+                    y: H / 2,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    wavelength: lambdaNm,
+                    color: wavelengthToColor(lambdaNm),
+                    life: 100
+                });
+
+                // Add to spectrum
+                emittedLines.push({ wavelength: lambdaNm, intensity: 2 });
+            }
+        }
+
+        function draw() {
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, W, H);
+
+            const cx = W / 2;
+            const cy = H / 2;
+
+            // Draw energy level diagram on the right
+            if (showEnergy) {
+                drawEnergyDiagram(cx, cy);
+            }
+
+            // Draw orbits
+            if (showOrbits) {
+                for (let n = 1; n <= 7; n++) {
+                    const r = getOrbitRadius(n);
+                    ctx.strokeStyle = `rgba(34, 211, 238, ${0.1 + 0.05 * (8 - n)})`;
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([5, 5]);
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    // Quantum numbers
+                    if (showQuantum) {
+                        ctx.fillStyle = 'rgba(148, 163, 184, 0.6)';
+                        ctx.font = '12px Fira Code';
+                        ctx.fillText(`n=${n}`, cx + r + 8, cy + 4);
+                    }
+                }
+            }
+
+            // Draw nucleus
+            const nucleusSize = 8 + currentZ * 2;
+            const nucleusGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, nucleusSize);
+            nucleusGrad.addColorStop(0, '#22d3ee');
+            nucleusGrad.addColorStop(0.5, '#0891b2');
+            nucleusGrad.addColorStop(1, '#164e63');
+            ctx.fillStyle = nucleusGrad;
+            ctx.beginPath();
+            ctx.arc(cx, cy, nucleusSize, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Nucleus glow
+            ctx.shadowColor = '#22d3ee';
+            ctx.shadowBlur = 20;
+            ctx.beginPath();
+            ctx.arc(cx, cy, nucleusSize, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Draw element symbol
+            ctx.fillStyle = '#0f172a';
+            ctx.font = `bold ${nucleusSize}px Inter`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(elements[currentZ].symbol, cx, cy);
+
+            // Update and draw electrons
+            electrons.forEach((electron, idx) => {
+                let currentN = electron.n;
+                let r = getOrbitRadius(currentN);
+
+                // Handle transition animation
+                if (transitioning && electron === transitionElectron) {
+                    const startR = getOrbitRadius(electron.startN);
+                    const endR = getOrbitRadius(electron.targetN);
+                    r = startR + (endR - startR) * transitionProgress;
+                }
+
+                electron.angle += electron.speed * speed;
+                const x = cx + Math.cos(electron.angle) * r;
+                const y = cy + Math.sin(electron.angle) * r;
+
+                // Electron glow
+                const glowGrad = ctx.createRadialGradient(x, y, 0, x, y, 15);
+                glowGrad.addColorStop(0, 'rgba(34, 211, 238, 0.8)');
+                glowGrad.addColorStop(1, 'rgba(34, 211, 238, 0)');
+                ctx.fillStyle = glowGrad;
+                ctx.beginPath();
+                ctx.arc(x, y, 15, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Electron
+                ctx.fillStyle = '#67e8f9';
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Update transition
+            if (transitioning) {
+                transitionProgress += 0.02 * speed;
+                if (transitionProgress >= 1) {
+                    transitionElectron.n = transitionElectron.targetN;
+                    transitioning = false;
+                    transitionProgress = 0;
+                    document.getElementById('transitionIndicator').classList.remove('active');
+                }
+            }
+
+            // Draw and update photons
+            photons = photons.filter(photon => {
+                photon.x += photon.vx;
+                photon.y += photon.vy;
+                photon.life--;
+
+                // Wavy photon path
+                const wave = Math.sin(photon.life * 0.3) * 3;
+                const perpX = -photon.vy / Math.sqrt(photon.vx*photon.vx + photon.vy*photon.vy);
+                const perpY = photon.vx / Math.sqrt(photon.vx*photon.vx + photon.vy*photon.vy);
+
+                ctx.fillStyle = photon.color;
+                ctx.globalAlpha = photon.life / 100;
+                ctx.beginPath();
+                ctx.arc(photon.x + perpX * wave, photon.y + perpY * wave, 4, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Photon trail
+                ctx.strokeStyle = photon.color;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                for (let i = 0; i < 10; i++) {
+                    const tx = photon.x - photon.vx * i * 0.3;
+                    const ty = photon.y - photon.vy * i * 0.3;
+                    const tw = Math.sin((photon.life + i * 3) * 0.3) * 3;
+                    if (i === 0) ctx.moveTo(tx + perpX * tw, ty + perpY * tw);
+                    else ctx.lineTo(tx + perpX * tw, ty + perpY * tw);
+                }
+                ctx.stroke();
+                ctx.globalAlpha = 1;
+
+                return photon.life > 0 && photon.x > 0 && photon.x < W && photon.y > 0 && photon.y < H;
+            });
+
+            // Draw spectrum
+            drawSpectrum();
+
+            requestAnimationFrame(draw);
+        }
+
+        function drawEnergyDiagram(cx, cy) {
+            const diagramX = W - 150;
+            const diagramY = 50;
+            const diagramH = H - 100;
+
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
+            ctx.fillRect(diagramX - 20, diagramY - 20, 140, diagramH + 40);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Niveles de Energ\u00eda', diagramX + 50, diagramY - 5);
+
+            // Draw energy levels
+            for (let n = 1; n <= 7; n++) {
+                const E = -13.6 * currentZ * currentZ / (n * n);
+                const y = diagramY + diagramH - (diagramH * (E + 14) / 14);
+
+                ctx.strokeStyle = n === ni ? '#f97316' : (n === nf ? '#22d3ee' : 'rgba(148, 163, 184, 0.3)');
+                ctx.lineWidth = n === ni || n === nf ? 2 : 1;
+                ctx.beginPath();
+                ctx.moveTo(diagramX, y);
+                ctx.lineTo(diagramX + 80, y);
+                ctx.stroke();
+
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '10px Fira Code';
+                ctx.textAlign = 'left';
+                ctx.fillText(`n=${n}`, diagramX + 85, y + 4);
+                ctx.textAlign = 'right';
+                ctx.fillText(`${E.toFixed(1)} eV`, diagramX - 5, y + 4);
+            }
+
+            // Draw transition arrow
+            if (ni > nf) {
+                const y1 = diagramY + diagramH - (diagramH * (-13.6 * currentZ * currentZ / (ni * ni) + 14) / 14);
+                const y2 = diagramY + diagramH - (diagramH * (-13.6 * currentZ * currentZ / (nf * nf) + 14) / 14);
+
+                ctx.strokeStyle = wavelengthToColor(calculateWavelength(currentZ, ni, nf) * 1e9);
+                ctx.lineWidth = 2;
+                ctx.setLineDash([4, 4]);
+                ctx.beginPath();
+                ctx.moveTo(diagramX + 40, y1);
+                ctx.lineTo(diagramX + 40, y2);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Arrow head
+                ctx.beginPath();
+                ctx.moveTo(diagramX + 40, y2);
+                ctx.lineTo(diagramX + 35, y2 - 8);
+                ctx.lineTo(diagramX + 45, y2 - 8);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        // Event listeners
+        document.querySelectorAll('.element-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.element-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentZ = parseInt(btn.dataset.z);
+                setupElectrons();
+                emittedLines = [];
+                updateTransitionInfo();
+            });
+        });
+
+        document.getElementById('niSlider').oninput = function() {
+            ni = parseInt(this.value);
+            if (nf >= ni) {
+                nf = ni - 1;
+                document.getElementById('nfSlider').value = nf;
+                document.getElementById('nfDisplay').textContent = nf;
+            }
+            document.getElementById('niDisplay').textContent = ni;
+            updateTransitionInfo();
+        };
+
+        document.getElementById('nfSlider').oninput = function() {
+            nf = parseInt(this.value);
+            if (nf >= ni) {
+                nf = ni - 1;
+                this.value = nf;
+            }
+            document.getElementById('nfDisplay').textContent = nf;
+            updateTransitionInfo();
+        };
+
+        document.getElementById('speedSlider').oninput = function() {
+            speed = parseFloat(this.value);
+            document.getElementById('speedDisplay').textContent = speed.toFixed(1) + 'x';
+        };
+
+        document.getElementById('showOrbits').onchange = function() {
+            showOrbits = this.checked;
+        };
+
+        document.getElementById('showQuantum').onchange = function() {
+            showQuantum = this.checked;
+        };
+
+        document.getElementById('showEnergy').onchange = function() {
+            showEnergy = this.checked;
+        };
+
+        document.getElementById('exciteBtn').onclick = exciteElectron;
+        document.getElementById('emitBtn').onclick = emitPhoton;
+        document.getElementById('resetBtn').onclick = () => {
+            setupElectrons();
+            photons = [];
+            emittedLines = [];
+            transitioning = false;
+        };
+
+        window.onload = init;
+        window.onresize = init;
+    </script>
+</body>
+</html>

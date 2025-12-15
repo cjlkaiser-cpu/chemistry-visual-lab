@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tendencias Peri&oacute;dicas - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e2e8f0;
+            display: flex;
+        }
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            height: 100%;
+            min-width: 0;
+        }
+        .title-bar { margin-bottom: 15px; }
+        .title-bar h1 {
+            font-size: 1.8rem;
+            color: #06b6d4;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .title-bar h1 a { color: #64748b; text-decoration: none; font-size: 1.2rem; }
+        .title-bar h1 a:hover { color: #06b6d4; }
+        .subtitle { color: #64748b; font-size: 0.9rem; margin-top: 5px; }
+        #canvas {
+            flex: 1;
+            width: 100%;
+            min-height: 0;
+            background: #020617;
+            border-radius: 12px;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        .controls {
+            width: 300px;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border-left: 1px solid rgba(6, 182, 212, 0.2);
+            padding: 20px;
+            overflow-y: auto;
+            height: 100%;
+        }
+        .control-group { margin-bottom: 20px; }
+        .control-group h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #06b6d4;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        .property-btn {
+            display: block;
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 6px;
+            border: 2px solid #334155;
+            border-radius: 6px;
+            background: #1e293b;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        .property-btn:hover { border-color: #06b6d4; color: #06b6d4; }
+        .property-btn.active {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            color: #0f172a;
+            border-color: #06b6d4;
+        }
+        .element-display {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .element-symbol {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #22d3ee;
+        }
+        .element-name { font-size: 1rem; color: #e2e8f0; margin: 4px 0; }
+        .element-number { font-size: 0.85rem; color: #64748b; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+        .info-item { text-align: center; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; }
+        .info-label { font-size: 0.65rem; color: #64748b; text-transform: uppercase; }
+        .info-value { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: #22d3ee; margin-top: 2px; }
+        .scale-bar {
+            height: 20px;
+            border-radius: 10px;
+            margin: 12px 0;
+            position: relative;
+        }
+        .scale-labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: #64748b; }
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .toggle-label { font-size: 0.85rem; color: #94a3b8; }
+        .toggle { position: relative; width: 44px; height: 24px; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute; cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #334155; border-radius: 24px; transition: 0.3s;
+        }
+        .toggle-slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px;
+            left: 3px; bottom: 3px; background: white;
+            border-radius: 50%; transition: 0.3s;
+        }
+        .toggle input:checked + .toggle-slider { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
+        .toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
+    </style>
+</head>
+<body>
+    <div class="canvas-section">
+        <div class="title-bar">
+            <h1><a href="index.html">&larr;</a> Tendencias Peri&oacute;dicas</h1>
+            <p class="subtitle">Exploraci&oacute;n interactiva de propiedades at&oacute;micas</p>
+        </div>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <h3>Propiedad</h3>
+            <button class="property-btn active" data-prop="atomicRadius">Radio At&oacute;mico</button>
+            <button class="property-btn" data-prop="ionizationEnergy">Energ&iacute;a de Ionizaci&oacute;n</button>
+            <button class="property-btn" data-prop="electronegativity">Electronegatividad</button>
+            <button class="property-btn" data-prop="electronAffinity">Afinidad Electr&oacute;nica</button>
+            <button class="property-btn" data-prop="meltingPoint">Punto de Fusi&oacute;n</button>
+        </div>
+
+        <div class="control-group">
+            <h3>Elemento Seleccionado</h3>
+            <div class="element-display">
+                <div class="element-number" id="elemNumber">Z = 1</div>
+                <div class="element-symbol" id="elemSymbol">H</div>
+                <div class="element-name" id="elemName">Hidr&oacute;geno</div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Radio (pm)</div>
+                        <div class="info-value" id="elemRadius">53</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">E. Ioniz. (eV)</div>
+                        <div class="info-value" id="elemIE">13.6</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Electroneg.</div>
+                        <div class="info-value" id="elemEN">2.20</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Config.</div>
+                        <div class="info-value" id="elemConfig">1s<sup>1</sup></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Escala de Color</h3>
+            <div class="scale-bar" id="scaleBar" style="background: linear-gradient(90deg, #3b82f6 0%, #22c55e 50%, #ef4444 100%);"></div>
+            <div class="scale-labels">
+                <span id="scaleMin">Bajo</span>
+                <span id="scaleMax">Alto</span>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Visualizaci&oacute;n</h3>
+            <div class="toggle-group">
+                <span class="toggle-label">Mostrar valores</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showValues">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Mostrar tendencias</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showTrends" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Resaltar grupo</span>
+                <label class="toggle">
+                    <input type="checkbox" id="highlightGroup">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Tendencias</h3>
+            <div style="font-size: 0.8rem; color: #94a3b8; line-height: 1.6;">
+                <p><strong style="color: #06b6d4;">Periodo &rarr;</strong> <span id="trendPeriod">Radio disminuye</span></p>
+                <p style="margin-top: 8px;"><strong style="color: #06b6d4;">Grupo &darr;</strong> <span id="trendGroup">Radio aumenta</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let W, H;
+        let selectedElement = 1;
+        let currentProperty = 'atomicRadius';
+        let showValues = false;
+        let showTrends = true;
+        let highlightGroup = false;
+        let hoveredElement = null;
+
+        // Element data (first 54 elements)
+        const elements = [
+            null, // 0 index placeholder
+            { symbol: 'H', name: 'Hidrógeno', group: 1, period: 1, atomicRadius: 53, ionizationEnergy: 13.6, electronegativity: 2.20, electronAffinity: 0.75, meltingPoint: 14, config: '1s¹' },
+            { symbol: 'He', name: 'Helio', group: 18, period: 1, atomicRadius: 31, ionizationEnergy: 24.6, electronegativity: null, electronAffinity: 0, meltingPoint: 1, config: '1s²' },
+            { symbol: 'Li', name: 'Litio', group: 1, period: 2, atomicRadius: 167, ionizationEnergy: 5.4, electronegativity: 0.98, electronAffinity: 0.62, meltingPoint: 454, config: '[He]2s¹' },
+            { symbol: 'Be', name: 'Berilio', group: 2, period: 2, atomicRadius: 112, ionizationEnergy: 9.3, electronegativity: 1.57, electronAffinity: 0, meltingPoint: 1560, config: '[He]2s²' },
+            { symbol: 'B', name: 'Boro', group: 13, period: 2, atomicRadius: 87, ionizationEnergy: 8.3, electronegativity: 2.04, electronAffinity: 0.28, meltingPoint: 2349, config: '[He]2s²2p¹' },
+            { symbol: 'C', name: 'Carbono', group: 14, period: 2, atomicRadius: 67, ionizationEnergy: 11.3, electronegativity: 2.55, electronAffinity: 1.26, meltingPoint: 3823, config: '[He]2s²2p²' },
+            { symbol: 'N', name: 'Nitrógeno', group: 15, period: 2, atomicRadius: 56, ionizationEnergy: 14.5, electronegativity: 3.04, electronAffinity: 0, meltingPoint: 63, config: '[He]2s²2p³' },
+            { symbol: 'O', name: 'Oxígeno', group: 16, period: 2, atomicRadius: 48, ionizationEnergy: 13.6, electronegativity: 3.44, electronAffinity: 1.46, meltingPoint: 54, config: '[He]2s²2p⁴' },
+            { symbol: 'F', name: 'Flúor', group: 17, period: 2, atomicRadius: 42, ionizationEnergy: 17.4, electronegativity: 3.98, electronAffinity: 3.40, meltingPoint: 53, config: '[He]2s²2p⁵' },
+            { symbol: 'Ne', name: 'Neón', group: 18, period: 2, atomicRadius: 38, ionizationEnergy: 21.6, electronegativity: null, electronAffinity: 0, meltingPoint: 25, config: '[He]2s²2p⁶' },
+            { symbol: 'Na', name: 'Sodio', group: 1, period: 3, atomicRadius: 190, ionizationEnergy: 5.1, electronegativity: 0.93, electronAffinity: 0.55, meltingPoint: 371, config: '[Ne]3s¹' },
+            { symbol: 'Mg', name: 'Magnesio', group: 2, period: 3, atomicRadius: 145, ionizationEnergy: 7.6, electronegativity: 1.31, electronAffinity: 0, meltingPoint: 923, config: '[Ne]3s²' },
+            { symbol: 'Al', name: 'Aluminio', group: 13, period: 3, atomicRadius: 118, ionizationEnergy: 6.0, electronegativity: 1.61, electronAffinity: 0.43, meltingPoint: 933, config: '[Ne]3s²3p¹' },
+            { symbol: 'Si', name: 'Silicio', group: 14, period: 3, atomicRadius: 111, ionizationEnergy: 8.2, electronegativity: 1.90, electronAffinity: 1.39, meltingPoint: 1687, config: '[Ne]3s²3p²' },
+            { symbol: 'P', name: 'Fósforo', group: 15, period: 3, atomicRadius: 98, ionizationEnergy: 10.5, electronegativity: 2.19, electronAffinity: 0.75, meltingPoint: 317, config: '[Ne]3s²3p³' },
+            { symbol: 'S', name: 'Azufre', group: 16, period: 3, atomicRadius: 88, ionizationEnergy: 10.4, electronegativity: 2.58, electronAffinity: 2.08, meltingPoint: 388, config: '[Ne]3s²3p⁴' },
+            { symbol: 'Cl', name: 'Cloro', group: 17, period: 3, atomicRadius: 79, ionizationEnergy: 13.0, electronegativity: 3.16, electronAffinity: 3.61, meltingPoint: 172, config: '[Ne]3s²3p⁵' },
+            { symbol: 'Ar', name: 'Argón', group: 18, period: 3, atomicRadius: 71, ionizationEnergy: 15.8, electronegativity: null, electronAffinity: 0, meltingPoint: 84, config: '[Ne]3s²3p⁶' },
+            { symbol: 'K', name: 'Potasio', group: 1, period: 4, atomicRadius: 243, ionizationEnergy: 4.3, electronegativity: 0.82, electronAffinity: 0.50, meltingPoint: 337, config: '[Ar]4s¹' },
+            { symbol: 'Ca', name: 'Calcio', group: 2, period: 4, atomicRadius: 194, ionizationEnergy: 6.1, electronegativity: 1.00, electronAffinity: 0.02, meltingPoint: 1115, config: '[Ar]4s²' },
+            { symbol: 'Sc', name: 'Escandio', group: 3, period: 4, atomicRadius: 184, ionizationEnergy: 6.6, electronegativity: 1.36, electronAffinity: 0.19, meltingPoint: 1814, config: '[Ar]3d¹4s²' },
+            { symbol: 'Ti', name: 'Titanio', group: 4, period: 4, atomicRadius: 176, ionizationEnergy: 6.8, electronegativity: 1.54, electronAffinity: 0.08, meltingPoint: 1941, config: '[Ar]3d²4s²' },
+            { symbol: 'V', name: 'Vanadio', group: 5, period: 4, atomicRadius: 171, ionizationEnergy: 6.7, electronegativity: 1.63, electronAffinity: 0.53, meltingPoint: 2183, config: '[Ar]3d³4s²' },
+            { symbol: 'Cr', name: 'Cromo', group: 6, period: 4, atomicRadius: 166, ionizationEnergy: 6.8, electronegativity: 1.66, electronAffinity: 0.67, meltingPoint: 2180, config: '[Ar]3d⁵4s¹' },
+            { symbol: 'Mn', name: 'Manganeso', group: 7, period: 4, atomicRadius: 161, ionizationEnergy: 7.4, electronegativity: 1.55, electronAffinity: 0, meltingPoint: 1519, config: '[Ar]3d⁵4s²' },
+            { symbol: 'Fe', name: 'Hierro', group: 8, period: 4, atomicRadius: 156, ionizationEnergy: 7.9, electronegativity: 1.83, electronAffinity: 0.15, meltingPoint: 1811, config: '[Ar]3d⁶4s²' },
+            { symbol: 'Co', name: 'Cobalto', group: 9, period: 4, atomicRadius: 152, ionizationEnergy: 7.9, electronegativity: 1.88, electronAffinity: 0.66, meltingPoint: 1768, config: '[Ar]3d⁷4s²' },
+            { symbol: 'Ni', name: 'Níquel', group: 10, period: 4, atomicRadius: 149, ionizationEnergy: 7.6, electronegativity: 1.91, electronAffinity: 1.16, meltingPoint: 1728, config: '[Ar]3d⁸4s²' },
+            { symbol: 'Cu', name: 'Cobre', group: 11, period: 4, atomicRadius: 145, ionizationEnergy: 7.7, electronegativity: 1.90, electronAffinity: 1.24, meltingPoint: 1358, config: '[Ar]3d¹⁰4s¹' },
+            { symbol: 'Zn', name: 'Zinc', group: 12, period: 4, atomicRadius: 142, ionizationEnergy: 9.4, electronegativity: 1.65, electronAffinity: 0, meltingPoint: 693, config: '[Ar]3d¹⁰4s²' },
+            { symbol: 'Ga', name: 'Galio', group: 13, period: 4, atomicRadius: 136, ionizationEnergy: 6.0, electronegativity: 1.81, electronAffinity: 0.43, meltingPoint: 303, config: '[Ar]3d¹⁰4s²4p¹' },
+            { symbol: 'Ge', name: 'Germanio', group: 14, period: 4, atomicRadius: 125, ionizationEnergy: 7.9, electronegativity: 2.01, electronAffinity: 1.23, meltingPoint: 1211, config: '[Ar]3d¹⁰4s²4p²' },
+            { symbol: 'As', name: 'Arsénico', group: 15, period: 4, atomicRadius: 114, ionizationEnergy: 9.8, electronegativity: 2.18, electronAffinity: 0.80, meltingPoint: 1090, config: '[Ar]3d¹⁰4s²4p³' },
+            { symbol: 'Se', name: 'Selenio', group: 16, period: 4, atomicRadius: 103, ionizationEnergy: 9.8, electronegativity: 2.55, electronAffinity: 2.02, meltingPoint: 494, config: '[Ar]3d¹⁰4s²4p⁴' },
+            { symbol: 'Br', name: 'Bromo', group: 17, period: 4, atomicRadius: 94, ionizationEnergy: 11.8, electronegativity: 2.96, electronAffinity: 3.36, meltingPoint: 266, config: '[Ar]3d¹⁰4s²4p⁵' },
+            { symbol: 'Kr', name: 'Kriptón', group: 18, period: 4, atomicRadius: 88, ionizationEnergy: 14.0, electronegativity: 3.00, electronAffinity: 0, meltingPoint: 116, config: '[Ar]3d¹⁰4s²4p⁶' },
+        ];
+
+        const propertyInfo = {
+            atomicRadius: { name: 'Radio Atómico', unit: 'pm', min: 30, max: 250, periodTrend: 'disminuye', groupTrend: 'aumenta', gradient: ['#3b82f6', '#22c55e', '#ef4444'] },
+            ionizationEnergy: { name: 'Energía de Ionización', unit: 'eV', min: 4, max: 25, periodTrend: 'aumenta', groupTrend: 'disminuye', gradient: ['#ef4444', '#22c55e', '#3b82f6'] },
+            electronegativity: { name: 'Electronegatividad', unit: '', min: 0.7, max: 4, periodTrend: 'aumenta', groupTrend: 'disminuye', gradient: ['#fbbf24', '#22c55e', '#8b5cf6'] },
+            electronAffinity: { name: 'Afinidad Electrónica', unit: 'eV', min: 0, max: 4, periodTrend: 'aumenta (general)', groupTrend: 'variable', gradient: ['#94a3b8', '#06b6d4', '#ec4899'] },
+            meltingPoint: { name: 'Punto de Fusión', unit: 'K', min: 0, max: 4000, periodTrend: 'variable', groupTrend: 'variable', gradient: ['#3b82f6', '#fbbf24', '#ef4444'] }
+        };
+
+        // Periodic table layout
+        const tableLayout = [
+            [1, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 2],
+            [3, 4,0,0,0,0,0,0,0,0,0,0, 5, 6, 7, 8, 9,10],
+            [11,12,0,0,0,0,0,0,0,0,0,0,13,14,15,16,17,18],
+            [19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36]
+        ];
+
+        function init() {
+            const rect = canvas.getBoundingClientRect();
+            W = rect.width;
+            H = rect.height;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = W * dpr;
+            canvas.height = H * dpr;
+            ctx.scale(dpr, dpr);
+
+            updateElementDisplay();
+            updateTrendText();
+            draw();
+        }
+
+        function getPropertyValue(z) {
+            if (!elements[z]) return null;
+            return elements[z][currentProperty];
+        }
+
+        function valueToColor(value) {
+            const prop = propertyInfo[currentProperty];
+            if (value === null || value === undefined) return '#334155';
+
+            const ratio = (value - prop.min) / (prop.max - prop.min);
+            const clampedRatio = Math.max(0, Math.min(1, ratio));
+
+            const colors = prop.gradient;
+            if (clampedRatio < 0.5) {
+                return interpolateColor(colors[0], colors[1], clampedRatio * 2);
+            } else {
+                return interpolateColor(colors[1], colors[2], (clampedRatio - 0.5) * 2);
+            }
+        }
+
+        function interpolateColor(c1, c2, t) {
+            const r1 = parseInt(c1.slice(1, 3), 16);
+            const g1 = parseInt(c1.slice(3, 5), 16);
+            const b1 = parseInt(c1.slice(5, 7), 16);
+            const r2 = parseInt(c2.slice(1, 3), 16);
+            const g2 = parseInt(c2.slice(3, 5), 16);
+            const b2 = parseInt(c2.slice(5, 7), 16);
+
+            const r = Math.round(r1 + (r2 - r1) * t);
+            const g = Math.round(g1 + (g2 - g1) * t);
+            const b = Math.round(b1 + (b2 - b1) * t);
+
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function updateElementDisplay() {
+            const elem = elements[selectedElement];
+            if (!elem) return;
+
+            document.getElementById('elemNumber').textContent = 'Z = ' + selectedElement;
+            document.getElementById('elemSymbol').textContent = elem.symbol;
+            document.getElementById('elemName').textContent = elem.name;
+            document.getElementById('elemRadius').textContent = elem.atomicRadius || '-';
+            document.getElementById('elemIE').textContent = elem.ionizationEnergy?.toFixed(1) || '-';
+            document.getElementById('elemEN').textContent = elem.electronegativity?.toFixed(2) || '-';
+            document.getElementById('elemConfig').innerHTML = elem.config;
+        }
+
+        function updateTrendText() {
+            const prop = propertyInfo[currentProperty];
+            document.getElementById('trendPeriod').textContent = prop.periodTrend;
+            document.getElementById('trendGroup').textContent = prop.groupTrend;
+
+            const scaleBar = document.getElementById('scaleBar');
+            scaleBar.style.background = `linear-gradient(90deg, ${prop.gradient[0]} 0%, ${prop.gradient[1]} 50%, ${prop.gradient[2]} 100%)`;
+
+            document.getElementById('scaleMin').textContent = prop.min + (prop.unit ? ' ' + prop.unit : '');
+            document.getElementById('scaleMax').textContent = prop.max + (prop.unit ? ' ' + prop.unit : '');
+        }
+
+        function draw() {
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, W, H);
+
+            const cols = 18;
+            const rows = 4;
+            const padding = 20;
+            const cellW = (W - padding * 2) / cols;
+            const cellH = Math.min(cellW * 1.2, (H - padding * 2 - 100) / rows);
+            const startX = padding;
+            const startY = padding + 50;
+
+            // Draw title
+            ctx.fillStyle = '#e2e8f0';
+            ctx.font = 'bold 18px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(propertyInfo[currentProperty].name, padding, 35);
+
+            // Draw trend arrows if enabled
+            if (showTrends) {
+                // Horizontal arrow (period trend)
+                ctx.strokeStyle = 'rgba(6, 182, 212, 0.5)';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(startX, startY + rows * cellH + 30);
+                ctx.lineTo(startX + cols * cellW - 20, startY + rows * cellH + 30);
+                ctx.stroke();
+
+                // Arrow head
+                ctx.beginPath();
+                ctx.moveTo(startX + cols * cellW - 20, startY + rows * cellH + 30);
+                ctx.lineTo(startX + cols * cellW - 35, startY + rows * cellH + 25);
+                ctx.lineTo(startX + cols * cellW - 35, startY + rows * cellH + 35);
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(6, 182, 212, 0.5)';
+                ctx.fill();
+
+                ctx.fillStyle = '#06b6d4';
+                ctx.font = '12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Periodo →', startX + cols * cellW / 2, startY + rows * cellH + 50);
+
+                // Vertical arrow (group trend)
+                ctx.strokeStyle = 'rgba(6, 182, 212, 0.5)';
+                ctx.beginPath();
+                ctx.moveTo(startX + cols * cellW + 20, startY);
+                ctx.lineTo(startX + cols * cellW + 20, startY + rows * cellH - 20);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(startX + cols * cellW + 20, startY + rows * cellH - 20);
+                ctx.lineTo(startX + cols * cellW + 15, startY + rows * cellH - 35);
+                ctx.lineTo(startX + cols * cellW + 25, startY + rows * cellH - 35);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.save();
+                ctx.translate(startX + cols * cellW + 40, startY + rows * cellH / 2);
+                ctx.rotate(Math.PI / 2);
+                ctx.fillText('Grupo ↓', 0, 0);
+                ctx.restore();
+            }
+
+            // Draw elements
+            for (let row = 0; row < tableLayout.length; row++) {
+                for (let col = 0; col < tableLayout[row].length; col++) {
+                    const z = tableLayout[row][col];
+                    if (z === 0) continue;
+
+                    const elem = elements[z];
+                    if (!elem) continue;
+
+                    const x = startX + col * cellW;
+                    const y = startY + row * cellH;
+                    const value = getPropertyValue(z);
+
+                    // Cell background
+                    let bgColor = valueToColor(value);
+                    let alpha = 0.8;
+
+                    if (highlightGroup && elem.group === elements[selectedElement]?.group) {
+                        alpha = 1;
+                        ctx.shadowColor = '#06b6d4';
+                        ctx.shadowBlur = 10;
+                    }
+
+                    if (z === selectedElement) {
+                        ctx.shadowColor = '#ffffff';
+                        ctx.shadowBlur = 15;
+                    }
+
+                    if (z === hoveredElement) {
+                        alpha = 1;
+                    }
+
+                    ctx.fillStyle = bgColor;
+                    ctx.globalAlpha = alpha;
+                    ctx.fillRect(x + 2, y + 2, cellW - 4, cellH - 4);
+                    ctx.globalAlpha = 1;
+                    ctx.shadowBlur = 0;
+
+                    // Border for selected
+                    if (z === selectedElement) {
+                        ctx.strokeStyle = '#ffffff';
+                        ctx.lineWidth = 3;
+                        ctx.strokeRect(x + 2, y + 2, cellW - 4, cellH - 4);
+                    }
+
+                    // Atomic number
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                    ctx.font = '9px Fira Code';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(z.toString(), x + 6, y + 14);
+
+                    // Symbol
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = `bold ${cellW * 0.35}px Inter`;
+                    ctx.textAlign = 'center';
+                    ctx.fillText(elem.symbol, x + cellW / 2, y + cellH / 2 + 5);
+
+                    // Value if enabled
+                    if (showValues && value !== null) {
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                        ctx.font = '8px Fira Code';
+                        ctx.fillText(value.toString(), x + cellW / 2, y + cellH - 8);
+                    }
+                }
+            }
+
+            // Draw graph on the right side
+            drawPropertyGraph();
+
+            requestAnimationFrame(draw);
+        }
+
+        function drawPropertyGraph() {
+            const graphX = W * 0.6;
+            const graphY = H * 0.55;
+            const graphW = W * 0.35;
+            const graphH = H * 0.35;
+
+            // Background
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
+            ctx.fillRect(graphX, graphY, graphW, graphH);
+
+            // Axes
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.5)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(graphX + 30, graphY + graphH - 20);
+            ctx.lineTo(graphX + graphW - 10, graphY + graphH - 20);
+            ctx.moveTo(graphX + 30, graphY + graphH - 20);
+            ctx.lineTo(graphX + 30, graphY + 10);
+            ctx.stroke();
+
+            // Labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Número Atómico (Z)', graphX + graphW / 2 + 10, graphY + graphH - 3);
+
+            // Plot data points
+            const prop = propertyInfo[currentProperty];
+            ctx.fillStyle = '#06b6d4';
+
+            for (let z = 1; z <= 36; z++) {
+                const value = getPropertyValue(z);
+                if (value === null) continue;
+
+                const x = graphX + 30 + ((z - 1) / 35) * (graphW - 50);
+                const y = graphY + graphH - 20 - ((value - prop.min) / (prop.max - prop.min)) * (graphH - 40);
+
+                ctx.beginPath();
+                ctx.arc(x, y, z === selectedElement ? 5 : 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (z === selectedElement) {
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            }
+
+            // Title
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(prop.name + ' vs Z', graphX + 10, graphY + 20);
+        }
+
+        // Mouse interaction
+        canvas.onclick = function(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const cols = 18;
+            const rows = 4;
+            const padding = 20;
+            const cellW = (W - padding * 2) / cols;
+            const cellH = Math.min(cellW * 1.2, (H - padding * 2 - 100) / rows);
+            const startX = padding;
+            const startY = padding + 50;
+
+            const col = Math.floor((x - startX) / cellW);
+            const row = Math.floor((y - startY) / cellH);
+
+            if (row >= 0 && row < tableLayout.length && col >= 0 && col < 18) {
+                const z = tableLayout[row][col];
+                if (z > 0 && elements[z]) {
+                    selectedElement = z;
+                    updateElementDisplay();
+                }
+            }
+        };
+
+        canvas.onmousemove = function(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const cols = 18;
+            const padding = 20;
+            const cellW = (W - padding * 2) / cols;
+            const cellH = Math.min(cellW * 1.2, (H - padding * 2 - 100) / 4);
+            const startX = padding;
+            const startY = padding + 50;
+
+            const col = Math.floor((x - startX) / cellW);
+            const row = Math.floor((y - startY) / cellH);
+
+            hoveredElement = null;
+            if (row >= 0 && row < tableLayout.length && col >= 0 && col < 18) {
+                const z = tableLayout[row][col];
+                if (z > 0) hoveredElement = z;
+            }
+        };
+
+        // Event listeners
+        document.querySelectorAll('.property-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.property-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentProperty = btn.dataset.prop;
+                updateTrendText();
+            });
+        });
+
+        document.getElementById('showValues').onchange = function() { showValues = this.checked; };
+        document.getElementById('showTrends').onchange = function() { showTrends = this.checked; };
+        document.getElementById('highlightGroup').onchange = function() { highlightGroup = this.checked; };
+
+        window.onload = init;
+        window.onresize = init;
+    </script>
+</body>
+</html>

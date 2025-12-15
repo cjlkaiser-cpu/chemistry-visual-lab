@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celda Galvánica | Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --accent: #eab308;
+            --accent-glow: rgba(234, 179, 8, 0.3);
+            --accent-secondary: #22d3ee;
+            --border-color: #2a2a3a;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+        }
+
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .canvas-header {
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .title-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .title-area span {
+            font-family: 'Covered By Your Grace', cursive;
+            color: var(--accent);
+            font-size: 1rem;
+            margin-left: 0.5rem;
+        }
+
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            min-height: 0;
+        }
+
+        #canvas {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: 0 0 40px var(--accent-glow);
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            min-height: 0;
+        }
+
+        .controls {
+            width: 340px;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        .control-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .control-section:last-child {
+            border-bottom: none;
+        }
+
+        .control-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .control-group {
+            margin-bottom: 1rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.625rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        select:hover {
+            border-color: var(--accent);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .slider-container {
+            margin-bottom: 1rem;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-header label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .slider-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+            background: var(--bg-tertiary);
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+        }
+
+        .info-panel {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+        }
+
+        .info-value.large {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .cell-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--bg-primary);
+            border-radius: 6px;
+            margin-top: 0.75rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+        }
+
+        .half-cell {
+            text-align: center;
+        }
+
+        .half-cell.anode {
+            color: #818cf8;
+        }
+
+        .half-cell.cathode {
+            color: #f472b6;
+        }
+
+        .cell-separator {
+            color: var(--text-secondary);
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .reactions-panel {
+            background: var(--bg-primary);
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+        }
+
+        .reaction {
+            padding: 0.375rem 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .reaction:last-child {
+            border-bottom: none;
+        }
+
+        .reaction-label {
+            color: var(--text-secondary);
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .reaction-eq {
+            color: var(--text-primary);
+        }
+
+        .reaction-eq .oxidation {
+            color: #818cf8;
+        }
+
+        .reaction-eq .reduction {
+            color: #f472b6;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .controls {
+                width: 100%;
+                height: auto;
+                max-height: 50vh;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-section">
+        <div class="canvas-header">
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Volver al Lab
+            </a>
+            <div class="title-area">
+                <h1>Celda Galvánica <span>e⁻ → flujo</span></h1>
+            </div>
+        </div>
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-section">
+            <h3>Configuración de Celda</h3>
+            <div class="control-group">
+                <label>Tipo de celda</label>
+                <select id="cellType">
+                    <option value="zn-cu">Zn | Cu (Pila de Daniell)</option>
+                    <option value="mg-cu">Mg | Cu</option>
+                    <option value="fe-cu">Fe | Cu</option>
+                    <option value="zn-ag">Zn | Ag</option>
+                    <option value="mg-ag">Mg | Ag</option>
+                    <option value="pb-cu">Pb | Cu</option>
+                </select>
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>[Ánodo] (M)</label>
+                    <span class="slider-value" id="anodeConc">1.00</span>
+                </div>
+                <input type="range" id="anodeConcSlider" min="0.01" max="2" step="0.01" value="1">
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>[Cátodo] (M)</label>
+                    <span class="slider-value" id="cathodeConc">1.00</span>
+                </div>
+                <input type="range" id="cathodeConcSlider" min="0.01" max="2" step="0.01" value="1">
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>Temperatura (K)</label>
+                    <span class="slider-value" id="tempValue">298</span>
+                </div>
+                <input type="range" id="tempSlider" min="273" max="373" step="1" value="298">
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Voltaje de Celda</h3>
+            <div class="info-panel">
+                <div class="info-row">
+                    <span class="info-label">E°celda (estándar)</span>
+                    <span class="info-value" id="stdPotential">1.10 V</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">E celda (Nernst)</span>
+                    <span class="info-value large" id="cellPotential">1.10 V</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">ΔG° (kJ/mol)</span>
+                    <span class="info-value" id="deltaG">-212.3</span>
+                </div>
+            </div>
+
+            <div class="cell-diagram">
+                <div class="half-cell anode" id="anodeLabel">Zn|Zn²⁺</div>
+                <div class="cell-separator">||</div>
+                <div class="half-cell cathode" id="cathodeLabel">Cu²⁺|Cu</div>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Reacciones</h3>
+            <div class="reactions-panel">
+                <div class="reaction">
+                    <div class="reaction-label">Ánodo (oxidación)</div>
+                    <div class="reaction-eq" id="anodeReaction"><span class="oxidation">Zn → Zn²⁺ + 2e⁻</span></div>
+                </div>
+                <div class="reaction">
+                    <div class="reaction-label">Cátodo (reducción)</div>
+                    <div class="reaction-eq" id="cathodeReaction"><span class="reduction">Cu²⁺ + 2e⁻ → Cu</span></div>
+                </div>
+                <div class="reaction">
+                    <div class="reaction-label">Reacción global</div>
+                    <div class="reaction-eq" id="globalReaction">Zn + Cu²⁺ → Zn²⁺ + Cu</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Controles</h3>
+            <button class="btn btn-primary" id="toggleBtn">⏸ Pausar</button>
+            <button class="btn btn-secondary" id="resetBtn">↺ Reiniciar</button>
+        </div>
+
+        <div class="control-section">
+            <h3>Leyenda</h3>
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #818cf8"></span>
+                    Ánodo (−)
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #f472b6"></span>
+                    Cátodo (+)
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #fbbf24"></span>
+                    Electrones
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #34d399"></span>
+                    Iones
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Cell data
+        const cells = {
+            'zn-cu': {
+                anode: { symbol: 'Zn', E0: -0.76, color: '#a1a1aa', ion: 'Zn²⁺', ionColor: '#818cf8' },
+                cathode: { symbol: 'Cu', E0: 0.34, color: '#f97316', ion: 'Cu²⁺', ionColor: '#22d3ee' },
+                n: 2
+            },
+            'mg-cu': {
+                anode: { symbol: 'Mg', E0: -2.37, color: '#d4d4d8', ion: 'Mg²⁺', ionColor: '#a78bfa' },
+                cathode: { symbol: 'Cu', E0: 0.34, color: '#f97316', ion: 'Cu²⁺', ionColor: '#22d3ee' },
+                n: 2
+            },
+            'fe-cu': {
+                anode: { symbol: 'Fe', E0: -0.44, color: '#78716c', ion: 'Fe²⁺', ionColor: '#84cc16' },
+                cathode: { symbol: 'Cu', E0: 0.34, color: '#f97316', ion: 'Cu²⁺', ionColor: '#22d3ee' },
+                n: 2
+            },
+            'zn-ag': {
+                anode: { symbol: 'Zn', E0: -0.76, color: '#a1a1aa', ion: 'Zn²⁺', ionColor: '#818cf8' },
+                cathode: { symbol: 'Ag', E0: 0.80, color: '#e5e5e5', ion: 'Ag⁺', ionColor: '#f0abfc' },
+                n: 2
+            },
+            'mg-ag': {
+                anode: { symbol: 'Mg', E0: -2.37, color: '#d4d4d8', ion: 'Mg²⁺', ionColor: '#a78bfa' },
+                cathode: { symbol: 'Ag', E0: 0.80, color: '#e5e5e5', ion: 'Ag⁺', ionColor: '#f0abfc' },
+                n: 2
+            },
+            'pb-cu': {
+                anode: { symbol: 'Pb', E0: -0.13, color: '#71717a', ion: 'Pb²⁺', ionColor: '#94a3b8' },
+                cathode: { symbol: 'Cu', E0: 0.34, color: '#f97316', ion: 'Cu²⁺', ionColor: '#22d3ee' },
+                n: 2
+            }
+        };
+
+        let currentCell = 'zn-cu';
+        let anodeConc = 1.0;
+        let cathodeConc = 1.0;
+        let temperature = 298;
+        let isRunning = true;
+        let time = 0;
+
+        // Particles
+        let electrons = [];
+        let anodeIons = [];
+        let cathodeIons = [];
+        let saltBridgeIons = [];
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            const size = Math.min(rect.width - 32, rect.height - 32);
+            const aspectRatio = 1.4;
+
+            let width, height;
+            if (rect.width / rect.height > aspectRatio) {
+                height = rect.height - 32;
+                width = height * aspectRatio;
+            } else {
+                width = rect.width - 32;
+                height = width / aspectRatio;
+            }
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            ctx.scale(dpr, dpr);
+        }
+
+        function calculatePotential() {
+            const cell = cells[currentCell];
+            const E0cell = cell.cathode.E0 - cell.anode.E0;
+            const R = 8.314;
+            const F = 96485;
+            const n = cell.n;
+
+            // Nernst equation: E = E° - (RT/nF)ln(Q)
+            const Q = anodeConc / cathodeConc;
+            const Ecell = E0cell - (R * temperature / (n * F)) * Math.log(Q);
+            const deltaG = -n * F * E0cell / 1000; // kJ/mol
+
+            return { E0cell, Ecell, deltaG };
+        }
+
+        function updateDisplay() {
+            const { E0cell, Ecell, deltaG } = calculatePotential();
+            const cell = cells[currentCell];
+
+            document.getElementById('stdPotential').textContent = E0cell.toFixed(2) + ' V';
+            document.getElementById('cellPotential').textContent = Ecell.toFixed(2) + ' V';
+            document.getElementById('deltaG').textContent = deltaG.toFixed(1);
+
+            document.getElementById('anodeLabel').textContent = `${cell.anode.symbol}|${cell.anode.ion}`;
+            document.getElementById('cathodeLabel').textContent = `${cell.cathode.ion}|${cell.cathode.symbol}`;
+
+            document.getElementById('anodeReaction').innerHTML =
+                `<span class="oxidation">${cell.anode.symbol} → ${cell.anode.ion} + ${cell.n}e⁻</span>`;
+            document.getElementById('cathodeReaction').innerHTML =
+                `<span class="reduction">${cell.cathode.ion} + ${cell.n}e⁻ → ${cell.cathode.symbol}</span>`;
+            document.getElementById('globalReaction').textContent =
+                `${cell.anode.symbol} + ${cell.cathode.ion} → ${cell.anode.ion} + ${cell.cathode.symbol}`;
+        }
+
+        function initParticles() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            electrons = [];
+            anodeIons = [];
+            cathodeIons = [];
+            saltBridgeIons = [];
+
+            // Electrons in wire (will move)
+            for (let i = 0; i < 8; i++) {
+                electrons.push({
+                    progress: Math.random(),
+                    speed: 0.002 + Math.random() * 0.001
+                });
+            }
+
+            // Anode ions in solution
+            const anodeCount = Math.floor(anodeConc * 15);
+            for (let i = 0; i < anodeCount; i++) {
+                anodeIons.push({
+                    x: w * 0.1 + Math.random() * w * 0.25,
+                    y: h * 0.5 + Math.random() * h * 0.35,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5
+                });
+            }
+
+            // Cathode ions in solution
+            const cathodeCount = Math.floor(cathodeConc * 15);
+            for (let i = 0; i < cathodeCount; i++) {
+                cathodeIons.push({
+                    x: w * 0.65 + Math.random() * w * 0.25,
+                    y: h * 0.5 + Math.random() * h * 0.35,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5
+                });
+            }
+
+            // Salt bridge ions (K+ and NO3-)
+            for (let i = 0; i < 12; i++) {
+                saltBridgeIons.push({
+                    x: w * 0.5,
+                    y: h * 0.35 + (i / 12) * h * 0.15,
+                    type: i % 2 === 0 ? 'K+' : 'NO3-',
+                    offset: Math.random() * Math.PI * 2
+                });
+            }
+        }
+
+        function updateParticles() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            // Update electrons
+            electrons.forEach(e => {
+                e.progress += e.speed;
+                if (e.progress > 1) e.progress = 0;
+            });
+
+            // Update anode ions (drift away from electrode)
+            anodeIons.forEach(ion => {
+                ion.x += ion.vx + 0.1;
+                ion.y += ion.vy;
+
+                // Boundary checks for anode half-cell
+                if (ion.x < w * 0.1) ion.x = w * 0.1;
+                if (ion.x > w * 0.38) { ion.x = w * 0.38; ion.vx *= -1; }
+                if (ion.y < h * 0.5) { ion.y = h * 0.5; ion.vy *= -1; }
+                if (ion.y > h * 0.88) { ion.y = h * 0.88; ion.vy *= -1; }
+
+                ion.vx += (Math.random() - 0.5) * 0.1;
+                ion.vy += (Math.random() - 0.5) * 0.1;
+                ion.vx *= 0.98;
+                ion.vy *= 0.98;
+            });
+
+            // Update cathode ions (drift toward electrode)
+            cathodeIons.forEach(ion => {
+                ion.x += ion.vx + 0.08;
+                ion.y += ion.vy;
+
+                // Boundary checks for cathode half-cell
+                if (ion.x < w * 0.62) { ion.x = w * 0.62; ion.vx *= -1; }
+                if (ion.x > w * 0.9) ion.x = w * 0.9;
+                if (ion.y < h * 0.5) { ion.y = h * 0.5; ion.vy *= -1; }
+                if (ion.y > h * 0.88) { ion.y = h * 0.88; ion.vy *= -1; }
+
+                ion.vx += (Math.random() - 0.5) * 0.1;
+                ion.vy += (Math.random() - 0.5) * 0.1;
+                ion.vx *= 0.98;
+                ion.vy *= 0.98;
+            });
+
+            // Salt bridge ions oscillate
+            saltBridgeIons.forEach(ion => {
+                ion.offset += 0.02;
+            });
+        }
+
+        function getElectronPosition(progress) {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            // Path: anode top -> wire left -> wire middle -> wire right -> cathode top
+            const points = [
+                { x: w * 0.22, y: h * 0.42 },  // anode top
+                { x: w * 0.22, y: h * 0.15 },  // wire left top
+                { x: w * 0.5, y: h * 0.08 },   // wire middle (voltmeter)
+                { x: w * 0.78, y: h * 0.15 },  // wire right top
+                { x: w * 0.78, y: h * 0.42 }   // cathode top
+            ];
+
+            const totalSegments = points.length - 1;
+            const segment = Math.floor(progress * totalSegments);
+            const segmentProgress = (progress * totalSegments) % 1;
+
+            const p1 = points[Math.min(segment, points.length - 1)];
+            const p2 = points[Math.min(segment + 1, points.length - 1)];
+
+            return {
+                x: p1.x + (p2.x - p1.x) * segmentProgress,
+                y: p1.y + (p2.y - p1.y) * segmentProgress
+            };
+        }
+
+        function draw() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            const cell = cells[currentCell];
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw beakers
+            drawBeaker(w * 0.08, h * 0.42, w * 0.34, h * 0.5, '#1e3a5f', 'rgba(30, 58, 95, 0.3)');
+            drawBeaker(w * 0.58, h * 0.42, w * 0.34, h * 0.5, '#1e3a5f', 'rgba(30, 58, 95, 0.3)');
+
+            // Draw solutions (colored liquid)
+            ctx.fillStyle = `${cell.anode.ionColor}22`;
+            ctx.fillRect(w * 0.1, h * 0.5, w * 0.3, h * 0.4);
+
+            ctx.fillStyle = `${cell.cathode.ionColor}22`;
+            ctx.fillRect(w * 0.6, h * 0.5, w * 0.3, h * 0.4);
+
+            // Draw salt bridge
+            ctx.beginPath();
+            ctx.moveTo(w * 0.38, h * 0.5);
+            ctx.bezierCurveTo(w * 0.38, h * 0.3, w * 0.62, h * 0.3, w * 0.62, h * 0.5);
+            ctx.lineWidth = 20;
+            ctx.strokeStyle = '#4a5568';
+            ctx.stroke();
+
+            // Salt bridge inner (gel)
+            ctx.beginPath();
+            ctx.moveTo(w * 0.38, h * 0.5);
+            ctx.bezierCurveTo(w * 0.38, h * 0.3, w * 0.62, h * 0.3, w * 0.62, h * 0.5);
+            ctx.lineWidth = 14;
+            ctx.strokeStyle = 'rgba(167, 139, 250, 0.3)';
+            ctx.stroke();
+
+            // Salt bridge ions
+            saltBridgeIons.forEach(ion => {
+                // Get position along the bezier curve
+                const t = (ion.y - h * 0.35) / (h * 0.15);
+                const x = ion.x + Math.sin(ion.offset) * 4;
+                const y = ion.y;
+
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = ion.type === 'K+' ? '#a78bfa' : '#f472b6';
+                ctx.fill();
+            });
+
+            // Draw electrodes
+            // Anode (negative, oxidation)
+            ctx.fillStyle = cell.anode.color;
+            ctx.fillRect(w * 0.18, h * 0.42, w * 0.08, h * 0.45);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(w * 0.18, h * 0.42, w * 0.08, h * 0.45);
+
+            // Anode label
+            ctx.fillStyle = '#818cf8';
+            ctx.font = 'bold 14px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Ánodo (−)', w * 0.22, h * 0.96);
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 16px Inter';
+            ctx.fillText(cell.anode.symbol, w * 0.22, h * 0.65);
+
+            // Cathode (positive, reduction)
+            ctx.fillStyle = cell.cathode.color;
+            ctx.fillRect(w * 0.74, h * 0.42, w * 0.08, h * 0.45);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(w * 0.74, h * 0.42, w * 0.08, h * 0.45);
+
+            // Cathode label
+            ctx.fillStyle = '#f472b6';
+            ctx.font = 'bold 14px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Cátodo (+)', w * 0.78, h * 0.96);
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 16px Inter';
+            ctx.fillText(cell.cathode.symbol, w * 0.78, h * 0.65);
+
+            // Draw wire
+            ctx.beginPath();
+            ctx.moveTo(w * 0.22, h * 0.42);
+            ctx.lineTo(w * 0.22, h * 0.15);
+            ctx.lineTo(w * 0.78, h * 0.15);
+            ctx.lineTo(w * 0.78, h * 0.42);
+            ctx.strokeStyle = '#71717a';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // Draw voltmeter
+            ctx.beginPath();
+            ctx.arc(w * 0.5, h * 0.08, 30, 0, Math.PI * 2);
+            ctx.fillStyle = '#1a1a25';
+            ctx.fill();
+            ctx.strokeStyle = '#eab308';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Voltmeter display
+            const { Ecell } = calculatePotential();
+            ctx.fillStyle = '#eab308';
+            ctx.font = 'bold 12px Fira Code';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${Ecell.toFixed(2)}V`, w * 0.5, h * 0.085);
+            ctx.font = '9px Inter';
+            ctx.fillText('V', w * 0.5, h * 0.11);
+
+            // Draw electrons moving
+            electrons.forEach(e => {
+                const pos = getElectronPosition(e.progress);
+
+                // Glow
+                const gradient = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 8);
+                gradient.addColorStop(0, 'rgba(251, 191, 36, 0.8)');
+                gradient.addColorStop(1, 'rgba(251, 191, 36, 0)');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Electron
+                ctx.beginPath();
+                ctx.arc(pos.x, pos.y, 4, 0, Math.PI * 2);
+                ctx.fillStyle = '#fbbf24';
+                ctx.fill();
+
+                // e- symbol
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 6px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('e⁻', pos.x, pos.y);
+            });
+
+            // Draw ions
+            // Anode ions
+            anodeIons.forEach(ion => {
+                ctx.beginPath();
+                ctx.arc(ion.x, ion.y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = cell.anode.ionColor;
+                ctx.fill();
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 7px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('+', ion.x, ion.y);
+            });
+
+            // Cathode ions
+            cathodeIons.forEach(ion => {
+                ctx.beginPath();
+                ctx.arc(ion.x, ion.y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = cell.cathode.ionColor;
+                ctx.fill();
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 7px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('+', ion.x, ion.y);
+            });
+
+            // Draw electron flow direction arrow
+            ctx.beginPath();
+            ctx.moveTo(w * 0.35, h * 0.12);
+            ctx.lineTo(w * 0.42, h * 0.12);
+            ctx.lineTo(w * 0.40, h * 0.10);
+            ctx.moveTo(w * 0.42, h * 0.12);
+            ctx.lineTo(w * 0.40, h * 0.14);
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('e⁻ →', w * 0.5, h * 0.18);
+
+            // Labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '11px Inter';
+            ctx.fillText('Puente salino (KNO₃)', w * 0.5, h * 0.26);
+
+            // Solution labels
+            ctx.fillStyle = cell.anode.ionColor;
+            ctx.font = '10px Fira Code';
+            ctx.fillText(`${cell.anode.ion}(aq)`, w * 0.25, h * 0.48);
+
+            ctx.fillStyle = cell.cathode.ionColor;
+            ctx.fillText(`${cell.cathode.ion}(aq)`, w * 0.75, h * 0.48);
+        }
+
+        function drawBeaker(x, y, w, h, strokeColor, fillColor) {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, y + h);
+            ctx.lineTo(x + w, y + h);
+            ctx.lineTo(x + w, y);
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.fillStyle = fillColor;
+            ctx.fillRect(x + 1.5, y, w - 3, h - 1.5);
+        }
+
+        function animate() {
+            if (isRunning) {
+                time += 1/60;
+                updateParticles();
+            }
+            draw();
+            requestAnimationFrame(animate);
+        }
+
+        // Event listeners
+        document.getElementById('cellType').addEventListener('change', (e) => {
+            currentCell = e.target.value;
+            initParticles();
+            updateDisplay();
+        });
+
+        document.getElementById('anodeConcSlider').addEventListener('input', (e) => {
+            anodeConc = parseFloat(e.target.value);
+            document.getElementById('anodeConc').textContent = anodeConc.toFixed(2);
+            updateDisplay();
+        });
+
+        document.getElementById('cathodeConcSlider').addEventListener('input', (e) => {
+            cathodeConc = parseFloat(e.target.value);
+            document.getElementById('cathodeConc').textContent = cathodeConc.toFixed(2);
+            updateDisplay();
+        });
+
+        document.getElementById('tempSlider').addEventListener('input', (e) => {
+            temperature = parseInt(e.target.value);
+            document.getElementById('tempValue').textContent = temperature;
+            updateDisplay();
+        });
+
+        document.getElementById('toggleBtn').addEventListener('click', () => {
+            isRunning = !isRunning;
+            document.getElementById('toggleBtn').textContent = isRunning ? '⏸ Pausar' : '▶ Iniciar';
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            time = 0;
+            initParticles();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        // Initialize
+        resizeCanvas();
+        initParticles();
+        updateDisplay();
+        animate();
+    </script>
+</body>
+</html>

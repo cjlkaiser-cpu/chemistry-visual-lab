@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solubilidad y Kps | Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --accent: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.3);
+            --border-color: #2a2a3a;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+        }
+
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .canvas-header {
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .title-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .title-area span {
+            font-family: 'Covered By Your Grace', cursive;
+            color: var(--accent);
+            font-size: 1rem;
+            margin-left: 0.5rem;
+        }
+
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            min-height: 0;
+        }
+
+        #canvas {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: 0 0 40px var(--accent-glow);
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            min-height: 0;
+        }
+
+        .controls {
+            width: 340px;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        .control-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .control-section:last-child {
+            border-bottom: none;
+        }
+
+        .control-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .control-group {
+            margin-bottom: 1rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.625rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        select:hover, select:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .slider-container {
+            margin-bottom: 1rem;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-header label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .slider-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+            background: var(--bg-tertiary);
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .info-panel {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+        }
+
+        .info-value.large {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .info-value.saturated {
+            color: #22c55e;
+        }
+
+        .info-value.precipitate {
+            color: #f97316;
+        }
+
+        .info-value.unsaturated {
+            color: #3b82f6;
+        }
+
+        .equation-box {
+            background: var(--bg-primary);
+            border-radius: 6px;
+            padding: 0.75rem;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .status-badge.unsaturated {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .status-badge.saturated {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .status-badge.precipitate {
+            background: rgba(249, 115, 22, 0.2);
+            color: #f97316;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .controls {
+                width: 100%;
+                height: auto;
+                max-height: 50vh;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-section">
+        <div class="canvas-header">
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Volver al Lab
+            </a>
+            <div class="title-area">
+                <h1>Solubilidad y Kps <span>Q vs Kps</span></h1>
+            </div>
+        </div>
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-section">
+            <h3>Sal Iónica</h3>
+            <div class="control-group">
+                <label>Seleccionar compuesto</label>
+                <select id="compoundSelect">
+                    <option value="AgCl">AgCl (Cloruro de plata)</option>
+                    <option value="BaSO4">BaSO₄ (Sulfato de bario)</option>
+                    <option value="PbI2">PbI₂ (Yoduro de plomo)</option>
+                    <option value="CaF2">CaF₂ (Fluoruro de calcio)</option>
+                    <option value="Fe(OH)3">Fe(OH)₃ (Hidróxido férrico)</option>
+                </select>
+            </div>
+
+            <div class="equation-box" id="equilibriumEq">
+                AgCl(s) ⇌ Ag⁺(aq) + Cl⁻(aq)
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Concentraciones Iónicas</h3>
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label id="cationLabel">[Ag⁺] (M)</label>
+                    <span class="slider-value" id="cationValue">1.0×10⁻⁵</span>
+                </div>
+                <input type="range" id="cationSlider" min="-8" max="-2" step="0.1" value="-5">
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label id="anionLabel">[Cl⁻] (M)</label>
+                    <span class="slider-value" id="anionValue">1.0×10⁻⁵</span>
+                </div>
+                <input type="range" id="anionSlider" min="-8" max="-2" step="0.1" value="-5">
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Producto de Solubilidad</h3>
+            <div class="info-panel">
+                <div class="info-row">
+                    <span class="info-label">Kps</span>
+                    <span class="info-value" id="kspValue">1.8×10⁻¹⁰</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Q (producto iónico)</span>
+                    <span class="info-value large" id="qValue">1.0×10⁻¹⁰</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Q/Kps</span>
+                    <span class="info-value" id="ratioValue">0.56</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Estado</span>
+                    <span class="info-value" id="stateValue">Insaturada</span>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <span class="status-badge unsaturated" id="statusBadge">Solución Insaturada</span>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Acciones</h3>
+            <button class="btn btn-primary" id="addSaltBtn">+ Añadir Sal Sólida</button>
+            <button class="btn btn-secondary" id="resetBtn">↺ Reiniciar</button>
+        </div>
+
+        <div class="control-section">
+            <h3>Leyenda</h3>
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #22d3ee"></span>
+                    Cationes (+)
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #f472b6"></span>
+                    Aniones (−)
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #e5e5e5"></span>
+                    Precipitado
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #fbbf24"></span>
+                    Formación
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Compound database
+        const compounds = {
+            'AgCl': {
+                name: 'Cloruro de plata',
+                cation: 'Ag⁺',
+                anion: 'Cl⁻',
+                Ksp: 1.8e-10,
+                cationCoef: 1,
+                anionCoef: 1,
+                precipColor: '#e5e5e5',
+                equation: 'AgCl(s) ⇌ Ag⁺(aq) + Cl⁻(aq)'
+            },
+            'BaSO4': {
+                name: 'Sulfato de bario',
+                cation: 'Ba²⁺',
+                anion: 'SO₄²⁻',
+                Ksp: 1.1e-10,
+                cationCoef: 1,
+                anionCoef: 1,
+                precipColor: '#f0f0f0',
+                equation: 'BaSO₄(s) ⇌ Ba²⁺(aq) + SO₄²⁻(aq)'
+            },
+            'PbI2': {
+                name: 'Yoduro de plomo',
+                cation: 'Pb²⁺',
+                anion: 'I⁻',
+                Ksp: 9.8e-9,
+                cationCoef: 1,
+                anionCoef: 2,
+                precipColor: '#fbbf24',
+                equation: 'PbI₂(s) ⇌ Pb²⁺(aq) + 2I⁻(aq)'
+            },
+            'CaF2': {
+                name: 'Fluoruro de calcio',
+                cation: 'Ca²⁺',
+                anion: 'F⁻',
+                Ksp: 3.9e-11,
+                cationCoef: 1,
+                anionCoef: 2,
+                precipColor: '#a78bfa',
+                equation: 'CaF₂(s) ⇌ Ca²⁺(aq) + 2F⁻(aq)'
+            },
+            'Fe(OH)3': {
+                name: 'Hidróxido férrico',
+                cation: 'Fe³⁺',
+                anion: 'OH⁻',
+                Ksp: 2.8e-39,
+                cationCoef: 1,
+                anionCoef: 3,
+                precipColor: '#a16207',
+                equation: 'Fe(OH)₃(s) ⇌ Fe³⁺(aq) + 3OH⁻(aq)'
+            }
+        };
+
+        let currentCompound = 'AgCl';
+        let cationConc = 1e-5;
+        let anionConc = 1e-5;
+
+        // Particles
+        let cations = [];
+        let anions = [];
+        let precipitates = [];
+        let formationEffects = [];
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            const aspectRatio = 1.4;
+
+            let width, height;
+            if (rect.width / rect.height > aspectRatio) {
+                height = rect.height - 32;
+                width = height * aspectRatio;
+            } else {
+                width = rect.width - 32;
+                height = width / aspectRatio;
+            }
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            ctx.scale(dpr, dpr);
+        }
+
+        function calculateQ() {
+            const compound = compounds[currentCompound];
+            return Math.pow(cationConc, compound.cationCoef) * Math.pow(anionConc, compound.anionCoef);
+        }
+
+        function getState() {
+            const Q = calculateQ();
+            const Ksp = compounds[currentCompound].Ksp;
+
+            if (Q < Ksp * 0.99) return 'unsaturated';
+            if (Q > Ksp * 1.01) return 'precipitate';
+            return 'saturated';
+        }
+
+        function formatScientific(num) {
+            if (num === 0) return '0';
+            const exp = Math.floor(Math.log10(Math.abs(num)));
+            const mantissa = num / Math.pow(10, exp);
+            if (exp === 0) return mantissa.toFixed(2);
+            return `${mantissa.toFixed(1)}×10${exp < 0 ? '⁻' : ''}${Math.abs(exp).toString().split('').map(d => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join('')}`;
+        }
+
+        function initParticles() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            cations = [];
+            anions = [];
+            precipitates = [];
+            formationEffects = [];
+
+            // Number of particles based on concentration (log scale visualization)
+            const numCations = Math.floor(Math.log10(cationConc / 1e-10) * 8);
+            const numAnions = Math.floor(Math.log10(anionConc / 1e-10) * 8);
+
+            const containerX = w * 0.05;
+            const containerY = h * 0.15;
+            const containerW = w * 0.55;
+            const containerH = h * 0.75;
+
+            for (let i = 0; i < Math.max(5, numCations); i++) {
+                cations.push({
+                    x: containerX + 50 + Math.random() * (containerW - 100),
+                    y: containerY + 50 + Math.random() * (containerH - 100),
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2,
+                    radius: 8
+                });
+            }
+
+            for (let i = 0; i < Math.max(5, numAnions); i++) {
+                anions.push({
+                    x: containerX + 50 + Math.random() * (containerW - 100),
+                    y: containerY + 50 + Math.random() * (containerH - 100),
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2,
+                    radius: 10
+                });
+            }
+        }
+
+        function updateParticles() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            const compound = compounds[currentCompound];
+            const state = getState();
+
+            const containerX = w * 0.05;
+            const containerY = h * 0.15;
+            const containerW = w * 0.55;
+            const containerH = h * 0.75;
+
+            // Update cations
+            cations.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < containerX + p.radius + 5) { p.x = containerX + p.radius + 5; p.vx *= -1; }
+                if (p.x > containerX + containerW - p.radius - 5) { p.x = containerX + containerW - p.radius - 5; p.vx *= -1; }
+                if (p.y < containerY + p.radius + 5) { p.y = containerY + p.radius + 5; p.vy *= -1; }
+                if (p.y > containerY + containerH - p.radius - 5) { p.y = containerY + containerH - p.radius - 5; p.vy *= -1; }
+
+                p.vx += (Math.random() - 0.5) * 0.1;
+                p.vy += (Math.random() - 0.5) * 0.1;
+                p.vx *= 0.99;
+                p.vy *= 0.99;
+            });
+
+            // Update anions
+            anions.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < containerX + p.radius + 5) { p.x = containerX + p.radius + 5; p.vx *= -1; }
+                if (p.x > containerX + containerW - p.radius - 5) { p.x = containerX + containerW - p.radius - 5; p.vx *= -1; }
+                if (p.y < containerY + p.radius + 5) { p.y = containerY + p.radius + 5; p.vy *= -1; }
+                if (p.y > containerY + containerH - p.radius - 5) { p.y = containerY + containerH - p.radius - 5; p.vy *= -1; }
+
+                p.vx += (Math.random() - 0.5) * 0.1;
+                p.vy += (Math.random() - 0.5) * 0.1;
+                p.vx *= 0.99;
+                p.vy *= 0.99;
+            });
+
+            // Check for precipitation (Q > Ksp)
+            if (state === 'precipitate' && cations.length > 3 && anions.length > 3) {
+                // Check for close pairs
+                for (let i = cations.length - 1; i >= 0; i--) {
+                    for (let j = anions.length - 1; j >= 0; j--) {
+                        const c = cations[i];
+                        const a = anions[j];
+                        if (!c || !a) continue;
+
+                        const dx = c.x - a.x;
+                        const dy = c.y - a.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < 25 && Math.random() < 0.05) {
+                            // Form precipitate
+                            const mx = (c.x + a.x) / 2;
+                            const my = (c.y + a.y) / 2;
+
+                            precipitates.push({
+                                x: mx,
+                                y: my,
+                                vy: 0.5,
+                                radius: 6 + Math.random() * 4,
+                                settled: false
+                            });
+
+                            formationEffects.push({
+                                x: mx, y: my,
+                                radius: 5, maxRadius: 30,
+                                alpha: 1
+                            });
+
+                            cations.splice(i, 1);
+                            anions.splice(j, 1);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Update precipitates (fall to bottom)
+            precipitates.forEach(p => {
+                if (!p.settled) {
+                    p.y += p.vy;
+                    p.vy += 0.05; // gravity
+
+                    if (p.y > containerY + containerH - p.radius - 10) {
+                        p.y = containerY + containerH - p.radius - 10;
+                        p.settled = true;
+                    }
+                }
+            });
+
+            // Update effects
+            formationEffects = formationEffects.filter(e => {
+                e.radius += 1.5;
+                e.alpha -= 0.03;
+                return e.alpha > 0;
+            });
+        }
+
+        function draw() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            const compound = compounds[currentCompound];
+            const state = getState();
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw container (beaker)
+            const containerX = w * 0.05;
+            const containerY = h * 0.15;
+            const containerW = w * 0.55;
+            const containerH = h * 0.75;
+
+            // Solution background
+            ctx.fillStyle = 'rgba(6, 182, 212, 0.1)';
+            ctx.fillRect(containerX + 5, containerY + 5, containerW - 10, containerH - 10);
+
+            // Beaker outline
+            ctx.strokeStyle = '#06b6d4';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(containerX, containerY);
+            ctx.lineTo(containerX, containerY + containerH);
+            ctx.lineTo(containerX + containerW, containerY + containerH);
+            ctx.lineTo(containerX + containerW, containerY);
+            ctx.stroke();
+
+            // Formation effects
+            formationEffects.forEach(e => {
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(251, 191, 36, ${e.alpha})`;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+
+            // Draw precipitates
+            precipitates.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = compound.precipColor;
+                ctx.fill();
+                ctx.strokeStyle = '#999';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
+
+            // Draw cations
+            cations.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#22d3ee';
+                ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 8px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('+', p.x, p.y);
+            });
+
+            // Draw anions
+            anions.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#f472b6';
+                ctx.fill();
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 10px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('−', p.x, p.y);
+            });
+
+            // Draw Q vs Ksp diagram
+            drawQKspDiagram(w * 0.65, h * 0.1, w * 0.32, h * 0.4);
+
+            // Draw solubility curve
+            drawSolubilityCurve(w * 0.65, h * 0.55, w * 0.32, h * 0.4);
+
+            // Labels
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '11px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Solución', containerX + containerW / 2, containerY - 5);
+
+            // State indicator
+            ctx.font = 'bold 12px Inter';
+            if (state === 'unsaturated') {
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillText('Insaturada (Q < Kps)', containerX + containerW / 2, h * 0.95);
+            } else if (state === 'saturated') {
+                ctx.fillStyle = '#22c55e';
+                ctx.fillText('Saturada (Q = Kps)', containerX + containerW / 2, h * 0.95);
+            } else {
+                ctx.fillStyle = '#f97316';
+                ctx.fillText('Sobresaturada - Precipitando (Q > Kps)', containerX + containerW / 2, h * 0.95);
+            }
+        }
+
+        function drawQKspDiagram(x, y, w, h) {
+            const compound = compounds[currentCompound];
+            const Q = calculateQ();
+            const Ksp = compound.Ksp;
+
+            // Background
+            ctx.fillStyle = 'rgba(26, 26, 37, 0.9)';
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeStyle = '#2a2a3a';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x, y, w, h);
+
+            // Title
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Comparación Q vs Kps', x + w/2, y + 15);
+
+            // Bar chart
+            const barY = y + 40;
+            const barH = h - 70;
+            const barW = 40;
+            const gap = 30;
+
+            // Ksp bar
+            const kspX = x + w/2 - barW - gap/2;
+            ctx.fillStyle = '#22c55e';
+            ctx.fillRect(kspX, barY + barH * 0.3, barW, barH * 0.7);
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '9px Fira Code';
+            ctx.textAlign = 'center';
+            ctx.fillText('Kps', kspX + barW/2, barY + barH + 15);
+
+            // Q bar (scaled relative to Ksp)
+            const qX = x + w/2 + gap/2;
+            const qHeight = Math.min(barH, barH * 0.7 * (Math.log10(Q/Ksp) + 1));
+            const qColor = Q < Ksp ? '#3b82f6' : Q > Ksp ? '#f97316' : '#22c55e';
+
+            ctx.fillStyle = qColor;
+            ctx.fillRect(qX, barY + barH - Math.max(10, barH * 0.7 * Math.pow(Q/Ksp, 0.3)), barW, Math.max(10, barH * 0.7 * Math.pow(Q/Ksp, 0.3)));
+            ctx.fillStyle = '#a0a0a0';
+            ctx.fillText('Q', qX + barW/2, barY + barH + 15);
+
+            // Values
+            ctx.fillStyle = '#22c55e';
+            ctx.font = '8px Fira Code';
+            ctx.fillText(formatScientific(Ksp), kspX + barW/2, barY + 20);
+
+            ctx.fillStyle = qColor;
+            ctx.fillText(formatScientific(Q), qX + barW/2, barY + 20);
+        }
+
+        function drawSolubilityCurve(x, y, w, h) {
+            const compound = compounds[currentCompound];
+
+            // Background
+            ctx.fillStyle = 'rgba(26, 26, 37, 0.9)';
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeStyle = '#2a2a3a';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x, y, w, h);
+
+            // Title
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Diagrama de Solubilidad: ${compound.name}`, x + w/2, y + 15);
+
+            // Graph area
+            const gx = x + 35;
+            const gy = y + 25;
+            const gw = w - 45;
+            const gh = h - 45;
+
+            // Axes
+            ctx.strokeStyle = '#4a5568';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(gx, gy);
+            ctx.lineTo(gx, gy + gh);
+            ctx.lineTo(gx + gw, gy + gh);
+            ctx.stroke();
+
+            // Axis labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '8px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('[' + compound.anion + ']', gx + gw/2, gy + gh + 12);
+
+            ctx.save();
+            ctx.translate(gx - 8, gy + gh/2);
+            ctx.rotate(-Math.PI/2);
+            ctx.fillText('[' + compound.cation + ']', 0, 0);
+            ctx.restore();
+
+            // Draw Ksp curve (hyperbola: [cation] * [anion] = Ksp)
+            ctx.beginPath();
+            const numPoints = 50;
+            for (let i = 0; i <= numPoints; i++) {
+                const logAnion = -8 + (i / numPoints) * 6; // -8 to -2
+                const anion = Math.pow(10, logAnion);
+                const cation = compound.Ksp / Math.pow(anion, compound.anionCoef);
+                const logCation = Math.log10(cation);
+
+                if (logCation >= -8 && logCation <= -2) {
+                    const px = gx + ((logAnion + 8) / 6) * gw;
+                    const py = gy + gh - ((logCation + 8) / 6) * gh;
+
+                    if (i === 0 || logCation < -8) {
+                        ctx.moveTo(px, py);
+                    } else {
+                        ctx.lineTo(px, py);
+                    }
+                }
+            }
+            ctx.strokeStyle = '#22c55e';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Label the curve
+            ctx.fillStyle = '#22c55e';
+            ctx.font = '9px Fira Code';
+            ctx.fillText('Q = Kps', gx + gw - 30, gy + 35);
+
+            // Shade regions
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.1)';
+            ctx.fillRect(gx, gy, gw, gh);
+
+            // Current point
+            const logCation = Math.log10(cationConc);
+            const logAnion = Math.log10(anionConc);
+            const px = gx + ((logAnion + 8) / 6) * gw;
+            const py = gy + gh - ((logCation + 8) / 6) * gh;
+
+            const state = getState();
+            const pointColor = state === 'unsaturated' ? '#3b82f6' :
+                              state === 'saturated' ? '#22c55e' : '#f97316';
+
+            // Point glow
+            ctx.beginPath();
+            ctx.arc(px, py, 12, 0, Math.PI * 2);
+            ctx.fillStyle = `${pointColor}33`;
+            ctx.fill();
+
+            // Point
+            ctx.beginPath();
+            ctx.arc(px, py, 6, 0, Math.PI * 2);
+            ctx.fillStyle = pointColor;
+            ctx.fill();
+
+            // Region labels
+            ctx.font = '8px Inter';
+            ctx.fillStyle = '#3b82f6';
+            ctx.textAlign = 'left';
+            ctx.fillText('Q < Kps', gx + 5, gy + gh - 10);
+            ctx.fillText('(insaturada)', gx + 5, gy + gh - 2);
+
+            ctx.fillStyle = '#f97316';
+            ctx.textAlign = 'right';
+            ctx.fillText('Q > Kps', gx + gw - 5, gy + 35);
+            ctx.fillText('(precipita)', gx + gw - 5, gy + 43);
+        }
+
+        function updateDisplay() {
+            const compound = compounds[currentCompound];
+            const Q = calculateQ();
+            const Ksp = compound.Ksp;
+            const state = getState();
+
+            document.getElementById('equilibriumEq').textContent = compound.equation;
+            document.getElementById('cationLabel').textContent = `[${compound.cation}] (M)`;
+            document.getElementById('anionLabel').textContent = `[${compound.anion}] (M)`;
+
+            document.getElementById('cationValue').textContent = formatScientific(cationConc);
+            document.getElementById('anionValue').textContent = formatScientific(anionConc);
+
+            document.getElementById('kspValue').textContent = formatScientific(Ksp);
+            document.getElementById('qValue').textContent = formatScientific(Q);
+            document.getElementById('ratioValue').textContent = (Q / Ksp).toFixed(2);
+
+            const stateValue = document.getElementById('stateValue');
+            const statusBadge = document.getElementById('statusBadge');
+
+            if (state === 'unsaturated') {
+                stateValue.textContent = 'Insaturada';
+                stateValue.className = 'info-value unsaturated';
+                statusBadge.textContent = 'Solución Insaturada';
+                statusBadge.className = 'status-badge unsaturated';
+            } else if (state === 'saturated') {
+                stateValue.textContent = 'Saturada';
+                stateValue.className = 'info-value saturated';
+                statusBadge.textContent = 'Solución Saturada';
+                statusBadge.className = 'status-badge saturated';
+            } else {
+                stateValue.textContent = 'Precipitando';
+                stateValue.className = 'info-value precipitate';
+                statusBadge.textContent = 'Precipitación en Curso';
+                statusBadge.className = 'status-badge precipitate';
+            }
+        }
+
+        function animate() {
+            updateParticles();
+            draw();
+            requestAnimationFrame(animate);
+        }
+
+        // Event listeners
+        document.getElementById('compoundSelect').addEventListener('change', (e) => {
+            currentCompound = e.target.value;
+            initParticles();
+            updateDisplay();
+        });
+
+        document.getElementById('cationSlider').addEventListener('input', (e) => {
+            cationConc = Math.pow(10, parseFloat(e.target.value));
+            initParticles();
+            updateDisplay();
+        });
+
+        document.getElementById('anionSlider').addEventListener('input', (e) => {
+            anionConc = Math.pow(10, parseFloat(e.target.value));
+            initParticles();
+            updateDisplay();
+        });
+
+        document.getElementById('addSaltBtn').addEventListener('click', () => {
+            // Increase both ion concentrations
+            cationConc *= 2;
+            anionConc *= 2;
+
+            const cationSlider = document.getElementById('cationSlider');
+            const anionSlider = document.getElementById('anionSlider');
+
+            cationSlider.value = Math.min(-2, Math.log10(cationConc));
+            anionSlider.value = Math.min(-2, Math.log10(anionConc));
+
+            // Cap at maximum
+            cationConc = Math.pow(10, parseFloat(cationSlider.value));
+            anionConc = Math.pow(10, parseFloat(anionSlider.value));
+
+            initParticles();
+            updateDisplay();
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            cationConc = 1e-5;
+            anionConc = 1e-5;
+            document.getElementById('cationSlider').value = -5;
+            document.getElementById('anionSlider').value = -5;
+            initParticles();
+            updateDisplay();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        // Initialize
+        resizeCanvas();
+        initParticles();
+        updateDisplay();
+        animate();
+    </script>
+</body>
+</html>

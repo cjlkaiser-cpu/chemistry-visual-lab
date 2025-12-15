@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbitales Atómicos - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e2e8f0;
+            display: flex;
+        }
+
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .title-bar {
+            margin-bottom: 15px;
+        }
+
+        .title-bar h1 {
+            font-size: 1.8rem;
+            color: #22d3ee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title-bar h1 a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .title-bar h1 a:hover {
+            color: #22d3ee;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        #canvas-container {
+            flex: 1;
+            width: 100%;
+            min-height: 0;
+            background: radial-gradient(ellipse at center, #0f172a 0%, #020617 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #canvas-container canvas {
+            display: block;
+        }
+
+        .orbital-label {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 0 0 20px currentColor;
+            pointer-events: none;
+        }
+
+        .quantum-label {
+            position: absolute;
+            top: 55px;
+            left: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        .controls {
+            width: 320px;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border-left: 1px solid rgba(34, 211, 238, 0.2);
+            padding: 20px;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #22d3ee;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        .slider-group {
+            margin-bottom: 16px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .slider-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .slider-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #22d3ee;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #334155;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+        }
+
+        .orbital-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .orbital-btn {
+            padding: 10px 4px;
+            border: 2px solid #334155;
+            border-radius: 6px;
+            background: #1e293b;
+            color: #94a3b8;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .orbital-btn:hover {
+            border-color: #22d3ee;
+            color: #22d3ee;
+        }
+
+        .orbital-btn.active {
+            background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+            color: #0f172a;
+            border-color: #22d3ee;
+        }
+
+        .orbital-btn.s-orbital { border-left: 3px solid #22d3ee; }
+        .orbital-btn.p-orbital { border-left: 3px solid #a855f7; }
+        .orbital-btn.d-orbital { border-left: 3px solid #f97316; }
+        .orbital-btn.f-orbital { border-left: 3px solid #22c55e; }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+            color: #0f172a;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+        }
+
+        .btn-secondary {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .info-card {
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .info-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            color: #22d3ee;
+            margin-top: 2px;
+        }
+
+        .equation-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .equation {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #f1f5f9;
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .toggle-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #334155;
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
+        }
+
+        .toggle input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .radial-graph {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 12px;
+        }
+
+        .radial-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+
+        #radial-canvas {
+            width: 100%;
+            height: 100px;
+            border-radius: 4px;
+        }
+
+        .hint {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-align: center;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-section">
+        <div class="title-bar">
+            <h1><a href="index.html">&larr;</a> Orbitales Atómicos</h1>
+            <p class="subtitle">Visualización 3D de nubes de densidad electrónica</p>
+        </div>
+        <div id="canvas-container">
+            <div class="orbital-label" id="orbitalLabel">1s</div>
+            <div class="quantum-label" id="quantumLabel">n=1, l=0, m=0</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <h3>Orbital</h3>
+            <div class="orbital-grid">
+                <button class="orbital-btn s-orbital active" data-n="1" data-l="0" data-m="0">1s</button>
+                <button class="orbital-btn s-orbital" data-n="2" data-l="0" data-m="0">2s</button>
+                <button class="orbital-btn s-orbital" data-n="3" data-l="0" data-m="0">3s</button>
+                <button class="orbital-btn s-orbital" data-n="4" data-l="0" data-m="0">4s</button>
+                <button class="orbital-btn p-orbital" data-n="2" data-l="1" data-m="0">2p<sub>z</sub></button>
+                <button class="orbital-btn p-orbital" data-n="2" data-l="1" data-m="1">2p<sub>x</sub></button>
+                <button class="orbital-btn p-orbital" data-n="2" data-l="1" data-m="-1">2p<sub>y</sub></button>
+                <button class="orbital-btn p-orbital" data-n="3" data-l="1" data-m="0">3p<sub>z</sub></button>
+                <button class="orbital-btn d-orbital" data-n="3" data-l="2" data-m="0">3d<sub>z²</sub></button>
+                <button class="orbital-btn d-orbital" data-n="3" data-l="2" data-m="1">3d<sub>xz</sub></button>
+                <button class="orbital-btn d-orbital" data-n="3" data-l="2" data-m="2">3d<sub>xy</sub></button>
+                <button class="orbital-btn d-orbital" data-n="3" data-l="2" data-m="-2">3d<sub>x²-y²</sub></button>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Números Cuánticos</h3>
+            <div class="info-card">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">n (principal)</div>
+                        <div class="info-value" id="nValue">1</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">l (azimutal)</div>
+                        <div class="info-value" id="lValue">0</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">m<sub>l</sub> (magnético)</div>
+                        <div class="info-value" id="mValue">0</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Forma</div>
+                        <div class="info-value" id="shapeValue">Esférica</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Visualización</h3>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Densidad de puntos</span>
+                    <span class="slider-value" id="densityDisplay">8000</span>
+                </div>
+                <input type="range" id="densitySlider" min="2000" max="25000" step="1000" value="8000">
+            </div>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Tamaño de puntos</span>
+                    <span class="slider-value" id="sizeDisplay">3.0</span>
+                </div>
+                <input type="range" id="sizeSlider" min="1" max="8" step="0.5" value="3">
+            </div>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Escala radial</span>
+                    <span class="slider-value" id="scaleDisplay">1.0x</span>
+                </div>
+                <input type="range" id="scaleSlider" min="0.5" max="2" step="0.1" value="1">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Opciones</h3>
+            <div class="toggle-group">
+                <span class="toggle-label">Rotación automática</span>
+                <label class="toggle">
+                    <input type="checkbox" id="autoRotate" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Mostrar ejes</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showAxes" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Mostrar núcleo</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showNucleus" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Color por fase</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showPhase">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Superficie de probabilidad</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showSurface">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-secondary" id="resetView">Reiniciar Vista</button>
+            </div>
+            <p class="hint">Arrastra para rotar, scroll para zoom</p>
+        </div>
+
+        <div class="control-group">
+            <h3>Función de Onda</h3>
+            <div class="equation-box">
+                <div class="equation">Ψ<sub>nlm</sub> = R<sub>nl</sub>(r) · Y<sub>lm</sub>(θ, φ)</div>
+            </div>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #22d3ee;"></div>
+                    <span>s (l=0)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #a855f7;"></div>
+                    <span>p (l=1)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f97316;"></div>
+                    <span>d (l=2)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #22c55e;"></div>
+                    <span>f (l=3)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Distribución Radial</h3>
+            <div class="radial-graph">
+                <div class="radial-label">P(r) = 4πr²|R<sub>nl</sub>(r)|²</div>
+                <canvas id="radial-canvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Three.js setup
+        let scene, camera, renderer, controls;
+        let pointCloud, nucleus, axesGroup, surfaceMesh;
+
+        // State
+        let n = 1, l = 0, m = 0;
+        let density = 8000;
+        let pointSize = 3;
+        let scale = 1;
+        let autoRotate = true;
+        let showAxes = true;
+        let showNucleus = true;
+        let showPhase = false;
+        let showSurface = false;
+
+        // Orbital colors (hex)
+        const orbitalColors = {
+            0: { primary: 0x22d3ee, secondary: 0x0891b2, css: '#22d3ee' }, // s
+            1: { primary: 0xa855f7, secondary: 0x7c3aed, css: '#a855f7' }, // p
+            2: { primary: 0xf97316, secondary: 0xea580c, css: '#f97316' }, // d
+            3: { primary: 0x22c55e, secondary: 0x16a34a, css: '#22c55e' }  // f
+        };
+
+        const shapeNames = {
+            0: 'Esférica',
+            1: 'Pesa (dumbbell)',
+            2: 'Trébol'
+        };
+
+        // Radial canvas
+        const radialCanvas = document.getElementById('radial-canvas');
+        const radialCtx = radialCanvas.getContext('2d');
+
+        function init() {
+            const container = document.getElementById('canvas-container');
+            const rect = container.getBoundingClientRect();
+
+            // Scene
+            scene = new THREE.Scene();
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(60, rect.width / rect.height, 0.1, 1000);
+            camera.position.set(8, 6, 10);
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(rect.width, rect.height);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+
+            // Controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 3;
+            controls.maxDistance = 50;
+            controls.autoRotate = autoRotate;
+            controls.autoRotateSpeed = 1.0;
+
+            // Create axes
+            createAxes();
+
+            // Create nucleus
+            createNucleus();
+
+            // Generate initial orbital
+            generateOrbital();
+
+            // Initialize radial canvas
+            initRadialCanvas();
+            drawRadialDistribution();
+
+            // Update info
+            updateInfo();
+
+            // Start animation
+            animate();
+
+            // Handle resize
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function createAxes() {
+            axesGroup = new THREE.Group();
+
+            const axisLength = 6;
+            const axesData = [
+                { dir: new THREE.Vector3(1, 0, 0), color: 0xef4444, label: 'X' },
+                { dir: new THREE.Vector3(0, 1, 0), color: 0x22c55e, label: 'Y' },
+                { dir: new THREE.Vector3(0, 0, 1), color: 0x3b82f6, label: 'Z' }
+            ];
+
+            axesData.forEach(axis => {
+                // Line
+                const points = [
+                    new THREE.Vector3(0, 0, 0),
+                    axis.dir.clone().multiplyScalar(axisLength)
+                ];
+                const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                const material = new THREE.LineBasicMaterial({
+                    color: axis.color,
+                    transparent: true,
+                    opacity: 0.6
+                });
+                const line = new THREE.Line(geometry, material);
+                axesGroup.add(line);
+
+                // Arrowhead
+                const coneGeom = new THREE.ConeGeometry(0.1, 0.3, 8);
+                const coneMat = new THREE.MeshBasicMaterial({ color: axis.color });
+                const cone = new THREE.Mesh(coneGeom, coneMat);
+                cone.position.copy(axis.dir.clone().multiplyScalar(axisLength));
+                cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), axis.dir);
+                axesGroup.add(cone);
+            });
+
+            scene.add(axesGroup);
+        }
+
+        function createNucleus() {
+            const geometry = new THREE.SphereGeometry(0.15, 32, 32);
+            const material = new THREE.MeshBasicMaterial({
+                color: 0xfbbf24
+            });
+            nucleus = new THREE.Mesh(geometry, material);
+
+            // Add glow
+            const glowGeom = new THREE.SphereGeometry(0.25, 32, 32);
+            const glowMat = new THREE.MeshBasicMaterial({
+                color: 0xfbbf24,
+                transparent: true,
+                opacity: 0.3
+            });
+            const glow = new THREE.Mesh(glowGeom, glowMat);
+            nucleus.add(glow);
+
+            scene.add(nucleus);
+        }
+
+        // Radial wave function R_nl(r)
+        function radialWaveFunction(r, n, l) {
+            const a0 = 1;
+            const rho = 2 * r / (n * a0);
+
+            if (n === 1 && l === 0) {
+                return 2 * Math.exp(-rho / 2);
+            } else if (n === 2 && l === 0) {
+                return (1 / Math.sqrt(2)) * (1 - rho / 2) * Math.exp(-rho / 2);
+            } else if (n === 2 && l === 1) {
+                return (1 / (2 * Math.sqrt(6))) * rho * Math.exp(-rho / 2);
+            } else if (n === 3 && l === 0) {
+                return (2 / (81 * Math.sqrt(3))) * (27 - 18 * rho + 2 * rho * rho) * Math.exp(-rho / 2);
+            } else if (n === 3 && l === 1) {
+                return (4 / (81 * Math.sqrt(6))) * rho * (4 - rho) * Math.exp(-rho / 2);
+            } else if (n === 3 && l === 2) {
+                return (4 / (81 * Math.sqrt(30))) * rho * rho * Math.exp(-rho / 2);
+            } else if (n === 4 && l === 0) {
+                return (1 / 768) * (192 - 144 * rho + 24 * rho * rho - rho * rho * rho) * Math.exp(-rho / 2);
+            }
+            return Math.exp(-rho / 2) * Math.pow(rho, l);
+        }
+
+        // Angular wave function Y_lm(theta, phi) - real spherical harmonics
+        function angularWaveFunction(theta, phi, l, m) {
+            const cosT = Math.cos(theta);
+            const sinT = Math.sin(theta);
+
+            if (l === 0) {
+                return 1 / Math.sqrt(4 * Math.PI);
+            } else if (l === 1) {
+                if (m === 0) return Math.sqrt(3 / (4 * Math.PI)) * cosT;
+                if (m === 1) return Math.sqrt(3 / (4 * Math.PI)) * sinT * Math.cos(phi);
+                if (m === -1) return Math.sqrt(3 / (4 * Math.PI)) * sinT * Math.sin(phi);
+            } else if (l === 2) {
+                if (m === 0) return Math.sqrt(5 / (16 * Math.PI)) * (3 * cosT * cosT - 1);
+                if (m === 1) return Math.sqrt(15 / (4 * Math.PI)) * sinT * cosT * Math.cos(phi);
+                if (m === -1) return Math.sqrt(15 / (4 * Math.PI)) * sinT * cosT * Math.sin(phi);
+                if (m === 2) return Math.sqrt(15 / (16 * Math.PI)) * sinT * sinT * Math.cos(2 * phi);
+                if (m === -2) return Math.sqrt(15 / (16 * Math.PI)) * sinT * sinT * Math.sin(2 * phi);
+            }
+            return 1;
+        }
+
+        // Probability density
+        function probabilityDensity(r, theta, phi) {
+            const R = radialWaveFunction(r, n, l);
+            const Y = angularWaveFunction(theta, phi, l, m);
+            return R * R * Y * Y;
+        }
+
+        function generateOrbital() {
+            // Remove old point cloud
+            if (pointCloud) {
+                scene.remove(pointCloud);
+                pointCloud.geometry.dispose();
+                pointCloud.material.dispose();
+            }
+
+            // Remove old surface
+            if (surfaceMesh) {
+                scene.remove(surfaceMesh);
+                surfaceMesh.geometry.dispose();
+                surfaceMesh.material.dispose();
+                surfaceMesh = null;
+            }
+
+            const positions = [];
+            const colors = [];
+            const sizes = [];
+
+            const maxR = (n * n + 2) * 2 * scale;
+            const samples = density;
+
+            let attempts = 0;
+            const maxAttempts = samples * 25;
+
+            const primaryColor = new THREE.Color(orbitalColors[l].primary);
+            const negativeColor = new THREE.Color(0xf87171);
+
+            while (positions.length / 3 < samples && attempts < maxAttempts) {
+                attempts++;
+
+                const r = Math.random() * maxR;
+                const theta = Math.acos(2 * Math.random() - 1);
+                const phi = Math.random() * 2 * Math.PI;
+
+                const prob = probabilityDensity(r, theta, phi);
+                const threshold = Math.random() * 0.4;
+
+                if (prob > threshold) {
+                    // Convert to Cartesian
+                    const x = r * Math.sin(theta) * Math.cos(phi);
+                    const y = r * Math.sin(theta) * Math.sin(phi);
+                    const z = r * Math.cos(theta);
+
+                    positions.push(x, z, y); // Swap y and z for proper orientation
+
+                    // Phase color
+                    const Y = angularWaveFunction(theta, phi, l, m);
+                    const phase = Y >= 0;
+
+                    if (showPhase) {
+                        const c = phase ? primaryColor : negativeColor;
+                        colors.push(c.r, c.g, c.b);
+                    } else {
+                        colors.push(primaryColor.r, primaryColor.g, primaryColor.b);
+                    }
+
+                    // Size based on probability
+                    sizes.push(Math.min(1.5, 0.5 + prob * 3));
+                }
+            }
+
+            // Create point cloud geometry
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+
+            // Point material with custom shader for glow effect
+            const material = new THREE.PointsMaterial({
+                size: pointSize * 0.03,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.85,
+                sizeAttenuation: true,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+
+            pointCloud = new THREE.Points(geometry, material);
+            scene.add(pointCloud);
+
+            // Create probability surface if enabled
+            if (showSurface) {
+                createProbabilitySurface();
+            }
+        }
+
+        function createProbabilitySurface() {
+            // Create isosurface at probability threshold
+            const resolution = 40;
+            const maxR = (n * n + 2) * 2 * scale;
+            const step = maxR * 2 / resolution;
+
+            const vertices = [];
+            const probThreshold = 0.05;
+
+            // Simple marching approach - create points on isosurface
+            for (let i = 0; i <= resolution; i++) {
+                for (let j = 0; j <= resolution; j++) {
+                    const theta = (i / resolution) * Math.PI;
+                    const phi = (j / resolution) * 2 * Math.PI;
+
+                    // Find radius where probability equals threshold
+                    let r = 0.1;
+                    for (let k = 0; k < 50; k++) {
+                        const prob = probabilityDensity(r, theta, phi);
+                        if (prob < probThreshold) break;
+                        r += 0.2;
+                    }
+
+                    if (r > 0.2 && r < maxR) {
+                        const x = r * Math.sin(theta) * Math.cos(phi);
+                        const y = r * Math.sin(theta) * Math.sin(phi);
+                        const z = r * Math.cos(theta);
+                        vertices.push(x, z, y);
+                    }
+                }
+            }
+
+            if (vertices.length > 0) {
+                const geometry = new THREE.BufferGeometry();
+                geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+
+                const material = new THREE.PointsMaterial({
+                    size: 0.08,
+                    color: orbitalColors[l].secondary,
+                    transparent: true,
+                    opacity: 0.3,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false
+                });
+
+                surfaceMesh = new THREE.Points(geometry, material);
+                scene.add(surfaceMesh);
+            }
+        }
+
+        function updateInfo() {
+            document.getElementById('nValue').textContent = n;
+            document.getElementById('lValue').textContent = l;
+            document.getElementById('mValue').textContent = m;
+            document.getElementById('shapeValue').textContent = shapeNames[l] || 'Compleja';
+
+            // Update labels
+            const orbitalName = `${n}${['s', 'p', 'd', 'f'][l]}`;
+            document.getElementById('orbitalLabel').textContent = orbitalName;
+            document.getElementById('orbitalLabel').style.color = orbitalColors[l].css;
+            document.getElementById('quantumLabel').textContent = `n=${n}, l=${l}, m=${m}`;
+        }
+
+        function initRadialCanvas() {
+            const rect = radialCanvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            radialCanvas.width = rect.width * dpr;
+            radialCanvas.height = rect.height * dpr;
+            radialCtx.scale(dpr, dpr);
+        }
+
+        function drawRadialDistribution() {
+            const w = radialCanvas.width / (window.devicePixelRatio || 1);
+            const h = radialCanvas.height / (window.devicePixelRatio || 1);
+
+            radialCtx.fillStyle = '#0a0a1a';
+            radialCtx.fillRect(0, 0, w, h);
+
+            const maxR = (n * n + 2) * 2;
+            const color = orbitalColors[l].css;
+
+            // Find max value
+            let maxP = 0;
+            for (let i = 0; i < 100; i++) {
+                const r = (i / 100) * maxR;
+                const R = radialWaveFunction(r, n, l);
+                const P = 4 * Math.PI * r * r * R * R;
+                if (P > maxP) maxP = P;
+            }
+
+            // Draw curve
+            radialCtx.strokeStyle = color;
+            radialCtx.lineWidth = 2;
+            radialCtx.beginPath();
+
+            for (let i = 0; i < 100; i++) {
+                const r = (i / 100) * maxR;
+                const R = radialWaveFunction(r, n, l);
+                const P = 4 * Math.PI * r * r * R * R;
+
+                const x = 10 + (i / 100) * (w - 20);
+                const y = h - 10 - (P / maxP) * (h - 20);
+
+                if (i === 0) radialCtx.moveTo(x, y);
+                else radialCtx.lineTo(x, y);
+            }
+            radialCtx.stroke();
+
+            // Fill
+            radialCtx.lineTo(w - 10, h - 10);
+            radialCtx.lineTo(10, h - 10);
+            radialCtx.closePath();
+
+            const gradient = radialCtx.createLinearGradient(0, 0, 0, h);
+            gradient.addColorStop(0, color.replace(')', ', 0.3)').replace('#', 'rgba(').replace(/([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})/i, (m, r, g, b) => `${parseInt(r,16)}, ${parseInt(g,16)}, ${parseInt(b,16)}`));
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+            radialCtx.fillStyle = `${color}33`;
+            radialCtx.fill();
+
+            // Axes
+            radialCtx.strokeStyle = 'rgba(148, 163, 184, 0.3)';
+            radialCtx.lineWidth = 1;
+            radialCtx.beginPath();
+            radialCtx.moveTo(10, h - 10);
+            radialCtx.lineTo(w - 10, h - 10);
+            radialCtx.moveTo(10, h - 10);
+            radialCtx.lineTo(10, 10);
+            radialCtx.stroke();
+
+            // Labels
+            radialCtx.fillStyle = '#64748b';
+            radialCtx.font = '9px Inter';
+            radialCtx.fillText('r', w - 15, h - 2);
+            radialCtx.fillText('P(r)', 2, 18);
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('canvas-container');
+            const rect = container.getBoundingClientRect();
+
+            camera.aspect = rect.width / rect.height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(rect.width, rect.height);
+
+            initRadialCanvas();
+            drawRadialDistribution();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            controls.autoRotate = autoRotate;
+            controls.update();
+
+            // Update visibility
+            axesGroup.visible = showAxes;
+            nucleus.visible = showNucleus;
+
+            renderer.render(scene, camera);
+        }
+
+        // Event listeners
+        document.querySelectorAll('.orbital-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.orbital-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                n = parseInt(btn.dataset.n);
+                l = parseInt(btn.dataset.l);
+                m = parseInt(btn.dataset.m);
+                generateOrbital();
+                updateInfo();
+                drawRadialDistribution();
+            });
+        });
+
+        document.getElementById('densitySlider').oninput = function() {
+            density = parseInt(this.value);
+            document.getElementById('densityDisplay').textContent = density;
+            generateOrbital();
+        };
+
+        document.getElementById('sizeSlider').oninput = function() {
+            pointSize = parseFloat(this.value);
+            document.getElementById('sizeDisplay').textContent = pointSize.toFixed(1);
+            if (pointCloud) {
+                pointCloud.material.size = pointSize * 0.03;
+            }
+        };
+
+        document.getElementById('scaleSlider').oninput = function() {
+            scale = parseFloat(this.value);
+            document.getElementById('scaleDisplay').textContent = scale.toFixed(1) + 'x';
+            generateOrbital();
+            drawRadialDistribution();
+        };
+
+        document.getElementById('autoRotate').onchange = function() {
+            autoRotate = this.checked;
+        };
+
+        document.getElementById('showAxes').onchange = function() {
+            showAxes = this.checked;
+        };
+
+        document.getElementById('showNucleus').onchange = function() {
+            showNucleus = this.checked;
+        };
+
+        document.getElementById('showPhase').onchange = function() {
+            showPhase = this.checked;
+            generateOrbital();
+        };
+
+        document.getElementById('showSurface').onchange = function() {
+            showSurface = this.checked;
+            generateOrbital();
+        };
+
+        document.getElementById('resetView').onclick = function() {
+            camera.position.set(8, 6, 10);
+            controls.reset();
+        };
+
+        // Initialize
+        window.onload = init;
+    </script>
+</body>
+</html>

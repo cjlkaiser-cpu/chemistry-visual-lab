@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Principio de Le Chatelier | Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --accent: #22c55e;
+            --accent-glow: rgba(34, 197, 94, 0.3);
+            --border-color: #2a2a3a;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+        }
+
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .canvas-header {
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .title-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .title-area span {
+            font-family: 'Covered By Your Grace', cursive;
+            color: var(--accent);
+            font-size: 1rem;
+            margin-left: 0.5rem;
+        }
+
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            min-height: 0;
+        }
+
+        #canvas {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: 0 0 40px var(--accent-glow);
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            min-height: 0;
+        }
+
+        .controls {
+            width: 340px;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        .control-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .control-section:last-child {
+            border-bottom: none;
+        }
+
+        .control-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .control-group {
+            margin-bottom: 1rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.625rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        select:hover, select:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .perturbation-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .perturb-btn {
+            padding: 0.625rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .perturb-btn:hover {
+            border-color: var(--accent);
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .perturb-btn.increase {
+            color: #22d3ee;
+        }
+
+        .perturb-btn.decrease {
+            color: #f472b6;
+        }
+
+        .info-panel {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+        }
+
+        .info-value.large {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .reaction-box {
+            background: var(--bg-primary);
+            border-radius: 6px;
+            padding: 0.75rem;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .reaction-box .reactants {
+            color: #22d3ee;
+        }
+
+        .reaction-box .products {
+            color: #f472b6;
+        }
+
+        .reaction-box .arrow {
+            color: var(--accent);
+            margin: 0 0.5rem;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--bg-primary);
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 1.5s infinite;
+        }
+
+        .status-dot.shifting-right {
+            background: #f472b6;
+        }
+
+        .status-dot.shifting-left {
+            background: #22d3ee;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .controls {
+                width: 100%;
+                height: auto;
+                max-height: 50vh;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-section">
+        <div class="canvas-header">
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Volver al Lab
+            </a>
+            <div class="title-area">
+                <h1>Principio de Le Chatelier <span>⇌ equilibrio dinámico</span></h1>
+            </div>
+        </div>
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-section">
+            <h3>Reacción</h3>
+            <div class="control-group">
+                <label>Sistema de equilibrio</label>
+                <select id="reactionSelect">
+                    <option value="n2o4">N₂O₄ ⇌ 2NO₂ (marrón)</option>
+                    <option value="haber">N₂ + 3H₂ ⇌ 2NH₃</option>
+                    <option value="ester">CH₃COOH + C₂H₅OH ⇌ Éster + H₂O</option>
+                    <option value="co2">CaCO₃ ⇌ Caite + CO₂</option>
+                </select>
+            </div>
+
+            <div class="reaction-box" id="reactionDisplay">
+                <span class="reactants">N₂O₄</span>
+                <span class="arrow">⇌</span>
+                <span class="products">2NO₂</span>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Perturbaciones</h3>
+
+            <div class="control-group">
+                <label>Concentración</label>
+                <div class="perturbation-btns">
+                    <button class="perturb-btn increase" id="addReactant">+ Reactante</button>
+                    <button class="perturb-btn decrease" id="removeReactant">− Reactante</button>
+                    <button class="perturb-btn increase" id="addProduct">+ Producto</button>
+                    <button class="perturb-btn decrease" id="removeProduct">− Producto</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Presión (para gases)</label>
+                <div class="perturbation-btns">
+                    <button class="perturb-btn increase" id="increaseP">↑ Aumentar P</button>
+                    <button class="perturb-btn decrease" id="decreaseP">↓ Disminuir P</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Temperatura</label>
+                <div class="perturbation-btns">
+                    <button class="perturb-btn increase" id="increaseT">🔥 Calentar</button>
+                    <button class="perturb-btn decrease" id="decreaseT">❄️ Enfriar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Estado del Sistema</h3>
+            <div class="status-indicator">
+                <div class="status-dot" id="statusDot"></div>
+                <span class="status-text" id="statusText">En equilibrio</span>
+            </div>
+
+            <div class="info-panel">
+                <div class="info-row">
+                    <span class="info-label">Q (cociente)</span>
+                    <span class="info-value" id="qValue">1.00</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">K (constante)</span>
+                    <span class="info-value large" id="kValue">1.00</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">[Reactantes]</span>
+                    <span class="info-value" id="reactantConc">0.50 M</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">[Productos]</span>
+                    <span class="info-value" id="productConc">0.50 M</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Temperatura</span>
+                    <span class="info-value" id="tempDisplay">298 K</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Presión</span>
+                    <span class="info-value" id="pressureDisplay">1.0 atm</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Controles</h3>
+            <button class="btn btn-primary" id="toggleBtn">⏸ Pausar</button>
+            <button class="btn btn-secondary" id="resetBtn">↺ Restablecer Equilibrio</button>
+        </div>
+
+        <div class="control-section">
+            <h3>Leyenda</h3>
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #22d3ee"></span>
+                    Reactantes
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #f472b6"></span>
+                    Productos
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #22c55e"></span>
+                    Equilibrio
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #fbbf24"></span>
+                    Reacción
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Reactions database
+        const reactions = {
+            'n2o4': {
+                name: 'N₂O₄ ⇌ 2NO₂',
+                reactants: 'N₂O₄',
+                products: '2NO₂',
+                K: 0.115,
+                deltaH: 57.2, // kJ/mol (endothermic)
+                deltaN: 1, // change in moles of gas (2 - 1)
+                reactantColor: '#e5e5e5',
+                productColor: '#a16207' // brown NO2
+            },
+            'haber': {
+                name: 'N₂ + 3H₂ ⇌ 2NH₃',
+                reactants: 'N₂ + 3H₂',
+                products: '2NH₃',
+                K: 6.0e5,
+                deltaH: -92.4, // kJ/mol (exothermic)
+                deltaN: -2, // change in moles (2 - 4)
+                reactantColor: '#60a5fa',
+                productColor: '#34d399'
+            },
+            'ester': {
+                name: 'Ácido + Alcohol ⇌ Éster + H₂O',
+                reactants: 'CH₃COOH + C₂H₅OH',
+                products: 'Éster + H₂O',
+                K: 4.0,
+                deltaH: -10, // slightly exothermic
+                deltaN: 0,
+                reactantColor: '#f472b6',
+                productColor: '#a78bfa'
+            },
+            'co2': {
+                name: 'CaCO₃ ⇌ CaO + CO₂',
+                reactants: 'CaCO₃',
+                products: 'CaO + CO₂',
+                K: 0.001,
+                deltaH: 178, // highly endothermic
+                deltaN: 1,
+                reactantColor: '#e5e5e5',
+                productColor: '#64748b'
+            }
+        };
+
+        let currentReaction = 'n2o4';
+        let reactantConc = 0.5;
+        let productConc = 0.5;
+        let temperature = 298;
+        let pressure = 1.0;
+        let K = reactions[currentReaction].K;
+        let isRunning = true;
+        let equilibriumState = 'equilibrium'; // 'equilibrium', 'shifting-right', 'shifting-left'
+
+        // Particles
+        let reactantParticles = [];
+        let productParticles = [];
+        let reactionEffects = [];
+
+        // Concentration history for graph
+        let concentrationHistory = {
+            time: [],
+            reactants: [],
+            products: []
+        };
+        let historyTime = 0;
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            const aspectRatio = 1.4;
+
+            let width, height;
+            if (rect.width / rect.height > aspectRatio) {
+                height = rect.height - 32;
+                width = height * aspectRatio;
+            } else {
+                width = rect.width - 32;
+                height = width / aspectRatio;
+            }
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            ctx.scale(dpr, dpr);
+        }
+
+        function calculateQ() {
+            // Simplified Q = [products]^n / [reactants]^m
+            return productConc * productConc / (reactantConc || 0.001);
+        }
+
+        function updateK() {
+            // K changes with temperature (Van't Hoff equation simplified)
+            const reaction = reactions[currentReaction];
+            const deltaH = reaction.deltaH * 1000; // J/mol
+            const R = 8.314;
+            const T0 = 298;
+
+            // ln(K2/K1) = -ΔH/R * (1/T2 - 1/T1)
+            const factor = Math.exp(-deltaH / R * (1/temperature - 1/T0));
+            K = reaction.K * factor;
+        }
+
+        function initParticles() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            reactantParticles = [];
+            productParticles = [];
+            reactionEffects = [];
+
+            // Container area
+            const containerX = 20;
+            const containerY = 20;
+            const containerW = w * 0.5 - 40;
+            const containerH = h - 40;
+
+            const numReactants = Math.floor(reactantConc * 30);
+            const numProducts = Math.floor(productConc * 30);
+
+            for (let i = 0; i < numReactants; i++) {
+                reactantParticles.push(createParticle(containerX, containerY, containerW, containerH, 'reactant'));
+            }
+
+            for (let i = 0; i < numProducts; i++) {
+                productParticles.push(createParticle(containerX, containerY, containerW, containerH, 'product'));
+            }
+
+            // Reset history
+            concentrationHistory = { time: [], reactants: [], products: [] };
+            historyTime = 0;
+        }
+
+        function createParticle(containerX, containerY, containerW, containerH, type) {
+            const speedFactor = Math.sqrt(temperature / 298);
+            return {
+                x: containerX + Math.random() * containerW,
+                y: containerY + Math.random() * containerH,
+                vx: (Math.random() - 0.5) * 2 * speedFactor,
+                vy: (Math.random() - 0.5) * 2 * speedFactor,
+                radius: type === 'reactant' ? 10 : 8,
+                type: type
+            };
+        }
+
+        function updateParticles() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            // Adjust container size based on pressure
+            const containerX = 20;
+            const containerY = 20;
+            const containerW = (w * 0.5 - 40) / pressure;
+            const containerH = (h - 40) / Math.sqrt(pressure);
+
+            const speedFactor = Math.sqrt(temperature / 298);
+
+            // Update all particles
+            const allParticles = [...reactantParticles, ...productParticles];
+
+            allParticles.forEach(p => {
+                p.x += p.vx * speedFactor;
+                p.y += p.vy * speedFactor;
+
+                // Container boundaries
+                if (p.x < containerX + p.radius) {
+                    p.x = containerX + p.radius;
+                    p.vx *= -1;
+                }
+                if (p.x > containerX + containerW - p.radius) {
+                    p.x = containerX + containerW - p.radius;
+                    p.vx *= -1;
+                }
+                if (p.y < containerY + p.radius) {
+                    p.y = containerY + p.radius;
+                    p.vy *= -1;
+                }
+                if (p.y > containerY + containerH - p.radius) {
+                    p.y = containerY + containerH - p.radius;
+                    p.vy *= -1;
+                }
+
+                // Random motion
+                p.vx += (Math.random() - 0.5) * 0.1;
+                p.vy += (Math.random() - 0.5) * 0.1;
+                p.vx *= 0.99;
+                p.vy *= 0.99;
+            });
+
+            // Check equilibrium and shift
+            const Q = calculateQ();
+            const tolerance = 0.1;
+
+            if (Math.abs(Q - K) / K < tolerance) {
+                equilibriumState = 'equilibrium';
+            } else if (Q < K) {
+                equilibriumState = 'shifting-right';
+                // Convert reactant to product
+                if (reactantParticles.length > 5 && Math.random() < 0.02) {
+                    const idx = Math.floor(Math.random() * reactantParticles.length);
+                    const p = reactantParticles[idx];
+
+                    reactionEffects.push({
+                        x: p.x, y: p.y,
+                        radius: 5, maxRadius: 25,
+                        alpha: 1, type: 'forward'
+                    });
+
+                    productParticles.push({
+                        ...p,
+                        type: 'product',
+                        radius: 8
+                    });
+
+                    reactantParticles.splice(idx, 1);
+                    reactantConc = reactantParticles.length / 30;
+                    productConc = productParticles.length / 30;
+                }
+            } else {
+                equilibriumState = 'shifting-left';
+                // Convert product to reactant
+                if (productParticles.length > 5 && Math.random() < 0.02) {
+                    const idx = Math.floor(Math.random() * productParticles.length);
+                    const p = productParticles[idx];
+
+                    reactionEffects.push({
+                        x: p.x, y: p.y,
+                        radius: 5, maxRadius: 25,
+                        alpha: 1, type: 'reverse'
+                    });
+
+                    reactantParticles.push({
+                        ...p,
+                        type: 'reactant',
+                        radius: 10
+                    });
+
+                    productParticles.splice(idx, 1);
+                    reactantConc = reactantParticles.length / 30;
+                    productConc = productParticles.length / 30;
+                }
+            }
+
+            // Update effects
+            reactionEffects = reactionEffects.filter(e => {
+                e.radius += 1.5;
+                e.alpha -= 0.04;
+                return e.alpha > 0;
+            });
+
+            // Record history
+            historyTime += 1/60;
+            if (concentrationHistory.time.length === 0 || historyTime - concentrationHistory.time[concentrationHistory.time.length - 1] > 0.1) {
+                concentrationHistory.time.push(historyTime);
+                concentrationHistory.reactants.push(reactantConc);
+                concentrationHistory.products.push(productConc);
+
+                // Keep only last 100 points
+                if (concentrationHistory.time.length > 100) {
+                    concentrationHistory.time.shift();
+                    concentrationHistory.reactants.shift();
+                    concentrationHistory.products.shift();
+                }
+            }
+        }
+
+        function draw() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            const reaction = reactions[currentReaction];
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw container (left half)
+            const containerX = 20;
+            const containerY = 20;
+            const containerW = (w * 0.5 - 40) / pressure;
+            const containerH = (h - 40) / Math.sqrt(pressure);
+
+            // Container background with temperature color
+            const tempColor = temperature > 350 ? 'rgba(239, 68, 68, 0.1)' :
+                             temperature < 273 ? 'rgba(59, 130, 246, 0.1)' :
+                             'rgba(30, 41, 59, 0.5)';
+            ctx.fillStyle = tempColor;
+            ctx.fillRect(containerX, containerY, containerW, containerH);
+
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(containerX, containerY, containerW, containerH);
+
+            // Draw reaction effects
+            reactionEffects.forEach(e => {
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+                const color = e.type === 'forward' ? `rgba(251, 191, 36, ${e.alpha})` :
+                                                     `rgba(34, 197, 94, ${e.alpha})`;
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+
+            // Draw particles
+            reactantParticles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = reaction.reactantColor;
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
+
+            productParticles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = reaction.productColor;
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
+
+            // Draw concentration graph (right half)
+            drawConcentrationGraph(w * 0.55, 40, w * 0.4, h * 0.4);
+
+            // Draw Q vs K comparison
+            drawQKComparison(w * 0.55, h * 0.5, w * 0.4, h * 0.2);
+
+            // Draw direction indicator
+            drawDirectionIndicator(w * 0.55, h * 0.75, w * 0.4, h * 0.2);
+
+            // Labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '11px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Sistema de Reacción', containerX + containerW/2, containerY - 5);
+
+            // Temperature indicator
+            if (temperature > 320) {
+                ctx.fillStyle = '#ef4444';
+                ctx.fillText(`🔥 ${temperature} K`, containerX + containerW/2, containerY + containerH + 15);
+            } else if (temperature < 280) {
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillText(`❄️ ${temperature} K`, containerX + containerW/2, containerY + containerH + 15);
+            }
+        }
+
+        function drawConcentrationGraph(x, y, w, h) {
+            const reaction = reactions[currentReaction];
+
+            // Background
+            ctx.fillStyle = 'rgba(26, 26, 37, 0.8)';
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeStyle = '#2a2a3a';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x, y, w, h);
+
+            // Title
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Concentración vs Tiempo', x + w/2, y + 15);
+
+            // Axes
+            const graphX = x + 30;
+            const graphY = y + 25;
+            const graphW = w - 40;
+            const graphH = h - 40;
+
+            ctx.strokeStyle = '#4a5568';
+            ctx.beginPath();
+            ctx.moveTo(graphX, graphY);
+            ctx.lineTo(graphX, graphY + graphH);
+            ctx.lineTo(graphX + graphW, graphY + graphH);
+            ctx.stroke();
+
+            if (concentrationHistory.time.length > 1) {
+                const maxConc = Math.max(...concentrationHistory.reactants, ...concentrationHistory.products, 1);
+                const minTime = concentrationHistory.time[0];
+                const maxTime = concentrationHistory.time[concentrationHistory.time.length - 1];
+                const timeRange = maxTime - minTime || 1;
+
+                // Draw reactant line
+                ctx.beginPath();
+                concentrationHistory.time.forEach((t, i) => {
+                    const px = graphX + ((t - minTime) / timeRange) * graphW;
+                    const py = graphY + graphH - (concentrationHistory.reactants[i] / maxConc) * graphH;
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                });
+                ctx.strokeStyle = reaction.reactantColor;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Draw product line
+                ctx.beginPath();
+                concentrationHistory.time.forEach((t, i) => {
+                    const px = graphX + ((t - minTime) / timeRange) * graphW;
+                    const py = graphY + graphH - (concentrationHistory.products[i] / maxConc) * graphH;
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                });
+                ctx.strokeStyle = reaction.productColor;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+
+            // Legend
+            ctx.fillStyle = reaction.reactantColor;
+            ctx.fillRect(graphX + graphW - 60, graphY + 5, 10, 10);
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '8px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText('React.', graphX + graphW - 45, graphY + 13);
+
+            ctx.fillStyle = reaction.productColor;
+            ctx.fillRect(graphX + graphW - 60, graphY + 18, 10, 10);
+            ctx.fillStyle = '#a0a0a0';
+            ctx.fillText('Prod.', graphX + graphW - 45, graphY + 26);
+        }
+
+        function drawQKComparison(x, y, w, h) {
+            ctx.fillStyle = 'rgba(26, 26, 37, 0.8)';
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeStyle = '#2a2a3a';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x, y, w, h);
+
+            const Q = calculateQ();
+
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Comparación Q vs K', x + w/2, y + 15);
+
+            // Bar visualization
+            const barY = y + 35;
+            const barH = 20;
+            const centerX = x + w/2;
+
+            // K marker (center)
+            ctx.fillStyle = '#22c55e';
+            ctx.fillRect(centerX - 2, barY - 5, 4, barH + 10);
+            ctx.fillStyle = '#22c55e';
+            ctx.font = 'bold 10px Fira Code';
+            ctx.fillText('K', centerX, barY + barH + 20);
+
+            // Q marker
+            const qPos = centerX + Math.log10(Q/K) * 50; // logarithmic scale
+            const qX = Math.max(x + 30, Math.min(x + w - 30, qPos));
+
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.moveTo(qX, barY);
+            ctx.lineTo(qX - 8, barY - 10);
+            ctx.lineTo(qX + 8, barY - 10);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = 'bold 10px Fira Code';
+            ctx.fillText('Q', qX, barY - 15);
+
+            // Scale line
+            ctx.strokeStyle = '#4a5568';
+            ctx.beginPath();
+            ctx.moveTo(x + 20, barY + barH/2);
+            ctx.lineTo(x + w - 20, barY + barH/2);
+            ctx.stroke();
+
+            // Direction labels
+            ctx.fillStyle = '#64748b';
+            ctx.font = '9px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText('Q < K → Productos', x + 10, barY + barH + 35);
+            ctx.textAlign = 'right';
+            ctx.fillText('Q > K → Reactantes', x + w - 10, barY + barH + 35);
+        }
+
+        function drawDirectionIndicator(x, y, w, h) {
+            ctx.fillStyle = 'rgba(26, 26, 37, 0.8)';
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeStyle = '#2a2a3a';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x, y, w, h);
+
+            const reaction = reactions[currentReaction];
+            const centerY = y + h/2;
+
+            // Reaction equation
+            ctx.font = '12px Fira Code';
+            ctx.textAlign = 'center';
+
+            ctx.fillStyle = reaction.reactantColor;
+            ctx.fillText(reaction.reactants, x + w * 0.25, centerY - 5);
+
+            ctx.fillStyle = reaction.productColor;
+            ctx.fillText(reaction.products, x + w * 0.75, centerY - 5);
+
+            // Arrow
+            const arrowY = centerY + 15;
+            ctx.beginPath();
+
+            if (equilibriumState === 'shifting-right') {
+                // Forward arrow (emphasized)
+                ctx.moveTo(x + w * 0.35, arrowY);
+                ctx.lineTo(x + w * 0.65, arrowY);
+                ctx.lineTo(x + w * 0.6, arrowY - 8);
+                ctx.moveTo(x + w * 0.65, arrowY);
+                ctx.lineTo(x + w * 0.6, arrowY + 8);
+                ctx.strokeStyle = '#fbbf24';
+                ctx.lineWidth = 3;
+            } else if (equilibriumState === 'shifting-left') {
+                // Reverse arrow (emphasized)
+                ctx.moveTo(x + w * 0.65, arrowY);
+                ctx.lineTo(x + w * 0.35, arrowY);
+                ctx.lineTo(x + w * 0.4, arrowY - 8);
+                ctx.moveTo(x + w * 0.35, arrowY);
+                ctx.lineTo(x + w * 0.4, arrowY + 8);
+                ctx.strokeStyle = '#fbbf24';
+                ctx.lineWidth = 3;
+            } else {
+                // Double arrow (equilibrium)
+                ctx.moveTo(x + w * 0.35, arrowY - 3);
+                ctx.lineTo(x + w * 0.65, arrowY - 3);
+                ctx.lineTo(x + w * 0.6, arrowY - 8);
+                ctx.moveTo(x + w * 0.65, arrowY + 3);
+                ctx.lineTo(x + w * 0.35, arrowY + 3);
+                ctx.lineTo(x + w * 0.4, arrowY + 8);
+                ctx.strokeStyle = '#22c55e';
+                ctx.lineWidth = 2;
+            }
+            ctx.stroke();
+
+            // ΔH indicator
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Inter';
+            const dhLabel = reaction.deltaH > 0 ? '(endotérmica, +ΔH)' : '(exotérmica, -ΔH)';
+            ctx.fillText(dhLabel, x + w/2, centerY + 40);
+        }
+
+        function updateDisplay() {
+            const Q = calculateQ();
+
+            document.getElementById('qValue').textContent = Q.toFixed(3);
+            document.getElementById('kValue').textContent = K.toFixed(3);
+            document.getElementById('reactantConc').textContent = reactantConc.toFixed(2) + ' M';
+            document.getElementById('productConc').textContent = productConc.toFixed(2) + ' M';
+            document.getElementById('tempDisplay').textContent = temperature + ' K';
+            document.getElementById('pressureDisplay').textContent = pressure.toFixed(1) + ' atm';
+
+            // Update status
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+
+            statusDot.className = 'status-dot';
+            if (equilibriumState === 'shifting-right') {
+                statusDot.classList.add('shifting-right');
+                statusText.textContent = 'Desplazándose → Productos';
+            } else if (equilibriumState === 'shifting-left') {
+                statusDot.classList.add('shifting-left');
+                statusText.textContent = 'Desplazándose ← Reactantes';
+            } else {
+                statusText.textContent = 'En equilibrio';
+            }
+
+            // Update reaction display
+            const reaction = reactions[currentReaction];
+            document.getElementById('reactionDisplay').innerHTML =
+                `<span class="reactants">${reaction.reactants}</span>` +
+                `<span class="arrow">⇌</span>` +
+                `<span class="products">${reaction.products}</span>`;
+        }
+
+        function animate() {
+            if (isRunning) {
+                updateParticles();
+            }
+            draw();
+            updateDisplay();
+            requestAnimationFrame(animate);
+        }
+
+        // Event listeners
+        document.getElementById('reactionSelect').addEventListener('change', (e) => {
+            currentReaction = e.target.value;
+            K = reactions[currentReaction].K;
+            updateK();
+            initParticles();
+        });
+
+        document.getElementById('addReactant').addEventListener('click', () => {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            for (let i = 0; i < 10; i++) {
+                reactantParticles.push(createParticle(20, 20, (w * 0.5 - 40) / pressure, (h - 40) / Math.sqrt(pressure), 'reactant'));
+            }
+            reactantConc = reactantParticles.length / 30;
+        });
+
+        document.getElementById('removeReactant').addEventListener('click', () => {
+            for (let i = 0; i < 10 && reactantParticles.length > 5; i++) {
+                reactantParticles.pop();
+            }
+            reactantConc = reactantParticles.length / 30;
+        });
+
+        document.getElementById('addProduct').addEventListener('click', () => {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            for (let i = 0; i < 10; i++) {
+                productParticles.push(createParticle(20, 20, (w * 0.5 - 40) / pressure, (h - 40) / Math.sqrt(pressure), 'product'));
+            }
+            productConc = productParticles.length / 30;
+        });
+
+        document.getElementById('removeProduct').addEventListener('click', () => {
+            for (let i = 0; i < 10 && productParticles.length > 5; i++) {
+                productParticles.pop();
+            }
+            productConc = productParticles.length / 30;
+        });
+
+        document.getElementById('increaseP').addEventListener('click', () => {
+            pressure = Math.min(3.0, pressure + 0.5);
+        });
+
+        document.getElementById('decreaseP').addEventListener('click', () => {
+            pressure = Math.max(0.5, pressure - 0.5);
+        });
+
+        document.getElementById('increaseT').addEventListener('click', () => {
+            temperature = Math.min(500, temperature + 50);
+            updateK();
+        });
+
+        document.getElementById('decreaseT').addEventListener('click', () => {
+            temperature = Math.max(200, temperature - 50);
+            updateK();
+        });
+
+        document.getElementById('toggleBtn').addEventListener('click', () => {
+            isRunning = !isRunning;
+            document.getElementById('toggleBtn').textContent = isRunning ? '⏸ Pausar' : '▶ Iniciar';
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            temperature = 298;
+            pressure = 1.0;
+            reactantConc = 0.5;
+            productConc = 0.5;
+            updateK();
+            initParticles();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        // Initialize
+        resizeCanvas();
+        updateK();
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinética y Colisiones | Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --accent: #a855f7;
+            --accent-glow: rgba(168, 85, 247, 0.3);
+            --border-color: #2a2a3a;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+        }
+
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .canvas-header {
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .title-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .title-area span {
+            font-family: 'Covered By Your Grace', cursive;
+            color: var(--accent);
+            font-size: 1rem;
+            margin-left: 0.5rem;
+        }
+
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            min-height: 0;
+        }
+
+        #canvas {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: 0 0 40px var(--accent-glow);
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            min-height: 0;
+        }
+
+        .controls {
+            width: 340px;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        .control-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .control-section:last-child {
+            border-bottom: none;
+        }
+
+        .control-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .slider-container {
+            margin-bottom: 1rem;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-header label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .slider-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+            background: var(--bg-tertiary);
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+        }
+
+        .info-panel {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+        }
+
+        .info-value.large {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .equation-box {
+            background: var(--bg-primary);
+            border-radius: 6px;
+            padding: 0.75rem;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            margin-top: 0.5rem;
+        }
+
+        .equation-box .highlight {
+            color: var(--accent);
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .view-btn {
+            flex: 1;
+            padding: 0.5rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .controls {
+                width: 100%;
+                height: auto;
+                max-height: 50vh;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-section">
+        <div class="canvas-header">
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Volver al Lab
+            </a>
+            <div class="title-area">
+                <h1>Cinética y Colisiones <span>k = Ae^(-Ea/RT)</span></h1>
+            </div>
+        </div>
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-section">
+            <h3>Vista</h3>
+            <div class="view-toggle">
+                <button class="view-btn active" id="viewCollisions">Colisiones</button>
+                <button class="view-btn" id="viewEnergy">Energía</button>
+                <button class="view-btn" id="viewMaxwell">Maxwell</button>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Parámetros</h3>
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>Temperatura (K)</label>
+                    <span class="slider-value" id="tempValue">300</span>
+                </div>
+                <input type="range" id="tempSlider" min="200" max="600" step="10" value="300">
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>Energía Activación (kJ/mol)</label>
+                    <span class="slider-value" id="eaValue">50</span>
+                </div>
+                <input type="range" id="eaSlider" min="10" max="150" step="5" value="50">
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>Concentración (M)</label>
+                    <span class="slider-value" id="concValue">1.0</span>
+                </div>
+                <input type="range" id="concSlider" min="0.2" max="2.0" step="0.1" value="1.0">
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>Factor pre-exponencial (A)</label>
+                    <span class="slider-value" id="aValue">1e10</span>
+                </div>
+                <input type="range" id="aSlider" min="8" max="14" step="0.5" value="10">
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Constante de Velocidad</h3>
+            <div class="info-panel">
+                <div class="info-row">
+                    <span class="info-label">k (s⁻¹)</span>
+                    <span class="info-value large" id="rateConstant">2.45×10³</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Colisiones efectivas</span>
+                    <span class="info-value" id="effectivePercent">12.3%</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Colisiones/s</span>
+                    <span class="info-value" id="collisionRate">0</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Reacciones</span>
+                    <span class="info-value" id="reactions">0</span>
+                </div>
+            </div>
+
+            <div class="equation-box">
+                k = <span class="highlight">A</span> × e<sup>-<span class="highlight">Ea</span>/RT</sup>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Controles</h3>
+            <button class="btn btn-primary" id="toggleBtn">⏸ Pausar</button>
+            <button class="btn btn-secondary" id="resetBtn">↺ Reiniciar</button>
+        </div>
+
+        <div class="control-section">
+            <h3>Leyenda</h3>
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #22d3ee"></span>
+                    Reactante A
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #f472b6"></span>
+                    Reactante B
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #a855f7"></span>
+                    Producto
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #fbbf24"></span>
+                    Colisión efectiva
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let temperature = 300;
+        let activationEnergy = 50; // kJ/mol
+        let concentration = 1.0;
+        let preExpFactor = 1e10;
+        let isRunning = true;
+        let currentView = 'collisions';
+
+        // Particles
+        let particlesA = [];
+        let particlesB = [];
+        let products = [];
+        let collisionEffects = [];
+
+        // Statistics
+        let totalCollisions = 0;
+        let effectiveCollisions = 0;
+        let reactionCount = 0;
+        let collisionsPerSecond = 0;
+        let collisionHistory = [];
+
+        const R = 8.314; // J/(mol·K)
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            const size = Math.min(rect.width - 32, rect.height - 32);
+            const aspectRatio = 1.3;
+
+            let width, height;
+            if (rect.width / rect.height > aspectRatio) {
+                height = rect.height - 32;
+                width = height * aspectRatio;
+            } else {
+                width = rect.width - 32;
+                height = width / aspectRatio;
+            }
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            ctx.scale(dpr, dpr);
+        }
+
+        function calculateRateConstant() {
+            // Arrhenius equation: k = A * exp(-Ea/RT)
+            const EaJoules = activationEnergy * 1000; // Convert to J/mol
+            const k = preExpFactor * Math.exp(-EaJoules / (R * temperature));
+            return k;
+        }
+
+        function getEffectiveFraction() {
+            // Fraction of molecules with energy >= Ea
+            const EaJoules = activationEnergy * 1000;
+            return Math.exp(-EaJoules / (R * temperature));
+        }
+
+        function getMaxwellBoltzmann(E, T) {
+            // Simplified Maxwell-Boltzmann energy distribution
+            const kT = R * T / 1000; // kJ/mol
+            return 2 * Math.sqrt(E / Math.PI) * Math.pow(kT, -1.5) * Math.exp(-E / kT);
+        }
+
+        function initParticles() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            particlesA = [];
+            particlesB = [];
+            products = [];
+            collisionEffects = [];
+            totalCollisions = 0;
+            effectiveCollisions = 0;
+            reactionCount = 0;
+            collisionHistory = [];
+
+            const numParticles = Math.floor(concentration * 25);
+            const speedFactor = Math.sqrt(temperature / 300);
+
+            for (let i = 0; i < numParticles; i++) {
+                particlesA.push({
+                    x: Math.random() * w * 0.9 + w * 0.05,
+                    y: Math.random() * h * 0.9 + h * 0.05,
+                    vx: (Math.random() - 0.5) * 3 * speedFactor,
+                    vy: (Math.random() - 0.5) * 3 * speedFactor,
+                    radius: 8,
+                    energy: Math.random() * 100 // kJ/mol equivalent
+                });
+
+                particlesB.push({
+                    x: Math.random() * w * 0.9 + w * 0.05,
+                    y: Math.random() * h * 0.9 + h * 0.05,
+                    vx: (Math.random() - 0.5) * 3 * speedFactor,
+                    vy: (Math.random() - 0.5) * 3 * speedFactor,
+                    radius: 8,
+                    energy: Math.random() * 100
+                });
+            }
+        }
+
+        function updateParticles() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            const speedFactor = Math.sqrt(temperature / 300);
+
+            // Update particle A positions
+            particlesA.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Boundary collisions
+                if (p.x < p.radius || p.x > w - p.radius) {
+                    p.vx *= -1;
+                    p.x = Math.max(p.radius, Math.min(w - p.radius, p.x));
+                }
+                if (p.y < p.radius || p.y > h - p.radius) {
+                    p.vy *= -1;
+                    p.y = Math.max(p.radius, Math.min(h - p.radius, p.y));
+                }
+
+                // Update energy based on velocity
+                p.energy = 0.5 * (p.vx * p.vx + p.vy * p.vy) * 50;
+            });
+
+            // Update particle B positions
+            particlesB.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < p.radius || p.x > w - p.radius) {
+                    p.vx *= -1;
+                    p.x = Math.max(p.radius, Math.min(w - p.radius, p.x));
+                }
+                if (p.y < p.radius || p.y > h - p.radius) {
+                    p.vy *= -1;
+                    p.y = Math.max(p.radius, Math.min(h - p.radius, p.y));
+                }
+
+                p.energy = 0.5 * (p.vx * p.vx + p.vy * p.vy) * 50;
+            });
+
+            // Check for collisions between A and B
+            for (let i = particlesA.length - 1; i >= 0; i--) {
+                for (let j = particlesB.length - 1; j >= 0; j--) {
+                    const a = particlesA[i];
+                    const b = particlesB[j];
+                    if (!a || !b) continue;
+
+                    const dx = a.x - b.x;
+                    const dy = a.y - b.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < a.radius + b.radius) {
+                        totalCollisions++;
+                        collisionHistory.push(Date.now());
+
+                        // Check if collision has enough energy (effective collision)
+                        const collisionEnergy = a.energy + b.energy;
+                        const effectiveProb = getEffectiveFraction();
+
+                        if (Math.random() < effectiveProb * 0.5) {
+                            // Successful reaction!
+                            effectiveCollisions++;
+                            reactionCount++;
+
+                            // Create product
+                            products.push({
+                                x: (a.x + b.x) / 2,
+                                y: (a.y + b.y) / 2,
+                                vx: (a.vx + b.vx) / 2,
+                                vy: (a.vy + b.vy) / 2,
+                                radius: 10,
+                                age: 0
+                            });
+
+                            // Create collision effect
+                            collisionEffects.push({
+                                x: (a.x + b.x) / 2,
+                                y: (a.y + b.y) / 2,
+                                radius: 5,
+                                maxRadius: 30,
+                                alpha: 1,
+                                effective: true
+                            });
+
+                            // Remove reactants
+                            particlesA.splice(i, 1);
+                            particlesB.splice(j, 1);
+                            break;
+                        } else {
+                            // Elastic collision
+                            const nx = dx / dist;
+                            const ny = dy / dist;
+
+                            const dvx = a.vx - b.vx;
+                            const dvy = a.vy - b.vy;
+                            const dvn = dvx * nx + dvy * ny;
+
+                            a.vx -= dvn * nx;
+                            a.vy -= dvn * ny;
+                            b.vx += dvn * nx;
+                            b.vy += dvn * ny;
+
+                            // Separate particles
+                            const overlap = a.radius + b.radius - dist;
+                            a.x += nx * overlap / 2;
+                            a.y += ny * overlap / 2;
+                            b.x -= nx * overlap / 2;
+                            b.y -= ny * overlap / 2;
+
+                            // Non-effective collision effect
+                            collisionEffects.push({
+                                x: (a.x + b.x) / 2,
+                                y: (a.y + b.y) / 2,
+                                radius: 3,
+                                maxRadius: 15,
+                                alpha: 0.5,
+                                effective: false
+                            });
+                        }
+                    }
+                }
+            }
+
+            // Update products
+            products.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.age++;
+
+                if (p.x < p.radius || p.x > w - p.radius) p.vx *= -1;
+                if (p.y < p.radius || p.y > h - p.radius) p.vy *= -1;
+            });
+
+            // Update collision effects
+            collisionEffects = collisionEffects.filter(e => {
+                e.radius += 2;
+                e.alpha -= 0.05;
+                return e.alpha > 0;
+            });
+
+            // Calculate collisions per second
+            const now = Date.now();
+            collisionHistory = collisionHistory.filter(t => now - t < 1000);
+            collisionsPerSecond = collisionHistory.length;
+        }
+
+        function drawCollisions() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw container
+            ctx.strokeStyle = '#2a2a3a';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(10, 10, w - 20, h - 20);
+
+            // Draw collision effects
+            collisionEffects.forEach(e => {
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+                if (e.effective) {
+                    ctx.strokeStyle = `rgba(251, 191, 36, ${e.alpha})`;
+                    ctx.lineWidth = 3;
+                } else {
+                    ctx.strokeStyle = `rgba(100, 100, 100, ${e.alpha})`;
+                    ctx.lineWidth = 1;
+                }
+                ctx.stroke();
+            });
+
+            // Draw particles A (cyan)
+            particlesA.forEach(p => {
+                const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+                gradient.addColorStop(0, '#67e8f9');
+                gradient.addColorStop(1, '#22d3ee');
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 10px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('A', p.x, p.y);
+            });
+
+            // Draw particles B (pink)
+            particlesB.forEach(p => {
+                const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+                gradient.addColorStop(0, '#f9a8d4');
+                gradient.addColorStop(1, '#f472b6');
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 10px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('B', p.x, p.y);
+            });
+
+            // Draw products (purple)
+            products.forEach(p => {
+                const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+                gradient.addColorStop(0, '#c084fc');
+                gradient.addColorStop(1, '#a855f7');
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+
+                // Glow effect for new products
+                if (p.age < 30) {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius + 5, 0, Math.PI * 2);
+                    ctx.strokeStyle = `rgba(168, 85, 247, ${1 - p.age / 30})`;
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 9px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('AB', p.x, p.y);
+            });
+
+            // Title
+            ctx.fillStyle = '#64748b';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText('A + B → AB', 20, 30);
+
+            // Stats
+            ctx.textAlign = 'right';
+            ctx.fillText(`T = ${temperature} K`, w - 20, 30);
+        }
+
+        function drawEnergyProfile() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            ctx.clearRect(0, 0, w, h);
+
+            const margin = 60;
+            const graphW = w - 2 * margin;
+            const graphH = h - 2 * margin;
+
+            // Draw axes
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin, margin);
+            ctx.lineTo(margin, h - margin);
+            ctx.lineTo(w - margin, h - margin);
+            ctx.stroke();
+
+            // Y-axis label
+            ctx.save();
+            ctx.translate(25, h / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Energía Potencial', 0, 0);
+            ctx.restore();
+
+            // X-axis label
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Coordenada de Reacción', w / 2, h - 20);
+
+            // Energy levels
+            const reactantE = 0.3;
+            const productE = 0.2;
+            const transitionE = 0.3 + activationEnergy / 150;
+
+            // Draw energy curve
+            ctx.beginPath();
+            ctx.moveTo(margin, h - margin - reactantE * graphH);
+
+            // Reactants plateau
+            ctx.lineTo(margin + graphW * 0.2, h - margin - reactantE * graphH);
+
+            // Transition state (activation barrier)
+            const peakX = margin + graphW * 0.5;
+            const peakY = h - margin - transitionE * graphH;
+
+            ctx.bezierCurveTo(
+                margin + graphW * 0.3, h - margin - reactantE * graphH,
+                margin + graphW * 0.4, peakY,
+                peakX, peakY
+            );
+
+            ctx.bezierCurveTo(
+                margin + graphW * 0.6, peakY,
+                margin + graphW * 0.7, h - margin - productE * graphH,
+                margin + graphW * 0.8, h - margin - productE * graphH
+            );
+
+            // Products plateau
+            ctx.lineTo(w - margin, h - margin - productE * graphH);
+
+            ctx.strokeStyle = '#a855f7';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Activation energy arrow
+            const eaStartY = h - margin - reactantE * graphH;
+            const eaEndY = peakY;
+
+            ctx.setLineDash([5, 5]);
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin + graphW * 0.35, eaStartY);
+            ctx.lineTo(margin + graphW * 0.35, eaEndY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Ea arrow heads
+            ctx.beginPath();
+            ctx.moveTo(margin + graphW * 0.35 - 5, eaEndY + 10);
+            ctx.lineTo(margin + graphW * 0.35, eaEndY);
+            ctx.lineTo(margin + graphW * 0.35 + 5, eaEndY + 10);
+            ctx.strokeStyle = '#ef4444';
+            ctx.stroke();
+
+            ctx.fillStyle = '#ef4444';
+            ctx.font = 'bold 12px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(`Ea = ${activationEnergy} kJ/mol`, margin + graphW * 0.37, (eaStartY + eaEndY) / 2);
+
+            // Delta H arrow
+            const dhStartY = h - margin - reactantE * graphH;
+            const dhEndY = h - margin - productE * graphH;
+
+            ctx.setLineDash([5, 5]);
+            ctx.strokeStyle = '#22d3ee';
+            ctx.beginPath();
+            ctx.moveTo(margin + graphW * 0.85, dhStartY);
+            ctx.lineTo(margin + graphW * 0.85, dhEndY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            const deltaH = ((productE - reactantE) * 150).toFixed(0);
+            ctx.fillStyle = '#22d3ee';
+            ctx.font = 'bold 12px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(`ΔH = ${deltaH} kJ/mol`, margin + graphW * 0.87, (dhStartY + dhEndY) / 2);
+
+            // Labels
+            ctx.fillStyle = '#f0f0f0';
+            ctx.font = '11px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Reactantes', margin + graphW * 0.1, h - margin - reactantE * graphH - 15);
+            ctx.fillText('A + B', margin + graphW * 0.1, h - margin - reactantE * graphH + 20);
+
+            ctx.fillText('Estado de', peakX, peakY - 25);
+            ctx.fillText('Transición', peakX, peakY - 10);
+
+            ctx.fillText('Productos', w - margin - graphW * 0.1, h - margin - productE * graphH - 15);
+            ctx.fillText('AB', w - margin - graphW * 0.1, h - margin - productE * graphH + 20);
+
+            // Activation complex
+            ctx.beginPath();
+            ctx.arc(peakX, peakY, 20, 0, Math.PI * 2);
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = '10px Inter';
+            ctx.fillText('[A···B]‡', peakX, peakY + 5);
+        }
+
+        function drawMaxwellBoltzmann() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            ctx.clearRect(0, 0, w, h);
+
+            const margin = 60;
+            const graphW = w - 2 * margin;
+            const graphH = h - 2 * margin;
+
+            // Draw axes
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin, margin);
+            ctx.lineTo(margin, h - margin);
+            ctx.lineTo(w - margin, h - margin);
+            ctx.stroke();
+
+            // Y-axis label
+            ctx.save();
+            ctx.translate(25, h / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Fracción de Moléculas', 0, 0);
+            ctx.restore();
+
+            // X-axis label
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Energía Cinética (kJ/mol)', w / 2, h - 20);
+
+            // Draw distribution curves at different temperatures
+            const temps = [
+                { T: 300, color: '#22d3ee', label: '300 K' },
+                { T: temperature, color: '#a855f7', label: `${temperature} K (actual)` }
+            ];
+
+            if (temperature !== 300 && temperature !== 500) {
+                temps.push({ T: 500, color: '#ef4444', label: '500 K' });
+            }
+
+            temps.sort((a, b) => a.T - b.T);
+
+            temps.forEach(({ T, color, label }) => {
+                ctx.beginPath();
+
+                let maxY = 0;
+                const points = [];
+
+                for (let E = 0; E <= 100; E += 0.5) {
+                    const y = getMaxwellBoltzmann(E, T);
+                    points.push({ E, y });
+                    if (y > maxY) maxY = y;
+                }
+
+                // Normalize and draw
+                const scale = graphH * 0.9 / maxY;
+                points.forEach((p, i) => {
+                    const x = margin + (p.E / 100) * graphW;
+                    const y = h - margin - p.y * scale;
+
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                });
+
+                ctx.strokeStyle = color;
+                ctx.lineWidth = T === temperature ? 3 : 2;
+                ctx.stroke();
+
+                // Find peak for label
+                const peak = points.reduce((a, b) => a.y > b.y ? a : b);
+                const labelX = margin + (peak.E / 100) * graphW;
+                const labelY = h - margin - peak.y * scale - 10;
+
+                ctx.fillStyle = color;
+                ctx.font = '11px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(label, labelX, labelY);
+            });
+
+            // Draw activation energy line
+            const eaX = margin + (activationEnergy / 100) * graphW;
+
+            ctx.beginPath();
+            ctx.moveTo(eaX, margin);
+            ctx.lineTo(eaX, h - margin);
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#fbbf24';
+            ctx.font = 'bold 11px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(`Ea = ${activationEnergy} kJ/mol`, eaX + 10, margin + 20);
+
+            // Shade area above Ea for current temperature
+            ctx.beginPath();
+            ctx.moveTo(eaX, h - margin);
+
+            let maxY = 0;
+            const points = [];
+            for (let E = activationEnergy; E <= 100; E += 0.5) {
+                const y = getMaxwellBoltzmann(E, temperature);
+                points.push({ E, y });
+                if (y > maxY) maxY = y;
+            }
+
+            const scale = (graphH * 0.9) / (getMaxwellBoltzmann(temperature * 0.001 * R, temperature) || 1);
+
+            points.forEach(p => {
+                const x = margin + (p.E / 100) * graphW;
+                const y = h - margin - p.y * scale;
+                ctx.lineTo(x, y);
+            });
+
+            ctx.lineTo(w - margin, h - margin);
+            ctx.closePath();
+
+            ctx.fillStyle = 'rgba(168, 85, 247, 0.3)';
+            ctx.fill();
+
+            // Label for reactive fraction
+            const fraction = (getEffectiveFraction() * 100).toFixed(2);
+            ctx.fillStyle = '#a855f7';
+            ctx.font = 'bold 12px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Moléculas con E ≥ Ea: ${fraction}%`, w / 2, margin + 40);
+
+            // Arrow indicating reactive molecules
+            ctx.beginPath();
+            ctx.moveTo(eaX + graphW * 0.15, margin + 60);
+            ctx.lineTo(eaX + graphW * 0.1, margin + 70);
+            ctx.strokeStyle = '#a855f7';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function updateDisplay() {
+            const k = calculateRateConstant();
+            const fraction = getEffectiveFraction() * 100;
+
+            // Format rate constant in scientific notation
+            let kDisplay;
+            if (k >= 1e6) {
+                kDisplay = k.toExponential(2);
+            } else if (k >= 0.01) {
+                kDisplay = k.toFixed(2);
+            } else {
+                kDisplay = k.toExponential(2);
+            }
+
+            document.getElementById('rateConstant').textContent = kDisplay;
+            document.getElementById('effectivePercent').textContent = fraction.toFixed(2) + '%';
+            document.getElementById('collisionRate').textContent = collisionsPerSecond;
+            document.getElementById('reactions').textContent = reactionCount;
+        }
+
+        function draw() {
+            switch (currentView) {
+                case 'collisions':
+                    drawCollisions();
+                    break;
+                case 'energy':
+                    drawEnergyProfile();
+                    break;
+                case 'maxwell':
+                    drawMaxwellBoltzmann();
+                    break;
+            }
+        }
+
+        function animate() {
+            if (isRunning && currentView === 'collisions') {
+                updateParticles();
+            }
+            draw();
+            updateDisplay();
+            requestAnimationFrame(animate);
+        }
+
+        // Event listeners
+        document.getElementById('tempSlider').addEventListener('input', (e) => {
+            temperature = parseInt(e.target.value);
+            document.getElementById('tempValue').textContent = temperature;
+            // Update particle speeds
+            const speedFactor = Math.sqrt(temperature / 300);
+            [...particlesA, ...particlesB].forEach(p => {
+                const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                const angle = Math.atan2(p.vy, p.vx);
+                const newSpeed = speed * speedFactor / Math.sqrt(300 / temperature);
+                p.vx = newSpeed * Math.cos(angle);
+                p.vy = newSpeed * Math.sin(angle);
+            });
+        });
+
+        document.getElementById('eaSlider').addEventListener('input', (e) => {
+            activationEnergy = parseInt(e.target.value);
+            document.getElementById('eaValue').textContent = activationEnergy;
+        });
+
+        document.getElementById('concSlider').addEventListener('input', (e) => {
+            concentration = parseFloat(e.target.value);
+            document.getElementById('concValue').textContent = concentration.toFixed(1);
+            initParticles();
+        });
+
+        document.getElementById('aSlider').addEventListener('input', (e) => {
+            const exp = parseFloat(e.target.value);
+            preExpFactor = Math.pow(10, exp);
+            document.getElementById('aValue').textContent = `1e${exp}`;
+        });
+
+        document.getElementById('toggleBtn').addEventListener('click', () => {
+            isRunning = !isRunning;
+            document.getElementById('toggleBtn').textContent = isRunning ? '⏸ Pausar' : '▶ Iniciar';
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            initParticles();
+        });
+
+        // View toggle buttons
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentView = btn.id.replace('view', '').toLowerCase();
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        // Initialize
+        resizeCanvas();
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>

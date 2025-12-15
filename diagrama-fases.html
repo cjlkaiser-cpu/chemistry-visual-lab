@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Fases - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e2e8f0;
+            display: flex;
+        }
+
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .title-bar {
+            margin-bottom: 15px;
+        }
+
+        .title-bar h1 {
+            font-size: 1.8rem;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title-bar h1 a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .title-bar h1 a:hover {
+            color: #3b82f6;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        #canvas {
+            flex: 1;
+            width: 100%;
+            min-height: 0;
+            background: radial-gradient(ellipse at center, #0c1929 0%, #020617 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            cursor: crosshair;
+        }
+
+        .controls {
+            width: 320px;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border-left: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 20px;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #3b82f6;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .substance-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .substance-btn {
+            padding: 10px 8px;
+            border: 2px solid #334155;
+            border-radius: 6px;
+            background: #1e293b;
+            color: #94a3b8;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .substance-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .substance-btn.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .slider-group {
+            margin-bottom: 16px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .slider-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .slider-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #3b82f6;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #334155;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        .info-card {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .info-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            color: #60a5fa;
+            margin-top: 2px;
+        }
+
+        .phase-indicator {
+            text-align: center;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .phase-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .phase-solid { color: #60a5fa; }
+        .phase-liquid { color: #22c55e; }
+        .phase-gas { color: #f97316; }
+        .phase-supercritical { color: #a855f7; }
+
+        .phase-description {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .special-points {
+            margin-top: 12px;
+        }
+
+        .point-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+
+        .point-name {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .point-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #60a5fa;
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .toggle-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #334155;
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        .toggle input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-section">
+        <div class="title-bar">
+            <h1><a href="index.html">&larr;</a> Diagrama de Fases</h1>
+            <p class="subtitle">Transiciones de fase, punto triple y punto cr&iacute;tico</p>
+        </div>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <h3>Sustancia</h3>
+            <div class="substance-grid">
+                <button class="substance-btn active" data-sub="H2O">H<sub>2</sub>O</button>
+                <button class="substance-btn" data-sub="CO2">CO<sub>2</sub></button>
+                <button class="substance-btn" data-sub="N2">N<sub>2</sub></button>
+                <button class="substance-btn" data-sub="C2H5OH">Etanol</button>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Estado Actual</h3>
+            <div class="phase-indicator">
+                <div class="phase-name phase-liquid" id="phaseName">L&iacute;quido</div>
+                <div class="phase-description" id="phaseDesc">Mol&eacute;culas con movilidad limitada</div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Condiciones</h3>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Temperatura (K)</span>
+                    <span class="slider-value" id="tempDisplay">300 K</span>
+                </div>
+                <input type="range" id="tempSlider" min="50" max="800" value="300">
+            </div>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Presi&oacute;n (atm)</span>
+                    <span class="slider-value" id="pressDisplay">1.0 atm</span>
+                </div>
+                <input type="range" id="pressSlider" min="0.001" max="300" step="0.001" value="1">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Procesos</h3>
+            <div class="btn-row">
+                <button class="btn btn-primary" id="isobaricBtn">Isob&aacute;rico</button>
+                <button class="btn btn-secondary" id="isothermalBtn">Isot&eacute;rmico</button>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-secondary" id="tripleBtn">Ir a Punto Triple</button>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-secondary" id="criticalBtn">Ir a Punto Cr&iacute;tico</button>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Visualizaci&oacute;n</h3>
+            <div class="toggle-group">
+                <span class="toggle-label">Mostrar l&iacute;neas de fase</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showLines" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Mostrar puntos especiales</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showPoints" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Animaci&oacute;n de mol&eacute;culas</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showMolecules" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Puntos Caracter&iacute;sticos</h3>
+            <div class="info-card">
+                <div class="special-points">
+                    <div class="point-item">
+                        <span class="point-name">Punto Triple</span>
+                        <span class="point-value" id="triplePoint">273.16 K, 0.006 atm</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-name">Punto Cr&iacute;tico</span>
+                        <span class="point-value" id="criticalPoint">647 K, 218 atm</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-name">Ebullici&oacute;n (1 atm)</span>
+                        <span class="point-value" id="boilingPoint">373 K</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-name">Fusi&oacute;n (1 atm)</span>
+                        <span class="point-value" id="meltingPoint">273 K</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Leyenda</h3>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #60a5fa;"></div>
+                    <span>S&oacute;lido</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #22c55e;"></div>
+                    <span>L&iacute;quido</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f97316;"></div>
+                    <span>Gas</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #a855f7;"></div>
+                    <span>Supercr&iacute;tico</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let W, H;
+        let temperature = 300;
+        let pressure = 1;
+        let currentSubstance = 'H2O';
+        let showLines = true;
+        let showPoints = true;
+        let showMolecules = true;
+        let animationTime = 0;
+
+        // Phase diagram data for different substances
+        const substances = {
+            'H2O': {
+                name: 'Agua',
+                tripleT: 273.16, tripleP: 0.006,
+                criticalT: 647, criticalP: 218,
+                boilingT: 373, meltingT: 273,
+                // Anomalous: solid-liquid line has negative slope
+                anomalous: true
+            },
+            'CO2': {
+                name: 'Dióxido de Carbono',
+                tripleT: 216.55, tripleP: 5.11,
+                criticalT: 304.2, criticalP: 72.9,
+                boilingT: 194.65, meltingT: 216.55, // Sublimes at 1 atm
+                anomalous: false
+            },
+            'N2': {
+                name: 'Nitrógeno',
+                tripleT: 63.15, tripleP: 0.125,
+                criticalT: 126.2, criticalP: 33.5,
+                boilingT: 77.36, meltingT: 63.15,
+                anomalous: false
+            },
+            'C2H5OH': {
+                name: 'Etanol',
+                tripleT: 150, tripleP: 0.00001,
+                criticalT: 514, criticalP: 61,
+                boilingT: 351.5, meltingT: 159,
+                anomalous: false
+            }
+        };
+
+        // Molecules for animation
+        let molecules = [];
+
+        function init() {
+            const rect = canvas.getBoundingClientRect();
+            W = rect.width;
+            H = rect.height;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = W * dpr;
+            canvas.height = H * dpr;
+            ctx.scale(dpr, dpr);
+
+            createMolecules();
+            updateInfo();
+            draw();
+        }
+
+        function createMolecules() {
+            molecules = [];
+            for (let i = 0; i < 50; i++) {
+                molecules.push({
+                    x: Math.random() * 200,
+                    y: Math.random() * 200,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2,
+                    phase: 0
+                });
+            }
+        }
+
+        function getPhase(T, P) {
+            const sub = substances[currentSubstance];
+
+            // Above critical point
+            if (T >= sub.criticalT && P >= sub.criticalP) {
+                return 'supercritical';
+            }
+
+            // Get approximate phase boundaries
+            const tripleT = sub.tripleT;
+            const tripleP = sub.tripleP;
+            const criticalT = sub.criticalT;
+            const criticalP = sub.criticalP;
+
+            // Solid-Gas boundary (sublimation curve) - below triple point
+            if (P < tripleP) {
+                // Use Clausius-Clapeyron approximation
+                const sublimationT = tripleT * Math.pow(P / tripleP, 0.1);
+                if (T < sublimationT) return 'solid';
+                return 'gas';
+            }
+
+            // Above triple point pressure
+            // Liquid-Gas boundary (vaporization curve)
+            // Approximate with Antoine-like equation
+            const vaporT = tripleT + (criticalT - tripleT) * Math.pow((P - tripleP) / (criticalP - tripleP), 0.4);
+
+            // Solid-Liquid boundary (fusion curve)
+            let fusionP;
+            if (sub.anomalous) {
+                // Water: negative slope
+                fusionP = tripleP + (P - tripleP) * (1 - (T - tripleT) / 100);
+            } else {
+                // Normal: positive slope
+                fusionP = tripleP * Math.exp((T - tripleT) / 50);
+            }
+
+            if (T < tripleT && P > fusionP) return 'solid';
+            if (T < vaporT && T > tripleT - 20) {
+                if (sub.anomalous) {
+                    if (T < tripleT - (P - tripleP) * 0.1) return 'solid';
+                } else {
+                    if (T < tripleT + (P - tripleP) * 2) return 'solid';
+                }
+                return 'liquid';
+            }
+            if (T >= vaporT || P < tripleP) return 'gas';
+
+            return 'liquid';
+        }
+
+        function tempToX(T) {
+            const sub = substances[currentSubstance];
+            const minT = Math.max(0, sub.tripleT - 100);
+            const maxT = sub.criticalT + 100;
+            const margin = 80;
+            return margin + (T - minT) / (maxT - minT) * (W - margin - 50);
+        }
+
+        function pressToY(P) {
+            const sub = substances[currentSubstance];
+            const minP = 0.0001;
+            const maxP = sub.criticalP * 1.5;
+            const margin = 60;
+            // Logarithmic scale for pressure
+            const logMin = Math.log10(minP);
+            const logMax = Math.log10(maxP);
+            const logP = Math.log10(Math.max(P, minP));
+            return H - margin - (logP - logMin) / (logMax - logMin) * (H - margin - 50);
+        }
+
+        function updateInfo() {
+            const sub = substances[currentSubstance];
+            const phase = getPhase(temperature, pressure);
+
+            // Update phase indicator
+            const phaseName = document.getElementById('phaseName');
+            const phaseDesc = document.getElementById('phaseDesc');
+
+            phaseName.className = 'phase-name';
+            switch (phase) {
+                case 'solid':
+                    phaseName.textContent = 'Sólido';
+                    phaseName.classList.add('phase-solid');
+                    phaseDesc.textContent = 'Moléculas en posiciones fijas, vibrando';
+                    break;
+                case 'liquid':
+                    phaseName.textContent = 'Líquido';
+                    phaseName.classList.add('phase-liquid');
+                    phaseDesc.textContent = 'Moléculas con movilidad limitada';
+                    break;
+                case 'gas':
+                    phaseName.textContent = 'Gas';
+                    phaseName.classList.add('phase-gas');
+                    phaseDesc.textContent = 'Moléculas en movimiento libre';
+                    break;
+                case 'supercritical':
+                    phaseName.textContent = 'Fluido Supercrítico';
+                    phaseName.classList.add('phase-supercritical');
+                    phaseDesc.textContent = 'Propiedades de líquido y gas';
+                    break;
+            }
+
+            // Update characteristic points
+            document.getElementById('triplePoint').textContent =
+                `${sub.tripleT.toFixed(1)} K, ${sub.tripleP.toFixed(3)} atm`;
+            document.getElementById('criticalPoint').textContent =
+                `${sub.criticalT.toFixed(0)} K, ${sub.criticalP.toFixed(1)} atm`;
+            document.getElementById('boilingPoint').textContent = `${sub.boilingT.toFixed(1)} K`;
+            document.getElementById('meltingPoint').textContent = `${sub.meltingT.toFixed(1)} K`;
+        }
+
+        function draw() {
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, W, H);
+
+            const sub = substances[currentSubstance];
+            const margin = 80;
+
+            // Draw phase regions
+            drawPhaseRegions();
+
+            // Draw axes
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.5)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(margin, H - 60);
+            ctx.lineTo(W - 50, H - 60);
+            ctx.moveTo(margin, H - 60);
+            ctx.lineTo(margin, 50);
+            ctx.stroke();
+
+            // Axis labels
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '14px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Temperatura (K)', W / 2, H - 20);
+
+            ctx.save();
+            ctx.translate(25, H / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Presión (atm)', 0, 0);
+            ctx.restore();
+
+            // Draw phase boundary lines
+            if (showLines) {
+                drawPhaseBoundaries();
+            }
+
+            // Draw special points
+            if (showPoints) {
+                // Triple point
+                const tripleX = tempToX(sub.tripleT);
+                const tripleY = pressToY(sub.tripleP);
+
+                ctx.fillStyle = '#fbbf24';
+                ctx.beginPath();
+                ctx.arc(tripleX, tripleY, 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#fbbf24';
+                ctx.font = '11px Inter';
+                ctx.textAlign = 'left';
+                ctx.fillText('Punto Triple', tripleX + 12, tripleY + 4);
+
+                // Critical point
+                const criticalX = tempToX(sub.criticalT);
+                const criticalY = pressToY(sub.criticalP);
+
+                ctx.fillStyle = '#ef4444';
+                ctx.beginPath();
+                ctx.arc(criticalX, criticalY, 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#ef4444';
+                ctx.fillText('Punto Crítico', criticalX + 12, criticalY + 4);
+            }
+
+            // Draw current state point
+            const stateX = tempToX(temperature);
+            const stateY = pressToY(pressure);
+
+            // Glow effect
+            const phase = getPhase(temperature, pressure);
+            let stateColor;
+            switch (phase) {
+                case 'solid': stateColor = '#60a5fa'; break;
+                case 'liquid': stateColor = '#22c55e'; break;
+                case 'gas': stateColor = '#f97316'; break;
+                case 'supercritical': stateColor = '#a855f7'; break;
+            }
+
+            ctx.shadowColor = stateColor;
+            ctx.shadowBlur = 20;
+            ctx.fillStyle = stateColor;
+            ctx.beginPath();
+            ctx.arc(stateX, stateY, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(stateX, stateY, 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw molecule visualization
+            if (showMolecules) {
+                drawMoleculeVisualization(phase);
+            }
+
+            // Draw scale markers
+            drawScaleMarkers();
+
+            // Info box
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(W - 170, 20, 150, 70);
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.3)';
+            ctx.strokeRect(W - 170, 20, 150, 70);
+
+            ctx.fillStyle = '#e2e8f0';
+            ctx.font = 'bold 12px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(sub.name, W - 160, 40);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px Fira Code';
+            ctx.fillText(`T = ${temperature.toFixed(0)} K`, W - 160, 58);
+            ctx.fillText(`P = ${pressure.toFixed(3)} atm`, W - 160, 75);
+
+            animationTime += 0.016;
+            requestAnimationFrame(draw);
+        }
+
+        function drawPhaseRegions() {
+            const sub = substances[currentSubstance];
+            const minT = Math.max(0, sub.tripleT - 100);
+            const maxT = sub.criticalT + 100;
+
+            // Sample and fill phase regions
+            const resolution = 5;
+            for (let x = 80; x < W - 50; x += resolution) {
+                for (let y = 50; y < H - 60; y += resolution) {
+                    const T = minT + (x - 80) / (W - 130) * (maxT - minT);
+                    const logMin = Math.log10(0.0001);
+                    const logMax = Math.log10(sub.criticalP * 1.5);
+                    const logP = logMax - (y - 50) / (H - 110) * (logMax - logMin);
+                    const P = Math.pow(10, logP);
+
+                    const phase = getPhase(T, P);
+                    let color;
+                    switch (phase) {
+                        case 'solid': color = 'rgba(96, 165, 250, 0.15)'; break;
+                        case 'liquid': color = 'rgba(34, 197, 94, 0.15)'; break;
+                        case 'gas': color = 'rgba(249, 115, 22, 0.1)'; break;
+                        case 'supercritical': color = 'rgba(168, 85, 247, 0.15)'; break;
+                    }
+
+                    ctx.fillStyle = color;
+                    ctx.fillRect(x, y, resolution, resolution);
+                }
+            }
+        }
+
+        function drawPhaseBoundaries() {
+            const sub = substances[currentSubstance];
+
+            ctx.lineWidth = 2;
+
+            // Solid-Liquid boundary (fusion curve)
+            ctx.strokeStyle = '#60a5fa';
+            ctx.beginPath();
+            const fusionStartY = pressToY(sub.tripleP);
+            const fusionStartX = tempToX(sub.tripleT);
+            ctx.moveTo(fusionStartX, fusionStartY);
+
+            for (let P = sub.tripleP; P < sub.criticalP * 1.5; P *= 1.1) {
+                let T;
+                if (sub.anomalous) {
+                    T = sub.tripleT - (P - sub.tripleP) * 0.1;
+                } else {
+                    T = sub.tripleT + Math.log(P / sub.tripleP) * 5;
+                }
+                const x = tempToX(T);
+                const y = pressToY(P);
+                ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Liquid-Gas boundary (vaporization curve)
+            ctx.strokeStyle = '#22c55e';
+            ctx.beginPath();
+            ctx.moveTo(fusionStartX, fusionStartY);
+
+            for (let t = 0; t <= 1; t += 0.02) {
+                const T = sub.tripleT + t * (sub.criticalT - sub.tripleT);
+                const P = sub.tripleP + Math.pow(t, 2.5) * (sub.criticalP - sub.tripleP);
+                const x = tempToX(T);
+                const y = pressToY(P);
+                ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Solid-Gas boundary (sublimation curve)
+            ctx.strokeStyle = '#f97316';
+            ctx.beginPath();
+            ctx.moveTo(fusionStartX, fusionStartY);
+
+            for (let P = sub.tripleP; P > 0.0001; P *= 0.8) {
+                const T = sub.tripleT * Math.pow(P / sub.tripleP, 0.1);
+                const x = tempToX(T);
+                const y = pressToY(P);
+                ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
+
+        function drawMoleculeVisualization(phase) {
+            const boxX = 100;
+            const boxY = 80;
+            const boxW = 180;
+            const boxH = 150;
+
+            // Box
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
+            ctx.fillRect(boxX, boxY, boxW, boxH);
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)';
+            ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+            // Update and draw molecules based on phase
+            molecules.forEach((mol, i) => {
+                let speed, jitter;
+                switch (phase) {
+                    case 'solid':
+                        speed = 0;
+                        jitter = 2;
+                        // Grid positions
+                        mol.targetX = boxX + 20 + (i % 7) * 22;
+                        mol.targetY = boxY + 20 + Math.floor(i / 7) * 22;
+                        mol.x += (mol.targetX - mol.x) * 0.1;
+                        mol.y += (mol.targetY - mol.y) * 0.1;
+                        mol.x += (Math.random() - 0.5) * jitter;
+                        mol.y += (Math.random() - 0.5) * jitter;
+                        break;
+                    case 'liquid':
+                        speed = 1.5;
+                        mol.vx += (Math.random() - 0.5) * 0.3;
+                        mol.vy += (Math.random() - 0.5) * 0.3;
+                        mol.vx *= 0.98;
+                        mol.vy *= 0.98;
+                        mol.x += mol.vx;
+                        mol.y += mol.vy;
+                        // Stay in bottom half mostly
+                        if (mol.y < boxY + boxH * 0.3) mol.vy += 0.1;
+                        break;
+                    case 'gas':
+                        speed = 4;
+                        mol.vx += (Math.random() - 0.5) * 0.5;
+                        mol.vy += (Math.random() - 0.5) * 0.5;
+                        const s = Math.sqrt(mol.vx * mol.vx + mol.vy * mol.vy);
+                        if (s > speed) {
+                            mol.vx = mol.vx / s * speed;
+                            mol.vy = mol.vy / s * speed;
+                        }
+                        mol.x += mol.vx;
+                        mol.y += mol.vy;
+                        break;
+                    case 'supercritical':
+                        speed = 3;
+                        mol.vx += (Math.random() - 0.5) * 0.4;
+                        mol.vy += (Math.random() - 0.5) * 0.4;
+                        mol.vx *= 0.95;
+                        mol.vy *= 0.95;
+                        mol.x += mol.vx;
+                        mol.y += mol.vy;
+                        break;
+                }
+
+                // Bounce off walls
+                if (mol.x < boxX + 8) { mol.x = boxX + 8; mol.vx *= -1; }
+                if (mol.x > boxX + boxW - 8) { mol.x = boxX + boxW - 8; mol.vx *= -1; }
+                if (mol.y < boxY + 8) { mol.y = boxY + 8; mol.vy *= -1; }
+                if (mol.y > boxY + boxH - 8) { mol.y = boxY + boxH - 8; mol.vy *= -1; }
+
+                // Draw molecule
+                let molColor;
+                switch (phase) {
+                    case 'solid': molColor = '#60a5fa'; break;
+                    case 'liquid': molColor = '#22c55e'; break;
+                    case 'gas': molColor = '#f97316'; break;
+                    case 'supercritical': molColor = '#a855f7'; break;
+                }
+
+                ctx.fillStyle = molColor;
+                ctx.beginPath();
+                ctx.arc(mol.x, mol.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Label
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Visualización molecular', boxX + boxW / 2, boxY + boxH + 15);
+        }
+
+        function drawScaleMarkers() {
+            const sub = substances[currentSubstance];
+            const minT = Math.max(0, sub.tripleT - 100);
+            const maxT = sub.criticalT + 100;
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Fira Code';
+            ctx.textAlign = 'center';
+
+            // Temperature markers
+            for (let T = Math.ceil(minT / 100) * 100; T <= maxT; T += 100) {
+                const x = tempToX(T);
+                ctx.fillText(T.toString(), x, H - 45);
+
+                ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+                ctx.beginPath();
+                ctx.moveTo(x, H - 60);
+                ctx.lineTo(x, H - 55);
+                ctx.stroke();
+            }
+
+            // Pressure markers (logarithmic)
+            ctx.textAlign = 'right';
+            const pressures = [0.001, 0.01, 0.1, 1, 10, 100];
+            pressures.forEach(P => {
+                if (P <= sub.criticalP * 1.5) {
+                    const y = pressToY(P);
+                    if (y > 50 && y < H - 60) {
+                        ctx.fillText(P.toString(), 75, y + 4);
+
+                        ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+                        ctx.beginPath();
+                        ctx.moveTo(80, y);
+                        ctx.lineTo(85, y);
+                        ctx.stroke();
+                    }
+                }
+            });
+        }
+
+        // Event listeners
+        document.querySelectorAll('.substance-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.substance-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentSubstance = btn.dataset.sub;
+
+                // Reset to reasonable values for new substance
+                const sub = substances[currentSubstance];
+                temperature = (sub.tripleT + sub.criticalT) / 2;
+                pressure = 1;
+
+                document.getElementById('tempSlider').min = Math.max(50, sub.tripleT - 100);
+                document.getElementById('tempSlider').max = sub.criticalT + 150;
+                document.getElementById('tempSlider').value = temperature;
+                document.getElementById('pressSlider').max = sub.criticalP * 1.5;
+                document.getElementById('pressSlider').value = pressure;
+
+                document.getElementById('tempDisplay').textContent = temperature.toFixed(0) + ' K';
+                document.getElementById('pressDisplay').textContent = pressure.toFixed(3) + ' atm';
+
+                updateInfo();
+            });
+        });
+
+        document.getElementById('tempSlider').oninput = function() {
+            temperature = parseFloat(this.value);
+            document.getElementById('tempDisplay').textContent = temperature.toFixed(0) + ' K';
+            updateInfo();
+        };
+
+        document.getElementById('pressSlider').oninput = function() {
+            pressure = parseFloat(this.value);
+            document.getElementById('pressDisplay').textContent = pressure.toFixed(3) + ' atm';
+            updateInfo();
+        };
+
+        document.getElementById('tripleBtn').onclick = function() {
+            const sub = substances[currentSubstance];
+            temperature = sub.tripleT;
+            pressure = sub.tripleP;
+            document.getElementById('tempSlider').value = temperature;
+            document.getElementById('pressSlider').value = pressure;
+            document.getElementById('tempDisplay').textContent = temperature.toFixed(0) + ' K';
+            document.getElementById('pressDisplay').textContent = pressure.toFixed(3) + ' atm';
+            updateInfo();
+        };
+
+        document.getElementById('criticalBtn').onclick = function() {
+            const sub = substances[currentSubstance];
+            temperature = sub.criticalT;
+            pressure = sub.criticalP;
+            document.getElementById('tempSlider').value = temperature;
+            document.getElementById('pressSlider').value = pressure;
+            document.getElementById('tempDisplay').textContent = temperature.toFixed(0) + ' K';
+            document.getElementById('pressDisplay').textContent = pressure.toFixed(1) + ' atm';
+            updateInfo();
+        };
+
+        let isobaricInterval, isothermalInterval;
+
+        document.getElementById('isobaricBtn').onclick = function() {
+            clearInterval(isobaricInterval);
+            clearInterval(isothermalInterval);
+            const sub = substances[currentSubstance];
+            temperature = sub.tripleT - 50;
+            isobaricInterval = setInterval(() => {
+                temperature += 2;
+                if (temperature > sub.criticalT + 50) {
+                    clearInterval(isobaricInterval);
+                    return;
+                }
+                document.getElementById('tempSlider').value = temperature;
+                document.getElementById('tempDisplay').textContent = temperature.toFixed(0) + ' K';
+                updateInfo();
+            }, 50);
+        };
+
+        document.getElementById('isothermalBtn').onclick = function() {
+            clearInterval(isobaricInterval);
+            clearInterval(isothermalInterval);
+            const sub = substances[currentSubstance];
+            pressure = 0.001;
+            isothermalInterval = setInterval(() => {
+                pressure *= 1.1;
+                if (pressure > sub.criticalP * 1.2) {
+                    clearInterval(isothermalInterval);
+                    return;
+                }
+                document.getElementById('pressSlider').value = pressure;
+                document.getElementById('pressDisplay').textContent = pressure.toFixed(3) + ' atm';
+                updateInfo();
+            }, 50);
+        };
+
+        document.getElementById('showLines').onchange = function() {
+            showLines = this.checked;
+        };
+
+        document.getElementById('showPoints').onchange = function() {
+            showPoints = this.checked;
+        };
+
+        document.getElementById('showMolecules').onchange = function() {
+            showMolecules = this.checked;
+        };
+
+        // Click on canvas to set state
+        canvas.onclick = function(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const sub = substances[currentSubstance];
+            const minT = Math.max(0, sub.tripleT - 100);
+            const maxT = sub.criticalT + 100;
+
+            if (x > 80 && x < W - 50 && y > 50 && y < H - 60) {
+                temperature = minT + (x - 80) / (W - 130) * (maxT - minT);
+                const logMin = Math.log10(0.0001);
+                const logMax = Math.log10(sub.criticalP * 1.5);
+                const logP = logMax - (y - 50) / (H - 110) * (logMax - logMin);
+                pressure = Math.pow(10, logP);
+
+                document.getElementById('tempSlider').value = temperature;
+                document.getElementById('pressSlider').value = pressure;
+                document.getElementById('tempDisplay').textContent = temperature.toFixed(0) + ' K';
+                document.getElementById('pressDisplay').textContent = pressure.toFixed(3) + ' atm';
+                updateInfo();
+            }
+        };
+
+        window.onload = init;
+        window.onresize = init;
+    </script>
+</body>
+</html>

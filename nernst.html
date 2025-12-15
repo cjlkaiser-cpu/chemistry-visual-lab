@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecuación de Nernst | Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --accent: #eab308;
+            --accent-glow: rgba(234, 179, 8, 0.3);
+            --border-color: #2a2a3a;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+        }
+
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .canvas-header {
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .title-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .title-area span {
+            font-family: 'Covered By Your Grace', cursive;
+            color: var(--accent);
+            font-size: 1rem;
+            margin-left: 0.5rem;
+        }
+
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            min-height: 0;
+        }
+
+        #canvas {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: 0 0 40px var(--accent-glow);
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            min-height: 0;
+        }
+
+        .controls {
+            width: 340px;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        .control-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .control-section:last-child {
+            border-bottom: none;
+        }
+
+        .control-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .control-group {
+            margin-bottom: 1rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.625rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        select:hover, select:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .slider-container {
+            margin-bottom: 1rem;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-header label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .slider-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+            background: var(--bg-tertiary);
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .info-panel {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+        }
+
+        .info-value.large {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .info-value.positive {
+            color: #22c55e;
+        }
+
+        .info-value.negative {
+            color: #ef4444;
+        }
+
+        .equation-box {
+            background: var(--bg-primary);
+            border-radius: 6px;
+            padding: 0.75rem;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+        }
+
+        .equation-box .highlight {
+            color: var(--accent);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .controls {
+                width: 100%;
+                height: auto;
+                max-height: 50vh;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-section">
+        <div class="canvas-header">
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Volver al Lab
+            </a>
+            <div class="title-area">
+                <h1>Ecuación de Nernst <span>E = E° - (RT/nF)lnQ</span></h1>
+            </div>
+        </div>
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-section">
+            <h3>Semi-reacción</h3>
+            <div class="control-group">
+                <label>Electrodo</label>
+                <select id="electrodeSelect">
+                    <option value="cu">Cu²⁺/Cu (E° = +0.34 V)</option>
+                    <option value="zn">Zn²⁺/Zn (E° = -0.76 V)</option>
+                    <option value="ag">Ag⁺/Ag (E° = +0.80 V)</option>
+                    <option value="fe">Fe²⁺/Fe (E° = -0.44 V)</option>
+                    <option value="h2">H⁺/H₂ (E° = 0.00 V)</option>
+                    <option value="cl2">Cl₂/Cl⁻ (E° = +1.36 V)</option>
+                </select>
+            </div>
+
+            <div class="equation-box" id="halfReaction">
+                Cu²⁺ + 2e⁻ ⇌ Cu
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Condiciones</h3>
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label id="concLabel">[Cu²⁺] (M)</label>
+                    <span class="slider-value" id="concValue">1.00</span>
+                </div>
+                <input type="range" id="concSlider" min="-4" max="1" step="0.1" value="0">
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>Temperatura (K)</label>
+                    <span class="slider-value" id="tempValue">298</span>
+                </div>
+                <input type="range" id="tempSlider" min="273" max="373" step="1" value="298">
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Potencial de Electrodo</h3>
+            <div class="info-panel">
+                <div class="info-row">
+                    <span class="info-label">E° (estándar)</span>
+                    <span class="info-value" id="e0Value">+0.34 V</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">E (Nernst)</span>
+                    <span class="info-value large positive" id="eValue">+0.34 V</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">ΔE (vs E°)</span>
+                    <span class="info-value" id="deltaE">0.00 V</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">ln(Q)</span>
+                    <span class="info-value" id="lnQ">0.00</span>
+                </div>
+            </div>
+
+            <div class="equation-box">
+                E = <span class="highlight">E°</span> − <span class="highlight">RT</span>/nF × ln(1/[M<sup>n+</sup>])
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Controles</h3>
+            <button class="btn btn-secondary" id="resetBtn">↺ Condiciones Estándar</button>
+        </div>
+
+        <div class="control-section">
+            <h3>Constantes</h3>
+            <div class="info-panel" style="font-size: 0.75rem;">
+                <div class="info-row">
+                    <span class="info-label">R (constante de gas)</span>
+                    <span class="info-value" style="font-size: 0.75rem;">8.314 J/mol·K</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">F (constante de Faraday)</span>
+                    <span class="info-value" style="font-size: 0.75rem;">96485 C/mol</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Electrodes database
+        const electrodes = {
+            'cu': {
+                name: 'Cobre',
+                ion: 'Cu²⁺',
+                metal: 'Cu',
+                E0: 0.34,
+                n: 2,
+                color: '#f97316',
+                ionColor: '#22d3ee',
+                reaction: 'Cu²⁺ + 2e⁻ ⇌ Cu'
+            },
+            'zn': {
+                name: 'Zinc',
+                ion: 'Zn²⁺',
+                metal: 'Zn',
+                E0: -0.76,
+                n: 2,
+                color: '#a1a1aa',
+                ionColor: '#818cf8',
+                reaction: 'Zn²⁺ + 2e⁻ ⇌ Zn'
+            },
+            'ag': {
+                name: 'Plata',
+                ion: 'Ag⁺',
+                metal: 'Ag',
+                E0: 0.80,
+                n: 1,
+                color: '#e5e5e5',
+                ionColor: '#f0abfc',
+                reaction: 'Ag⁺ + e⁻ ⇌ Ag'
+            },
+            'fe': {
+                name: 'Hierro',
+                ion: 'Fe²⁺',
+                metal: 'Fe',
+                E0: -0.44,
+                n: 2,
+                color: '#78716c',
+                ionColor: '#84cc16',
+                reaction: 'Fe²⁺ + 2e⁻ ⇌ Fe'
+            },
+            'h2': {
+                name: 'Hidrógeno',
+                ion: 'H⁺',
+                metal: 'H₂',
+                E0: 0.00,
+                n: 2,
+                color: '#60a5fa',
+                ionColor: '#fbbf24',
+                reaction: '2H⁺ + 2e⁻ ⇌ H₂'
+            },
+            'cl2': {
+                name: 'Cloro',
+                ion: 'Cl⁻',
+                metal: 'Cl₂',
+                E0: 1.36,
+                n: 2,
+                color: '#4ade80',
+                ionColor: '#22c55e',
+                reaction: 'Cl₂ + 2e⁻ ⇌ 2Cl⁻'
+            }
+        };
+
+        let currentElectrode = 'cu';
+        let concentration = 1.0; // M
+        let temperature = 298; // K
+
+        const R = 8.314; // J/(mol·K)
+        const F = 96485; // C/mol
+
+        // Particles for visualization
+        let ions = [];
+        let electrons = [];
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            const aspectRatio = 1.4;
+
+            let width, height;
+            if (rect.width / rect.height > aspectRatio) {
+                height = rect.height - 32;
+                width = height * aspectRatio;
+            } else {
+                width = rect.width - 32;
+                height = width / aspectRatio;
+            }
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            ctx.scale(dpr, dpr);
+        }
+
+        function calculateNernst() {
+            const electrode = electrodes[currentElectrode];
+            const E0 = electrode.E0;
+            const n = electrode.n;
+
+            // Nernst equation: E = E° - (RT/nF) * ln(1/[M^n+])
+            // For reduction: M^n+ + ne- -> M
+            // Q = 1/[M^n+] for metals, or [reduced]/[oxidized]
+            const Q = 1 / concentration;
+            const lnQ = Math.log(Q);
+
+            const E = E0 - (R * temperature / (n * F)) * lnQ;
+
+            return { E, E0, lnQ, deltaE: E - E0 };
+        }
+
+        function initParticles() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            ions = [];
+            electrons = [];
+
+            // Number of ions based on concentration (log scale)
+            const numIons = Math.max(5, Math.floor(Math.log10(concentration + 0.0001) * 10 + 50));
+
+            for (let i = 0; i < numIons; i++) {
+                ions.push({
+                    x: w * 0.15 + Math.random() * w * 0.35,
+                    y: h * 0.35 + Math.random() * h * 0.5,
+                    vx: (Math.random() - 0.5) * 1.5,
+                    vy: (Math.random() - 0.5) * 1.5,
+                    radius: 6
+                });
+            }
+
+            // Electrons near electrode surface
+            for (let i = 0; i < 10; i++) {
+                electrons.push({
+                    x: w * 0.52,
+                    y: h * 0.35 + Math.random() * h * 0.5,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    phase: Math.random() * Math.PI * 2
+                });
+            }
+        }
+
+        function updateParticles() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            const { E } = calculateNernst();
+
+            // Update ions
+            ions.forEach(ion => {
+                ion.x += ion.vx;
+                ion.y += ion.vy;
+
+                // Boundary in solution
+                if (ion.x < w * 0.1) { ion.x = w * 0.1; ion.vx *= -1; }
+                if (ion.x > w * 0.5) { ion.x = w * 0.5; ion.vx *= -1; }
+                if (ion.y < h * 0.32) { ion.y = h * 0.32; ion.vy *= -1; }
+                if (ion.y > h * 0.88) { ion.y = h * 0.88; ion.vy *= -1; }
+
+                // Attraction/repulsion from electrode based on potential
+                const dx = w * 0.52 - ion.x;
+                const force = E > 0 ? 0.01 : -0.01;
+                ion.vx += dx * force * 0.001;
+
+                ion.vx *= 0.99;
+                ion.vy *= 0.99;
+                ion.vx += (Math.random() - 0.5) * 0.1;
+                ion.vy += (Math.random() - 0.5) * 0.1;
+            });
+
+            // Update electrons
+            electrons.forEach(e => {
+                e.phase += 0.05;
+                e.x = w * 0.52 + Math.sin(e.phase) * 5;
+            });
+        }
+
+        function draw() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            const electrode = electrodes[currentElectrode];
+            const { E, E0, lnQ, deltaE } = calculateNernst();
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw half-cell
+            drawHalfCell(w * 0.05, h * 0.3, w * 0.5, h * 0.6);
+
+            // Draw E vs concentration graph
+            drawPotentialGraph(w * 0.6, h * 0.05, w * 0.38, h * 0.4);
+
+            // Draw voltmeter
+            drawVoltmeter(w * 0.6, h * 0.5, w * 0.38, h * 0.45, E);
+
+            // Title and info
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '11px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Electrodo de ${electrode.name}`, w * 0.3, h * 0.1);
+
+            // Nernst equation calculation steps
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Fira Code';
+            ctx.textAlign = 'left';
+            ctx.fillText(`E = ${E0.toFixed(2)} - (8.314 × ${temperature})/(${electrode.n} × 96485) × ln(${(1/concentration).toFixed(4)})`, w * 0.05, h * 0.15);
+            ctx.fillText(`E = ${E0.toFixed(2)} - ${((R * temperature)/(electrode.n * F)).toFixed(4)} × ${lnQ.toFixed(3)}`, w * 0.05, h * 0.2);
+            ctx.fillStyle = '#eab308';
+            ctx.font = 'bold 11px Fira Code';
+            ctx.fillText(`E = ${E.toFixed(4)} V`, w * 0.05, h * 0.25);
+        }
+
+        function drawHalfCell(x, y, w, h) {
+            const electrode = electrodes[currentElectrode];
+
+            // Solution container
+            ctx.fillStyle = 'rgba(6, 182, 212, 0.1)';
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeStyle = '#06b6d4';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, w, h);
+
+            // Electrode (metal plate)
+            ctx.fillStyle = electrode.color;
+            ctx.fillRect(x + w - 30, y + 10, 25, h - 20);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x + w - 30, y + 10, 25, h - 20);
+
+            // Wire from electrode
+            ctx.beginPath();
+            ctx.moveTo(x + w - 17, y + 10);
+            ctx.lineTo(x + w - 17, y - 20);
+            ctx.lineTo(x + w + 50, y - 20);
+            ctx.strokeStyle = '#71717a';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Draw ions
+            ions.forEach(ion => {
+                ctx.beginPath();
+                ctx.arc(ion.x, ion.y, ion.radius, 0, Math.PI * 2);
+                ctx.fillStyle = electrode.ionColor;
+                ctx.fill();
+
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 7px Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('+', ion.x, ion.y);
+            });
+
+            // Draw electrons in electrode
+            electrons.forEach(e => {
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#fbbf24';
+                ctx.fill();
+            });
+
+            // Labels
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText(electrode.ion + '(aq)', x + w/3, y + h + 15);
+            ctx.fillText(electrode.metal + '(s)', x + w - 17, y + h + 15);
+
+            // Concentration indicator
+            ctx.fillStyle = electrode.ionColor;
+            ctx.font = 'bold 12px Fira Code';
+            ctx.fillText(`[${electrode.ion}] = ${concentration.toFixed(4)} M`, x + w/3, y - 10);
+        }
+
+        function drawPotentialGraph(x, y, w, h) {
+            const electrode = electrodes[currentElectrode];
+            const { E, E0 } = calculateNernst();
+
+            // Background
+            ctx.fillStyle = 'rgba(26, 26, 37, 0.9)';
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeStyle = '#2a2a3a';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x, y, w, h);
+
+            // Title
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('E vs log[' + electrode.ion + ']', x + w/2, y + 15);
+
+            // Graph area
+            const gx = x + 40;
+            const gy = y + 25;
+            const gw = w - 50;
+            const gh = h - 45;
+
+            // Axes
+            ctx.strokeStyle = '#4a5568';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(gx, gy);
+            ctx.lineTo(gx, gy + gh);
+            ctx.lineTo(gx + gw, gy + gh);
+            ctx.stroke();
+
+            // Y-axis labels (E)
+            const Emin = E0 - 0.3;
+            const Emax = E0 + 0.3;
+            ctx.fillStyle = '#64748b';
+            ctx.font = '8px Fira Code';
+            ctx.textAlign = 'right';
+            for (let e = Emin; e <= Emax; e += 0.1) {
+                const py = gy + gh - ((e - Emin) / (Emax - Emin)) * gh;
+                ctx.fillText(e.toFixed(2), gx - 5, py + 3);
+            }
+
+            // X-axis labels (log concentration)
+            ctx.textAlign = 'center';
+            for (let logC = -4; logC <= 1; logC++) {
+                const px = gx + ((logC + 4) / 5) * gw;
+                ctx.fillText(`10^${logC}`, px, gy + gh + 12);
+            }
+
+            // E° reference line
+            const e0Y = gy + gh - ((E0 - Emin) / (Emax - Emin)) * gh;
+            ctx.setLineDash([3, 3]);
+            ctx.strokeStyle = '#22c55e';
+            ctx.beginPath();
+            ctx.moveTo(gx, e0Y);
+            ctx.lineTo(gx + gw, e0Y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#22c55e';
+            ctx.font = '8px Fira Code';
+            ctx.textAlign = 'left';
+            ctx.fillText('E°', gx + gw + 3, e0Y + 3);
+
+            // Nernst curve
+            ctx.beginPath();
+            for (let logC = -4; logC <= 1; logC += 0.1) {
+                const c = Math.pow(10, logC);
+                const eNernst = E0 - (R * temperature / (electrode.n * F)) * Math.log(1/c);
+
+                const px = gx + ((logC + 4) / 5) * gw;
+                const py = gy + gh - ((eNernst - Emin) / (Emax - Emin)) * gh;
+
+                if (logC === -4) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.strokeStyle = '#eab308';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Current point
+            const logConc = Math.log10(concentration);
+            const px = gx + ((logConc + 4) / 5) * gw;
+            const py = gy + gh - ((E - Emin) / (Emax - Emin)) * gh;
+
+            // Point glow
+            ctx.beginPath();
+            ctx.arc(px, py, 10, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(234, 179, 8, 0.3)';
+            ctx.fill();
+
+            // Point
+            ctx.beginPath();
+            ctx.arc(px, py, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#eab308';
+            ctx.fill();
+        }
+
+        function drawVoltmeter(x, y, w, h, E) {
+            const electrode = electrodes[currentElectrode];
+
+            // Background
+            ctx.fillStyle = 'rgba(26, 26, 37, 0.9)';
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeStyle = '#2a2a3a';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x, y, w, h);
+
+            // Voltmeter dial
+            const centerX = x + w/2;
+            const centerY = y + h * 0.5;
+            const radius = Math.min(w, h) * 0.35;
+
+            // Dial background
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#1a1a25';
+            ctx.fill();
+            ctx.strokeStyle = '#eab308';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Scale arc
+            const scaleMin = electrode.E0 - 0.5;
+            const scaleMax = electrode.E0 + 0.5;
+
+            // Scale marks
+            for (let e = scaleMin; e <= scaleMax; e += 0.1) {
+                const angle = Math.PI + ((e - scaleMin) / (scaleMax - scaleMin)) * Math.PI;
+                const innerR = radius * 0.7;
+                const outerR = radius * 0.85;
+
+                ctx.beginPath();
+                ctx.moveTo(centerX + Math.cos(angle) * innerR, centerY + Math.sin(angle) * innerR);
+                ctx.lineTo(centerX + Math.cos(angle) * outerR, centerY + Math.sin(angle) * outerR);
+                ctx.strokeStyle = '#4a5568';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // Labels for major marks
+                if (Math.abs(e - Math.round(e * 10) / 10) < 0.001) {
+                    const labelR = radius * 0.55;
+                    ctx.fillStyle = '#a0a0a0';
+                    ctx.font = '8px Fira Code';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(e.toFixed(1), centerX + Math.cos(angle) * labelR, centerY + Math.sin(angle) * labelR);
+                }
+            }
+
+            // Needle
+            const normalizedE = Math.max(0, Math.min(1, (E - scaleMin) / (scaleMax - scaleMin)));
+            const needleAngle = Math.PI + normalizedE * Math.PI;
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX + Math.cos(needleAngle) * radius * 0.75, centerY + Math.sin(needleAngle) * radius * 0.75);
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Needle center
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#ef4444';
+            ctx.fill();
+
+            // Digital display
+            ctx.fillStyle = E >= 0 ? '#22c55e' : '#ef4444';
+            ctx.font = 'bold 18px Fira Code';
+            ctx.textAlign = 'center';
+            ctx.fillText(`${E >= 0 ? '+' : ''}${E.toFixed(4)} V`, centerX, centerY + radius + 25);
+
+            // Label
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '10px Inter';
+            ctx.fillText('Potencial de Electrodo (E)', centerX, y + 15);
+
+            // Delta E indicator
+            const deltaE = E - electrode.E0;
+            ctx.fillStyle = '#64748b';
+            ctx.font = '9px Inter';
+            ctx.fillText(`ΔE = ${deltaE >= 0 ? '+' : ''}${deltaE.toFixed(4)} V vs E°`, centerX, y + h - 10);
+        }
+
+        function updateDisplay() {
+            const electrode = electrodes[currentElectrode];
+            const { E, E0, lnQ, deltaE } = calculateNernst();
+
+            document.getElementById('halfReaction').textContent = electrode.reaction;
+            document.getElementById('concLabel').textContent = `[${electrode.ion}] (M)`;
+            document.getElementById('concValue').textContent = concentration.toFixed(4);
+
+            document.getElementById('e0Value').textContent = `${E0 >= 0 ? '+' : ''}${E0.toFixed(2)} V`;
+            document.getElementById('eValue').textContent = `${E >= 0 ? '+' : ''}${E.toFixed(4)} V`;
+            document.getElementById('eValue').className = `info-value large ${E >= 0 ? 'positive' : 'negative'}`;
+            document.getElementById('deltaE').textContent = `${deltaE >= 0 ? '+' : ''}${deltaE.toFixed(4)} V`;
+            document.getElementById('lnQ').textContent = lnQ.toFixed(4);
+        }
+
+        function animate() {
+            updateParticles();
+            draw();
+            requestAnimationFrame(animate);
+        }
+
+        // Event listeners
+        document.getElementById('electrodeSelect').addEventListener('change', (e) => {
+            currentElectrode = e.target.value;
+            initParticles();
+            updateDisplay();
+        });
+
+        document.getElementById('concSlider').addEventListener('input', (e) => {
+            concentration = Math.pow(10, parseFloat(e.target.value));
+            initParticles();
+            updateDisplay();
+        });
+
+        document.getElementById('tempSlider').addEventListener('input', (e) => {
+            temperature = parseInt(e.target.value);
+            document.getElementById('tempValue').textContent = temperature;
+            updateDisplay();
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            concentration = 1.0;
+            temperature = 298;
+            document.getElementById('concSlider').value = 0;
+            document.getElementById('tempSlider').value = 298;
+            document.getElementById('tempValue').textContent = 298;
+            initParticles();
+            updateDisplay();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        // Initialize
+        resizeCanvas();
+        initParticles();
+        updateDisplay();
+        animate();
+    </script>
+</body>
+</html>

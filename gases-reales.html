@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gases Ideales vs Reales - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e2e8f0;
+            display: flex;
+        }
+
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .title-bar {
+            margin-bottom: 15px;
+        }
+
+        .title-bar h1 {
+            font-size: 1.8rem;
+            color: #3b82f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title-bar h1 a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .title-bar h1 a:hover {
+            color: #3b82f6;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        #canvas {
+            flex: 1;
+            width: 100%;
+            min-height: 0;
+            background: radial-gradient(ellipse at center, #0c1929 0%, #020617 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .controls {
+            width: 340px;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border-left: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 20px;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #3b82f6;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .slider-group {
+            margin-bottom: 16px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .slider-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .slider-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #3b82f6;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #334155;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .gas-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .gas-btn {
+            padding: 10px 4px;
+            border: 2px solid #334155;
+            border-radius: 6px;
+            background: #1e293b;
+            color: #94a3b8;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .gas-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        .gas-btn.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-secondary {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .btn-heat {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .btn-cool {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            color: white;
+        }
+
+        .info-card {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .info-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            color: #60a5fa;
+            margin-top: 2px;
+        }
+
+        .equation-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .equation {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 1rem;
+            color: #f1f5f9;
+        }
+
+        .equation-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .toggle-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #334155;
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        .toggle input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        .comparison-bar {
+            margin-top: 12px;
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+
+        .bar-container {
+            height: 20px;
+            background: #1e293b;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-ideal {
+            position: absolute;
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+            transition: width 0.3s;
+        }
+
+        .bar-real {
+            position: absolute;
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
+            opacity: 0.7;
+            transition: width 0.3s;
+        }
+
+        .legend {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+            font-size: 0.75rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-section">
+        <div class="title-bar">
+            <h1><a href="index.html">&larr;</a> Gases Ideales vs Reales</h1>
+            <p class="subtitle">Ecuaci&oacute;n de Van der Waals y comportamiento molecular</p>
+        </div>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <h3>Gas</h3>
+            <div class="gas-grid">
+                <button class="gas-btn active" data-gas="ideal">Ideal</button>
+                <button class="gas-btn" data-gas="He">He</button>
+                <button class="gas-btn" data-gas="H2">H<sub>2</sub></button>
+                <button class="gas-btn" data-gas="N2">N<sub>2</sub></button>
+                <button class="gas-btn" data-gas="O2">O<sub>2</sub></button>
+                <button class="gas-btn" data-gas="CO2">CO<sub>2</sub></button>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Condiciones</h3>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Temperatura (K)</span>
+                    <span class="slider-value" id="tempDisplay">300 K</span>
+                </div>
+                <input type="range" id="tempSlider" min="100" max="600" value="300">
+            </div>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">Volumen (%)</span>
+                    <span class="slider-value" id="volDisplay">100%</span>
+                </div>
+                <input type="range" id="volSlider" min="30" max="150" value="100">
+            </div>
+            <div class="slider-group">
+                <div class="slider-header">
+                    <span class="slider-label">N&uacute;mero de part&iacute;culas</span>
+                    <span class="slider-value" id="particlesDisplay">100</span>
+                </div>
+                <input type="range" id="particlesSlider" min="20" max="200" value="100">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Controles</h3>
+            <div class="btn-row">
+                <button class="btn btn-heat" id="heatBtn">Calentar</button>
+                <button class="btn btn-cool" id="coolBtn">Enfriar</button>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-primary" id="compressBtn">Comprimir</button>
+                <button class="btn btn-secondary" id="expandBtn">Expandir</button>
+            </div>
+            <div class="btn-row">
+                <button class="btn btn-secondary" id="resetBtn">Reiniciar</button>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Visualizaci&oacute;n</h3>
+            <div class="toggle-group">
+                <span class="toggle-label">Mostrar atracci&oacute;n intermolecular</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showAttraction" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Mostrar volumen excluido</span>
+                <label class="toggle">
+                    <input type="checkbox" id="showExcluded">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="toggle-group">
+                <span class="toggle-label">Colorear por velocidad</span>
+                <label class="toggle">
+                    <input type="checkbox" id="colorBySpeed" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Ecuaciones</h3>
+            <div class="equation-box">
+                <div class="equation">PV = nRT</div>
+                <div class="equation-label">Gas Ideal</div>
+            </div>
+            <div class="equation-box">
+                <div class="equation">(P + an&sup2;/V&sup2;)(V - nb) = nRT</div>
+                <div class="equation-label">Van der Waals</div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Propiedades</h3>
+            <div class="info-card">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Presi&oacute;n Ideal</div>
+                        <div class="info-value" id="pressureIdeal">1.00 atm</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Presi&oacute;n Real</div>
+                        <div class="info-value" id="pressureReal">1.00 atm</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Constante a</div>
+                        <div class="info-value" id="constantA">0.00</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Constante b</div>
+                        <div class="info-value" id="constantB">0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-bar">
+                <div class="bar-label">
+                    <span>Comparaci&oacute;n de Presi&oacute;n</span>
+                    <span id="deviationPercent">0%</span>
+                </div>
+                <div class="bar-container">
+                    <div class="bar-ideal" id="barIdeal" style="width: 50%;"></div>
+                    <div class="bar-real" id="barReal" style="width: 50%;"></div>
+                </div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #22c55e;"></div>
+                        <span>Ideal</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3b82f6;"></div>
+                        <span>Real</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Constants
+        const R = 8.314; // J/(mol·K)
+        const kB = 1.38e-23; // Boltzmann constant
+
+        // Van der Waals constants (L²·atm/mol², L/mol)
+        const gasData = {
+            'ideal': { a: 0, b: 0, name: 'Gas Ideal', mass: 28, color: '#22c55e' },
+            'He': { a: 0.0346, b: 0.0238, name: 'Helio', mass: 4, color: '#fbbf24' },
+            'H2': { a: 0.2453, b: 0.0265, name: 'Hidrógeno', mass: 2, color: '#f1f5f9' },
+            'N2': { a: 1.370, b: 0.0387, name: 'Nitrógeno', mass: 28, color: '#60a5fa' },
+            'O2': { a: 1.382, b: 0.0319, name: 'Oxígeno', mass: 32, color: '#f87171' },
+            'CO2': { a: 3.658, b: 0.0429, name: 'Dióxido de Carbono', mass: 44, color: '#a3a3a3' }
+        };
+
+        // Canvas
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // State
+        let W, H;
+        let temperature = 300;
+        let volumePercent = 100;
+        let numParticles = 100;
+        let currentGas = 'ideal';
+        let particles = [];
+        let showAttraction = true;
+        let showExcluded = false;
+        let colorBySpeed = true;
+
+        // Container dimensions (will be calculated)
+        let containerX, containerY, containerW, containerH;
+        let baseContainerW, baseContainerH;
+
+        function init() {
+            const rect = canvas.getBoundingClientRect();
+            W = rect.width;
+            H = rect.height;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = W * dpr;
+            canvas.height = H * dpr;
+            ctx.scale(dpr, dpr);
+
+            // Base container size
+            baseContainerW = W * 0.6;
+            baseContainerH = H * 0.7;
+
+            updateContainer();
+            createParticles();
+            updateInfo();
+            draw();
+        }
+
+        function updateContainer() {
+            containerW = baseContainerW * (volumePercent / 100);
+            containerH = baseContainerH * (volumePercent / 100);
+            containerX = (W - containerW) / 2;
+            containerY = (H - containerH) / 2;
+        }
+
+        function createParticles() {
+            particles = [];
+            const gas = gasData[currentGas];
+
+            for (let i = 0; i < numParticles; i++) {
+                // Maxwell-Boltzmann distribution for velocities
+                const avgSpeed = Math.sqrt(3 * kB * temperature / (gas.mass * 1.66e-27)) / 1000;
+                const speedScale = avgSpeed * 0.05; // Scale for visualization
+
+                const angle = Math.random() * Math.PI * 2;
+                const speed = speedScale * (0.5 + Math.random());
+
+                particles.push({
+                    x: containerX + 20 + Math.random() * (containerW - 40),
+                    y: containerY + 20 + Math.random() * (containerH - 40),
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    radius: 4 + gas.b * 30 // Size based on b constant
+                });
+            }
+        }
+
+        function updateParticleVelocities() {
+            const gas = gasData[currentGas];
+            const avgSpeed = Math.sqrt(3 * kB * temperature / (gas.mass * 1.66e-27)) / 1000;
+            const speedScale = avgSpeed * 0.05;
+
+            particles.forEach(p => {
+                const currentSpeed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                if (currentSpeed > 0) {
+                    const targetSpeed = speedScale * (0.5 + Math.random());
+                    const factor = targetSpeed / currentSpeed;
+                    p.vx *= 0.95 + factor * 0.05;
+                    p.vy *= 0.95 + factor * 0.05;
+                }
+            });
+        }
+
+        function calculatePressure() {
+            const gas = gasData[currentGas];
+            const n = numParticles / 100; // moles (scaled)
+            const V = (volumePercent / 100) * 22.4; // L (scaled from STP)
+            const T = temperature;
+
+            // Ideal gas: P = nRT/V
+            const P_ideal = (n * R * T) / (V * 101.325); // Convert to atm
+
+            // Van der Waals: P = nRT/(V-nb) - an²/V²
+            const P_real = (n * R * T) / ((V - n * gas.b) * 101.325) - (gas.a * n * n) / (V * V);
+
+            return { ideal: Math.max(0.1, P_ideal), real: Math.max(0.1, P_real) };
+        }
+
+        function updateInfo() {
+            const gas = gasData[currentGas];
+            const pressure = calculatePressure();
+
+            document.getElementById('pressureIdeal').textContent = pressure.ideal.toFixed(2) + ' atm';
+            document.getElementById('pressureReal').textContent = pressure.real.toFixed(2) + ' atm';
+            document.getElementById('constantA').textContent = gas.a.toFixed(3);
+            document.getElementById('constantB').textContent = gas.b.toFixed(4);
+
+            // Update comparison bar
+            const maxP = Math.max(pressure.ideal, pressure.real, 2);
+            const idealWidth = (pressure.ideal / maxP) * 100;
+            const realWidth = (pressure.real / maxP) * 100;
+
+            document.getElementById('barIdeal').style.width = idealWidth + '%';
+            document.getElementById('barReal').style.width = realWidth + '%';
+
+            const deviation = ((pressure.real - pressure.ideal) / pressure.ideal * 100);
+            document.getElementById('deviationPercent').textContent =
+                (deviation >= 0 ? '+' : '') + deviation.toFixed(1) + '%';
+        }
+
+        function draw() {
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, W, H);
+
+            const gas = gasData[currentGas];
+
+            // Draw container
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.5)';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(containerX, containerY, containerW, containerH);
+
+            // Container walls glow
+            const wallGrad = ctx.createLinearGradient(containerX, containerY, containerX + containerW, containerY);
+            wallGrad.addColorStop(0, 'rgba(59, 130, 246, 0.1)');
+            wallGrad.addColorStop(0.5, 'rgba(59, 130, 246, 0.05)');
+            wallGrad.addColorStop(1, 'rgba(59, 130, 246, 0.1)');
+            ctx.fillStyle = wallGrad;
+            ctx.fillRect(containerX, containerY, containerW, containerH);
+
+            // Draw piston (top)
+            ctx.fillStyle = '#475569';
+            ctx.fillRect(containerX - 10, containerY - 20, containerW + 20, 20);
+            ctx.fillStyle = '#64748b';
+            ctx.fillRect(containerX + containerW/2 - 15, containerY - 40, 30, 20);
+
+            // Draw heat source indicator
+            if (temperature > 350) {
+                const heatGrad = ctx.createLinearGradient(containerX, containerY + containerH, containerX, containerY + containerH + 30);
+                heatGrad.addColorStop(0, `rgba(239, 68, 68, ${(temperature - 350) / 250})`);
+                heatGrad.addColorStop(1, 'rgba(239, 68, 68, 0)');
+                ctx.fillStyle = heatGrad;
+                ctx.fillRect(containerX, containerY + containerH, containerW, 30);
+            }
+
+            // Update and draw particles
+            particles.forEach((p, i) => {
+                // Apply Van der Waals forces (attraction)
+                if (gas.a > 0 && showAttraction) {
+                    particles.forEach((p2, j) => {
+                        if (i !== j) {
+                            const dx = p2.x - p.x;
+                            const dy = p2.y - p.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            if (dist > 0 && dist < 100) {
+                                const force = gas.a * 0.00001 / (dist * dist);
+                                p.vx += (dx / dist) * force;
+                                p.vy += (dy / dist) * force;
+                            }
+                        }
+                    });
+                }
+
+                // Update position
+                p.x += p.vx;
+                p.y += p.vy;
+
+                // Wall collisions
+                const effectiveRadius = p.radius + (showExcluded ? gas.b * 100 : 0);
+
+                if (p.x - effectiveRadius < containerX) {
+                    p.x = containerX + effectiveRadius;
+                    p.vx *= -0.98;
+                }
+                if (p.x + effectiveRadius > containerX + containerW) {
+                    p.x = containerX + containerW - effectiveRadius;
+                    p.vx *= -0.98;
+                }
+                if (p.y - effectiveRadius < containerY) {
+                    p.y = containerY + effectiveRadius;
+                    p.vy *= -0.98;
+                }
+                if (p.y + effectiveRadius > containerY + containerH) {
+                    p.y = containerY + containerH - effectiveRadius;
+                    p.vy *= -0.98;
+                }
+
+                // Particle-particle collisions (excluded volume)
+                if (gas.b > 0) {
+                    particles.forEach((p2, j) => {
+                        if (i < j) {
+                            const dx = p2.x - p.x;
+                            const dy = p2.y - p.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            const minDist = p.radius + p2.radius;
+
+                            if (dist < minDist && dist > 0) {
+                                // Elastic collision
+                                const nx = dx / dist;
+                                const ny = dy / dist;
+                                const dvx = p.vx - p2.vx;
+                                const dvy = p.vy - p2.vy;
+                                const dvn = dvx * nx + dvy * ny;
+
+                                if (dvn > 0) {
+                                    p.vx -= dvn * nx;
+                                    p.vy -= dvn * ny;
+                                    p2.vx += dvn * nx;
+                                    p2.vy += dvn * ny;
+                                }
+
+                                // Separate particles
+                                const overlap = minDist - dist;
+                                p.x -= overlap * nx * 0.5;
+                                p.y -= overlap * ny * 0.5;
+                                p2.x += overlap * nx * 0.5;
+                                p2.y += overlap * ny * 0.5;
+                            }
+                        }
+                    });
+                }
+
+                // Draw excluded volume
+                if (showExcluded && gas.b > 0) {
+                    ctx.fillStyle = 'rgba(59, 130, 246, 0.1)';
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius + gas.b * 100, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Draw attraction lines
+                if (showAttraction && gas.a > 0) {
+                    particles.forEach((p2, j) => {
+                        if (i < j) {
+                            const dx = p2.x - p.x;
+                            const dy = p2.y - p.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            if (dist < 60) {
+                                ctx.strokeStyle = `rgba(250, 204, 21, ${(60 - dist) / 60 * 0.3})`;
+                                ctx.lineWidth = 1;
+                                ctx.beginPath();
+                                ctx.moveTo(p.x, p.y);
+                                ctx.lineTo(p2.x, p2.y);
+                                ctx.stroke();
+                            }
+                        }
+                    });
+                }
+
+                // Determine particle color
+                let particleColor = gas.color;
+                if (colorBySpeed) {
+                    const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                    const maxSpeed = 8;
+                    const ratio = Math.min(speed / maxSpeed, 1);
+                    // Blue (cold) to Red (hot)
+                    const r = Math.floor(59 + ratio * 180);
+                    const g = Math.floor(130 - ratio * 80);
+                    const b = Math.floor(246 - ratio * 180);
+                    particleColor = `rgb(${r}, ${g}, ${b})`;
+                }
+
+                // Draw particle
+                const grad = ctx.createRadialGradient(p.x - 1, p.y - 1, 0, p.x, p.y, p.radius);
+                grad.addColorStop(0, '#ffffff');
+                grad.addColorStop(0.3, particleColor);
+                grad.addColorStop(1, shadeColor(particleColor, -40));
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw info overlay
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
+            ctx.fillRect(20, 20, 200, 80);
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.3)';
+            ctx.strokeRect(20, 20, 200, 80);
+
+            ctx.fillStyle = '#e2e8f0';
+            ctx.font = 'bold 14px Inter';
+            ctx.fillText(gas.name, 35, 45);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '12px Fira Code';
+            ctx.fillText(`T = ${temperature} K`, 35, 65);
+            ctx.fillText(`V = ${volumePercent}%`, 35, 82);
+
+            // Temperature indicator
+            const tempColor = temperature < 273 ? '#06b6d4' : (temperature > 400 ? '#ef4444' : '#fbbf24');
+            ctx.fillStyle = tempColor;
+            ctx.beginPath();
+            ctx.arc(185, 55, 15, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#0f172a';
+            ctx.font = 'bold 10px Fira Code';
+            ctx.textAlign = 'center';
+            ctx.fillText(temperature > 400 ? 'HOT' : (temperature < 273 ? 'COLD' : 'OK'), 185, 59);
+            ctx.textAlign = 'left';
+
+            requestAnimationFrame(draw);
+        }
+
+        function shadeColor(color, percent) {
+            if (color.startsWith('rgb')) {
+                const match = color.match(/\d+/g);
+                if (match) {
+                    let [r, g, b] = match.map(Number);
+                    r = Math.max(0, Math.min(255, r + percent));
+                    g = Math.max(0, Math.min(255, g + percent));
+                    b = Math.max(0, Math.min(255, b + percent));
+                    return `rgb(${r}, ${g}, ${b})`;
+                }
+            }
+            const num = parseInt(color.replace('#', ''), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = Math.max(0, Math.min(255, (num >> 16) + amt));
+            const G = Math.max(0, Math.min(255, (num >> 8 & 0x00FF) + amt));
+            const B = Math.max(0, Math.min(255, (num & 0x0000FF) + amt));
+            return `rgb(${R}, ${G}, ${B})`;
+        }
+
+        // Event listeners
+        document.querySelectorAll('.gas-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.gas-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentGas = btn.dataset.gas;
+                createParticles();
+                updateInfo();
+            });
+        });
+
+        document.getElementById('tempSlider').oninput = function() {
+            temperature = parseInt(this.value);
+            document.getElementById('tempDisplay').textContent = temperature + ' K';
+            updateParticleVelocities();
+            updateInfo();
+        };
+
+        document.getElementById('volSlider').oninput = function() {
+            volumePercent = parseInt(this.value);
+            document.getElementById('volDisplay').textContent = volumePercent + '%';
+            updateContainer();
+            // Constrain particles to new volume
+            particles.forEach(p => {
+                p.x = Math.max(containerX + p.radius, Math.min(containerX + containerW - p.radius, p.x));
+                p.y = Math.max(containerY + p.radius, Math.min(containerY + containerH - p.radius, p.y));
+            });
+            updateInfo();
+        };
+
+        document.getElementById('particlesSlider').oninput = function() {
+            numParticles = parseInt(this.value);
+            document.getElementById('particlesDisplay').textContent = numParticles;
+            createParticles();
+            updateInfo();
+        };
+
+        document.getElementById('heatBtn').onclick = function() {
+            temperature = Math.min(600, temperature + 50);
+            document.getElementById('tempSlider').value = temperature;
+            document.getElementById('tempDisplay').textContent = temperature + ' K';
+            updateParticleVelocities();
+            updateInfo();
+        };
+
+        document.getElementById('coolBtn').onclick = function() {
+            temperature = Math.max(100, temperature - 50);
+            document.getElementById('tempSlider').value = temperature;
+            document.getElementById('tempDisplay').textContent = temperature + ' K';
+            updateParticleVelocities();
+            updateInfo();
+        };
+
+        document.getElementById('compressBtn').onclick = function() {
+            volumePercent = Math.max(30, volumePercent - 20);
+            document.getElementById('volSlider').value = volumePercent;
+            document.getElementById('volDisplay').textContent = volumePercent + '%';
+            updateContainer();
+            particles.forEach(p => {
+                p.x = Math.max(containerX + p.radius, Math.min(containerX + containerW - p.radius, p.x));
+                p.y = Math.max(containerY + p.radius, Math.min(containerY + containerH - p.radius, p.y));
+            });
+            updateInfo();
+        };
+
+        document.getElementById('expandBtn').onclick = function() {
+            volumePercent = Math.min(150, volumePercent + 20);
+            document.getElementById('volSlider').value = volumePercent;
+            document.getElementById('volDisplay').textContent = volumePercent + '%';
+            updateContainer();
+            updateInfo();
+        };
+
+        document.getElementById('resetBtn').onclick = function() {
+            temperature = 300;
+            volumePercent = 100;
+            numParticles = 100;
+            document.getElementById('tempSlider').value = temperature;
+            document.getElementById('volSlider').value = volumePercent;
+            document.getElementById('particlesSlider').value = numParticles;
+            document.getElementById('tempDisplay').textContent = temperature + ' K';
+            document.getElementById('volDisplay').textContent = volumePercent + '%';
+            document.getElementById('particlesDisplay').textContent = numParticles;
+            updateContainer();
+            createParticles();
+            updateInfo();
+        };
+
+        document.getElementById('showAttraction').onchange = function() {
+            showAttraction = this.checked;
+        };
+
+        document.getElementById('showExcluded').onchange = function() {
+            showExcluded = this.checked;
+        };
+
+        document.getElementById('colorBySpeed').onchange = function() {
+            colorBySpeed = this.checked;
+        };
+
+        window.onload = init;
+        window.onresize = init;
+    </script>
+</body>
+</html>

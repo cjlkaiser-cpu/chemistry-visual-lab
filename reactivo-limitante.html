@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reactivo Limitante | Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --accent: #f97316;
+            --accent-glow: rgba(249, 115, 22, 0.3);
+            --border-color: #2a2a3a;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+        }
+
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .canvas-header {
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .title-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .title-area span {
+            font-family: 'Covered By Your Grace', cursive;
+            color: var(--accent);
+            font-size: 1rem;
+            margin-left: 0.5rem;
+        }
+
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            min-height: 0;
+        }
+
+        #canvas {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: 0 0 40px var(--accent-glow);
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            min-height: 0;
+        }
+
+        .controls {
+            width: 340px;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        .control-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .control-section:last-child {
+            border-bottom: none;
+        }
+
+        .control-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .control-group {
+            margin-bottom: 1rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.625rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        select:hover, select:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .slider-container {
+            margin-bottom: 1rem;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-header label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .slider-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+            background: var(--bg-tertiary);
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .info-panel {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+        }
+
+        .info-value.large {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .info-value.limiting {
+            color: #ef4444;
+        }
+
+        .info-value.excess {
+            color: #22c55e;
+        }
+
+        .reaction-box {
+            background: var(--bg-primary);
+            border-radius: 6px;
+            padding: 0.75rem;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .controls {
+                width: 100%;
+                height: auto;
+                max-height: 50vh;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-section">
+        <div class="canvas-header">
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Volver al Lab
+            </a>
+            <div class="title-area">
+                <h1>Reactivo Limitante <span>estequiometría visual</span></h1>
+            </div>
+        </div>
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-section">
+            <h3>Reacción</h3>
+            <div class="control-group">
+                <label>Seleccionar reacción</label>
+                <select id="reactionSelect">
+                    <option value="h2o">2H₂ + O₂ → 2H₂O</option>
+                    <option value="nh3">N₂ + 3H₂ → 2NH₃</option>
+                    <option value="co2">C + O₂ → CO₂</option>
+                    <option value="nacl">2Na + Cl₂ → 2NaCl</option>
+                    <option value="feo">4Fe + 3O₂ → 2Fe₂O₃</option>
+                </select>
+            </div>
+
+            <div class="reaction-box" id="reactionDisplay">
+                <span style="color: #22d3ee">2H₂</span> +
+                <span style="color: #f472b6">O₂</span> →
+                <span style="color: #a855f7">2H₂O</span>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Cantidad de Reactantes</h3>
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label id="reactantALabel">Moles de H₂</label>
+                    <span class="slider-value" id="molAValue">4</span>
+                </div>
+                <input type="range" id="molASlider" min="1" max="10" step="1" value="4">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressA" style="background: #22d3ee; width: 40%"></div>
+                </div>
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label id="reactantBLabel">Moles de O₂</label>
+                    <span class="slider-value" id="molBValue">3</span>
+                </div>
+                <input type="range" id="molBSlider" min="1" max="10" step="1" value="3">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressB" style="background: #f472b6; width: 30%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Análisis Estequiométrico</h3>
+            <div class="info-panel">
+                <div class="info-row">
+                    <span class="info-label">Reactivo limitante</span>
+                    <span class="info-value limiting" id="limitingReagent">H₂</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Reactivo en exceso</span>
+                    <span class="info-value excess" id="excessReagent">O₂</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Exceso restante</span>
+                    <span class="info-value" id="excessAmount">1.0 mol</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Producto formado</span>
+                    <span class="info-value large" id="productAmount">4.0 mol</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Rendimiento teórico</span>
+                    <span class="info-value" id="theoreticalYield">72.0 g</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Controles</h3>
+            <button class="btn btn-primary" id="reactBtn">⚗️ Hacer Reaccionar</button>
+            <button class="btn btn-secondary" id="resetBtn">↺ Reiniciar</button>
+        </div>
+
+        <div class="control-section">
+            <h3>Leyenda</h3>
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #22d3ee"></span>
+                    Reactante A
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #f472b6"></span>
+                    Reactante B
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #a855f7"></span>
+                    Producto
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #ef4444"></span>
+                    Limitante
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Reactions database
+        const reactions = {
+            'h2o': {
+                name: '2H₂ + O₂ → 2H₂O',
+                reactantA: { formula: 'H₂', coef: 2, mass: 2, color: '#22d3ee' },
+                reactantB: { formula: 'O₂', coef: 1, mass: 32, color: '#f472b6' },
+                product: { formula: 'H₂O', coef: 2, mass: 18, color: '#a855f7' }
+            },
+            'nh3': {
+                name: 'N₂ + 3H₂ → 2NH₃',
+                reactantA: { formula: 'N₂', coef: 1, mass: 28, color: '#22d3ee' },
+                reactantB: { formula: 'H₂', coef: 3, mass: 2, color: '#f472b6' },
+                product: { formula: 'NH₃', coef: 2, mass: 17, color: '#a855f7' }
+            },
+            'co2': {
+                name: 'C + O₂ → CO₂',
+                reactantA: { formula: 'C', coef: 1, mass: 12, color: '#22d3ee' },
+                reactantB: { formula: 'O₂', coef: 1, mass: 32, color: '#f472b6' },
+                product: { formula: 'CO₂', coef: 1, mass: 44, color: '#a855f7' }
+            },
+            'nacl': {
+                name: '2Na + Cl₂ → 2NaCl',
+                reactantA: { formula: 'Na', coef: 2, mass: 23, color: '#22d3ee' },
+                reactantB: { formula: 'Cl₂', coef: 1, mass: 71, color: '#f472b6' },
+                product: { formula: 'NaCl', coef: 2, mass: 58.5, color: '#a855f7' }
+            },
+            'feo': {
+                name: '4Fe + 3O₂ → 2Fe₂O₃',
+                reactantA: { formula: 'Fe', coef: 4, mass: 56, color: '#22d3ee' },
+                reactantB: { formula: 'O₂', coef: 3, mass: 32, color: '#f472b6' },
+                product: { formula: 'Fe₂O₃', coef: 2, mass: 160, color: '#a855f7' }
+            }
+        };
+
+        let currentReaction = 'h2o';
+        let molA = 4;
+        let molB = 3;
+        let isReacting = false;
+        let reactionProgress = 0;
+
+        // Particles
+        let particlesA = [];
+        let particlesB = [];
+        let products = [];
+        let reactionEffects = [];
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            const aspectRatio = 1.4;
+
+            let width, height;
+            if (rect.width / rect.height > aspectRatio) {
+                height = rect.height - 32;
+                width = height * aspectRatio;
+            } else {
+                width = rect.width - 32;
+                height = width / aspectRatio;
+            }
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            ctx.scale(dpr, dpr);
+        }
+
+        function calculateStoichiometry() {
+            const rxn = reactions[currentReaction];
+
+            // Calculate mole ratios
+            const ratioA = molA / rxn.reactantA.coef;
+            const ratioB = molB / rxn.reactantB.coef;
+
+            let limiting, excess, excessMol, productMol;
+
+            if (ratioA <= ratioB) {
+                limiting = 'A';
+                excess = 'B';
+                productMol = (molA / rxn.reactantA.coef) * rxn.product.coef;
+                const usedB = (molA / rxn.reactantA.coef) * rxn.reactantB.coef;
+                excessMol = molB - usedB;
+            } else {
+                limiting = 'B';
+                excess = 'A';
+                productMol = (molB / rxn.reactantB.coef) * rxn.product.coef;
+                const usedA = (molB / rxn.reactantB.coef) * rxn.reactantA.coef;
+                excessMol = molA - usedA;
+            }
+
+            const theoreticalYield = productMol * rxn.product.mass;
+
+            return {
+                limiting,
+                excess,
+                excessMol,
+                productMol,
+                theoreticalYield,
+                limitingFormula: limiting === 'A' ? rxn.reactantA.formula : rxn.reactantB.formula,
+                excessFormula: excess === 'A' ? rxn.reactantA.formula : rxn.reactantB.formula
+            };
+        }
+
+        function initParticles() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            const rxn = reactions[currentReaction];
+
+            particlesA = [];
+            particlesB = [];
+            products = [];
+            reactionEffects = [];
+            reactionProgress = 0;
+            isReacting = false;
+
+            // Create particles for reactant A (left side)
+            for (let i = 0; i < molA * 3; i++) {
+                particlesA.push({
+                    x: 50 + Math.random() * (w * 0.35 - 50),
+                    y: 50 + Math.random() * (h - 100),
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2,
+                    radius: 12,
+                    color: rxn.reactantA.color,
+                    formula: rxn.reactantA.formula
+                });
+            }
+
+            // Create particles for reactant B (right side)
+            for (let i = 0; i < molB * 3; i++) {
+                particlesB.push({
+                    x: w * 0.65 + Math.random() * (w * 0.35 - 50),
+                    y: 50 + Math.random() * (h - 100),
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: (Math.random() - 0.5) * 2,
+                    radius: 12,
+                    color: rxn.reactantB.color,
+                    formula: rxn.reactantB.formula
+                });
+            }
+        }
+
+        function updateParticles() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            // Update reactant A
+            particlesA.forEach(p => {
+                if (!isReacting) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    // Boundary for left zone
+                    if (p.x < p.radius + 20) { p.x = p.radius + 20; p.vx *= -1; }
+                    if (p.x > w * 0.4 - p.radius) { p.x = w * 0.4 - p.radius; p.vx *= -1; }
+                    if (p.y < p.radius + 20) { p.y = p.radius + 20; p.vy *= -1; }
+                    if (p.y > h - p.radius - 20) { p.y = h - p.radius - 20; p.vy *= -1; }
+                } else {
+                    // Move toward center during reaction
+                    const targetX = w * 0.5;
+                    const targetY = h * 0.5;
+                    p.x += (targetX - p.x) * 0.03;
+                    p.y += (targetY - p.y) * 0.03;
+                }
+            });
+
+            // Update reactant B
+            particlesB.forEach(p => {
+                if (!isReacting) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    // Boundary for right zone
+                    if (p.x < w * 0.6 + p.radius) { p.x = w * 0.6 + p.radius; p.vx *= -1; }
+                    if (p.x > w - p.radius - 20) { p.x = w - p.radius - 20; p.vx *= -1; }
+                    if (p.y < p.radius + 20) { p.y = p.radius + 20; p.vy *= -1; }
+                    if (p.y > h - p.radius - 20) { p.y = h - p.radius - 20; p.vy *= -1; }
+                } else {
+                    // Move toward center during reaction
+                    const targetX = w * 0.5;
+                    const targetY = h * 0.5;
+                    p.x += (targetX - p.x) * 0.03;
+                    p.y += (targetY - p.y) * 0.03;
+                }
+            });
+
+            // Update products
+            products.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < p.radius + 20) { p.x = p.radius + 20; p.vx *= -1; }
+                if (p.x > w - p.radius - 20) { p.x = w - p.radius - 20; p.vx *= -1; }
+                if (p.y < p.radius + 20) { p.y = p.radius + 20; p.vy *= -1; }
+                if (p.y > h - p.radius - 20) { p.y = h - p.radius - 20; p.vy *= -1; }
+
+                p.vx *= 0.99;
+                p.vy *= 0.99;
+            });
+
+            // Update effects
+            reactionEffects = reactionEffects.filter(e => {
+                e.radius += 2;
+                e.alpha -= 0.03;
+                return e.alpha > 0;
+            });
+
+            // Process reaction
+            if (isReacting && reactionProgress < 1) {
+                reactionProgress += 0.005;
+
+                const rxn = reactions[currentReaction];
+                const stoich = calculateStoichiometry();
+
+                // Calculate how many particles should react
+                const targetARemaining = stoich.limiting === 'A' ? 0 :
+                    Math.floor(stoich.excessMol * 3);
+                const targetBRemaining = stoich.limiting === 'B' ? 0 :
+                    Math.floor(stoich.excessMol * 3);
+                const targetProducts = Math.floor(stoich.productMol * 3);
+
+                // React particles
+                if (particlesA.length > targetARemaining && particlesB.length > targetBRemaining) {
+                    if (Math.random() < 0.1) {
+                        const idxA = Math.floor(Math.random() * particlesA.length);
+                        const idxB = Math.floor(Math.random() * particlesB.length);
+
+                        const pA = particlesA[idxA];
+                        const pB = particlesB[idxB];
+
+                        // Create reaction effect
+                        const mx = (pA.x + pB.x) / 2;
+                        const my = (pA.y + pB.y) / 2;
+
+                        reactionEffects.push({
+                            x: mx, y: my,
+                            radius: 10, maxRadius: 40,
+                            alpha: 1
+                        });
+
+                        // Create product
+                        products.push({
+                            x: mx,
+                            y: my,
+                            vx: (Math.random() - 0.5) * 3,
+                            vy: (Math.random() - 0.5) * 3,
+                            radius: 14,
+                            color: rxn.product.color,
+                            formula: rxn.product.formula
+                        });
+
+                        // Remove reactants
+                        particlesA.splice(idxA, 1);
+                        particlesB.splice(idxB, 1);
+                    }
+                } else if (reactionProgress < 1) {
+                    reactionProgress = 1;
+                    isReacting = false;
+                }
+            }
+        }
+
+        function draw() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+            const rxn = reactions[currentReaction];
+            const stoich = calculateStoichiometry();
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw zones
+            if (!isReacting && products.length === 0) {
+                // Reactant A zone
+                ctx.fillStyle = 'rgba(34, 211, 238, 0.05)';
+                ctx.fillRect(20, 20, w * 0.4 - 30, h - 40);
+                ctx.strokeStyle = 'rgba(34, 211, 238, 0.3)';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(20, 20, w * 0.4 - 30, h - 40);
+
+                // Reactant B zone
+                ctx.fillStyle = 'rgba(244, 114, 182, 0.05)';
+                ctx.fillRect(w * 0.6 + 10, 20, w * 0.4 - 30, h - 40);
+                ctx.strokeStyle = 'rgba(244, 114, 182, 0.3)';
+                ctx.strokeRect(w * 0.6 + 10, 20, w * 0.4 - 30, h - 40);
+
+                // Middle arrow zone
+                ctx.fillStyle = '#1a1a25';
+                ctx.fillRect(w * 0.4, 20, w * 0.2, h - 40);
+
+                // Arrow
+                ctx.beginPath();
+                ctx.moveTo(w * 0.45, h / 2);
+                ctx.lineTo(w * 0.55, h / 2);
+                ctx.lineTo(w * 0.52, h / 2 - 15);
+                ctx.moveTo(w * 0.55, h / 2);
+                ctx.lineTo(w * 0.52, h / 2 + 15);
+                ctx.strokeStyle = '#f97316';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+
+                // Zone labels
+                ctx.fillStyle = rxn.reactantA.color;
+                ctx.font = 'bold 14px Fira Code';
+                ctx.textAlign = 'center';
+                ctx.fillText(rxn.reactantA.formula, w * 0.2, 45);
+                ctx.fillText(`${molA} mol`, w * 0.2, h - 30);
+
+                ctx.fillStyle = rxn.reactantB.color;
+                ctx.fillText(rxn.reactantB.formula, w * 0.8, 45);
+                ctx.fillText(`${molB} mol`, w * 0.8, h - 30);
+
+                // Limiting indicator
+                if (stoich.limiting === 'A') {
+                    ctx.fillStyle = '#ef4444';
+                    ctx.font = '10px Inter';
+                    ctx.fillText('(LIMITANTE)', w * 0.2, 62);
+                } else {
+                    ctx.fillStyle = '#ef4444';
+                    ctx.font = '10px Inter';
+                    ctx.fillText('(LIMITANTE)', w * 0.8, 62);
+                }
+            }
+
+            // Draw reaction effects
+            reactionEffects.forEach(e => {
+                const gradient = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, e.radius);
+                gradient.addColorStop(0, `rgba(249, 115, 22, ${e.alpha})`);
+                gradient.addColorStop(1, `rgba(249, 115, 22, 0)`);
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw particles
+            particlesA.forEach(p => {
+                drawParticle(p);
+            });
+
+            particlesB.forEach(p => {
+                drawParticle(p);
+            });
+
+            products.forEach(p => {
+                drawParticle(p);
+                // Glow for new products
+                if (reactionProgress > 0) {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius + 5, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(168, 85, 247, 0.5)';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            });
+
+            // Draw results after reaction
+            if (products.length > 0 && !isReacting) {
+                // Results box
+                ctx.fillStyle = 'rgba(26, 26, 37, 0.95)';
+                ctx.fillRect(w * 0.25, 20, w * 0.5, 80);
+                ctx.strokeStyle = '#f97316';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(w * 0.25, 20, w * 0.5, 80);
+
+                ctx.fillStyle = '#f0f0f0';
+                ctx.font = 'bold 14px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Reacción Completa', w * 0.5, 45);
+
+                ctx.font = '12px Fira Code';
+                ctx.fillStyle = '#a855f7';
+                ctx.fillText(`${rxn.product.formula}: ${stoich.productMol.toFixed(1)} mol`, w * 0.5, 65);
+
+                const excessReagent = stoich.limiting === 'A' ? rxn.reactantB : rxn.reactantA;
+                ctx.fillStyle = '#22c55e';
+                ctx.fillText(`Exceso de ${excessReagent.formula}: ${stoich.excessMol.toFixed(1)} mol`, w * 0.5, 85);
+            }
+        }
+
+        function drawParticle(p) {
+            // Glow
+            const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 1.5);
+            gradient.addColorStop(0, p.color);
+            gradient.addColorStop(1, 'transparent');
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius * 1.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Main particle
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+
+            // Label
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 9px Fira Code';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(p.formula, p.x, p.y);
+        }
+
+        function updateDisplay() {
+            const rxn = reactions[currentReaction];
+            const stoich = calculateStoichiometry();
+
+            document.getElementById('reactantALabel').textContent = `Moles de ${rxn.reactantA.formula}`;
+            document.getElementById('reactantBLabel').textContent = `Moles de ${rxn.reactantB.formula}`;
+
+            document.getElementById('limitingReagent').textContent = stoich.limitingFormula;
+            document.getElementById('excessReagent').textContent = stoich.excessFormula;
+            document.getElementById('excessAmount').textContent = stoich.excessMol.toFixed(1) + ' mol';
+            document.getElementById('productAmount').textContent = stoich.productMol.toFixed(1) + ' mol';
+            document.getElementById('theoreticalYield').textContent = stoich.theoreticalYield.toFixed(1) + ' g';
+
+            // Update reaction display
+            document.getElementById('reactionDisplay').innerHTML = rxn.name
+                .replace(rxn.reactantA.formula, `<span style="color: ${rxn.reactantA.color}">${rxn.reactantA.formula}</span>`)
+                .replace(rxn.reactantB.formula, `<span style="color: ${rxn.reactantB.color}">${rxn.reactantB.formula}</span>`)
+                .replace(rxn.product.formula, `<span style="color: ${rxn.product.color}">${rxn.product.formula}</span>`);
+
+            // Update progress bars
+            document.getElementById('progressA').style.width = `${molA * 10}%`;
+            document.getElementById('progressB').style.width = `${molB * 10}%`;
+        }
+
+        function animate() {
+            updateParticles();
+            draw();
+            requestAnimationFrame(animate);
+        }
+
+        // Event listeners
+        document.getElementById('reactionSelect').addEventListener('change', (e) => {
+            currentReaction = e.target.value;
+            molA = 4;
+            molB = 3;
+            document.getElementById('molASlider').value = 4;
+            document.getElementById('molBSlider').value = 3;
+            document.getElementById('molAValue').textContent = '4';
+            document.getElementById('molBValue').textContent = '3';
+            initParticles();
+            updateDisplay();
+        });
+
+        document.getElementById('molASlider').addEventListener('input', (e) => {
+            molA = parseInt(e.target.value);
+            document.getElementById('molAValue').textContent = molA;
+            initParticles();
+            updateDisplay();
+        });
+
+        document.getElementById('molBSlider').addEventListener('input', (e) => {
+            molB = parseInt(e.target.value);
+            document.getElementById('molBValue').textContent = molB;
+            initParticles();
+            updateDisplay();
+        });
+
+        document.getElementById('reactBtn').addEventListener('click', () => {
+            if (!isReacting && products.length === 0) {
+                isReacting = true;
+                reactionProgress = 0;
+            }
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            initParticles();
+            updateDisplay();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        // Initialize
+        resizeCanvas();
+        initParticles();
+        updateDisplay();
+        animate();
+    </script>
+</body>
+</html>

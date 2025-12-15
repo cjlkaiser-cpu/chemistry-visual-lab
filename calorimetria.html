@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorimetría | Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Covered+By+Your+Grace&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --accent: #ef4444;
+            --accent-glow: rgba(239, 68, 68, 0.3);
+            --border-color: #2a2a3a;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+        }
+
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .canvas-header {
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .title-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .title-area span {
+            font-family: 'Covered By Your Grace', cursive;
+            color: var(--accent);
+            font-size: 1rem;
+            margin-left: 0.5rem;
+        }
+
+        .canvas-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            min-height: 0;
+        }
+
+        #canvas {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            box-shadow: 0 0 40px var(--accent-glow);
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            min-height: 0;
+        }
+
+        .controls {
+            width: 340px;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        .control-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .control-section:last-child {
+            border-bottom: none;
+        }
+
+        .control-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .control-group {
+            margin-bottom: 1rem;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.625rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        select:hover, select:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .slider-container {
+            margin-bottom: 1rem;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-header label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .slider-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+            background: var(--bg-tertiary);
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .info-panel {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .info-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            color: var(--accent);
+        }
+
+        .info-value.large {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .info-value.hot {
+            color: #ef4444;
+        }
+
+        .info-value.cold {
+            color: #3b82f6;
+        }
+
+        .equation-box {
+            background: var(--bg-primary);
+            border-radius: 6px;
+            padding: 0.75rem;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .equation-box .highlight {
+            color: var(--accent);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+
+            .controls {
+                width: 100%;
+                height: auto;
+                max-height: 50vh;
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-section">
+        <div class="canvas-header">
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Volver al Lab
+            </a>
+            <div class="title-area">
+                <h1>Calorimetría <span>Q = mcΔT</span></h1>
+            </div>
+        </div>
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-section">
+            <h3>Experimento</h3>
+            <div class="control-group">
+                <label>Tipo de experimento</label>
+                <select id="experimentType">
+                    <option value="mixing">Mezcla de líquidos</option>
+                    <option value="metal">Metal caliente en agua</option>
+                    <option value="reaction">Reacción química</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="control-section" id="mixingControls">
+            <h3>Muestra Caliente</h3>
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>Temperatura (°C)</label>
+                    <span class="slider-value" id="hotTempValue">80</span>
+                </div>
+                <input type="range" id="hotTempSlider" min="50" max="100" step="1" value="80">
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>Masa (g)</label>
+                    <span class="slider-value" id="hotMassValue">100</span>
+                </div>
+                <input type="range" id="hotMassSlider" min="50" max="300" step="10" value="100">
+            </div>
+
+            <h3 style="margin-top: 1rem;">Muestra Fría</h3>
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>Temperatura (°C)</label>
+                    <span class="slider-value" id="coldTempValue">20</span>
+                </div>
+                <input type="range" id="coldTempSlider" min="0" max="40" step="1" value="20">
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-header">
+                    <label>Masa (g)</label>
+                    <span class="slider-value" id="coldMassValue">150</span>
+                </div>
+                <input type="range" id="coldMassSlider" min="50" max="300" step="10" value="150">
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Resultados</h3>
+            <div class="info-panel">
+                <div class="info-row">
+                    <span class="info-label">T inicial (caliente)</span>
+                    <span class="info-value hot" id="hotInitial">80.0 °C</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">T inicial (frío)</span>
+                    <span class="info-value cold" id="coldInitial">20.0 °C</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">T equilibrio</span>
+                    <span class="info-value large" id="equilibriumTemp">44.0 °C</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Calor transferido</span>
+                    <span class="info-value" id="heatTransferred">0.0 kJ</span>
+                </div>
+            </div>
+
+            <div class="equation-box">
+                Q = <span class="highlight">m</span> × <span class="highlight">c</span> × Δ<span class="highlight">T</span>
+            </div>
+        </div>
+
+        <div class="control-section">
+            <h3>Controles</h3>
+            <button class="btn btn-primary" id="startBtn">🔥 Iniciar Mezcla</button>
+            <button class="btn btn-secondary" id="resetBtn">↺ Reiniciar</button>
+        </div>
+
+        <div class="control-section">
+            <h3>Leyenda</h3>
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #ef4444"></span>
+                    Muestra caliente
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #3b82f6"></span>
+                    Muestra fría
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #a855f7"></span>
+                    Mezcla final
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: #fbbf24"></span>
+                    Flujo de calor
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let experimentType = 'mixing';
+        let hotTemp = 80;
+        let coldTemp = 20;
+        let hotMass = 100;
+        let coldMass = 150;
+        let isRunning = false;
+        let progress = 0;
+
+        // Current temperatures during animation
+        let currentHotTemp = 80;
+        let currentColdTemp = 20;
+        let equilibriumTemp = 44;
+
+        // Heat flow particles
+        let heatParticles = [];
+
+        // Temperature history for graph
+        let tempHistory = {
+            time: [],
+            hot: [],
+            cold: []
+        };
+
+        // Specific heat capacity of water (J/g·°C)
+        const c_water = 4.184;
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            const aspectRatio = 1.4;
+
+            let width, height;
+            if (rect.width / rect.height > aspectRatio) {
+                height = rect.height - 32;
+                width = height * aspectRatio;
+            } else {
+                width = rect.width - 32;
+                height = width / aspectRatio;
+            }
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            ctx.scale(dpr, dpr);
+        }
+
+        function calculateEquilibrium() {
+            // Heat lost by hot = Heat gained by cold
+            // m_hot * c * (T_hot - T_eq) = m_cold * c * (T_eq - T_cold)
+            equilibriumTemp = (hotMass * hotTemp + coldMass * coldTemp) / (hotMass + coldMass);
+            return equilibriumTemp;
+        }
+
+        function calculateHeatTransferred() {
+            // Q = m * c * ΔT (for the cold sample)
+            const deltaT = equilibriumTemp - coldTemp;
+            const Q = coldMass * c_water * deltaT / 1000; // Convert to kJ
+            return Q;
+        }
+
+        function tempToColor(temp) {
+            // Map temperature to color (blue to red)
+            const normalized = Math.max(0, Math.min(1, (temp - 0) / 100));
+            const r = Math.floor(normalized * 255);
+            const b = Math.floor((1 - normalized) * 255);
+            return `rgb(${r}, 50, ${b})`;
+        }
+
+        function initExperiment() {
+            currentHotTemp = hotTemp;
+            currentColdTemp = coldTemp;
+            progress = 0;
+            isRunning = false;
+            heatParticles = [];
+            tempHistory = { time: [], hot: [], cold: [] };
+            calculateEquilibrium();
+        }
+
+        function updateExperiment() {
+            if (!isRunning) return;
+
+            progress += 0.005;
+            if (progress >= 1) {
+                progress = 1;
+                isRunning = false;
+            }
+
+            // Exponential approach to equilibrium
+            const tau = 0.15; // time constant
+            const factor = 1 - Math.exp(-progress / tau);
+
+            currentHotTemp = hotTemp + (equilibriumTemp - hotTemp) * factor;
+            currentColdTemp = coldTemp + (equilibriumTemp - coldTemp) * factor;
+
+            // Create heat particles
+            if (Math.random() < 0.3 && progress < 0.9) {
+                const w = canvas.width / (window.devicePixelRatio || 1);
+                const h = canvas.height / (window.devicePixelRatio || 1);
+
+                heatParticles.push({
+                    x: w * 0.35,
+                    y: h * 0.4 + Math.random() * h * 0.25,
+                    targetX: w * 0.65,
+                    progress: 0,
+                    speed: 0.02 + Math.random() * 0.02
+                });
+            }
+
+            // Update heat particles
+            heatParticles = heatParticles.filter(p => {
+                p.progress += p.speed;
+                p.x = p.x + (p.targetX - p.x) * p.progress;
+                return p.progress < 1;
+            });
+
+            // Record history
+            const time = progress * 100;
+            if (tempHistory.time.length === 0 || time - tempHistory.time[tempHistory.time.length - 1] > 1) {
+                tempHistory.time.push(time);
+                tempHistory.hot.push(currentHotTemp);
+                tempHistory.cold.push(currentColdTemp);
+            }
+        }
+
+        function draw() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw calorimeter container
+            drawCalorimeter(w, h);
+
+            // Draw temperature graph
+            drawTemperatureGraph(w * 0.05, h * 0.05, w * 0.4, h * 0.35);
+
+            // Draw heat flow visualization
+            drawHeatFlow(w, h);
+
+            // Draw thermometers
+            drawThermometer(w * 0.25, h * 0.45, 30, h * 0.4, currentHotTemp, 'Caliente');
+            drawThermometer(w * 0.75, h * 0.45, 30, h * 0.4, currentColdTemp, 'Frío');
+
+            // Labels
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '11px Inter';
+            ctx.textAlign = 'center';
+
+            if (progress > 0 && progress < 1) {
+                ctx.fillStyle = '#fbbf24';
+                ctx.font = 'bold 12px Inter';
+                ctx.fillText('Transferencia de calor en progreso...', w / 2, h * 0.95);
+            } else if (progress >= 1) {
+                ctx.fillStyle = '#22c55e';
+                ctx.font = 'bold 12px Inter';
+                ctx.fillText(`Equilibrio térmico alcanzado: ${equilibriumTemp.toFixed(1)}°C`, w / 2, h * 0.95);
+            }
+        }
+
+        function drawCalorimeter(w, h) {
+            const centerY = h * 0.65;
+
+            // Outer container (insulation)
+            ctx.fillStyle = '#2a2a3a';
+            ctx.beginPath();
+            ctx.roundRect(w * 0.15, h * 0.42, w * 0.7, h * 0.45, 10);
+            ctx.fill();
+
+            // Inner container
+            ctx.fillStyle = '#1a1a25';
+            ctx.beginPath();
+            ctx.roundRect(w * 0.18, h * 0.45, w * 0.64, h * 0.38, 8);
+            ctx.fill();
+
+            if (progress === 0) {
+                // Hot sample (left)
+                ctx.fillStyle = tempToColor(hotTemp);
+                ctx.fillRect(w * 0.2, h * 0.48, w * 0.25, h * 0.32);
+
+                // Cold sample (right)
+                ctx.fillStyle = tempToColor(coldTemp);
+                ctx.fillRect(w * 0.55, h * 0.48, w * 0.25, h * 0.32);
+
+                // Divider
+                ctx.fillStyle = '#4a5568';
+                ctx.fillRect(w * 0.48, h * 0.45, w * 0.04, h * 0.38);
+
+                // Labels
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(`${hotMass}g`, w * 0.325, h * 0.65);
+                ctx.fillText(`${hotTemp}°C`, w * 0.325, h * 0.68);
+
+                ctx.fillText(`${coldMass}g`, w * 0.675, h * 0.65);
+                ctx.fillText(`${coldTemp}°C`, w * 0.675, h * 0.68);
+            } else {
+                // Mixed solution
+                const mixColor = tempToColor(progress >= 1 ? equilibriumTemp :
+                    (currentHotTemp * hotMass + currentColdTemp * coldMass) / (hotMass + coldMass));
+
+                ctx.fillStyle = mixColor;
+                ctx.fillRect(w * 0.2, h * 0.48, w * 0.6, h * 0.32);
+
+                // Mixing animation
+                if (progress < 1) {
+                    // Swirl effect
+                    const time = Date.now() / 1000;
+                    for (let i = 0; i < 8; i++) {
+                        const angle = time * 2 + i * Math.PI / 4;
+                        const r = 30 + Math.sin(time * 3 + i) * 10;
+                        const cx = w * 0.5 + Math.cos(angle) * r;
+                        const cy = h * 0.64 + Math.sin(angle) * r * 0.5;
+
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, 5, 0, Math.PI * 2);
+                        ctx.fillStyle = i % 2 === 0 ? 'rgba(239, 68, 68, 0.5)' : 'rgba(59, 130, 246, 0.5)';
+                        ctx.fill();
+                    }
+                }
+
+                // Final temperature display
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 14px Fira Code';
+                ctx.textAlign = 'center';
+                const displayTemp = progress >= 1 ? equilibriumTemp :
+                    (currentHotTemp * hotMass + currentColdTemp * coldMass) / (hotMass + coldMass);
+                ctx.fillText(`${displayTemp.toFixed(1)}°C`, w * 0.5, h * 0.66);
+            }
+
+            // Calorimeter lid
+            ctx.fillStyle = '#3b3b4f';
+            ctx.beginPath();
+            ctx.roundRect(w * 0.12, h * 0.38, w * 0.76, h * 0.06, [10, 10, 0, 0]);
+            ctx.fill();
+
+            // Label
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Calorímetro (aislado)', w * 0.5, h * 0.41);
+        }
+
+        function drawThermometer(x, y, w, h, temp, label) {
+            // Thermometer body
+            ctx.fillStyle = '#e5e5e5';
+            ctx.beginPath();
+            ctx.roundRect(x - w/2, y, w, h, w/2);
+            ctx.fill();
+
+            // Bulb
+            ctx.beginPath();
+            ctx.arc(x, y + h, w * 0.8, 0, Math.PI * 2);
+            ctx.fillStyle = tempToColor(temp);
+            ctx.fill();
+
+            // Mercury column
+            const mercuryHeight = (temp / 100) * (h - w);
+            ctx.fillStyle = tempToColor(temp);
+            ctx.fillRect(x - w/4, y + h - mercuryHeight - w * 0.8, w/2, mercuryHeight);
+
+            // Scale marks
+            ctx.strokeStyle = '#4a5568';
+            ctx.lineWidth = 1;
+            for (let t = 0; t <= 100; t += 20) {
+                const markY = y + h - (t / 100) * (h - w) - w * 0.8;
+                ctx.beginPath();
+                ctx.moveTo(x + w/2 + 5, markY);
+                ctx.lineTo(x + w/2 + 12, markY);
+                ctx.stroke();
+
+                ctx.fillStyle = '#a0a0a0';
+                ctx.font = '8px Fira Code';
+                ctx.textAlign = 'left';
+                ctx.fillText(`${t}°`, x + w/2 + 15, markY + 3);
+            }
+
+            // Current temperature marker
+            const tempY = y + h - (temp / 100) * (h - w) - w * 0.8;
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.moveTo(x - w/2 - 5, tempY);
+            ctx.lineTo(x - w/2 - 15, tempY - 5);
+            ctx.lineTo(x - w/2 - 15, tempY + 5);
+            ctx.closePath();
+            ctx.fill();
+
+            // Temperature value
+            ctx.fillStyle = '#f0f0f0';
+            ctx.font = 'bold 10px Fira Code';
+            ctx.textAlign = 'right';
+            ctx.fillText(`${temp.toFixed(1)}°C`, x - w/2 - 18, tempY + 4);
+
+            // Label
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText(label, x, y - 10);
+        }
+
+        function drawTemperatureGraph(x, y, w, h) {
+            // Background
+            ctx.fillStyle = 'rgba(26, 26, 37, 0.9)';
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeStyle = '#2a2a3a';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x, y, w, h);
+
+            // Title
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Temperatura vs Tiempo', x + w/2, y + 15);
+
+            // Graph area
+            const gx = x + 35;
+            const gy = y + 25;
+            const gw = w - 45;
+            const gh = h - 40;
+
+            // Axes
+            ctx.strokeStyle = '#4a5568';
+            ctx.beginPath();
+            ctx.moveTo(gx, gy);
+            ctx.lineTo(gx, gy + gh);
+            ctx.lineTo(gx + gw, gy + gh);
+            ctx.stroke();
+
+            // Y-axis labels (temperature)
+            ctx.fillStyle = '#64748b';
+            ctx.font = '8px Fira Code';
+            ctx.textAlign = 'right';
+            for (let t = 0; t <= 100; t += 25) {
+                const ty = gy + gh - (t / 100) * gh;
+                ctx.fillText(`${t}°`, gx - 5, ty + 3);
+            }
+
+            // Draw equilibrium line
+            const eqY = gy + gh - (equilibriumTemp / 100) * gh;
+            ctx.setLineDash([3, 3]);
+            ctx.strokeStyle = '#a855f7';
+            ctx.beginPath();
+            ctx.moveTo(gx, eqY);
+            ctx.lineTo(gx + gw, eqY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#a855f7';
+            ctx.font = '8px Fira Code';
+            ctx.textAlign = 'left';
+            ctx.fillText(`Teq=${equilibriumTemp.toFixed(0)}°`, gx + gw + 2, eqY + 3);
+
+            // Draw temperature curves
+            if (tempHistory.time.length > 1) {
+                const maxTime = Math.max(...tempHistory.time);
+
+                // Hot curve
+                ctx.beginPath();
+                tempHistory.time.forEach((t, i) => {
+                    const px = gx + (t / maxTime) * gw;
+                    const py = gy + gh - (tempHistory.hot[i] / 100) * gh;
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                });
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Cold curve
+                ctx.beginPath();
+                tempHistory.time.forEach((t, i) => {
+                    const px = gx + (t / maxTime) * gw;
+                    const py = gy + gh - (tempHistory.cold[i] / 100) * gh;
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                });
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            } else {
+                // Initial points
+                const hotY = gy + gh - (hotTemp / 100) * gh;
+                const coldY = gy + gh - (coldTemp / 100) * gh;
+
+                ctx.beginPath();
+                ctx.arc(gx, hotY, 4, 0, Math.PI * 2);
+                ctx.fillStyle = '#ef4444';
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(gx, coldY, 4, 0, Math.PI * 2);
+                ctx.fillStyle = '#3b82f6';
+                ctx.fill();
+            }
+        }
+
+        function drawHeatFlow(w, h) {
+            // Draw heat particles
+            heatParticles.forEach(p => {
+                const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 8);
+                gradient.addColorStop(0, 'rgba(251, 191, 36, 0.8)');
+                gradient.addColorStop(1, 'rgba(251, 191, 36, 0)');
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#fbbf24';
+                ctx.fill();
+            });
+
+            // Heat flow arrow
+            if (progress > 0 && progress < 1) {
+                const arrowY = h * 0.38;
+
+                ctx.beginPath();
+                ctx.moveTo(w * 0.35, arrowY);
+                ctx.lineTo(w * 0.6, arrowY);
+                ctx.lineTo(w * 0.55, arrowY - 8);
+                ctx.moveTo(w * 0.6, arrowY);
+                ctx.lineTo(w * 0.55, arrowY + 8);
+                ctx.strokeStyle = '#fbbf24';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.fillStyle = '#fbbf24';
+                ctx.font = '10px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Q (calor)', w * 0.5, arrowY - 12);
+            }
+        }
+
+        function updateDisplay() {
+            calculateEquilibrium();
+            const Q = calculateHeatTransferred();
+
+            document.getElementById('hotInitial').textContent = hotTemp.toFixed(1) + ' °C';
+            document.getElementById('coldInitial').textContent = coldTemp.toFixed(1) + ' °C';
+            document.getElementById('equilibriumTemp').textContent = equilibriumTemp.toFixed(1) + ' °C';
+            document.getElementById('heatTransferred').textContent = Q.toFixed(2) + ' kJ';
+        }
+
+        function animate() {
+            updateExperiment();
+            draw();
+            requestAnimationFrame(animate);
+        }
+
+        // Event listeners
+        document.getElementById('experimentType').addEventListener('change', (e) => {
+            experimentType = e.target.value;
+            initExperiment();
+            updateDisplay();
+        });
+
+        document.getElementById('hotTempSlider').addEventListener('input', (e) => {
+            hotTemp = parseInt(e.target.value);
+            document.getElementById('hotTempValue').textContent = hotTemp;
+            initExperiment();
+            updateDisplay();
+        });
+
+        document.getElementById('coldTempSlider').addEventListener('input', (e) => {
+            coldTemp = parseInt(e.target.value);
+            document.getElementById('coldTempValue').textContent = coldTemp;
+            initExperiment();
+            updateDisplay();
+        });
+
+        document.getElementById('hotMassSlider').addEventListener('input', (e) => {
+            hotMass = parseInt(e.target.value);
+            document.getElementById('hotMassValue').textContent = hotMass;
+            initExperiment();
+            updateDisplay();
+        });
+
+        document.getElementById('coldMassSlider').addEventListener('input', (e) => {
+            coldMass = parseInt(e.target.value);
+            document.getElementById('coldMassValue').textContent = coldMass;
+            initExperiment();
+            updateDisplay();
+        });
+
+        document.getElementById('startBtn').addEventListener('click', () => {
+            if (!isRunning && progress === 0) {
+                isRunning = true;
+            }
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            initExperiment();
+            updateDisplay();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+
+        // Initialize
+        resizeCanvas();
+        initExperiment();
+        updateDisplay();
+        animate();
+    </script>
+</body>
+</html>
