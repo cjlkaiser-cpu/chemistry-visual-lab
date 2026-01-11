@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinamica Molecular | EigenLab WASM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #030712;
+            --bg-secondary: #0f172a;
+            --bg-panel: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #06b6d4;
+            --accent-dim: rgba(6, 182, 212, 0.2);
+            --border: #334155;
+            --solid: #60a5fa;
+            --liquid: #22c55e;
+            --gas: #f97316;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge {
+            background: var(--accent);
+            color: var(--bg-primary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .breadcrumb {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover { color: var(--accent); }
+
+        .main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            background: #000;
+        }
+
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .loading, .file-warning {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 100;
+        }
+
+        .loading.hidden, .file-warning.hidden { display: none; }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .file-warning {
+            background: rgba(15, 23, 42, 0.98);
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+        }
+
+        .file-warning h2 { color: #f59e0b; margin-bottom: 0.75rem; }
+        .file-warning code { background: #f59e0b20; color: #f59e0b; padding: 0.2rem 0.5rem; border-radius: 4px; }
+        .file-warning .cmd { background: #000; border-radius: 8px; padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #22c55e; text-align: left; margin: 1rem 0; }
+        .file-warning a { color: #22c55e; }
+
+        .hud {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            pointer-events: none;
+        }
+
+        .hud-item {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .hud-label { color: var(--text-secondary); }
+        .hud-value { color: var(--accent); font-weight: 500; }
+
+        .phase-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 340px;
+            background: rgba(15, 23, 42, 0.9);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .phase-label { font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 0.25rem; }
+        .phase-value { font-size: 1.1rem; font-weight: 600; }
+        .phase-value.solid { color: var(--solid); }
+        .phase-value.liquid { color: var(--liquid); }
+        .phase-value.gas { color: var(--gas); }
+
+        .sidebar {
+            width: 320px;
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .section {
+            background: var(--bg-panel);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .equation {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-align: center;
+            padding: 0.75rem;
+            background: rgba(6, 182, 212, 0.1);
+            border-radius: 6px;
+            border: 1px solid var(--accent-dim);
+        }
+
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .preset-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preset-btn:hover { border-color: var(--accent); }
+        .preset-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+        .control-group { margin-bottom: 1rem; }
+        .control-group:last-child { margin-bottom: 0; }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.4rem;
+            font-size: 0.75rem;
+        }
+
+        .control-label span:first-child { color: var(--text-secondary); }
+        .control-label span:last-child { color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .btn-row { display: flex; gap: 0.5rem; }
+
+        .btn {
+            flex: 1;
+            padding: 0.6rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover { border-color: var(--accent); color: var(--accent); }
+        .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--bg-primary); font-weight: 500; }
+        .btn-primary:hover { background: #0891b2; color: white; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .stat-item {
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-label { font-size: 0.65rem; color: var(--text-secondary); }
+        .stat-value { font-size: 0.9rem; font-weight: 500; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .checkbox-group input { accent-color: var(--accent); }
+        .checkbox-group label { font-size: 0.8rem; color: var(--text-secondary); cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Dinamica Molecular <span class="badge">WASM</span></h1>
+        <nav class="breadcrumb">
+            <a href="../../_portal/index.html">EigenLab</a> /
+            <a href="index.html">Chemistry Visual Lab</a> /
+            <a href="../../_portal/wasm-labs.html">WASM Labs</a>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <div>Cargando simulacion molecular...</div>
+            </div>
+
+            <div class="file-warning hidden" id="file-warning">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                <h2>Servidor HTTP requerido</h2>
+                <p style="color: var(--text-secondary); font-size: 0.875rem;">WASM no funciona con <code>file://</code></p>
+                <div class="cmd">cd /Users/carlos/Projects/EigenLab<br>python3 -m http.server 8080</div>
+                <p style="font-size: 0.8rem; color: var(--text-secondary);">Luego: <a href="http://localhost:8080/Chemistry/Chemistry%20Visual%20Lab/dinamica-molecular.html">localhost:8080/.../dinamica-molecular.html</a></p>
+            </div>
+
+            <div class="hud">
+                <div class="hud-item">
+                    <span class="hud-label">Atomos:</span>
+                    <span class="hud-value" id="hud-atoms">0</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">FPS:</span>
+                    <span class="hud-value" id="hud-fps">0</span>
+                </div>
+                <div class="hud-item">
+                    <span class="hud-label">Temp:</span>
+                    <span class="hud-value" id="hud-temp">0.00</span>
+                </div>
+            </div>
+
+            <div class="phase-indicator">
+                <div class="phase-label">FASE</div>
+                <div class="phase-value" id="phase-value">---</div>
+            </div>
+        </div>
+
+        <aside class="sidebar">
+            <div class="section">
+                <div class="section-title">Potencial Lennard-Jones</div>
+                <div class="equation">V(r) = 4e[(s/r)^12 - (s/r)^6]</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Presets</div>
+                <div class="preset-grid">
+                    <button class="preset-btn active" data-preset="liquid">Liquido</button>
+                    <button class="preset-btn" data-preset="solid">Solido</button>
+                    <button class="preset-btn" data-preset="gas">Gas</button>
+                    <button class="preset-btn" data-preset="melting">Fusion</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Parametros</div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>Temperatura (T*)</span>
+                        <span id="val-temp">1.0</span>
+                    </div>
+                    <input type="range" id="ctrl-temp" min="0.1" max="5" step="0.1" value="1.0">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>Epsilon (e)</span>
+                        <span id="val-epsilon">1.0</span>
+                    </div>
+                    <input type="range" id="ctrl-epsilon" min="0.5" max="3" step="0.1" value="1.0">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>Sigma (s)</span>
+                        <span id="val-sigma">1.0</span>
+                    </div>
+                    <input type="range" id="ctrl-sigma" min="0.5" max="2" step="0.1" value="1.0">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>Termostato tau</span>
+                        <span id="val-tau">0.5</span>
+                    </div>
+                    <input type="range" id="ctrl-tau" min="0.1" max="3" step="0.1" value="0.5">
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="check-thermostat" checked>
+                    <label for="check-thermostat">Termostato Berendsen</label>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Acciones</div>
+                <div class="btn-row">
+                    <button class="btn" id="btn-pause">Pausar</button>
+                    <button class="btn" id="btn-reset">Reset</button>
+                </div>
+                <div class="btn-row" style="margin-top: 0.5rem;">
+                    <button class="btn btn-primary" id="btn-heat">Calentar +0.5</button>
+                    <button class="btn btn-primary" id="btn-cool">Enfriar -0.5</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Estadisticas</div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">E. Cinetica</div>
+                        <div class="stat-value" id="stat-ke">0.00</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">E. Potencial</div>
+                        <div class="stat-value" id="stat-pe">0.00</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">E. Total</div>
+                        <div class="stat-value" id="stat-total">0.00</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Densidad</div>
+                        <div class="stat-value" id="stat-density">0.00</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <script src="../../_wasm/eigenlab-core.js"></script>
+    <script>
+        // Check for file:// protocol
+        if (window.location.protocol === 'file:') {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('file-warning').classList.remove('hidden');
+        }
+
+        let Module = null;
+        let sim = null;
+        let paused = false;
+        let currentPreset = 'liquid';
+        let targetTemp = 1.0;
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let dpr = 1;
+
+        let frameCount = 0;
+        let fps = 0;
+        let lastFpsTime = performance.now();
+        let statsCounter = 0;
+
+        async function initWASM() {
+            try {
+                Module = await EigenLabCore();
+                console.log('EigenLab WASM loaded');
+                initSimulation();
+            } catch (e) {
+                console.error('WASM load error:', e);
+                document.getElementById('loading').innerHTML = '<div style="color:#f87171;">Error cargando WASM</div>';
+            }
+        }
+
+        function initSimulation() {
+            document.getElementById('loading').classList.add('hidden');
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            createSimulator(currentPreset);
+            requestAnimationFrame(loop);
+            setupEventListeners();
+        }
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            dpr = window.devicePixelRatio || 1;
+            canvas.width = container.clientWidth * dpr;
+            canvas.height = container.clientHeight * dpr;
+            canvas.style.width = container.clientWidth + 'px';
+            canvas.style.height = container.clientHeight + 'px';
+        }
+
+        function createSimulator(preset) {
+            if (sim) sim.delete();
+
+            let config;
+            switch (preset) {
+                case 'solid': config = Module.mdPresetSolid(); break;
+                case 'liquid': config = Module.mdPresetLiquid(); break;
+                case 'gas': config = Module.mdPresetGas(); break;
+                case 'melting': config = Module.mdPresetMelting(); break;
+                default: config = Module.mdPresetLiquid();
+            }
+
+            targetTemp = config.temperature;
+            sim = new Module.MolecularDynamics(config);
+            sim.initializeLattice();
+
+            // Update UI
+            document.getElementById('ctrl-temp').value = config.temperature;
+            document.getElementById('val-temp').textContent = config.temperature.toFixed(1);
+            document.getElementById('ctrl-epsilon').value = config.epsilon;
+            document.getElementById('val-epsilon').textContent = config.epsilon.toFixed(1);
+            document.getElementById('ctrl-sigma').value = config.sigma;
+            document.getElementById('val-sigma').textContent = config.sigma.toFixed(1);
+            document.getElementById('ctrl-tau').value = config.thermostatTau;
+            document.getElementById('val-tau').textContent = config.thermostatTau.toFixed(1);
+        }
+
+        // Cached arrays
+        let cachedPositions = null;
+        let cachedVelocities = null;
+        let cachedNumAtoms = 0;
+        let cachedBoxSize = 0;
+
+        function render() {
+            if (!sim) return;
+
+            const w = canvas.width;
+            const h = canvas.height;
+
+            // Clear
+            ctx.fillStyle = '#030712';
+            ctx.fillRect(0, 0, w, h);
+
+            // Get data (WASM memory views)
+            const positions = Module.getMDPositions(sim);
+            const velocities = Module.getMDVelocities(sim);
+            const numAtoms = sim.atomCount();
+            const boxSize = sim.boxSize();
+
+            if (numAtoms === 0) return;
+
+            // Calculate scale
+            const size = Math.min(w, h) * 0.9;
+            const scale = size / boxSize;
+            const offsetX = (w - size) / 2;
+            const offsetY = (h - size) / 2;
+
+            // Draw box
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(offsetX, offsetY, size, size);
+
+            // Draw atoms
+            const sigma = parseFloat(document.getElementById('ctrl-sigma').value);
+            const atomRadius = Math.max(2, sigma * scale * 0.4);
+
+            for (let i = 0; i < numAtoms; i++) {
+                const x = positions[i * 2] * scale + offsetX;
+                const y = positions[i * 2 + 1] * scale + offsetY;
+                const vx = velocities[i * 2];
+                const vy = velocities[i * 2 + 1];
+                const speed = Math.sqrt(vx * vx + vy * vy);
+
+                // Color by velocity (blue = slow, red = fast)
+                const hue = Math.max(0, 240 - speed * 60);
+                const sat = 80;
+                const light = 50 + Math.min(20, speed * 5);
+
+                ctx.fillStyle = `hsl(${hue}, ${sat}%, ${light}%)`;
+                ctx.beginPath();
+                ctx.arc(x, y, atomRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Glow for fast atoms
+                if (speed > 2) {
+                    ctx.fillStyle = `hsla(${hue}, ${sat}%, ${light}%, 0.3)`;
+                    ctx.beginPath();
+                    ctx.arc(x, y, atomRadius * 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        function updateHUD() {
+            if (!sim) return;
+
+            sim.computeStatistics();
+            const stats = sim.stats();
+
+            document.getElementById('hud-atoms').textContent = stats.numAtoms;
+            document.getElementById('hud-fps').textContent = fps.toFixed(0);
+            document.getElementById('hud-temp').textContent = stats.temperature.toFixed(2);
+
+            document.getElementById('stat-ke').textContent = stats.kineticEnergy.toFixed(2);
+            document.getElementById('stat-pe').textContent = stats.potentialEnergy.toFixed(2);
+            document.getElementById('stat-total').textContent = stats.totalEnergy.toFixed(2);
+            document.getElementById('stat-density').textContent = stats.density.toFixed(3);
+
+            // Phase
+            const phaseEl = document.getElementById('phase-value');
+            const phase = stats.phase;
+            if (phase === Module.MatterPhase.SOLID) {
+                phaseEl.textContent = 'SOLIDO';
+                phaseEl.className = 'phase-value solid';
+            } else if (phase === Module.MatterPhase.LIQUID) {
+                phaseEl.textContent = 'LIQUIDO';
+                phaseEl.className = 'phase-value liquid';
+            } else if (phase === Module.MatterPhase.GAS) {
+                phaseEl.textContent = 'GAS';
+                phaseEl.className = 'phase-value gas';
+            } else {
+                phaseEl.textContent = '---';
+                phaseEl.className = 'phase-value';
+            }
+        }
+
+        function loop(time) {
+            frameCount++;
+            if (time - lastFpsTime >= 1000) {
+                fps = frameCount;
+                frameCount = 0;
+                lastFpsTime = time;
+            }
+
+            if (!paused && sim) {
+                sim.stepMultiple(2, 0);  // Reduced from 5 to 2
+            }
+
+            render();
+
+            // Update stats less frequently to avoid overhead
+            statsCounter++;
+            if (statsCounter >= 5) {
+                statsCounter = 0;
+                updateHUD();
+            }
+
+            requestAnimationFrame(loop);
+        }
+
+        function setupEventListeners() {
+            // Presets
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentPreset = btn.dataset.preset;
+                    createSimulator(currentPreset);
+                });
+            });
+
+            // Temperature
+            document.getElementById('ctrl-temp').addEventListener('input', (e) => {
+                targetTemp = parseFloat(e.target.value);
+                document.getElementById('val-temp').textContent = targetTemp.toFixed(1);
+                if (sim) sim.setTemperature(targetTemp);
+            });
+
+            document.getElementById('ctrl-epsilon').addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                document.getElementById('val-epsilon').textContent = val.toFixed(1);
+                if (sim) sim.setEpsilon(val);
+            });
+
+            document.getElementById('ctrl-sigma').addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                document.getElementById('val-sigma').textContent = val.toFixed(1);
+                if (sim) sim.setSigma(val);
+            });
+
+            document.getElementById('ctrl-tau').addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                document.getElementById('val-tau').textContent = val.toFixed(1);
+                if (sim) sim.setThermostatTau(val);
+            });
+
+            document.getElementById('check-thermostat').addEventListener('change', (e) => {
+                if (sim) sim.setThermostatEnabled(e.target.checked);
+            });
+
+            // Actions
+            document.getElementById('btn-pause').addEventListener('click', () => {
+                paused = !paused;
+                document.getElementById('btn-pause').textContent = paused ? 'Reanudar' : 'Pausar';
+            });
+
+            document.getElementById('btn-reset').addEventListener('click', () => {
+                createSimulator(currentPreset);
+            });
+
+            document.getElementById('btn-heat').addEventListener('click', () => {
+                targetTemp = Math.min(5, targetTemp + 0.5);
+                document.getElementById('ctrl-temp').value = targetTemp;
+                document.getElementById('val-temp').textContent = targetTemp.toFixed(1);
+                if (sim) sim.setTemperature(targetTemp);
+            });
+
+            document.getElementById('btn-cool').addEventListener('click', () => {
+                targetTemp = Math.max(0.1, targetTemp - 0.5);
+                document.getElementById('ctrl-temp').value = targetTemp;
+                document.getElementById('val-temp').textContent = targetTemp.toFixed(1);
+                if (sim) sim.setTemperature(targetTemp);
+            });
+        }
+
+        initWASM();
+    </script>
+</body>
+</html>
