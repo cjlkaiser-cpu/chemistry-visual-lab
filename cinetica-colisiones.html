@@ -312,6 +312,96 @@
                 border-top: 1px solid var(--border-color);
             }
         }
+
+        .guide-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 8px;
+            color: #c4b5fd;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            margin-top: 16px;
+        }
+
+        .guide-link:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+        }
+
+        .guide-icon {
+            width: 18px;
+            height: 18px;
+            background: #a855f7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #0f172a;
+            flex-shrink: 0;
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .toggle-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-tertiary);
+            border-radius: 24px;
+            transition: 0.3s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: var(--accent);
+        }
+
+        .toggle input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
     </style>
 </head>
 <body>
@@ -339,6 +429,7 @@
                 <button class="view-btn active" id="viewCollisions">Colisiones</button>
                 <button class="view-btn" id="viewEnergy">Energía</button>
                 <button class="view-btn" id="viewMaxwell">Maxwell</button>
+                <button class="view-btn" id="viewKinetics">Cinética</button>
             </div>
         </div>
 
@@ -401,6 +492,27 @@
             <div class="equation-box">
                 k = <span class="highlight">A</span> × e<sup>-<span class="highlight">Ea</span>/RT</sup>
             </div>
+
+            <div class="control-section" id="catalystSection" style="display: none;">
+                <h3>Catalizador</h3>
+                <div class="toggle-group">
+                    <span class="toggle-label">Activar catalizador</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="catalystToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="info-panel" style="margin-top: 10px;">
+                    <div class="info-row">
+                        <span class="info-label">Ea reducida</span>
+                        <span class="info-value" id="catalystEa">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">k con catalizador</span>
+                        <span class="info-value" id="catalystK">-</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="control-section">
@@ -430,6 +542,11 @@
                 </div>
             </div>
         </div>
+
+        <a href="guides/cinetica-colisiones.html" class="guide-link">
+            <span class="guide-icon">?</span>
+            Guía completa: teoría de colisiones, energía de activación, Arrhenius
+        </a>
     </div>
 
     <script>
@@ -442,6 +559,7 @@
         let preExpFactor = 1e10;
         let isRunning = true;
         let currentView = 'collisions';
+        let catalystActive = false;
 
         // Particles
         let particlesA = [];
@@ -455,6 +573,9 @@
         let reactionCount = 0;
         let collisionsPerSecond = 0;
         let collisionHistory = [];
+
+        // Kinetics data for Arrhenius plot
+        let kineticDataPoints = [];
 
         const R = 8.314; // J/(mol·K)
 
@@ -1085,6 +1206,312 @@
             document.getElementById('reactions').textContent = reactionCount;
         }
 
+        function drawKinetics() {
+            const w = canvas.width / (window.devicePixelRatio || 1);
+            const h = canvas.height / (window.devicePixelRatio || 1);
+
+            ctx.clearRect(0, 0, w, h);
+
+            const margin = 60;
+            const graphW = (w - 3 * margin) / 2;
+            const graphH = (h - 3 * margin) / 2;
+
+            // 1. Arrhenius Plot: ln(k) vs 1/T
+            ctx.fillStyle = '#f0f0f0';
+            ctx.font = 'bold 14px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText('Gráfico de Arrhenius', margin, margin - 30);
+
+            const graphX1 = margin;
+            const graphY1 = margin;
+
+            // Axes
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(graphX1, graphY1);
+            ctx.lineTo(graphX1, graphY1 + graphH);
+            ctx.lineTo(graphX1 + graphW, graphY1 + graphH);
+            ctx.stroke();
+
+            // Labels
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '11px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('1/T (K⁻¹)', graphX1 + graphW / 2, graphY1 + graphH + 35);
+
+            ctx.save();
+            ctx.translate(graphX1 - 35, graphY1 + graphH / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('ln(k)', 0, 0);
+            ctx.restore();
+
+            // Generate Arrhenius data
+            const tempRange = [250, 300, 350, 400, 450, 500, 550, 600];
+            const dataPoints = [];
+            const catalystPoints = [];
+
+            tempRange.forEach(T => {
+                const invT = 1 / T;
+                const k = calculateKforTemp(T, activationEnergy);
+                const kCat = calculateKforTemp(T, activationEnergy * 0.5); // Catalizador reduce Ea a la mitad
+
+                if (k > 0) dataPoints.push({ invT, lnk: Math.log(k) });
+                if (kCat > 0) catalystPoints.push({ invT, lnk: Math.log(kCat) });
+            });
+
+            // Find min/max for scaling
+            let minInvT = Math.min(...dataPoints.map(p => p.invT));
+            let maxInvT = Math.max(...dataPoints.map(p => p.invT));
+            let minLnk = Math.min(...dataPoints.map(p => p.lnk), ...catalystPoints.map(p => p.lnk));
+            let maxLnk = Math.max(...dataPoints.map(p => p.lnk), ...catalystPoints.map(p => p.lnk));
+
+            // Draw sin catalizador
+            ctx.strokeStyle = '#a855f7';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            dataPoints.forEach((p, i) => {
+                const x = graphX1 + ((p.invT - minInvT) / (maxInvT - minInvT)) * graphW;
+                const y = graphY1 + graphH - ((p.lnk - minLnk) / (maxLnk - minLnk)) * graphH;
+
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+
+                // Point
+                ctx.fillStyle = '#a855f7';
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.strokeStyle = '#a855f7';
+            ctx.stroke();
+
+            // Draw con catalizador
+            if (catalystActive) {
+                ctx.strokeStyle = '#22d3ee';
+                ctx.lineWidth = 3;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                catalystPoints.forEach((p, i) => {
+                    const x = graphX1 + ((p.invT - minInvT) / (maxInvT - minInvT)) * graphW;
+                    const y = graphY1 + graphH - ((p.lnk - minLnk) / (maxLnk - minLnk)) * graphH;
+
+                    if (i === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+
+                    // Point
+                    ctx.fillStyle = '#22d3ee';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            // Current temperature indicator
+            const currentInvT = 1 / temperature;
+            const currentK = calculateKforTemp(temperature, activationEnergy);
+            const currentLnk = Math.log(currentK);
+            const currentX = graphX1 + ((currentInvT - minInvT) / (maxInvT - minInvT)) * graphW;
+            const currentY = graphY1 + graphH - ((currentLnk - minLnk) / (maxLnk - minLnk)) * graphH;
+
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.arc(currentX, currentY, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Legend
+            ctx.fillStyle = '#a855f7';
+            ctx.font = '11px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText('Sin catalizador', graphX1 + 10, graphY1 + 20);
+
+            if (catalystActive) {
+                ctx.fillStyle = '#22d3ee';
+                ctx.fillText('Con catalizador', graphX1 + 10, graphY1 + 35);
+            }
+
+            // 2. Energy diagram with catalyst
+            ctx.fillStyle = '#f0f0f0';
+            ctx.font = 'bold 14px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText('Diagrama de Energía', w / 2 + margin / 2, margin - 30);
+
+            const graphX2 = w / 2 + margin / 2;
+            const graphY2 = margin;
+
+            // Axes
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(graphX2, graphY2);
+            ctx.lineTo(graphX2, graphY2 + graphH);
+            ctx.lineTo(graphX2 + graphW, graphY2 + graphH);
+            ctx.stroke();
+
+            ctx.save();
+            ctx.translate(graphX2 - 35, graphY2 + graphH / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '11px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Energía Potencial', 0, 0);
+            ctx.restore();
+
+            ctx.fillStyle = '#a0a0a0';
+            ctx.fillText('Coordenada de Reacción', graphX2 + graphW / 2 - 50, graphY2 + graphH + 35);
+
+            // Energy levels
+            const reactantE = 0.3;
+            const productE = 0.2;
+            const transitionE = 0.3 + activationEnergy / 150;
+            const transitionEcat = 0.3 + (activationEnergy * 0.5) / 150;
+
+            // Draw reaction path sin catalizador
+            ctx.beginPath();
+            ctx.moveTo(graphX2, graphY2 + graphH - reactantE * graphH);
+            ctx.lineTo(graphX2 + graphW * 0.2, graphY2 + graphH - reactantE * graphH);
+
+            const peakX = graphX2 + graphW * 0.5;
+            const peakY = graphY2 + graphH - transitionE * graphH;
+
+            ctx.bezierCurveTo(
+                graphX2 + graphW * 0.3, graphY2 + graphH - reactantE * graphH,
+                graphX2 + graphW * 0.4, peakY,
+                peakX, peakY
+            );
+
+            ctx.bezierCurveTo(
+                graphX2 + graphW * 0.6, peakY,
+                graphX2 + graphW * 0.7, graphY2 + graphH - productE * graphH,
+                graphX2 + graphW * 0.8, graphY2 + graphH - productE * graphH
+            );
+
+            ctx.lineTo(graphX2 + graphW, graphY2 + graphH - productE * graphH);
+
+            ctx.strokeStyle = '#a855f7';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Draw reaction path con catalizador
+            if (catalystActive) {
+                const peakYcat = graphY2 + graphH - transitionEcat * graphH;
+
+                ctx.beginPath();
+                ctx.moveTo(graphX2, graphY2 + graphH - reactantE * graphH);
+                ctx.lineTo(graphX2 + graphW * 0.2, graphY2 + graphH - reactantE * graphH);
+
+                ctx.bezierCurveTo(
+                    graphX2 + graphW * 0.3, graphY2 + graphH - reactantE * graphH,
+                    graphX2 + graphW * 0.4, peakYcat,
+                    peakX, peakYcat
+                );
+
+                ctx.bezierCurveTo(
+                    graphX2 + graphW * 0.6, peakYcat,
+                    graphX2 + graphW * 0.7, graphY2 + graphH - productE * graphH,
+                    graphX2 + graphW * 0.8, graphY2 + graphH - productE * graphH
+                );
+
+                ctx.lineTo(graphX2 + graphW, graphY2 + graphH - productE * graphH);
+
+                ctx.strokeStyle = '#22d3ee';
+                ctx.lineWidth = 3;
+                ctx.setLineDash([5, 5]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            // Activation energy arrows
+            const eaStartY = graphY2 + graphH - reactantE * graphH;
+            const eaEndY = peakY;
+
+            ctx.setLineDash([5, 5]);
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(graphX2 + graphW * 0.35, eaStartY);
+            ctx.lineTo(graphX2 + graphW * 0.35, eaEndY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#ef4444';
+            ctx.font = '11px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText(`Ea = ${activationEnergy} kJ/mol`, graphX2 + graphW * 0.37, (eaStartY + eaEndY) / 2);
+
+            if (catalystActive) {
+                const eaEndYcat = peakYcat;
+
+                ctx.setLineDash([5, 5]);
+                ctx.strokeStyle = '#22d3ee';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(graphX2 + graphW * 0.42, eaStartY);
+                ctx.lineTo(graphX2 + graphW * 0.42, eaEndYcat);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                ctx.fillStyle = '#22d3ee';
+                ctx.fillText(`Ea(cat) = ${(activationEnergy * 0.5).toFixed(0)} kJ/mol`, graphX2 + graphW * 0.44, (eaStartY + eaEndYcat) / 2);
+            }
+
+            // Labels
+            ctx.fillStyle = '#f0f0f0';
+            ctx.font = '11px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Reactantes', graphX2 + graphW * 0.1, graphY2 + graphH - reactantE * graphH - 10);
+            ctx.fillText('Productos', graphX2 + graphW * 0.9, graphY2 + graphH - productE * graphH - 10);
+
+            // 3. Reaction rate vs time
+            ctx.fillStyle = '#f0f0f0';
+            ctx.font = 'bold 14px Inter';
+            ctx.textAlign = 'left';
+            ctx.fillText('Ecuación de Arrhenius', margin, h / 2 + margin);
+
+            const boxX = margin;
+            const boxY = h / 2 + margin + 20;
+            const boxW = w - 2 * margin;
+            const boxH = 120;
+
+            ctx.fillStyle = 'rgba(168, 85, 247, 0.1)';
+            ctx.fillRect(boxX, boxY, boxW, boxH);
+            ctx.strokeStyle = 'rgba(168, 85, 247, 0.3)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+            ctx.fillStyle = '#a855f7';
+            ctx.font = 'bold 20px Fira Code';
+            ctx.textAlign = 'center';
+            ctx.fillText('k = A × e^(-Ea/RT)', w / 2, boxY + 35);
+
+            ctx.fillStyle = '#a0a0a0';
+            ctx.font = '12px Inter';
+            ctx.fillText('Donde:', boxX + 60, boxY + 65);
+            ctx.textAlign = 'left';
+            ctx.fillText('k = constante de velocidad', boxX + 40, boxY + 85);
+            ctx.fillText('A = factor pre-exponencial (frecuencia de colisiones)', boxX + 40, boxY + 100);
+            ctx.fillText('Ea = energía de activación', boxX + 40, boxY + 115);
+
+            // Effect of catalyst explanation
+            ctx.fillStyle = '#22d3ee';
+            ctx.font = 'bold 12px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('El catalizador reduce Ea → aumenta k → acelera la reacción', w / 2, boxY + boxH + 30);
+
+            ctx.fillStyle = '#fbbf24';
+            ctx.fillText('(sin cambiar ΔH de la reacción)', w / 2, boxY + boxH + 50);
+        }
+
+        function calculateKforTemp(T, Ea) {
+            const EaJoules = Ea * 1000;
+            return preExpFactor * Math.exp(-EaJoules / (R * T));
+        }
+
         function draw() {
             switch (currentView) {
                 case 'collisions':
@@ -1095,6 +1522,9 @@
                     break;
                 case 'maxwell':
                     drawMaxwellBoltzmann();
+                    break;
+                case 'kinetics':
+                    drawKinetics();
                     break;
             }
         }
@@ -1155,7 +1585,39 @@
                 document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentView = btn.id.replace('view', '').toLowerCase();
+
+                // Show catalyst section only in kinetics view
+                if (currentView === 'kinetics') {
+                    document.getElementById('catalystSection').style.display = 'block';
+                } else {
+                    document.getElementById('catalystSection').style.display = 'none';
+                }
             });
+        });
+
+        // Catalyst toggle
+        document.getElementById('catalystToggle').addEventListener('change', (e) => {
+            catalystActive = e.target.checked;
+
+            if (catalystActive) {
+                const reducedEa = activationEnergy * 0.5;
+                const kCatalyst = calculateKforTemp(temperature, reducedEa);
+
+                document.getElementById('catalystEa').textContent = reducedEa.toFixed(1) + ' kJ/mol';
+
+                let kDisplay;
+                if (kCatalyst >= 1e6) {
+                    kDisplay = kCatalyst.toExponential(2);
+                } else if (kCatalyst >= 0.01) {
+                    kDisplay = kCatalyst.toFixed(2);
+                } else {
+                    kDisplay = kCatalyst.toExponential(2);
+                }
+                document.getElementById('catalystK').textContent = kDisplay;
+            } else {
+                document.getElementById('catalystEa').textContent = '-';
+                document.getElementById('catalystK').textContent = '-';
+            }
         });
 
         window.addEventListener('resize', () => {

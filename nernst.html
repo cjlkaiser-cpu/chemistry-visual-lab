@@ -322,6 +322,40 @@
                 border-top: 1px solid var(--border-color);
             }
         }
+
+        .guide-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            border-radius: 8px;
+            color: #fde047;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            margin-top: 16px;
+        }
+
+        .guide-link:hover {
+            background: rgba(234, 179, 8, 0.2);
+            border-color: #eab308;
+        }
+
+        .guide-icon {
+            width: 18px;
+            height: 18px;
+            background: #eab308;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #0f172a;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
@@ -425,6 +459,11 @@
                 </div>
             </div>
         </div>
+
+        <a href="guides/nernst.html" class="guide-link">
+            <span class="guide-icon">?</span>
+            Guía completa: ecuación de Nernst, potencial de electrodo, concentración
+        </a>
     </div>
 
     <script>

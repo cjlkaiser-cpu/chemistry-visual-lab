@@ -255,7 +255,14 @@
                 <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center text-xl">
                     <span class="code-font font-bold text-slate-900">Ch</span>
                 </div>
-                <span class="text-xl font-semibold">Chemistry Visual Lab</span>
+                <div>
+                    <nav class="text-xs text-slate-500 mb-0.5">
+                        <a href="https://cjlkaiser-cpu.github.io/eigenlab/_portal/index.html" class="hover:text-cyan-400 transition">EigenLab</a>
+                        <span class="mx-1">/</span>
+                        <span class="text-slate-400">Chemistry Visual Lab</span>
+                    </nav>
+                    <span class="text-xl font-semibold">Chemistry Visual Lab</span>
+                </div>
             </div>
             <a href="https://github.com" target="_blank" class="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -268,7 +275,7 @@
     <section class="hero py-20 text-center relative">
         <div class="max-w-4xl mx-auto px-6">
             <h1 class="chalk-font text-6xl md:text-7xl mb-4 text-white">Chemistry Visual Lab</h1>
-            <p class="text-xl text-slate-300 mb-2">16 simulaciones de qu&iacute;mica interactivas donde las reacciones cobran vida</p>
+            <p class="text-xl text-slate-300 mb-2">17 simulaciones de qu&iacute;mica interactivas donde las reacciones cobran vida</p>
             <p class="text-slate-400 code-font text-sm">Cero dependencias &bull; Canvas 2D &bull; JavaScript vanilla</p>
         </div>
 
@@ -344,6 +351,22 @@
                     <div class="equation mb-4">AX<sub>n</sub>E<sub>m</sub> &rarr; Geometr&iacute;a</div>
                     <button class="sim-button w-full">Abrir Simulaci&oacute;n &rarr;</button>
                 </a>
+
+                <!-- Tipos de Enlace -->
+                <a href="enlaces.html" class="element-card cat-enlace p-5">
+                    <span class="atomic-number">04</span>
+                    <div class="text-center mb-4">
+                        <canvas id="preview-enlaces" class="preview-canvas mx-auto"></canvas>
+                    </div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="element-symbol">&Delta;EN</span>
+                        <span class="category-tag bg-purple-500/20 text-purple-300">Enlace</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-1">Tipos de Enlace</h3>
+                    <p class="text-slate-400 text-sm mb-3">Covalente, i&oacute;nico y met&aacute;lico seg&uacute;n electronegatividad</p>
+                    <div class="equation mb-4">&Delta;EN &rarr; Cov/I&oacute;n/Met</div>
+                    <button class="sim-button w-full">Abrir Simulaci&oacute;n &rarr;</button>
+                </a>
             </div>
         </section>
 
@@ -356,7 +379,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Gases Reales -->
                 <a href="gases-reales.html" class="element-card cat-estados p-5">
-                    <span class="atomic-number">04</span>
+                    <span class="atomic-number">05</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-gases" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -372,7 +395,7 @@
 
                 <!-- Diagrama de Fases -->
                 <a href="diagrama-fases.html" class="element-card cat-estados p-5">
-                    <span class="atomic-number">05</span>
+                    <span class="atomic-number">06</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-fases" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -397,7 +420,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Reactivo Limitante -->
                 <a href="reactivo-limitante.html" class="element-card cat-estequiometria p-5">
-                    <span class="atomic-number">06</span>
+                    <span class="atomic-number">07</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-limitante" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -422,7 +445,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Calorimetría -->
                 <a href="calorimetria.html" class="element-card cat-termodinamica p-5">
-                    <span class="atomic-number">07</span>
+                    <span class="atomic-number">08</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-calorimetria" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -447,7 +470,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Le Chatelier -->
                 <a href="le-chatelier.html" class="element-card cat-equilibrio p-5">
-                    <span class="atomic-number">08</span>
+                    <span class="atomic-number">09</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-chatelier" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -463,7 +486,7 @@
 
                 <!-- Solubilidad -->
                 <a href="solubilidad.html" class="element-card cat-equilibrio p-5">
-                    <span class="atomic-number">09</span>
+                    <span class="atomic-number">10</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-solubilidad" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -488,7 +511,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Teoría de Colisiones -->
                 <a href="cinetica-colisiones.html" class="element-card cat-cinetica p-5">
-                    <span class="atomic-number">10</span>
+                    <span class="atomic-number">11</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-cinetica" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -513,7 +536,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Titulación -->
                 <a href="titulacion.html" class="element-card cat-acidos p-5">
-                    <span class="atomic-number">11</span>
+                    <span class="atomic-number">12</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-titulacion" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -538,7 +561,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Celda Galvánica -->
                 <a href="celda-galvanica.html" class="element-card cat-electroquimica p-5">
-                    <span class="atomic-number">12</span>
+                    <span class="atomic-number">13</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-galvanica" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -554,7 +577,7 @@
 
                 <!-- Nernst -->
                 <a href="nernst.html" class="element-card cat-electroquimica p-5">
-                    <span class="atomic-number">13</span>
+                    <span class="atomic-number">14</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-nernst" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -579,7 +602,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Isomería -->
                 <a href="isomeria.html" class="element-card cat-organica p-5">
-                    <span class="atomic-number">14</span>
+                    <span class="atomic-number">15</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-isomeria" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -604,7 +627,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Decaimiento -->
                 <a href="decaimiento.html" class="element-card cat-nuclear p-5">
-                    <span class="atomic-number">15</span>
+                    <span class="atomic-number">16</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-decaimiento" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -629,7 +652,7 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Tendencias -->
                 <a href="tendencias.html" class="element-card cat-periodica p-5">
-                    <span class="atomic-number">16</span>
+                    <span class="atomic-number">17</span>
                     <div class="text-center mb-4">
                         <canvas id="preview-tendencias" class="preview-canvas mx-auto"></canvas>
                     </div>
@@ -649,10 +672,10 @@
     <!-- Footer -->
     <footer class="py-8 text-center">
         <p class="text-slate-400 text-sm">
-            Chemistry Visual Lab &bull; 16 simulaciones interactivas
+            Chemistry Visual Lab &bull; 17 simulaciones interactivas
         </p>
         <p class="text-slate-500 text-xs mt-2">
-            Inspirado en <a href="../Physics Visual Lab/index.html" class="text-cyan-400 hover:underline">Physics Visual Lab</a>
+            Inspirado en <a href="https://cjlkaiser-cpu.github.io/physics-visual-lab/" class="text-cyan-400 hover:underline">Physics Visual Lab</a>
         </p>
     </footer>
 
@@ -833,7 +856,149 @@
             draw();
         }
 
-        // 4. Gases - Partículas rebotando
+        // 4. Tipos de Enlace
+        function initEnlaces() {
+            const p = setupCanvas('preview-enlaces');
+            if (!p) return;
+            let time = 0;
+            let currentBond = 0; // 0: covalente, 1: iónico, 2: metálico
+
+            function draw() {
+                const { ctx, w, h } = p;
+                ctx.fillStyle = '#0a0a1a';
+                ctx.fillRect(0, 0, w, h);
+
+                const cx = w / 2, cy = h / 2;
+
+                // Cambiar tipo cada 3 segundos
+                currentBond = Math.floor(time / 3) % 3;
+
+                if (currentBond === 0) {
+                    // Enlace covalente - electrones compartidos
+                    const atom1x = cx - 25;
+                    const atom2x = cx + 25;
+
+                    // Átomo 1
+                    ctx.fillStyle = 'rgba(96, 165, 250, 0.3)';
+                    ctx.beginPath();
+                    ctx.arc(atom1x, cy, 30, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Átomo 2
+                    ctx.fillStyle = 'rgba(96, 165, 250, 0.3)';
+                    ctx.beginPath();
+                    ctx.arc(atom2x, cy, 30, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Núcleos
+                    ctx.fillStyle = '#60a5fa';
+                    ctx.beginPath();
+                    ctx.arc(atom1x, cy, 8, 0, Math.PI * 2);
+                    ctx.arc(atom2x, cy, 8, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Electrones compartidos (figura 8)
+                    const e1x = cx + Math.sin(time * 5) * 15;
+                    const e1y = cy + Math.cos(time * 5) * 8;
+                    const e2x = cx + Math.sin(time * 5 + Math.PI) * 15;
+                    const e2y = cy + Math.cos(time * 5 + Math.PI) * 8;
+
+                    ctx.fillStyle = '#fbbf24';
+                    ctx.beginPath();
+                    ctx.arc(e1x, e1y, 4, 0, Math.PI * 2);
+                    ctx.arc(e2x, e2y, 4, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '10px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Covalente', cx, h - 10);
+
+                } else if (currentBond === 1) {
+                    // Enlace iónico - transferencia de electrones
+                    const cationX = cx - 30 + Math.sin(time * 2) * 3;
+                    const anionX = cx + 30 - Math.sin(time * 2) * 3;
+
+                    // Catión (+)
+                    ctx.fillStyle = 'rgba(239, 68, 68, 0.3)';
+                    ctx.beginPath();
+                    ctx.arc(cationX, cy, 18, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#ef4444';
+                    ctx.beginPath();
+                    ctx.arc(cationX, cy, 10, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 12px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('+', cationX, cy + 4);
+
+                    // Anión (-)
+                    ctx.fillStyle = 'rgba(96, 165, 250, 0.3)';
+                    ctx.beginPath();
+                    ctx.arc(anionX, cy, 28, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#60a5fa';
+                    ctx.beginPath();
+                    ctx.arc(anionX, cy, 14, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#fff';
+                    ctx.fillText('−', anionX, cy + 4);
+
+                    // Líneas de atracción
+                    ctx.strokeStyle = 'rgba(168, 85, 247, 0.4)';
+                    ctx.setLineDash([3, 3]);
+                    ctx.beginPath();
+                    ctx.moveTo(cationX + 18, cy);
+                    ctx.lineTo(anionX - 28, cy);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '10px Inter';
+                    ctx.fillText('Iónico', cx, h - 10);
+
+                } else {
+                    // Enlace metálico - mar de electrones
+                    // Red de cationes
+                    for (let i = 0; i < 3; i++) {
+                        for (let j = 0; j < 2; j++) {
+                            const x = cx - 35 + i * 35;
+                            const y = cy - 15 + j * 30;
+                            ctx.fillStyle = 'rgba(251, 191, 36, 0.6)';
+                            ctx.beginPath();
+                            ctx.arc(x, y, 8, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.fillStyle = '#fff';
+                            ctx.font = 'bold 8px Inter';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('+', x, y + 3);
+                        }
+                    }
+
+                    // Electrones libres moviéndose
+                    for (let i = 0; i < 8; i++) {
+                        const ex = cx + Math.sin(time * 3 + i * 0.8) * 45;
+                        const ey = cy + Math.cos(time * 4 + i * 1.2) * 20;
+                        ctx.fillStyle = '#fbbf24';
+                        ctx.beginPath();
+                        ctx.arc(ex, ey, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '10px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Metálico', cx, h - 10);
+                }
+
+                time += 0.02;
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        // 5. Gases - Partículas rebotando
         function initGases() {
             const p = setupCanvas('preview-gases');
             if (!p) return;
@@ -1687,6 +1852,7 @@
             initBohr();
             initOrbitales();
             initVSEPR();
+            initEnlaces();
             initGases();
             initFases();
             initLimitante();

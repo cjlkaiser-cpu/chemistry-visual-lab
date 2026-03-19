@@ -346,6 +346,40 @@
                 border-top: 1px solid var(--border-color);
             }
         }
+
+        .guide-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 8px;
+            color: #67e8f9;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            margin-top: 16px;
+        }
+
+        .guide-link:hover {
+            background: rgba(6, 182, 212, 0.2);
+            border-color: #06b6d4;
+        }
+
+        .guide-icon {
+            width: 18px;
+            height: 18px;
+            background: #06b6d4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #0f172a;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
@@ -457,6 +491,11 @@
                 </div>
             </div>
         </div>
+
+        <a href="guides/solubilidad.html" class="guide-link">
+            <span class="guide-icon">?</span>
+            Guía completa: producto de solubilidad, efecto ion común, precipitación
+        </a>
     </div>
 
     <script>
