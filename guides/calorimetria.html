@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Calorimetría - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #252540;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #ef4444;
+            --accent-dim: rgba(239, 68, 68, 0.15);
+            --hot: #ef4444;
+            --cold: #3b82f6;
+            --equilibrium: #a855f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .breadcrumb {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-dim);
+        }
+
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .concept-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .equation-block {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+
+        .equation-block .main {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-block .note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        th {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--bg-secondary);
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .feature-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .experiment-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--accent-dim);
+        }
+
+        .experiment-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .experiment-card ol {
+            margin-left: 1.5rem;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .law-box {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .law-box h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .law-box .equation {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .temperature-scale {
+            display: flex;
+            height: 30px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .temperature-scale div {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: white;
+            text-shadow: 0 0 3px rgba(0,0,0,0.5);
+        }
+
+        .variables-table {
+            margin: 1.5rem 0;
+        }
+
+        .variables-table td:first-child {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+            font-weight: 500;
+            width: 80px;
+        }
+
+        .historical-note {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .links-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .sim-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            border: 1px solid var(--bg-tertiary);
+            transition: all 0.3s ease;
+        }
+
+        .sim-link:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .sim-link .icon {
+            font-size: 1.5rem;
+        }
+
+        .sim-link .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .highlight {
+            background: var(--accent-dim);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--bg-tertiary);
+            text-align: center;
+        }
+
+        footer a {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #dc2626 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        footer a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → Guía
+        </nav>
+        <h1>Calorimetría</h1>
+        <p class="subtitle">Midiendo el calor que fluye en las transformaciones químicas</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>¿Qué Observarás?</h2>
+            <p>
+                Esta simulación recrea el experimento clásico de calorimetría: mezclar muestras a
+                diferentes temperaturas y observar cómo alcanzan el equilibrio térmico. Verás
+                termómetros animados, flujo de calor visualizado como partículas, y gráficos
+                en tiempo real del proceso.
+            </p>
+
+            <div class="grid-2">
+                <div class="feature-card">
+                    <h4>Calorímetro Aislado</h4>
+                    <p>Visualización de un sistema adiabático donde el calor solo fluye entre las muestras, no hacia el entorno.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Termómetros Dinámicos</h4>
+                    <p>Dos termómetros muestran la evolución de las temperaturas de cada muestra hacia el equilibrio.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Gráfico T vs t</h4>
+                    <p>Curvas de temperatura que convergen exponencialmente hacia el punto de equilibrio.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Flujo de Calor Visual</h4>
+                    <p>Partículas amarillas representan la energía térmica fluyendo de caliente a frío.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conceptos Clave</h2>
+
+            <div class="law-box">
+                <h4>Primera Ley de la Termodinámica (Conservación de Energía)</h4>
+                <div class="equation">Q<sub>caliente</sub> + Q<sub>frío</sub> = 0</div>
+                <p style="color: var(--text-secondary);">
+                    En un sistema aislado, el calor perdido por la muestra caliente
+                    es exactamente igual al calor ganado por la muestra fría.
+                </p>
+            </div>
+
+            <h3>Capacidad Calorífica Específica</h3>
+            <p>
+                La <strong>capacidad calorífica específica (c)</strong> es la cantidad de calor
+                necesaria para elevar 1 gramo de sustancia en 1°C. Para el agua:
+            </p>
+
+            <div class="equation-block">
+                <div class="main">c<sub>agua</sub> = 4.184 J/(g·°C)</div>
+                <div class="note">Una de las más altas entre sustancias comunes</div>
+            </div>
+
+            <p>
+                La alta capacidad calorífica del agua explica por qué modera el clima costero,
+                por qué usamos agua para enfriar motores, y por qué los océanos almacenan
+                enormes cantidades de energía térmica.
+            </p>
+
+            <h3>Capacidades Caloríficas de Materiales Comunes</h3>
+            <table>
+                <tr>
+                    <th>Sustancia</th>
+                    <th>c (J/g·°C)</th>
+                    <th>Comparación</th>
+                </tr>
+                <tr>
+                    <td>Agua</td>
+                    <td><code>4.184</code></td>
+                    <td>Referencia (muy alta)</td>
+                </tr>
+                <tr>
+                    <td>Hielo</td>
+                    <td><code>2.09</code></td>
+                    <td>~50% del agua líquida</td>
+                </tr>
+                <tr>
+                    <td>Aluminio</td>
+                    <td><code>0.897</code></td>
+                    <td>Se calienta rápido</td>
+                </tr>
+                <tr>
+                    <td>Hierro</td>
+                    <td><code>0.449</code></td>
+                    <td>Metales: c baja</td>
+                </tr>
+                <tr>
+                    <td>Cobre</td>
+                    <td><code>0.385</code></td>
+                    <td>Excelente conductor</td>
+                </tr>
+                <tr>
+                    <td>Oro</td>
+                    <td><code>0.129</code></td>
+                    <td>Muy baja</td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Ecuaciones Fundamentales</h2>
+
+            <div class="equation-block">
+                <div class="main">Q = m × c × ΔT</div>
+                <div class="note">Calor = masa × capacidad calorífica × cambio de temperatura</div>
+            </div>
+
+            <table class="variables-table">
+                <tr>
+                    <td>Q</td>
+                    <td>Calor transferido (J o kJ). Positivo si se absorbe, negativo si se libera.</td>
+                </tr>
+                <tr>
+                    <td>m</td>
+                    <td>Masa de la sustancia (g o kg)</td>
+                </tr>
+                <tr>
+                    <td>c</td>
+                    <td>Capacidad calorífica específica (J/g·°C)</td>
+                </tr>
+                <tr>
+                    <td>ΔT</td>
+                    <td>Cambio de temperatura (T<sub>final</sub> - T<sub>inicial</sub>)</td>
+                </tr>
+            </table>
+
+            <h3>Temperatura de Equilibrio</h3>
+            <p>
+                Cuando mezclamos dos muestras de la misma sustancia (mismo c) a diferentes temperaturas:
+            </p>
+
+            <div class="equation-block">
+                <div class="main">T<sub>eq</sub> = (m₁T₁ + m₂T₂) / (m₁ + m₂)</div>
+                <div class="note">Promedio ponderado por masa</div>
+            </div>
+
+            <div class="concept-box">
+                <p>
+                    La temperatura de equilibrio es un <strong>promedio ponderado</strong>:
+                    la muestra con mayor masa "tira" más de la temperatura final hacia su valor inicial.
+                </p>
+                <p style="margin-bottom: 0;">
+                    Ejemplo: 100g a 80°C + 200g a 20°C → T<sub>eq</sub> = (100×80 + 200×20) / 300 = 40°C
+                    (más cerca de 20°C porque la masa fría es mayor)
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>El Calorímetro</h2>
+
+            <p>
+                Un calorímetro es un recipiente diseñado para minimizar el intercambio de calor
+                con el entorno, permitiendo medir con precisión el calor intercambiado entre
+                las sustancias en su interior.
+            </p>
+
+            <h3>Tipos de Calorímetros</h3>
+            <ul>
+                <li>
+                    <strong>Calorímetro de vaso de café:</strong> Dos vasos de poliestireno anidados.
+                    Simple pero efectivo para experimentos educativos.
+                </li>
+                <li>
+                    <strong>Calorímetro de bomba:</strong> Recipiente sellado a volumen constante.
+                    Usado para medir entalpías de combustión.
+                </li>
+                <li>
+                    <strong>Calorímetro de flujo:</strong> Para procesos continuos industriales.
+                </li>
+            </ul>
+
+            <div class="concept-box">
+                <h4>Sistema Adiabático Ideal</h4>
+                <p style="margin-bottom: 0;">
+                    En la simulación, asumimos un calorímetro perfecto donde Q<sub>calorímetro</sub> = 0.
+                    En la práctica, hay que corregir por la capacidad calorífica del propio recipiente
+                    y las pérdidas al entorno.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Experimentos Sugeridos</h2>
+
+            <div class="experiment-card">
+                <h4>Experimento 1: Efecto de la Masa</h4>
+                <ol>
+                    <li>Fija T<sub>caliente</sub> = 80°C y T<sub>frío</sub> = 20°C</li>
+                    <li>Con masas iguales (100g cada una), el equilibrio será 50°C (punto medio)</li>
+                    <li>Cambia la masa caliente a 200g. ¿Hacia dónde se desplaza T<sub>eq</sub>?</li>
+                    <li>Ahora haz la masa fría 200g y la caliente 100g. ¿Qué ocurre?</li>
+                    <li>Verifica: T<sub>eq</sub> = (m₁T₁ + m₂T₂)/(m₁ + m₂)</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 2: Calor Transferido</h4>
+                <ol>
+                    <li>Configura: 100g a 80°C + 100g a 20°C</li>
+                    <li>T<sub>eq</sub> = 50°C. El agua fría se calentó 30°C</li>
+                    <li>Q = 100g × 4.184 J/g·°C × 30°C = 12,552 J ≈ 12.6 kJ</li>
+                    <li>Verifica que el agua caliente perdió la misma cantidad</li>
+                    <li>Cambia las masas y recalcula Q para cada caso</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 3: Velocidad del Equilibrio</h4>
+                <ol>
+                    <li>Observa el gráfico T vs tiempo durante la mezcla</li>
+                    <li>Las curvas convergen exponencialmente (no linealmente)</li>
+                    <li>La velocidad inicial es máxima cuando ΔT es mayor</li>
+                    <li>A medida que las temperaturas se acercan, el flujo de calor disminuye</li>
+                    <li>En la realidad, esto depende del contacto térmico y la agitación</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 4: Límites del Sistema</h4>
+                <ol>
+                    <li>Intenta: 50g a 100°C + 300g a 0°C</li>
+                    <li>T<sub>eq</sub> = (50×100 + 300×0)/350 = 14.3°C</li>
+                    <li>Una pequeña cantidad de agua caliente tiene poco efecto en mucha agua fría</li>
+                    <li>Ahora invierte: 300g a 100°C + 50g a 0°C → T<sub>eq</sub> = 85.7°C</li>
+                    <li>La masa domina la temperatura final</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>Contexto Histórico</h2>
+
+            <div class="historical-note">
+                <h3>Lavoisier y el Nacimiento de la Calorimetría</h3>
+                <p>
+                    Antoine Lavoisier (1743-1794) y Pierre-Simon Laplace desarrollaron el primer
+                    calorímetro de hielo en 1782-1783. Midieron el calor liberado por procesos
+                    observando cuánto hielo derretían.
+                </p>
+                <p>
+                    Su trabajo estableció que la respiración animal es esencialmente una combustión
+                    lenta: un cobaya que respiraba derretía la misma cantidad de hielo que quemar
+                    el carbón equivalente al CO₂ que producía.
+                </p>
+                <p>
+                    James Prescott Joule (1818-1889) conectó el calor con el trabajo mecánico,
+                    demostrando que 4.184 J de trabajo mecánico elevan 1g de agua en 1°C.
+                    Esta relación estableció el equivalente mecánico del calor.
+                </p>
+                <p style="margin-bottom: 0;">
+                    La caloría (cal) se definió originalmente como el calor para elevar 1g de agua
+                    de 14.5°C a 15.5°C. Hoy usamos 1 cal = 4.184 J exactamente (por definición).
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conexiones Interdisciplinarias</h2>
+
+            <div class="links-section">
+                <a href="../diagrama-fases.html" class="sim-link">
+                    <span class="icon">📊</span>
+                    <span class="label">Diagrama de Fases<br><small>Calor latente en transiciones</small></span>
+                </a>
+                <a href="../le-chatelier.html" class="sim-link">
+                    <span class="icon">⚖️</span>
+                    <span class="label">Principio de Le Chatelier<br><small>Efecto de T en equilibrios</small></span>
+                </a>
+                <a href="../cinetica-colisiones.html" class="sim-link">
+                    <span class="icon">⚡</span>
+                    <span class="label">Cinética Química<br><small>Temperatura y velocidad</small></span>
+                </a>
+                <a href="../../Physics/Physics Visual Lab/termodinamica.html" class="sim-link">
+                    <span class="icon">🔥</span>
+                    <span class="label">Termodinámica<br><small>Leyes fundamentales</small></span>
+                </a>
+            </div>
+
+            <h3>Aplicaciones en la Vida Real</h3>
+            <ul>
+                <li><strong>Nutrición:</strong> Las Calorías de los alimentos (kcal) se miden por calorimetría de bomba</li>
+                <li><strong>Metalurgia:</strong> Tratamientos térmicos requieren control preciso de energía</li>
+                <li><strong>Climatización:</strong> Diseño de sistemas HVAC basado en cargas térmicas</li>
+                <li><strong>Medicina:</strong> Calorimetría indirecta mide metabolismo basal</li>
+                <li><strong>Seguridad:</strong> Análisis de riesgo de reacciones exotérmicas</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Para Explorar Más</h2>
+            <ul>
+                <li>
+                    <strong>Calor latente:</strong> Durante un cambio de fase (fusión, ebullición),
+                    el calor absorbido no cambia la temperatura. Q = m × L.
+                </li>
+                <li>
+                    <strong>Ley de Hess:</strong> El cambio de entalpía de una reacción es independiente
+                    del camino. Permite calcular ΔH sumando etapas intermedias.
+                </li>
+                <li>
+                    <strong>Entalpía estándar de formación:</strong> Tablas de ΔH°f permiten calcular
+                    el calor de cualquier reacción.
+                </li>
+                <li>
+                    <strong>Calorimetría diferencial de barrido (DSC):</strong> Técnica moderna que
+                    mide flujos de calor en función de temperatura con alta precisión.
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <a href="../calorimetria.html">Abrir Simulación</a>
+    </footer>
+</body>
+</html>

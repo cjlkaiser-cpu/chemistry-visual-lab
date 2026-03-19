@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Curva de Titulación - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #252540;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #ec4899;
+            --accent-dim: rgba(236, 72, 153, 0.15);
+            --acidic: #ef4444;
+            --neutral: #22c55e;
+            --basic: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .breadcrumb {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #be185d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-dim);
+        }
+
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .concept-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .concept-box.acidic {
+            border-left-color: var(--acidic);
+        }
+
+        .concept-box.neutral {
+            border-left-color: var(--neutral);
+        }
+
+        .concept-box.basic {
+            border-left-color: var(--basic);
+        }
+
+        .equation-block {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+
+        .equation-block .main {
+            font-size: 1.4rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-block .note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        th {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--bg-secondary);
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .feature-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .experiment-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--accent-dim);
+        }
+
+        .experiment-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .experiment-card ol {
+            margin-left: 1.5rem;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .ph-scale {
+            display: flex;
+            height: 30px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .ph-scale div {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: white;
+            text-shadow: 0 0 3px rgba(0,0,0,0.5);
+        }
+
+        .curve-regions {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .region {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .region:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .region-marker {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .highlight {
+            background: var(--accent-dim);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        .historical-note {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .links-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .sim-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            border: 1px solid var(--bg-tertiary);
+            transition: all 0.3s ease;
+        }
+
+        .sim-link:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .sim-link .icon {
+            font-size: 1.5rem;
+        }
+
+        .sim-link .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .warning-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box strong {
+            color: #fbbf24;
+        }
+
+        .indicator-table {
+            font-size: 0.95rem;
+        }
+
+        .indicator-table td:first-child {
+            font-weight: 500;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--bg-tertiary);
+            text-align: center;
+        }
+
+        footer a {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #be185d 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        footer a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(236, 72, 153, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → Guía
+        </nav>
+        <h1>Curva de Titulación</h1>
+        <p class="subtitle">Cuantificación analítica mediante reacciones ácido-base</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>¿Qué Observarás?</h2>
+            <p>
+                Esta simulación recrea el experimento fundamental de la química analítica: la titulación
+                ácido-base. Observarás cómo el pH de una solución cambia a medida que agregas un reactivo
+                (titulante) gota a gota, generando la característica curva en forma de "S" que revela
+                el punto de equivalencia.
+            </p>
+
+            <div class="grid-2">
+                <div class="feature-card">
+                    <h4>Cuatro Tipos de Titulación</h4>
+                    <p>Ácido fuerte-base fuerte, débil-fuerte, fuerte-débil, y débil-débil. Cada combinación produce curvas características diferentes.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Visualización en Tiempo Real</h4>
+                    <p>Bureta que dispensa gotas, matraz con cambio de color según pH, y gráfica de la curva construyéndose dinámicamente.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Zona Buffer</h4>
+                    <p>Para ácidos y bases débiles, visualiza la región donde la solución resiste cambios de pH (zona amortiguadora).</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Punto de Equivalencia</h4>
+                    <p>Marcador del volumen exacto donde los moles de ácido igualan los moles de base, con cálculo automático del pH.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conceptos Clave</h2>
+
+            <h3>El Punto de Equivalencia</h3>
+            <p>
+                Es el momento de la titulación donde los <strong>moles de ácido igualan exactamente los moles de base</strong>.
+                No es lo mismo que pH = 7:
+            </p>
+
+            <div class="curve-regions">
+                <div class="region">
+                    <div class="region-marker" style="background: var(--neutral);">F-F</div>
+                    <div>
+                        <strong>Fuerte-Fuerte:</strong> pH = 7 en equivalencia. HCl + NaOH produce NaCl + H₂O.
+                        La sal es neutra, así que el pH final es exactamente 7.
+                    </div>
+                </div>
+                <div class="region">
+                    <div class="region-marker" style="background: var(--basic);">D-F</div>
+                    <div>
+                        <strong>Débil-Fuerte:</strong> pH > 7 en equivalencia. CH₃COOH + NaOH produce CH₃COO⁻Na⁺.
+                        El acetato es una base débil, por lo que el pH será básico (~8.7 para ácido acético).
+                    </div>
+                </div>
+                <div class="region">
+                    <div class="region-marker" style="background: var(--acidic);">F-D</div>
+                    <div>
+                        <strong>Fuerte-Débil:</strong> pH < 7 en equivalencia. HCl + NH₃ produce NH₄⁺Cl⁻.
+                        El amonio es un ácido débil, así que el pH será ácido (~5.3).
+                    </div>
+                </div>
+            </div>
+
+            <h3>La Zona Buffer</h3>
+            <div class="concept-box">
+                <p>
+                    En titulaciones con ácidos o bases débiles, existe una región (típicamente entre 10% y 90%
+                    del punto de equivalencia) donde la solución contiene cantidades significativas tanto del
+                    ácido débil como de su base conjugada.
+                </p>
+                <p style="margin-bottom: 0;">
+                    Esta mezcla actúa como <strong>amortiguador</strong>: el pH cambia muy poco incluso
+                    al agregar más titulante. En el punto medio exacto (50% titulado), <code>pH = pKa</code>.
+                </p>
+            </div>
+
+            <h3>Escala de pH y Colores</h3>
+            <div class="ph-scale">
+                <div style="background: #dc2626;">0</div>
+                <div style="background: #ef4444;">1</div>
+                <div style="background: #f97316;">3</div>
+                <div style="background: #fbbf24;">5</div>
+                <div style="background: #84cc16;">6</div>
+                <div style="background: #22c55e;">7</div>
+                <div style="background: #14b8a6;">8</div>
+                <div style="background: #06b6d4;">9</div>
+                <div style="background: #3b82f6;">11</div>
+                <div style="background: #6366f1;">13</div>
+                <div style="background: #8b5cf6;">14</div>
+            </div>
+            <p>
+                La simulación codifica el pH por colores: rojos para ácidos fuertes, amarillos/verdes para
+                zonas neutras, y azules/violetas para bases. Esta escala logarítmica significa que cada
+                unidad de pH representa un cambio de 10× en la concentración de H⁺.
+            </p>
+        </section>
+
+        <section>
+            <h2>Ecuaciones Fundamentales</h2>
+
+            <div class="equation-block">
+                <div class="main">pH = pKₐ + log([A⁻]/[HA])</div>
+                <div class="note">Ecuación de Henderson-Hasselbalch (zona buffer)</div>
+            </div>
+
+            <p>
+                Esta ecuación es fundamental para entender las curvas de titulación de ácidos débiles.
+                Describe cómo el pH depende de la proporción entre la base conjugada [A⁻] y el ácido [HA].
+            </p>
+
+            <h3>Cálculo del Volumen de Equivalencia</h3>
+            <div class="equation-block">
+                <div class="main">V<sub>eq</sub> = (C<sub>ácido</sub> × V<sub>ácido</sub>) / C<sub>base</sub></div>
+                <div class="note">Donde C = concentración (M) y V = volumen (mL)</div>
+            </div>
+
+            <h3>pH en Diferentes Regiones</h3>
+            <table>
+                <tr>
+                    <th>Región</th>
+                    <th>Ácido Fuerte</th>
+                    <th>Ácido Débil</th>
+                </tr>
+                <tr>
+                    <td>Inicial</td>
+                    <td><code>pH = -log[H⁺]</code></td>
+                    <td><code>pH = ½(pKₐ - log Cₐ)</code></td>
+                </tr>
+                <tr>
+                    <td>Antes de equiv.</td>
+                    <td>pH por exceso de H⁺</td>
+                    <td>Henderson-Hasselbalch</td>
+                </tr>
+                <tr>
+                    <td>Punto medio</td>
+                    <td>—</td>
+                    <td><code>pH = pKₐ</code></td>
+                </tr>
+                <tr>
+                    <td>En equivalencia</td>
+                    <td><code>pH = 7.00</code></td>
+                    <td>Hidrólisis de base conjugada</td>
+                </tr>
+                <tr>
+                    <td>Después de equiv.</td>
+                    <td colspan="2"><code>pOH = -log[OH⁻]ₑₓcₑₛₒ</code>, luego <code>pH = 14 - pOH</code></td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Indicadores Ácido-Base</h2>
+            <p>
+                En el laboratorio real, se utilizan indicadores que cambian de color a diferentes rangos de pH
+                para detectar el punto final (aproximación experimental al punto de equivalencia):
+            </p>
+
+            <table class="indicator-table">
+                <tr>
+                    <th>Indicador</th>
+                    <th>Rango de pH</th>
+                    <th>Color ácido</th>
+                    <th>Color básico</th>
+                    <th>Uso típico</th>
+                </tr>
+                <tr>
+                    <td>Naranja de metilo</td>
+                    <td>3.1 - 4.4</td>
+                    <td style="color: #ef4444;">Rojo</td>
+                    <td style="color: #f97316;">Naranja/Amarillo</td>
+                    <td>Bases débiles</td>
+                </tr>
+                <tr>
+                    <td>Rojo de metilo</td>
+                    <td>4.4 - 6.2</td>
+                    <td style="color: #ef4444;">Rojo</td>
+                    <td style="color: #fbbf24;">Amarillo</td>
+                    <td>Ácidos débiles</td>
+                </tr>
+                <tr>
+                    <td>Azul de bromotimol</td>
+                    <td>6.0 - 7.6</td>
+                    <td style="color: #fbbf24;">Amarillo</td>
+                    <td style="color: #3b82f6;">Azul</td>
+                    <td>Fuerte-Fuerte</td>
+                </tr>
+                <tr>
+                    <td>Fenolftaleína</td>
+                    <td>8.2 - 10.0</td>
+                    <td>Incoloro</td>
+                    <td style="color: #ec4899;">Rosa/Magenta</td>
+                    <td>Ácido débil + base fuerte</td>
+                </tr>
+            </table>
+
+            <div class="warning-box">
+                <strong>Punto final ≠ Punto de equivalencia:</strong> El indicador cambia en un rango de pH,
+                no en un punto exacto. La fenolftaleína es ideal para titulaciones débil-fuerte porque su
+                rango (8.2-10) coincide con el pH de equivalencia (~8.7).
+            </div>
+        </section>
+
+        <section>
+            <h2>Experimentos Sugeridos</h2>
+
+            <div class="experiment-card">
+                <h4>Experimento 1: Comparación de Curvas</h4>
+                <ol>
+                    <li>Configura una titulación fuerte-fuerte (HCl + NaOH)</li>
+                    <li>Usa "Auto-Titular" y observa la curva S con salto brusco en pH 7</li>
+                    <li>Reinicia y cambia a débil-fuerte (ácido acético + NaOH)</li>
+                    <li>Compara: ¿dónde está el punto de equivalencia ahora?</li>
+                    <li>Activa "Mostrar zona buffer" y nota la región plana antes del salto</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 2: Efecto del pKₐ</h4>
+                <ol>
+                    <li>Selecciona titulación débil-fuerte</li>
+                    <li>Con pKₐ = 4.75 (ácido acético), auto-titula y observa la curva</li>
+                    <li>Reinicia y cambia pKₐ a 2.0 (ácido más fuerte)</li>
+                    <li>¿Cómo cambia la forma de la curva? ¿Y el pH de equivalencia?</li>
+                    <li>Prueba con pKₐ = 9.0 (ácido muy débil) y compara</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 3: Concentraciones Diferentes</h4>
+                <ol>
+                    <li>Mantén [ácido] = 0.10 M, [base] = 0.10 M</li>
+                    <li>Nota el volumen de equivalencia (50 mL si V inicial = 50 mL)</li>
+                    <li>Cambia [base] a 0.20 M y reinicia</li>
+                    <li>¿Cuál es ahora el volumen de equivalencia? (Debería ser 25 mL)</li>
+                    <li>Verifica: V<sub>eq</sub> = (0.10 × 50) / 0.20 = 25 mL</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 4: El Punto Medio Buffer</h4>
+                <ol>
+                    <li>Selecciona débil-fuerte con pKₐ = 4.75</li>
+                    <li>Agrega gotas manualmente hasta llegar al 50% titulado</li>
+                    <li>Lee el pH: debería ser muy cercano a 4.75 (= pKₐ)</li>
+                    <li>En este punto, [HA] = [A⁻], así que log(1) = 0</li>
+                    <li>Por Henderson-Hasselbalch: pH = pKₐ + log(1) = pKₐ</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>Contexto Histórico</h2>
+
+            <div class="historical-note">
+                <h3>Desarrollo de la Química Analítica</h3>
+                <p>
+                    El concepto de titulación se desarrolló a finales del siglo XVIII. François-Antoine-Henri
+                    Descroizilles (1751-1825) inventó la bureta en 1791 para determinar la concentración de
+                    cloro en lejía. Joseph Louis Gay-Lussac (1778-1850) refinó las técnicas y acuñó el
+                    término "titulación" (del francés titre, significando proporción).
+                </p>
+                <p>
+                    La ecuación de Henderson-Hasselbalch, desarrollada independientemente por Lawrence
+                    Henderson (1908) y Karl Hasselbalch (1917), revolucionó la comprensión de los sistemas
+                    buffer y se usa extensivamente en bioquímica para analizar el pH sanguíneo.
+                </p>
+                <p style="margin-bottom: 0;">
+                    Hoy, las titulaciones automáticas con sensores de pH han reemplazado los indicadores
+                    colorimétricos en laboratorios de precisión, pero el principio sigue siendo idéntico
+                    al que observas en esta simulación.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conexiones Interdisciplinarias</h2>
+
+            <div class="links-section">
+                <a href="../le-chatelier.html" class="sim-link">
+                    <span class="icon">⚖️</span>
+                    <span class="label">Principio de Le Chatelier<br><small>Equilibrios desplazados en buffers</small></span>
+                </a>
+                <a href="../solubilidad.html" class="sim-link">
+                    <span class="icon">🧪</span>
+                    <span class="label">Producto de Solubilidad<br><small>Precipitación en puntos de equivalencia</small></span>
+                </a>
+                <a href="../nernst.html" class="sim-link">
+                    <span class="icon">⚡</span>
+                    <span class="label">Ecuación de Nernst<br><small>Relación pH-potencial</small></span>
+                </a>
+                <a href="../../Biochemistry/Biochem Visual Lab/michaelis-menten.html" class="sim-link">
+                    <span class="icon">🔬</span>
+                    <span class="label">Cinética Enzimática<br><small>pH óptimo de enzimas</small></span>
+                </a>
+            </div>
+
+            <h3>Aplicaciones en la Vida Real</h3>
+            <ul>
+                <li><strong>Análisis de agua:</strong> Determinación de alcalinidad y dureza</li>
+                <li><strong>Industria alimentaria:</strong> Acidez de vinos, lácteos, jugos</li>
+                <li><strong>Farmacéutica:</strong> Control de calidad de medicamentos</li>
+                <li><strong>Medicina:</strong> Análisis de buffer sanguíneo (pH 7.35-7.45)</li>
+                <li><strong>Medio ambiente:</strong> Lluvia ácida, neutralización de efluentes</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Para Explorar Más</h2>
+            <ul>
+                <li>
+                    <strong>Titulaciones polipróticas:</strong> ¿Qué ocurre si el ácido tiene más de un
+                    protón (H₂SO₄, H₃PO₄)? La curva muestra múltiples puntos de equivalencia.
+                </li>
+                <li>
+                    <strong>Derivada de la curva:</strong> La primera derivada (dpH/dV) tiene un máximo
+                    en el punto de equivalencia. Así lo detectan los tituladores automáticos.
+                </li>
+                <li>
+                    <strong>Capacidad buffer:</strong> Cuantifica cuánto ácido o base puede neutralizar
+                    una solución antes de cambiar significativamente su pH.
+                </li>
+                <li>
+                    <strong>Titulaciones redox:</strong> El mismo principio aplica a reacciones de
+                    oxidación-reducción, usando potencial en lugar de pH.
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <a href="../titulacion.html">Abrir Simulación</a>
+    </footer>
+</body>
+</html>

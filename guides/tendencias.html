@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Tendencias Periódicas | Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0a;
+            --color-surface: #141414;
+            --color-surface-elevated: #1a1a1a;
+            --color-border: #262626;
+            --color-text: #e5e5e5;
+            --color-text-secondary: #a3a3a3;
+            --color-accent: #06b6d4;
+            --color-accent-dim: rgba(6, 182, 212, 0.1);
+            --font-serif: 'Crimson Pro', Georgia, serif;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            font-size: 19px;
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .breadcrumb {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+            margin-top: 3rem;
+            margin-bottom: 1.25rem;
+        }
+
+        h3 {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+        }
+
+        .intro {
+            font-size: 1.15rem;
+            color: var(--color-text-secondary);
+            border-left: 3px solid var(--color-accent);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .concept-card h4 {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--color-accent);
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--color-text-secondary);
+        }
+
+        .trend-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .trend-table th {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            text-align: left;
+            padding: 1rem;
+            background: var(--color-surface);
+            border-bottom: 2px solid var(--color-accent);
+        }
+
+        .trend-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+            vertical-align: top;
+        }
+
+        .trend-table tr:hover {
+            background: var(--color-surface);
+        }
+
+        .property-name {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+
+        .arrow-up { color: #22c55e; font-weight: bold; }
+        .arrow-down { color: #ef4444; font-weight: bold; }
+        .arrow-mixed { color: #fbbf24; }
+
+        .periodic-visual {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .periodic-mini {
+            display: inline-grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .mini-cell {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            border-radius: 4px;
+        }
+
+        .gradient-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        .experiment-block {
+            background: var(--color-surface-elevated);
+            border-radius: 8px;
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .experiment-block h4 {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .experiment-block ol {
+            margin-left: 1.25rem;
+            color: var(--color-text-secondary);
+        }
+
+        .experiment-block li {
+            margin-bottom: 0.5rem;
+        }
+
+        .key-insight {
+            background: var(--color-accent-dim);
+            border: 1px solid var(--color-accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .key-insight strong {
+            color: var(--color-accent);
+        }
+
+        .element-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .element-example {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .element-symbol {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+
+        .element-name {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            margin: 0.25rem 0;
+        }
+
+        .element-stat {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .timeline {
+            border-left: 2px solid var(--color-border);
+            padding-left: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .timeline-event {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -2.35rem;
+            top: 0.5rem;
+            width: 10px;
+            height: 10px;
+            background: var(--color-accent);
+            border-radius: 50%;
+        }
+
+        .timeline-year {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--color-accent);
+        }
+
+        .timeline-text {
+            color: var(--color-text-secondary);
+        }
+
+        .connections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .connection-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .connection-item:hover {
+            border-color: var(--color-accent);
+            background: var(--color-surface-elevated);
+        }
+
+        .connection-icon {
+            font-size: 1.5rem;
+        }
+
+        .connection-text {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
+
+        ul {
+            margin-left: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        .btn-launch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 1rem 2rem;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-launch:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+                font-size: 17px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .mini-cell {
+                width: 28px;
+                height: 28px;
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → Guía
+        </nav>
+        <h1>Tendencias Periódicas</h1>
+        <p class="subtitle">El orden oculto en las propiedades atómicas</p>
+    </header>
+
+    <main>
+        <p class="intro">
+            La tabla periódica no es solo un catálogo de elementos: es un mapa de patrones.
+            Las propiedades atómicas —radio, electronegatividad, energía de ionización— varían
+            de forma predecible a lo largo de períodos y grupos. Estas tendencias revelan la
+            estructura electrónica subyacente y permiten predecir el comportamiento químico.
+        </p>
+
+        <h2>¿Qué Observarás?</h2>
+        <p>
+            La simulación muestra una tabla periódica interactiva (primeros 36 elementos) donde
+            cada celda se colorea según el valor de la propiedad seleccionada. Un gráfico
+            complementario muestra cómo varía la propiedad con el número atómico Z,
+            revelando los patrones periódicos.
+        </p>
+
+        <div class="concept-grid">
+            <div class="concept-card">
+                <h4>Mapa de colores</h4>
+                <p>Los elementos se colorean del azul (bajo) al rojo (alto) según la propiedad seleccionada.</p>
+            </div>
+            <div class="concept-card">
+                <h4>Gráfico Z vs propiedad</h4>
+                <p>Visualiza los "dientes de sierra" que revelan la periodicidad de las propiedades.</p>
+            </div>
+            <div class="concept-card">
+                <h4>Info del elemento</h4>
+                <p>Al seleccionar un elemento, muestra símbolo, nombre, Z, configuración electrónica y valores.</p>
+            </div>
+            <div class="concept-card">
+                <h4>Flechas de tendencia</h4>
+                <p>Indican la dirección de aumento para cada propiedad a lo largo de períodos y grupos.</p>
+            </div>
+        </div>
+
+        <h2>Las Cinco Propiedades</h2>
+
+        <table class="trend-table">
+            <thead>
+                <tr>
+                    <th>Propiedad</th>
+                    <th>Período →</th>
+                    <th>Grupo ↓</th>
+                    <th>Explicación</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="property-name">Radio atómico</td>
+                    <td><span class="arrow-down">↓ Disminuye</span></td>
+                    <td><span class="arrow-up">↑ Aumenta</span></td>
+                    <td>Más protones atraen más los electrones (período). Más capas = mayor radio (grupo).</td>
+                </tr>
+                <tr>
+                    <td class="property-name">Energía de ionización</td>
+                    <td><span class="arrow-up">↑ Aumenta</span></td>
+                    <td><span class="arrow-down">↓ Disminuye</span></td>
+                    <td>Electrones más cerca del núcleo son más difíciles de arrancar.</td>
+                </tr>
+                <tr>
+                    <td class="property-name">Electronegatividad</td>
+                    <td><span class="arrow-up">↑ Aumenta</span></td>
+                    <td><span class="arrow-down">↓ Disminuye</span></td>
+                    <td>Átomos pequeños con alta carga nuclear atraen más los electrones de enlace.</td>
+                </tr>
+                <tr>
+                    <td class="property-name">Afinidad electrónica</td>
+                    <td><span class="arrow-up">↑ Aumenta (general)</span></td>
+                    <td><span class="arrow-mixed">~ Variable</span></td>
+                    <td>Los halógenos (grupo 17) ganan electrones fácilmente para completar octeto.</td>
+                </tr>
+                <tr>
+                    <td class="property-name">Punto de fusión</td>
+                    <td><span class="arrow-mixed">~ Variable</span></td>
+                    <td><span class="arrow-mixed">~ Variable</span></td>
+                    <td>Depende del tipo de enlace: metálico, covalente, iónico o molecular.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Visualizando las Tendencias</h2>
+
+        <div class="periodic-visual">
+            <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--color-text-secondary);">
+                <strong>Radio atómico</strong> — Aumenta hacia abajo-izquierda
+            </p>
+            <div class="periodic-mini">
+                <div class="mini-cell" style="background: #22c55e;">Li</div>
+                <div class="mini-cell" style="background: #4ade80;">Be</div>
+                <div class="mini-cell" style="background: #86efac;">B</div>
+                <div class="mini-cell" style="background: #a7f3d0;">C</div>
+                <div class="mini-cell" style="background: #bbf7d0;">N</div>
+                <div class="mini-cell" style="background: #d1fae5;">O</div>
+                <div class="mini-cell" style="background: #ecfdf5;">F</div>
+                <div class="mini-cell" style="background: #f0fdf4;">Ne</div>
+                <div class="mini-cell" style="background: #16a34a;">Na</div>
+                <div class="mini-cell" style="background: #22c55e;">Mg</div>
+                <div class="mini-cell" style="background: #4ade80;">Al</div>
+                <div class="mini-cell" style="background: #86efac;">Si</div>
+                <div class="mini-cell" style="background: #a7f3d0;">P</div>
+                <div class="mini-cell" style="background: #bbf7d0;">S</div>
+                <div class="mini-cell" style="background: #d1fae5;">Cl</div>
+                <div class="mini-cell" style="background: #ecfdf5;">Ar</div>
+            </div>
+            <div class="gradient-bar">
+                <span>← Mayor radio</span>
+                <span>Menor radio →</span>
+            </div>
+        </div>
+
+        <div class="key-insight">
+            <strong>¿Por qué el radio disminuye en el período?</strong>
+            Al añadir protones al núcleo sin añadir nuevas capas electrónicas, la carga nuclear
+            efectiva (Z<sub>ef</sub>) aumenta. Los electrones de valencia son atraídos con más
+            fuerza hacia el núcleo, contrayendo el átomo. Es como un resorte que se tensa más.
+        </div>
+
+        <h2>Casos Extremos</h2>
+
+        <div class="element-examples">
+            <div class="element-example">
+                <div class="element-symbol">Cs</div>
+                <div class="element-name">Cesio</div>
+                <div class="element-stat">Mayor radio: 298 pm</div>
+            </div>
+            <div class="element-example">
+                <div class="element-symbol">He</div>
+                <div class="element-name">Helio</div>
+                <div class="element-stat">Menor radio: 31 pm</div>
+            </div>
+            <div class="element-example">
+                <div class="element-symbol">F</div>
+                <div class="element-name">Flúor</div>
+                <div class="element-stat">Mayor EN: 3.98</div>
+            </div>
+            <div class="element-example">
+                <div class="element-symbol">Fr</div>
+                <div class="element-name">Francio</div>
+                <div class="element-stat">Menor EN: 0.70</div>
+            </div>
+        </div>
+
+        <h2>Experimentos Sugeridos</h2>
+
+        <div class="experiment-block">
+            <h4>1. Comparar el período 2 vs período 3</h4>
+            <ol>
+                <li>Selecciona "Radio atómico" como propiedad</li>
+                <li>Compara Li-Ne (período 2) con Na-Ar (período 3)</li>
+                <li>¿Qué elemento del período 3 tiene radio similar al Li?</li>
+                <li>Activa "Resaltar grupo" para ver la diagonal</li>
+            </ol>
+        </div>
+
+        <div class="experiment-block">
+            <h4>2. Anomalías en la energía de ionización</h4>
+            <ol>
+                <li>Selecciona "Energía de Ionización"</li>
+                <li>Observa el gráfico Z vs EI</li>
+                <li>¿Por qué Be > B y N > O? (pista: subcapas)</li>
+                <li>Los picos corresponden a gases nobles. ¿Por qué?</li>
+            </ol>
+        </div>
+
+        <div class="experiment-block">
+            <h4>3. Predecir propiedades de elementos no vistos</h4>
+            <ol>
+                <li>Basándote en las tendencias de Li, Na, K...</li>
+                <li>Predice las propiedades del Rb (Z=37)</li>
+                <li>¿Tendrá mayor o menor radio que K?</li>
+                <li>¿Mayor o menor EI? ¿Mayor o menor EN?</li>
+            </ol>
+        </div>
+
+        <div class="experiment-block">
+            <h4>4. El punto de fusión rompe las reglas</h4>
+            <ol>
+                <li>Selecciona "Punto de fusión"</li>
+                <li>Observa que no sigue un patrón simple</li>
+                <li>¿Por qué el carbono (grafito/diamante) tiene Tf tan alto?</li>
+                <li>¿Por qué los gases nobles tienen Tf bajísimo?</li>
+            </ol>
+        </div>
+
+        <h2>Contexto Histórico</h2>
+
+        <div class="timeline">
+            <div class="timeline-event">
+                <div class="timeline-year">1829</div>
+                <div class="timeline-text">
+                    <strong>Döbereiner</strong> descubre las "tríadas": grupos de 3 elementos
+                    donde el peso atómico del central es el promedio de los extremos (Li-Na-K).
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1862</div>
+                <div class="timeline-text">
+                    <strong>Chancourtois</strong> organiza los elementos en una hélice cilíndrica,
+                    observando que propiedades similares reaparecen cada 7 elementos.
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1869</div>
+                <div class="timeline-text">
+                    <strong>Mendeléyev y Meyer</strong> publican tablas periódicas ordenadas por
+                    peso atómico. Mendeléyev deja huecos y predice propiedades de elementos desconocidos.
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1913</div>
+                <div class="timeline-text">
+                    <strong>Moseley</strong> demuestra que los elementos deben ordenarse por
+                    número atómico (Z), no por peso. La ley periódica se basa en la estructura electrónica.
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1932</div>
+                <div class="timeline-text">
+                    <strong>Pauling</strong> introduce la escala de electronegatividad basada en
+                    energías de enlace, cuantificando la "avidez" de los átomos por los electrones.
+                </div>
+            </div>
+        </div>
+
+        <h2>Conexiones Interdisciplinarias</h2>
+
+        <div class="connections-grid">
+            <a href="modelo-bohr.html" class="connection-item">
+                <span class="connection-icon">⚛️</span>
+                <span class="connection-text">Modelo de Bohr<br><small>Niveles de energía</small></span>
+            </a>
+            <a href="orbitales.html" class="connection-item">
+                <span class="connection-icon">☁️</span>
+                <span class="connection-text">Orbitales<br><small>Configuración electrónica</small></span>
+            </a>
+            <a href="vsepr.html" class="connection-item">
+                <span class="connection-icon">🔷</span>
+                <span class="connection-text">VSEPR<br><small>Geometría molecular</small></span>
+            </a>
+            <a href="celda-galvanica.html" class="connection-item">
+                <span class="connection-icon">🔋</span>
+                <span class="connection-text">Electroquímica<br><small>Potenciales de reducción</small></span>
+            </a>
+        </div>
+
+        <h2>Para Explorar Más</h2>
+        <ul>
+            <li><strong>Carga nuclear efectiva (Z<sub>ef</sub>):</strong> Reglas de Slater para calcular el apantallamiento</li>
+            <li><strong>Radio iónico vs atómico:</strong> Los cationes son menores, los aniones mayores que el átomo neutro</li>
+            <li><strong>Contracción del lantánido:</strong> Por qué Hf es casi igual de grande que Zr</li>
+            <li><strong>Efecto del par inerte:</strong> Pb²⁺ más estable que Pb⁴⁺ en elementos pesados</li>
+            <li><strong>Relaciones diagonales:</strong> Li se parece a Mg, Be a Al, B a Si...</li>
+        </ul>
+    </main>
+
+    <footer>
+        <a href="../tendencias.html" class="btn-launch">
+            ⚛️ Abrir Simulación
+        </a>
+    </footer>
+</body>
+</html>

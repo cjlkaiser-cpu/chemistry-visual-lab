@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Modelo de Bohr - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a1a;
+            --color-surface: #1e293b;
+            --color-accent: #22d3ee;
+            --color-accent-dim: rgba(34, 211, 238, 0.2);
+            --color-text: #e2e8f0;
+            --color-text-dim: #94a3b8;
+            --color-highlight: #fbbf24;
+            --color-uv: #8b5cf6;
+            --color-visible: #22d3ee;
+            --color-ir: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--color-text);
+            background: var(--color-bg);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-accent-dim);
+        }
+
+        .breadcrumb {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--color-text-dim);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-highlight);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--color-accent);
+        }
+
+        .launch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--color-accent) 0%, #0891b2 100%);
+            color: #0f172a;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 1rem 0;
+            transition: all 0.3s;
+        }
+
+        .launch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(34, 211, 238, 0.4);
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-accent-dim);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .concept-card h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .equation-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--color-accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+        }
+
+        .equation-box .eq-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-box .eq-main {
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-box .eq-desc {
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.95rem;
+            color: var(--color-text-dim);
+        }
+
+        .series-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .series-table th,
+        .series-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-accent-dim);
+        }
+
+        .series-table th {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .badge-uv {
+            background: var(--color-uv);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .badge-vis {
+            background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .badge-ir {
+            background: var(--color-ir);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .spectrum-visual {
+            background: #000;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .spectrum-bar {
+            height: 40px;
+            background: linear-gradient(90deg,
+                #8b5cf6 0%, #8b5cf6 10%,
+                #3b82f6 20%, #22c55e 35%, #eab308 50%, #f97316 65%, #ef4444 80%,
+                #7f1d1d 100%);
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .spectrum-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--color-text-dim);
+        }
+
+        .experiment-card {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(8, 145, 178, 0.1) 100%);
+            border: 1px solid var(--color-accent-dim);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .experiment-card h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .experiment-card ol {
+            margin-left: 1.5rem;
+            color: var(--color-text-dim);
+        }
+
+        .experiment-card li {
+            margin-bottom: 0.5rem;
+        }
+
+        .key-insight {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        .key-insight strong {
+            color: var(--color-highlight);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--color-accent-dim);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0.35rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            border: 2px solid var(--color-bg);
+        }
+
+        .timeline-year {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: var(--color-accent);
+        }
+
+        .timeline-text {
+            color: var(--color-text-dim);
+        }
+
+        .connection-list {
+            display: grid;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .connection-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--color-surface);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: all 0.3s;
+        }
+
+        .connection-item:hover {
+            background: rgba(34, 211, 238, 0.15);
+            transform: translateX(4px);
+        }
+
+        .connection-icon {
+            font-size: 1.5rem;
+        }
+
+        .connection-text {
+            flex: 1;
+        }
+
+        .connection-text strong {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .connection-text span {
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+        }
+
+        .quote {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--color-text-dim);
+            border-left: 3px solid var(--color-highlight);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .quote cite {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            color: var(--color-accent);
+        }
+
+        .hydrogen-lines {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1.5rem;
+            background: #000;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .line {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .line-bar {
+            width: 4px;
+            height: 60px;
+            border-radius: 2px;
+        }
+
+        .line-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.7rem;
+            color: var(--color-text-dim);
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-accent-dim);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> →
+            <a href="../modelo-bohr.html">Simulación</a> →
+            Guía
+        </nav>
+        <h1>Modelo de Bohr</h1>
+        <p class="subtitle">Saltos cuánticos y el origen de los espectros atómicos</p>
+        <a href="../modelo-bohr.html" class="launch-btn">
+            ▶ Abrir Simulación
+        </a>
+    </header>
+
+    <main>
+        <section>
+            <h2>¿Qué observarás?</h2>
+            <p>
+                Esta simulación visualiza el modelo atómico propuesto por Niels Bohr en 1913,
+                donde los electrones orbitan el núcleo en niveles de energía <em>cuantizados</em>.
+                A diferencia del modelo clásico, los electrones no pueden tener cualquier energía:
+                solo ciertos valores están "permitidos".
+            </p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>Órbitas Cuantizadas</h4>
+                    <p>Los electrones solo pueden ocupar niveles específicos (n=1, 2, 3...).
+                       El radio crece como n², por eso las órbitas externas están más separadas.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Transiciones</h4>
+                    <p>Cuando un electrón "salta" de un nivel alto a uno bajo, emite un fotón.
+                       La energía del fotón determina su color.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Espectro de Emisión</h4>
+                    <p>Cada elemento tiene un "código de barras" único de líneas espectrales,
+                       como una huella digital atómica.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Series Espectrales</h4>
+                    <p>Lyman (UV), Balmer (visible), Paschen (IR)... cada serie corresponde
+                       a transiciones hacia un nivel final específico.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Las Ecuaciones Fundamentales</h2>
+
+            <div class="equation-box">
+                <div class="eq-name">Fórmula de Rydberg (longitud de onda)</div>
+                <div class="eq-main">1/λ = R_H · Z² · (1/n_f² − 1/n_i²)</div>
+                <div class="eq-desc">
+                    Donde R_H = 1.097×10⁷ m⁻¹ (constante de Rydberg),
+                    Z = número atómico, n_i = nivel inicial, n_f = nivel final.
+                </div>
+            </div>
+
+            <div class="equation-box">
+                <div class="eq-name">Energía de un nivel</div>
+                <div class="eq-main">E_n = −13.6 eV · Z² / n²</div>
+                <div class="eq-desc">
+                    La energía es negativa (el electrón está ligado).
+                    En n=1 (estado fundamental) el hidrógeno tiene E = −13.6 eV.
+                </div>
+            </div>
+
+            <div class="equation-box">
+                <div class="eq-name">Radio de la órbita</div>
+                <div class="eq-main">r_n = a₀ · n² / Z</div>
+                <div class="eq-desc">
+                    Donde a₀ = 0.529 Å (radio de Bohr).
+                    El radio crece con n²: la órbita n=3 es 9 veces mayor que n=1.
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>Insight clave:</strong> La diferencia de energía entre niveles determina
+                la longitud de onda del fotón emitido: ΔE = h·ν = hc/λ.
+                Cuanto mayor es el salto, mayor es la energía del fotón y menor su longitud de onda.
+            </div>
+        </section>
+
+        <section>
+            <h2>Las Series del Hidrógeno</h2>
+            <p>
+                Las transiciones se agrupan en "series" según el nivel final al que llega el electrón:
+            </p>
+
+            <table class="series-table">
+                <tr>
+                    <th>Serie</th>
+                    <th>n_f</th>
+                    <th>Región</th>
+                    <th>Rango de λ</th>
+                    <th>Descubridor</th>
+                </tr>
+                <tr>
+                    <td>Lyman</td>
+                    <td>1</td>
+                    <td><span class="badge-uv">UV</span></td>
+                    <td>91–122 nm</td>
+                    <td>Theodore Lyman (1906)</td>
+                </tr>
+                <tr>
+                    <td>Balmer</td>
+                    <td>2</td>
+                    <td><span class="badge-vis">Visible</span></td>
+                    <td>365–656 nm</td>
+                    <td>Johann Balmer (1885)</td>
+                </tr>
+                <tr>
+                    <td>Paschen</td>
+                    <td>3</td>
+                    <td><span class="badge-ir">IR</span></td>
+                    <td>820–1875 nm</td>
+                    <td>Friedrich Paschen (1908)</td>
+                </tr>
+                <tr>
+                    <td>Brackett</td>
+                    <td>4</td>
+                    <td><span class="badge-ir">IR</span></td>
+                    <td>1458–4051 nm</td>
+                    <td>Frederick Brackett (1922)</td>
+                </tr>
+                <tr>
+                    <td>Pfund</td>
+                    <td>5</td>
+                    <td><span class="badge-ir">IR</span></td>
+                    <td>2279–7458 nm</td>
+                    <td>August Pfund (1924)</td>
+                </tr>
+            </table>
+
+            <h3>Líneas de Balmer (visibles)</h3>
+            <p>
+                La serie de Balmer es la única visible a simple vista.
+                Sus líneas tienen nombres propios de la tradición espectroscópica:
+            </p>
+
+            <div class="hydrogen-lines">
+                <div class="line">
+                    <div class="line-bar" style="background: #ef4444;"></div>
+                    <div class="line-label">H-α<br>656 nm</div>
+                </div>
+                <div class="line">
+                    <div class="line-bar" style="background: #22d3ee;"></div>
+                    <div class="line-label">H-β<br>486 nm</div>
+                </div>
+                <div class="line">
+                    <div class="line-bar" style="background: #6366f1;"></div>
+                    <div class="line-label">H-γ<br>434 nm</div>
+                </div>
+                <div class="line">
+                    <div class="line-bar" style="background: #8b5cf6;"></div>
+                    <div class="line-label">H-δ<br>410 nm</div>
+                </div>
+            </div>
+
+            <p>
+                La línea H-α (roja) corresponde a n=3→2, la más intensa.
+                En astronomía, las nebulosas brillan en H-α, dándoles su característico color rojizo.
+            </p>
+        </section>
+
+        <section>
+            <h2>El Espectro Electromagnético</h2>
+            <div class="spectrum-visual">
+                <div class="spectrum-bar"></div>
+                <div class="spectrum-labels">
+                    <span>UV ← 380nm</span>
+                    <span>Visible</span>
+                    <span>700nm → IR</span>
+                </div>
+            </div>
+            <p>
+                La simulación muestra cómo las transiciones a n=1 (Lyman) producen UV,
+                las transiciones a n=2 (Balmer) producen luz visible,
+                y las transiciones a n≥3 producen infrarrojo.
+            </p>
+        </section>
+
+        <section>
+            <h2>Experimentos Sugeridos</h2>
+
+            <div class="experiment-card">
+                <h4>🔬 Experimento 1: Huella espectral del hidrógeno</h4>
+                <ol>
+                    <li>Selecciona hidrógeno (H) y ajusta n_f = 2 (serie de Balmer)</li>
+                    <li>Haz transiciones desde n_i = 3, 4, 5, 6, 7</li>
+                    <li>Observa cómo el espectro acumula líneas en el visible</li>
+                    <li>¿Por qué las líneas se acercan hacia el extremo azul?</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>🔬 Experimento 2: Efecto del número atómico Z</h4>
+                <ol>
+                    <li>Mantén n_i = 3 → n_f = 2 fijos</li>
+                    <li>Cambia de H a He⁺ (Z=2 "similar" a He ionizado)</li>
+                    <li>Observa cómo la energía del fotón aumenta con Z²</li>
+                    <li>Nota: El helio neutro tiene 2 electrones, pero la fórmula de Bohr
+                        funciona exactamente solo para átomos hidrogenoides (1 electrón)</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>🔬 Experimento 3: El límite de serie</h4>
+                <ol>
+                    <li>Fija n_f = 1 y aumenta n_i progresivamente</li>
+                    <li>Observa que la longitud de onda se acerca a un límite: 91.2 nm</li>
+                    <li>Este es el "límite de Lyman": cuando n_i → ∞, el electrón se ioniza</li>
+                    <li>Calcula: λ_límite = 1/(R_H · Z²) para n_f = 1</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>🔬 Experimento 4: Diagrama de niveles de energía</h4>
+                <ol>
+                    <li>Activa "Mostrar energías" en el panel</li>
+                    <li>Observa que los niveles están más juntos conforme n aumenta</li>
+                    <li>La energía de ionización (escapar de n=1) es exactamente 13.6 eV</li>
+                    <li>Compara con la energía necesaria para salir desde n=2 (3.4 eV)</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>Contexto Histórico</h2>
+
+            <div class="quote">
+                "En 1913, Bohr resolvió el misterio de los espectros atómicos postulando que
+                los electrones solo pueden ocupar órbitas específicas, violando la física clásica
+                pero explicando perfectamente los datos experimentales."
+                <cite>— Adaptado de "The Making of the Atomic Bomb", Richard Rhodes</cite>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-year">1885</span>
+                    <p class="timeline-text">
+                        <strong>Johann Balmer</strong> encuentra una fórmula empírica que predice
+                        las líneas visibles del hidrógeno. No sabe por qué funciona.
+                    </p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">1888</span>
+                    <p class="timeline-text">
+                        <strong>Johannes Rydberg</strong> generaliza la fórmula de Balmer a otras series,
+                        introduciendo la constante R_H.
+                    </p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">1911</span>
+                    <p class="timeline-text">
+                        <strong>Ernest Rutherford</strong> descubre el núcleo atómico,
+                        pero su modelo clásico tiene un problema fatal:
+                        los electrones orbitando deberían radiar energía y colapsar.
+                    </p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">1913</span>
+                    <p class="timeline-text">
+                        <strong>Niels Bohr</strong> propone que los electrones ocupan
+                        órbitas cuantizadas donde no radian. Los saltos entre órbitas
+                        explican los espectros. Premio Nobel 1922.
+                    </p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">1926</span>
+                    <p class="timeline-text">
+                        <strong>Schrödinger y Heisenberg</strong> reemplazan las órbitas de Bohr
+                        por orbitales probabilísticos. El modelo de Bohr queda como aproximación
+                        pedagógica, pero sus predicciones para el hidrógeno siguen siendo exactas.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Limitaciones del Modelo</h2>
+            <p>
+                El modelo de Bohr es brillante pero incompleto:
+            </p>
+            <ul>
+                <li><strong>Solo funciona exactamente para átomos hidrogenoides</strong> (1 electrón: H, He⁺, Li²⁺)</li>
+                <li>No explica la <strong>estructura fina</strong> de las líneas (correcciones relativistas)</li>
+                <li>No predice las <strong>intensidades</strong> de las líneas espectrales</li>
+                <li>No explica el <strong>efecto Zeeman anómalo</strong> (desdoblamiento en campo magnético)</li>
+                <li>Las órbitas circulares son una simplificación; en realidad hay <strong>orbitales</strong> 3D</li>
+            </ul>
+            <p>
+                La mecánica cuántica completa (ecuación de Schrödinger) resuelve todas estas limitaciones,
+                pero el modelo de Bohr sigue siendo la mejor introducción conceptual a la cuantización atómica.
+            </p>
+        </section>
+
+        <section>
+            <h2>Conexiones Interdisciplinarias</h2>
+
+            <div class="connection-list">
+                <a href="../orbitales.html" class="connection-item">
+                    <span class="connection-icon">🌐</span>
+                    <div class="connection-text">
+                        <strong>Orbitales Atómicos</strong>
+                        <span>La evolución cuántica completa: del círculo a las nubes de probabilidad</span>
+                    </div>
+                </a>
+                <a href="../../Astronomy/Astronomy Visual Lab/diagrama-hr.html" class="connection-item">
+                    <span class="connection-icon">⭐</span>
+                    <div class="connection-text">
+                        <strong>Diagrama H-R (Astronomía)</strong>
+                        <span>Los espectros estelares revelan temperatura y composición</span>
+                    </div>
+                </a>
+                <a href="../../Physics/Physics Visual Lab/optica.html" class="connection-item">
+                    <span class="connection-icon">🌈</span>
+                    <div class="connection-text">
+                        <strong>Óptica y Espectroscopía</strong>
+                        <span>Cómo separamos la luz en sus componentes con prismas y redes</span>
+                    </div>
+                </a>
+                <a href="../decaimiento.html" class="connection-item">
+                    <span class="connection-icon">☢️</span>
+                    <div class="connection-text">
+                        <strong>Decaimiento Radiactivo</strong>
+                        <span>Transiciones nucleares: el átomo emite partículas, no solo fotones</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <h2>Para Explorar Más</h2>
+            <ul>
+                <li>
+                    <strong>Espectroscopía astronómica:</strong>
+                    ¿Cómo sabemos de qué están hechas las estrellas? Por sus líneas espectrales.
+                </li>
+                <li>
+                    <strong>Láseres:</strong>
+                    Funcionan mediante transiciones estimuladas entre niveles de energía.
+                </li>
+                <li>
+                    <strong>Análisis químico:</strong>
+                    La espectroscopía de emisión/absorción identifica elementos en muestras desconocidas.
+                </li>
+                <li>
+                    <strong>Corrimientos espectrales:</strong>
+                    El redshift de galaxias usa las mismas líneas de hidrógeno desplazadas por el efecto Doppler.
+                </li>
+            </ul>
+
+            <div class="key-insight">
+                <strong>Reflexión final:</strong> El modelo de Bohr fue la primera teoría en explicar
+                <em>por qué</em> los átomos emiten luz de colores específicos. Aunque fue reemplazado
+                por la mecánica cuántica, sus predicciones para el hidrógeno son matemáticamente idénticas.
+                Es un ejemplo perfecto de cómo una teoría "incorrecta" puede ser tremendamente útil.
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Chemistry Visual Lab — EigenLab</p>
+        <p>Una guía para explorar la estructura atómica cuantizada</p>
+    </footer>
+</body>
+</html>

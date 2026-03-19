@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Enlaces Químicos | Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0a;
+            --color-surface: #141414;
+            --color-surface-elevated: #1a1a1a;
+            --color-border: #262626;
+            --color-text: #e5e5e5;
+            --color-text-secondary: #a3a3a3;
+            --color-accent: #06b6d4;
+            --color-accent-dim: rgba(6, 182, 212, 0.1);
+            --font-serif: 'Crimson Pro', Georgia, serif;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            font-size: 19px;
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .breadcrumb {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+            margin-top: 3rem;
+            margin-bottom: 1.25rem;
+        }
+
+        h3 {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+        }
+
+        .intro {
+            font-size: 1.15rem;
+            color: var(--color-text-secondary);
+            border-left: 3px solid var(--color-accent);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .concept-card h4 {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--color-accent);
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--color-text-secondary);
+        }
+
+        .equation-block {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .equation {
+            font-family: var(--font-mono);
+            font-size: 1.4rem;
+            color: var(--color-accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .equation-label {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        .bond-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .bond-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .bond-card h4 {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bond-card.covalent h4 { color: #22c55e; }
+        .bond-card.ionic h4 { color: #f59e0b; }
+        .bond-card.metallic h4 { color: #a855f7; }
+
+        .bond-card .visual {
+            font-size: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            letter-spacing: 0.5rem;
+        }
+
+        .bond-card p {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .bond-card .examples {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--color-text);
+            margin-top: 0.5rem;
+        }
+
+        .en-scale {
+            background: var(--color-surface);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .en-scale .gradient {
+            height: 30px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #22c55e, #fbbf24, #ef4444);
+            margin: 1rem 0;
+        }
+
+        .en-scale .labels {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        .en-scale .markers {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .en-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .en-table th {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            text-align: left;
+            padding: 1rem;
+            background: var(--color-surface);
+            border-bottom: 2px solid var(--color-accent);
+        }
+
+        .en-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .en-table tr:hover {
+            background: var(--color-surface);
+        }
+
+        .element-symbol {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+
+        .experiment-block {
+            background: var(--color-surface-elevated);
+            border-radius: 8px;
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .experiment-block h4 {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .experiment-block ol {
+            margin-left: 1.25rem;
+            color: var(--color-text-secondary);
+        }
+
+        .experiment-block li {
+            margin-bottom: 0.5rem;
+        }
+
+        .key-insight {
+            background: var(--color-accent-dim);
+            border: 1px solid var(--color-accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .key-insight strong {
+            color: var(--color-accent);
+        }
+
+        .timeline {
+            border-left: 2px solid var(--color-border);
+            padding-left: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .timeline-event {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -2.35rem;
+            top: 0.5rem;
+            width: 10px;
+            height: 10px;
+            background: var(--color-accent);
+            border-radius: 50%;
+        }
+
+        .timeline-year {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--color-accent);
+        }
+
+        .timeline-text {
+            color: var(--color-text-secondary);
+        }
+
+        .connections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .connection-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .connection-item:hover {
+            border-color: var(--color-accent);
+            background: var(--color-surface-elevated);
+        }
+
+        .connection-icon {
+            font-size: 1.5rem;
+        }
+
+        .connection-text {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
+
+        ul {
+            margin-left: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        .btn-launch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 1rem 2rem;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-launch:hover {
+            opacity: 0.9;
+        }
+
+        .forces-comparison {
+            background: var(--color-surface);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .force-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .force-bar .label {
+            width: 150px;
+            font-size: 0.85rem;
+        }
+
+        .force-bar .bar {
+            flex: 1;
+            height: 20px;
+            background: var(--color-border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .force-bar .fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .force-bar .value {
+            width: 80px;
+            text-align: right;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+                font-size: 17px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .equation {
+                font-size: 1.1rem;
+            }
+
+            .bond-types {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → Guía
+        </nav>
+        <h1>Enlaces Químicos</h1>
+        <p class="subtitle">La fuerza que une a los átomos</p>
+    </header>
+
+    <main>
+        <p class="intro">
+            Los enlaces químicos son las "fuerzas de atracción" que mantienen unidos a los átomos
+            formando moléculas y materiales. Entender los enlaces es entender por qué el agua es
+            líquida, los metales conducen electricidad y el diamante es duro. Todo se reduce a
+            cómo los electrones se distribuyen entre los núcleos.
+        </p>
+
+        <h2>¿Qué Observarás?</h2>
+        <p>
+            La simulación visualiza la formación de enlaces químicos, mostrando cómo los electrones
+            de valencia se redistribuyen cuando dos átomos se acercan. Verás la diferencia entre
+            compartir electrones (covalente), transferirlos (iónico), o delocalizarlos (metálico).
+        </p>
+
+        <div class="concept-grid">
+            <div class="concept-card">
+                <h4>Electrones de Valencia</h4>
+                <p>Los electrones de la capa más externa, responsables de formar enlaces.</p>
+            </div>
+            <div class="concept-card">
+                <h4>Electronegatividad (EN)</h4>
+                <p>La capacidad de un átomo para atraer electrones compartidos hacia sí.</p>
+            </div>
+            <div class="concept-card">
+                <h4>Diferencia de EN (ΔEN)</h4>
+                <p>Determina si un enlace será covalente apolar, polar o iónico.</p>
+            </div>
+            <div class="concept-card">
+                <h4>Energía de Enlace</h4>
+                <p>La energía necesaria para romper un enlace. Mayor energía = enlace más fuerte.</p>
+            </div>
+        </div>
+
+        <h2>Los Tres Tipos de Enlace</h2>
+
+        <div class="bond-types">
+            <div class="bond-card covalent">
+                <h4>Enlace Covalente</h4>
+                <div class="visual">H • • H → H—H</div>
+                <p><strong>Mecanismo:</strong> Átomos <em>comparten</em> electrones.</p>
+                <p><strong>Ocurre entre:</strong> No metales con ΔEN pequeña.</p>
+                <p><strong>Propiedades:</strong> Gases, líquidos o sólidos blandos. No conducen electricidad.</p>
+                <div class="examples">Ejemplos: H₂, O₂, H₂O, CO₂, CH₄</div>
+            </div>
+            <div class="bond-card ionic">
+                <h4>Enlace Iónico</h4>
+                <div class="visual">Na• + •Cl → Na⁺ Cl⁻</div>
+                <p><strong>Mecanismo:</strong> Un átomo <em>transfiere</em> electrones a otro.</p>
+                <p><strong>Ocurre entre:</strong> Metales y no metales (ΔEN grande).</p>
+                <p><strong>Propiedades:</strong> Sólidos cristalinos, alto punto de fusión. Conducen en solución.</p>
+                <div class="examples">Ejemplos: NaCl, KBr, MgO, CaF₂</div>
+            </div>
+            <div class="bond-card metallic">
+                <h4>Enlace Metálico</h4>
+                <div class="visual">Cu⁺ Cu⁺ Cu⁺<br>e⁻ e⁻ e⁻ e⁻</div>
+                <p><strong>Mecanismo:</strong> Electrones <em>deslocalizados</em> en un "mar".</p>
+                <p><strong>Ocurre entre:</strong> Átomos metálicos.</p>
+                <p><strong>Propiedades:</strong> Conducen electricidad y calor. Maleables, dúctiles, brillantes.</p>
+                <div class="examples">Ejemplos: Cu, Fe, Au, Ag, Al</div>
+            </div>
+        </div>
+
+        <h2>Electronegatividad y Predicción de Enlaces</h2>
+
+        <p>
+            La <strong>electronegatividad</strong> (EN) mide cuánto "tira" un átomo de los electrones
+            compartidos. Linus Pauling creó la escala más usada, donde el flúor (el más electronegativo)
+            tiene EN = 3.98.
+        </p>
+
+        <div class="en-scale">
+            <div class="gradient"></div>
+            <div class="labels">
+                <span>ΔEN &lt; 0.5</span>
+                <span>0.5 ≤ ΔEN &lt; 1.7</span>
+                <span>ΔEN ≥ 1.7</span>
+            </div>
+            <div class="markers">
+                <span style="color: #22c55e;">Covalente Apolar</span>
+                <span style="color: #fbbf24;">Covalente Polar</span>
+                <span style="color: #ef4444;">Iónico</span>
+            </div>
+        </div>
+
+        <div class="equation-block">
+            <div class="equation">ΔEN = |EN₁ - EN₂|</div>
+            <div class="equation-label">La diferencia de electronegatividad predice el tipo de enlace</div>
+        </div>
+
+        <h3>Electronegatividades de Pauling</h3>
+
+        <table class="en-table">
+            <thead>
+                <tr>
+                    <th>Elemento</th>
+                    <th>EN</th>
+                    <th>Tendencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="element-symbol">F</span> Flúor</td>
+                    <td>3.98</td>
+                    <td>El más electronegativo</td>
+                </tr>
+                <tr>
+                    <td><span class="element-symbol">O</span> Oxígeno</td>
+                    <td>3.44</td>
+                    <td>Muy electronegativo</td>
+                </tr>
+                <tr>
+                    <td><span class="element-symbol">Cl</span> Cloro</td>
+                    <td>3.16</td>
+                    <td>Halógeno</td>
+                </tr>
+                <tr>
+                    <td><span class="element-symbol">N</span> Nitrógeno</td>
+                    <td>3.04</td>
+                    <td>Electronegativo</td>
+                </tr>
+                <tr>
+                    <td><span class="element-symbol">C</span> Carbono</td>
+                    <td>2.55</td>
+                    <td>Intermedio</td>
+                </tr>
+                <tr>
+                    <td><span class="element-symbol">H</span> Hidrógeno</td>
+                    <td>2.20</td>
+                    <td>Referencia</td>
+                </tr>
+                <tr>
+                    <td><span class="element-symbol">Na</span> Sodio</td>
+                    <td>0.93</td>
+                    <td>Metal alcalino</td>
+                </tr>
+                <tr>
+                    <td><span class="element-symbol">K</span> Potasio</td>
+                    <td>0.82</td>
+                    <td>Muy electropositivo</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="key-insight">
+            <strong>Regla de la diagonal:</strong> En la tabla periódica, la electronegatividad
+            aumenta hacia arriba y hacia la derecha. El flúor (esquina superior derecha de los
+            no metales) es el más electronegativo; el francio (esquina inferior izquierda) es
+            el menos electronegativo.
+        </div>
+
+        <h2>Energía de Enlace</h2>
+
+        <p>
+            La <strong>energía de enlace</strong> es la energía necesaria para romper un mol de
+            enlaces en fase gaseosa. Cuanto mayor es la energía, más fuerte es el enlace.
+        </p>
+
+        <div class="forces-comparison">
+            <div class="force-bar">
+                <span class="label">N≡N (triple)</span>
+                <div class="bar"><div class="fill" style="width: 100%; background: #22c55e;"></div></div>
+                <span class="value">945 kJ/mol</span>
+            </div>
+            <div class="force-bar">
+                <span class="label">O=O (doble)</span>
+                <div class="bar"><div class="fill" style="width: 52%; background: #3b82f6;"></div></div>
+                <span class="value">498 kJ/mol</span>
+            </div>
+            <div class="force-bar">
+                <span class="label">H—H</span>
+                <div class="bar"><div class="fill" style="width: 46%; background: #8b5cf6;"></div></div>
+                <span class="value">436 kJ/mol</span>
+            </div>
+            <div class="force-bar">
+                <span class="label">C—C</span>
+                <div class="bar"><div class="fill" style="width: 37%; background: #f59e0b;"></div></div>
+                <span class="value">347 kJ/mol</span>
+            </div>
+            <div class="force-bar">
+                <span class="label">Cl—Cl</span>
+                <div class="bar"><div class="fill" style="width: 26%; background: #ef4444;"></div></div>
+                <span class="value">242 kJ/mol</span>
+            </div>
+        </div>
+
+        <p>
+            Nota cómo los enlaces múltiples (doble, triple) son más fuertes que los simples.
+            Esto explica por qué el N₂ es tan estable que apenas reacciona a temperatura ambiente.
+        </p>
+
+        <h2>Experimentos Sugeridos</h2>
+
+        <div class="experiment-block">
+            <h4>1. Predecir el tipo de enlace</h4>
+            <ol>
+                <li>Selecciona Na como átomo 1 y Cl como átomo 2</li>
+                <li>Observa ΔEN = |0.93 - 3.16| = 2.23</li>
+                <li>¿Qué tipo de enlace predice la regla?</li>
+                <li>Anima la formación y observa la transferencia de electrones</li>
+                <li>Repite con H-Cl (ΔEN = 0.96) — ¿covalente polar o iónico?</li>
+            </ol>
+        </div>
+
+        <div class="experiment-block">
+            <h4>2. Enlaces múltiples</h4>
+            <ol>
+                <li>Selecciona O=O (oxígeno) y observa los dos pares de electrones compartidos</li>
+                <li>Cambia a N≡N (nitrógeno) — tres pares compartidos</li>
+                <li>¿Por qué el nitrógeno es tan estable? Piensa en la energía de enlace</li>
+                <li>Compara la distancia de enlace: ¿cuál es más corto?</li>
+            </ol>
+        </div>
+
+        <div class="experiment-block">
+            <h4>3. Polaridad del agua</h4>
+            <ol>
+                <li>Selecciona H-O-H (agua)</li>
+                <li>Calcula ΔEN = |2.20 - 3.44| = 1.24</li>
+                <li>Es covalente polar. ¿Hacia dónde se desplazan los electrones?</li>
+                <li>Observa los símbolos δ+ y δ− que indican cargas parciales</li>
+                <li>Esto explica por qué el agua es un excelente solvente</li>
+            </ol>
+        </div>
+
+        <div class="experiment-block">
+            <h4>4. El mar de electrones</h4>
+            <ol>
+                <li>Selecciona Cu (cobre) y modo metálico</li>
+                <li>Observa cómo los electrones se mueven libremente entre los cationes</li>
+                <li>Este "mar" explica la conductividad eléctrica de los metales</li>
+                <li>¿Por qué los metales son maleables? Piensa en los cationes deslizándose</li>
+            </ol>
+        </div>
+
+        <h2>Fuerzas Intermoleculares</h2>
+
+        <p>
+            Además de los enlaces intramoleculares (dentro de la molécula), existen fuerzas
+            más débiles <em>entre</em> moléculas:
+        </p>
+
+        <ul>
+            <li><strong>Puentes de hidrógeno:</strong> H unido a F, O o N interactúa con pares solitarios de otra molécula. Explica el alto punto de ebullición del agua.</li>
+            <li><strong>Dipolo-dipolo:</strong> Atracción entre moléculas polares. Más fuerte que London, más débil que H-bonding.</li>
+            <li><strong>Fuerzas de London:</strong> Dipolos temporales inducidos. Presentes en todas las moléculas, incluso las apolares.</li>
+        </ul>
+
+        <div class="key-insight">
+            <strong>Orden de fuerza:</strong> Enlace covalente >> Puente de hidrógeno > Dipolo-dipolo > London.
+            Las fuerzas intermoleculares son típicamente 10-100 veces más débiles que los enlaces covalentes.
+        </div>
+
+        <h2>Contexto Histórico</h2>
+
+        <div class="timeline">
+            <div class="timeline-event">
+                <div class="timeline-year">1916</div>
+                <div class="timeline-text">
+                    <strong>Gilbert Lewis</strong> propone que los enlaces covalentes involucran
+                    pares de electrones compartidos, introduciendo las "estructuras de Lewis".
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1927</div>
+                <div class="timeline-text">
+                    <strong>Walter Heitler y Fritz London</strong> aplican la mecánica cuántica
+                    al enlace H-H, explicando por primera vez el enlace covalente desde
+                    principios fundamentales.
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1931</div>
+                <div class="timeline-text">
+                    <strong>Linus Pauling</strong> desarrolla la teoría del enlace de valencia
+                    y el concepto de hibridación. Más tarde crearía la escala de electronegatividad.
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1932</div>
+                <div class="timeline-text">
+                    <strong>Robert Mulliken</strong> propone la teoría de orbitales moleculares,
+                    una visión alternativa donde los electrones pertenecen a toda la molécula.
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1954</div>
+                <div class="timeline-text">
+                    <strong>Pauling</strong> recibe el Premio Nobel de Química por su trabajo
+                    sobre la naturaleza del enlace químico.
+                </div>
+            </div>
+        </div>
+
+        <h2>Limitaciones del Modelo</h2>
+
+        <ul>
+            <li><strong>Simplificación visual:</strong> Los electrones no son "bolitas" sino distribuciones de probabilidad</li>
+            <li><strong>Clasificación binaria:</strong> La transición entre covalente e iónico es continua, no discreta</li>
+            <li><strong>Enlace metálico:</strong> El modelo del "mar" es simplificado; la teoría de bandas es más precisa</li>
+            <li><strong>Enlace dativo:</strong> Un tipo de covalente donde ambos electrones vienen del mismo átomo (no mostrado)</li>
+        </ul>
+
+        <h2>Conexiones Interdisciplinarias</h2>
+
+        <div class="connections-grid">
+            <a href="../orbitales.html" class="connection-item">
+                <span class="connection-icon">☁️</span>
+                <span class="connection-text">Orbitales Atómicos<br><small>Funciones de onda</small></span>
+            </a>
+            <a href="../vsepr.html" class="connection-item">
+                <span class="connection-icon">🔷</span>
+                <span class="connection-text">Geometría VSEPR<br><small>Forma molecular</small></span>
+            </a>
+            <a href="../tendencias.html" class="connection-item">
+                <span class="connection-icon">📊</span>
+                <span class="connection-text">Tendencias Periódicas<br><small>EN en la tabla</small></span>
+            </a>
+            <a href="../../Biochemistry/Biochem Visual Lab/estructura-proteinas.html" class="connection-item">
+                <span class="connection-icon">🧬</span>
+                <span class="connection-text">Proteínas<br><small>Puentes de hidrógeno</small></span>
+            </a>
+        </div>
+
+        <h2>Para Explorar Más</h2>
+        <ul>
+            <li><strong>Orbitales moleculares:</strong> Una teoría más completa donde los electrones pertenecen a toda la molécula, no a átomos individuales</li>
+            <li><strong>Resonancia:</strong> Cuando una molécula no puede describirse con una sola estructura de Lewis (ej: benceno, ozono)</li>
+            <li><strong>Enlace de hidrógeno en biología:</strong> Estabiliza el ADN, determina la estructura de proteínas</li>
+            <li><strong>Conductores, semiconductores, aislantes:</strong> El enlace metálico y la teoría de bandas explican las propiedades eléctricas</li>
+        </ul>
+    </main>
+
+    <footer>
+        <a href="../enlaces.html" class="btn-launch">
+            ⚛️ Abrir Simulación
+        </a>
+    </footer>
+</body>
+</html>

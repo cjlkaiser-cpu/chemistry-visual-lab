@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=tendencias.html">
+    <title>Tabla Periódica - Chemistry Visual Lab</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: #0a0a1a;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .redirect-message {
+            padding: 2rem;
+        }
+        .redirect-message h1 {
+            font-size: 1.5rem;
+            color: #06b6d4;
+            margin-bottom: 1rem;
+        }
+        .redirect-message p {
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+        .redirect-message a {
+            color: #06b6d4;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .redirect-message a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="redirect-message">
+        <h1>Redirigiendo a Tabla Periódica...</h1>
+        <p>Si no eres redirigido automáticamente, haz clic <a href="tendencias.html">aquí</a>.</p>
+    </div>
+    <script>
+        // Fallback redirect
+        setTimeout(() => {
+            window.location.href = 'tendencias.html';
+        }, 100);
+    </script>
+</body>
+</html>

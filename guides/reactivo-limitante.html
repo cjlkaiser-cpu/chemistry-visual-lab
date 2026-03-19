@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Reactivo Limitante - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #252540;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #f97316;
+            --accent-dim: rgba(249, 115, 22, 0.15);
+            --limiting: #ef4444;
+            --excess: #22c55e;
+            --product: #a855f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .breadcrumb {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #ea580c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-dim);
+        }
+
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .concept-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .equation-block {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+
+        .equation-block .main {
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-block .note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        th {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--bg-secondary);
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .feature-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .experiment-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--accent-dim);
+        }
+
+        .experiment-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .experiment-card ol {
+            margin-left: 1.5rem;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .analogy-box {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .analogy-box h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .step-box {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            counter-reset: step;
+        }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content strong {
+            color: var(--accent);
+        }
+
+        .historical-note {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(234, 88, 12, 0.1) 100%);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .links-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .sim-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            border: 1px solid var(--bg-tertiary);
+            transition: all 0.3s ease;
+        }
+
+        .sim-link:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .sim-link .icon {
+            font-size: 1.5rem;
+        }
+
+        .sim-link .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--bg-tertiary);
+            text-align: center;
+        }
+
+        footer a {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #ea580c 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        footer a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(249, 115, 22, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → Guía
+        </nav>
+        <h1>Reactivo Limitante</h1>
+        <p class="subtitle">Determinando cuánto producto se puede formar</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>¿Qué Observarás?</h2>
+            <p>
+                Esta simulación visualiza el concepto fundamental de estequiometría: cuando mezclas
+                dos reactantes, uno de ellos se agota primero (el limitante), determinando cuánto
+                producto puedes formar. El otro reactante queda en exceso.
+            </p>
+
+            <div class="grid-2">
+                <div class="feature-card">
+                    <h4>Cinco Reacciones</h4>
+                    <p>Formación de agua, amoníaco, CO₂, sal de mesa y óxido de hierro. Cada una con diferente estequiometría.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Partículas Animadas</h4>
+                    <p>Reactantes representados como esferas que colisionan y forman productos cuando haces "reaccionar".</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Identificación Automática</h4>
+                    <p>El sistema calcula cuál es el reactivo limitante y cuánto exceso queda del otro.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Rendimiento Teórico</h4>
+                    <p>Calcula los gramos de producto que se formarían si la reacción fuera 100% eficiente.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>La Analogía de los Sándwiches</h2>
+
+            <div class="analogy-box">
+                <h4>Imagina que haces sándwiches</h4>
+                <p>
+                    La receta dice: <strong>2 rebanadas de pan + 1 loncha de jamón → 1 sándwich</strong>
+                </p>
+                <p>
+                    Si tienes 10 rebanadas de pan y 3 lonchas de jamón:
+                </p>
+                <ul>
+                    <li>Con 3 jamones puedes hacer 3 sándwiches (usando 6 panes)</li>
+                    <li>Te sobran 4 rebanadas de pan</li>
+                    <li>El jamón es el <span style="color: var(--limiting);">REACTIVO LIMITANTE</span></li>
+                    <li>El pan está en <span style="color: var(--excess);">EXCESO</span></li>
+                </ul>
+                <p style="margin-bottom: 0;">
+                    No importa cuánto pan tengas, no puedes hacer más sándwiches sin más jamón.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Concepto Clave: Razones Molares</h2>
+
+            <p>
+                El truco para identificar el reactivo limitante es comparar las cantidades disponibles
+                con las cantidades requeridas por la ecuación balanceada.
+            </p>
+
+            <div class="equation-block">
+                <div class="main">Razón = moles disponibles / coeficiente estequiométrico</div>
+                <div class="note">El reactante con menor razón es el limitante</div>
+            </div>
+
+            <div class="concept-box">
+                <h4>Ejemplo: 2H₂ + O₂ → 2H₂O</h4>
+                <p>
+                    Tienes 4 mol de H₂ y 3 mol de O₂. ¿Cuál es el limitante?
+                </p>
+                <ul style="margin-bottom: 0;">
+                    <li>Razón H₂ = 4 mol / 2 = <strong>2</strong></li>
+                    <li>Razón O₂ = 3 mol / 1 = <strong>3</strong></li>
+                    <li>2 < 3, así que <span style="color: var(--limiting);">H₂ es el limitante</span></li>
+                    <li>Se forman 2 × 2 = 4 mol de H₂O (basado en H₂)</li>
+                    <li>Se usan 2 × 1 = 2 mol de O₂, sobra 1 mol</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Método Paso a Paso</h2>
+
+            <div class="step-box">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <strong>Balancea la ecuación</strong><br>
+                        Asegúrate de que la ecuación esté balanceada. Los coeficientes representan las proporciones molares.
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <strong>Convierte a moles</strong><br>
+                        Si te dan gramos, usa la masa molar para convertir a moles.
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <strong>Calcula las razones</strong><br>
+                        Divide los moles de cada reactante por su coeficiente estequiométrico.
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <strong>Identifica el limitante</strong><br>
+                        El reactante con la menor razón es el limitante. Determina la cantidad de producto.
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <strong>Calcula el exceso</strong><br>
+                        Determina cuánto del otro reactante se usa y resta para encontrar el exceso.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Reacciones de la Simulación</h2>
+
+            <table>
+                <tr>
+                    <th>Reacción</th>
+                    <th>Ecuación</th>
+                    <th>Producto</th>
+                    <th>M (g/mol)</th>
+                </tr>
+                <tr>
+                    <td>Síntesis de agua</td>
+                    <td><code>2H₂ + O₂ → 2H₂O</code></td>
+                    <td>Agua</td>
+                    <td>18</td>
+                </tr>
+                <tr>
+                    <td>Proceso Haber</td>
+                    <td><code>N₂ + 3H₂ → 2NH₃</code></td>
+                    <td>Amoníaco</td>
+                    <td>17</td>
+                </tr>
+                <tr>
+                    <td>Combustión de carbono</td>
+                    <td><code>C + O₂ → CO₂</code></td>
+                    <td>Dióxido de carbono</td>
+                    <td>44</td>
+                </tr>
+                <tr>
+                    <td>Síntesis de sal</td>
+                    <td><code>2Na + Cl₂ → 2NaCl</code></td>
+                    <td>Cloruro de sodio</td>
+                    <td>58.5</td>
+                </tr>
+                <tr>
+                    <td>Oxidación del hierro</td>
+                    <td><code>4Fe + 3O₂ → 2Fe₂O₃</code></td>
+                    <td>Óxido férrico</td>
+                    <td>160</td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Experimentos Sugeridos</h2>
+
+            <div class="experiment-card">
+                <h4>Experimento 1: Cambiando el Limitante</h4>
+                <ol>
+                    <li>Selecciona 2H₂ + O₂ → 2H₂O</li>
+                    <li>Pon 4 mol H₂ y 3 mol O₂. El H₂ es limitante (razón 2 vs 3)</li>
+                    <li>Haz reaccionar y observa: se forman 4 mol H₂O, sobra 1 mol O₂</li>
+                    <li>Reinicia. Ahora pon 6 mol H₂ y 2 mol O₂</li>
+                    <li>Ahora el O₂ es limitante (razón 3 vs 2). Se forman 4 mol H₂O, sobran 2 mol H₂</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 2: Proporciones Exactas</h4>
+                <ol>
+                    <li>Selecciona 2H₂ + O₂ → 2H₂O</li>
+                    <li>Pon 6 mol H₂ y 3 mol O₂ (razón 2:1 exacta)</li>
+                    <li>Ambos reactantes se agotan completamente</li>
+                    <li>No hay exceso. Esto se llama "proporciones estequiométricas"</li>
+                    <li>Es la mezcla más eficiente: todo reacciona</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 3: El Proceso Haber</h4>
+                <ol>
+                    <li>Selecciona N₂ + 3H₂ → 2NH₃</li>
+                    <li>Pon 2 mol N₂ y 4 mol H₂. ¿Cuál es el limitante?</li>
+                    <li>Razón N₂ = 2/1 = 2, Razón H₂ = 4/3 = 1.33</li>
+                    <li>H₂ es limitante. Se forman (4/3) × 2 = 2.67 mol NH₃</li>
+                    <li>Se usa (4/3) × 1 = 1.33 mol N₂, sobran 0.67 mol</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 4: Rendimiento Teórico</h4>
+                <ol>
+                    <li>Selecciona C + O₂ → CO₂</li>
+                    <li>Pon 3 mol C y 5 mol O₂. C es limitante (razón 3 vs 5)</li>
+                    <li>Se forman 3 mol CO₂. Rendimiento teórico = 3 × 44 = 132 g</li>
+                    <li>En la práctica, el rendimiento real siempre es menor</li>
+                    <li>% rendimiento = (real/teórico) × 100</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>Contexto Histórico</h2>
+
+            <div class="historical-note">
+                <h3>Dalton y la Ley de Proporciones Definidas</h3>
+                <p>
+                    John Dalton (1803) estableció que los compuestos siempre contienen elementos
+                    en proporciones fijas de masa. Esta ley implica que las reacciones químicas
+                    ocurren en proporciones discretas (estequiometría).
+                </p>
+                <p>
+                    El concepto de reactivo limitante surgió de la necesidad práctica en la industria
+                    química del siglo XIX. Los químicos necesitaban optimizar las materias primas
+                    para maximizar la producción y minimizar los desperdicios.
+                </p>
+                <p style="margin-bottom: 0;">
+                    Fritz Haber aplicó magistralmente estos conceptos al desarrollar la síntesis
+                    de amoníaco (N₂ + 3H₂ → 2NH₃). El control preciso de las proporciones de
+                    nitrógeno e hidrógeno fue crucial para el éxito industrial del proceso.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conexiones Interdisciplinarias</h2>
+
+            <div class="links-section">
+                <a href="../le-chatelier.html" class="sim-link">
+                    <span class="icon">⚖️</span>
+                    <span class="label">Principio de Le Chatelier<br><small>Equilibrio y rendimiento</small></span>
+                </a>
+                <a href="../calorimetria.html" class="sim-link">
+                    <span class="icon">🔥</span>
+                    <span class="label">Calorimetría<br><small>Calor de reacción</small></span>
+                </a>
+                <a href="../cinetica-colisiones.html" class="sim-link">
+                    <span class="icon">⚡</span>
+                    <span class="label">Cinética Química<br><small>Velocidad de reacción</small></span>
+                </a>
+                <a href="../../Biochemistry/Biochem Visual Lab/michaelis-menten.html" class="sim-link">
+                    <span class="icon">🔬</span>
+                    <span class="label">Cinética Enzimática<br><small>Sustrato limitante</small></span>
+                </a>
+            </div>
+
+            <h3>Aplicaciones en la Vida Real</h3>
+            <ul>
+                <li><strong>Industria química:</strong> Optimización de materias primas para maximizar rendimiento</li>
+                <li><strong>Farmacéutica:</strong> Síntesis de medicamentos con reactivos costosos</li>
+                <li><strong>Combustibles:</strong> Mezclas aire-combustible en motores (exceso de aire)</li>
+                <li><strong>Cocina:</strong> Recetas son básicamente ecuaciones estequiométricas</li>
+                <li><strong>Biología:</strong> Nutrientes limitantes determinan crecimiento poblacional</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Para Explorar Más</h2>
+            <ul>
+                <li>
+                    <strong>Rendimiento porcentual:</strong> En la práctica, el rendimiento real
+                    siempre es menor que el teórico debido a reacciones secundarias, pérdidas,
+                    o equilibrio incompleto.
+                </li>
+                <li>
+                    <strong>Exceso deliberado:</strong> A veces se usa un exceso de un reactante
+                    barato para asegurar que el reactante caro se consuma completamente.
+                </li>
+                <li>
+                    <strong>Factor limitante en ecología:</strong> La ley del mínimo de Liebig:
+                    el crecimiento está limitado por el nutriente más escaso.
+                </li>
+                <li>
+                    <strong>Múltiples productos:</strong> En reacciones con varios productos,
+                    cada uno tiene su propio rendimiento teórico basado en el limitante.
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <a href="../reactivo-limitante.html">Abrir Simulación</a>
+    </footer>
+</body>
+</html>

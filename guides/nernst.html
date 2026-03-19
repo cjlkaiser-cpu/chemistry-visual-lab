@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Ecuación de Nernst - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #252540;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #eab308;
+            --accent-dim: rgba(234, 179, 8, 0.15);
+            --positive: #22c55e;
+            --negative: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .breadcrumb {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #ca8a04 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-dim);
+        }
+
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .concept-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .equation-block {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+
+        .equation-block .main {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-block .note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .equation-block .alt {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--bg-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        th {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--bg-secondary);
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .feature-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .experiment-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--accent-dim);
+        }
+
+        .experiment-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .experiment-card ol {
+            margin-left: 1.5rem;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .electrode-table td:nth-child(2) {
+            font-family: 'Fira Code', monospace;
+        }
+
+        .electrode-table .positive {
+            color: var(--positive);
+        }
+
+        .electrode-table .negative {
+            color: var(--negative);
+        }
+
+        .variables-table {
+            margin: 1.5rem 0;
+        }
+
+        .variables-table td:first-child {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+            font-weight: 500;
+            width: 60px;
+        }
+
+        .historical-note {
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.1) 0%, rgba(202, 138, 4, 0.1) 100%);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .links-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .sim-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            border: 1px solid var(--bg-tertiary);
+            transition: all 0.3s ease;
+        }
+
+        .sim-link:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .sim-link .icon {
+            font-size: 1.5rem;
+        }
+
+        .sim-link .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .highlight {
+            background: var(--accent-dim);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--bg-tertiary);
+            text-align: center;
+        }
+
+        footer a {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #ca8a04 100%);
+            color: black;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        footer a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(234, 179, 8, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → Guía
+        </nav>
+        <h1>Ecuación de Nernst</h1>
+        <p class="subtitle">Potenciales de electrodo en condiciones no estándar</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>¿Qué Observarás?</h2>
+            <p>
+                Esta simulación visualiza cómo el potencial de un electrodo varía con la concentración
+                de iones en solución. Verás la semi-celda electroquímica, un gráfico de E vs log[ion],
+                y un voltímetro analógico mostrando el potencial calculado por la ecuación de Nernst.
+            </p>
+
+            <div class="grid-2">
+                <div class="feature-card">
+                    <h4>Seis Electrodos</h4>
+                    <p>Cu²⁺/Cu, Zn²⁺/Zn, Ag⁺/Ag, Fe²⁺/Fe, H⁺/H₂ y Cl₂/Cl⁻ con sus potenciales estándar característicos.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Visualización de Semi-celda</h4>
+                    <p>Iones moviéndose en solución y electrones en la superficie del electrodo metálico.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Gráfico E vs log[ion]</h4>
+                    <p>La curva de Nernst muestra la dependencia lineal del potencial con el logaritmo de la concentración.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Voltímetro Interactivo</h4>
+                    <p>Medidor analógico con aguja que responde en tiempo real a los cambios de concentración y temperatura.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>La Ecuación de Nernst</h2>
+
+            <div class="equation-block">
+                <div class="main">E = E° − (RT/nF) × ln Q</div>
+                <div class="note">Forma general con logaritmo natural</div>
+                <div class="alt">E = E° − (0.0592/n) × log Q &nbsp;&nbsp;(a 25°C)</div>
+            </div>
+
+            <table class="variables-table">
+                <tr>
+                    <td>E</td>
+                    <td>Potencial de electrodo en condiciones actuales (V)</td>
+                </tr>
+                <tr>
+                    <td>E°</td>
+                    <td>Potencial estándar de reducción (V) - medido a [ion] = 1 M</td>
+                </tr>
+                <tr>
+                    <td>R</td>
+                    <td>Constante de los gases: 8.314 J/(mol·K)</td>
+                </tr>
+                <tr>
+                    <td>T</td>
+                    <td>Temperatura absoluta (K)</td>
+                </tr>
+                <tr>
+                    <td>n</td>
+                    <td>Número de electrones transferidos en la semi-reacción</td>
+                </tr>
+                <tr>
+                    <td>F</td>
+                    <td>Constante de Faraday: 96,485 C/mol</td>
+                </tr>
+                <tr>
+                    <td>Q</td>
+                    <td>Cociente de reacción: [productos]/[reactivos]</td>
+                </tr>
+            </table>
+
+            <div class="concept-box">
+                <h4>A 25°C (298 K)</h4>
+                <p style="margin-bottom: 0;">
+                    El término <code>RT/F</code> = 8.314 × 298 / 96485 = 0.0257 V
+                    <br>
+                    Convertido a log₁₀: 0.0257 × 2.303 = <strong>0.0592 V</strong>
+                    <br>
+                    Por eso la forma simplificada usa 0.0592/n × log Q
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Potenciales Estándar de Reducción</h2>
+
+            <table class="electrode-table">
+                <tr>
+                    <th>Semi-reacción</th>
+                    <th>E° (V)</th>
+                    <th>n</th>
+                    <th>Tendencia</th>
+                </tr>
+                <tr>
+                    <td>Cl₂ + 2e⁻ ⇌ 2Cl⁻</td>
+                    <td class="positive">+1.36</td>
+                    <td>2</td>
+                    <td>Fuerte oxidante</td>
+                </tr>
+                <tr>
+                    <td>Ag⁺ + e⁻ ⇌ Ag</td>
+                    <td class="positive">+0.80</td>
+                    <td>1</td>
+                    <td>Oxidante moderado</td>
+                </tr>
+                <tr>
+                    <td>Cu²⁺ + 2e⁻ ⇌ Cu</td>
+                    <td class="positive">+0.34</td>
+                    <td>2</td>
+                    <td>Oxidante débil</td>
+                </tr>
+                <tr>
+                    <td>2H⁺ + 2e⁻ ⇌ H₂</td>
+                    <td>0.00</td>
+                    <td>2</td>
+                    <td>Referencia (SHE)</td>
+                </tr>
+                <tr>
+                    <td>Fe²⁺ + 2e⁻ ⇌ Fe</td>
+                    <td class="negative">−0.44</td>
+                    <td>2</td>
+                    <td>Reductor moderado</td>
+                </tr>
+                <tr>
+                    <td>Zn²⁺ + 2e⁻ ⇌ Zn</td>
+                    <td class="negative">−0.76</td>
+                    <td>2</td>
+                    <td>Buen reductor</td>
+                </tr>
+            </table>
+
+            <div class="concept-box">
+                <h4>Electrodo Estándar de Hidrógeno (SHE)</h4>
+                <p style="margin-bottom: 0;">
+                    Todos los potenciales se miden contra el electrodo de hidrógeno a condiciones
+                    estándar: H₂ a 1 atm burbujeando sobre Pt en solución con [H⁺] = 1 M.
+                    Por definición, E°(H⁺/H₂) = 0.00 V.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Aplicación a Semi-reacciones</h2>
+
+            <p>
+                Para una reducción genérica: Mⁿ⁺ + ne⁻ → M(s)
+            </p>
+
+            <div class="equation-block">
+                <div class="main">E = E° − (0.0592/n) × log(1/[Mⁿ⁺])</div>
+                <div class="alt">E = E° + (0.0592/n) × log[Mⁿ⁺]</div>
+                <div class="note">Nota: log(1/x) = −log(x)</div>
+            </div>
+
+            <h3>Interpretación del Gráfico E vs log[ion]</h3>
+            <ul>
+                <li>La curva es una <strong>línea recta</strong> cuando graficas E vs log[ion]</li>
+                <li>La <strong>pendiente</strong> es 0.0592/n V por década de concentración</li>
+                <li>La <strong>intersección</strong> en log[ion] = 0 (es decir, [ion] = 1 M) da E°</li>
+                <li>Para n = 1 (Ag⁺/Ag): pendiente = 59.2 mV/década</li>
+                <li>Para n = 2 (Cu²⁺/Cu): pendiente = 29.6 mV/década</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Experimentos Sugeridos</h2>
+
+            <div class="experiment-card">
+                <h4>Experimento 1: Efecto de la Concentración</h4>
+                <ol>
+                    <li>Selecciona Cu²⁺/Cu (E° = +0.34 V, n = 2)</li>
+                    <li>Con [Cu²⁺] = 1 M, E = E° = +0.34 V</li>
+                    <li>Reduce [Cu²⁺] a 0.01 M (10⁻² M). ¿Cuál es E ahora?</li>
+                    <li>E = 0.34 + (0.0592/2) × log(0.01) = 0.34 + 0.0296 × (−2) = +0.28 V</li>
+                    <li>Verifica: reducir la concentración de oxidante reduce E</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 2: Comparando Electrodos</h4>
+                <ol>
+                    <li>Con [ion] = 0.001 M (10⁻³ M), compara Cu, Ag y Zn</li>
+                    <li>Cu: E = 0.34 + (0.0592/2) × (−3) = +0.25 V</li>
+                    <li>Ag: E = 0.80 + (0.0592/1) × (−3) = +0.62 V (mayor cambio, n = 1)</li>
+                    <li>Zn: E = −0.76 + (0.0592/2) × (−3) = −0.85 V</li>
+                    <li>Los electrodos con n = 1 son más sensibles a la concentración</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 3: Efecto de la Temperatura</h4>
+                <ol>
+                    <li>Con [Cu²⁺] = 0.1 M a 298 K, anota E</li>
+                    <li>Aumenta T a 373 K. El factor RT/nF aumenta</li>
+                    <li>El cambio de E vs E° se amplifica a mayor temperatura</li>
+                    <li>A T alta, la curva E vs log[ion] tiene mayor pendiente</li>
+                    <li>Esto afecta la precisión de electrodos de pH a diferentes temperaturas</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 4: El Electrodo de Hidrógeno</h4>
+                <ol>
+                    <li>Selecciona H⁺/H₂. E° = 0.00 V por definición</li>
+                    <li>Con [H⁺] = 1 M (pH = 0), E = 0.00 V</li>
+                    <li>Cambia a [H⁺] = 10⁻⁷ M (pH = 7, agua neutra)</li>
+                    <li>E = 0 + (0.0592/2) × log(10⁻⁷) = −0.207 V</li>
+                    <li>Por eso la escala de pH mide potencial: cada unidad de pH = 59.2 mV (para n = 1)</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>Contexto Histórico</h2>
+
+            <div class="historical-note">
+                <h3>Walther Nernst (1864-1941)</h3>
+                <p>
+                    Físicoquímico alemán que derivó su ecuación en 1889, apenas terminando su doctorado.
+                    La ecuación combina termodinámica con electroquímica, relacionando el potencial
+                    de celda con el cambio de energía libre de Gibbs: ΔG = −nFE.
+                </p>
+                <p>
+                    Nernst también formuló la Tercera Ley de la Termodinámica (teorema del calor),
+                    que establece que la entropía de un cristal perfecto tiende a cero cuando T → 0.
+                    Ganó el Premio Nobel de Química en 1920.
+                </p>
+                <p style="margin-bottom: 0;">
+                    La ecuación de Nernst es fundamental para entender baterías, electrólisis,
+                    corrosión, electrodos de pH, y potenciales de membrana en células vivas
+                    (potencial de reposo neuronal).
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conexiones Interdisciplinarias</h2>
+
+            <div class="links-section">
+                <a href="../celda-galvanica.html" class="sim-link">
+                    <span class="icon">🔋</span>
+                    <span class="label">Celda Galvánica<br><small>Aplicación de Nernst a celdas</small></span>
+                </a>
+                <a href="../titulacion.html" class="sim-link">
+                    <span class="icon">🧪</span>
+                    <span class="label">Curva de Titulación<br><small>Electrodos de pH</small></span>
+                </a>
+                <a href="../le-chatelier.html" class="sim-link">
+                    <span class="icon">⚖️</span>
+                    <span class="label">Principio de Le Chatelier<br><small>Equilibrio electroquímico</small></span>
+                </a>
+                <a href="../../Biochemistry/Biochem Visual Lab/neurona.html" class="sim-link">
+                    <span class="icon">⚡</span>
+                    <span class="label">Potencial de Acción<br><small>Nernst en neurociencia</small></span>
+                </a>
+            </div>
+
+            <h3>Aplicaciones en la Vida Real</h3>
+            <ul>
+                <li><strong>Electrodos de pH:</strong> El potencial del electrodo de vidrio sigue Nernst con [H⁺]</li>
+                <li><strong>Baterías:</strong> El voltaje de celda depende del estado de carga (concentraciones)</li>
+                <li><strong>Corrosión:</strong> Predicción de potenciales de picadura y celdas galvánicas</li>
+                <li><strong>Neurociencia:</strong> Potencial de equilibrio de iones (ecuación de Goldman-Hodgkin-Katz)</li>
+                <li><strong>Sensores electroquímicos:</strong> Glucómetros, sensores de oxígeno, etc.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Para Explorar Más</h2>
+            <ul>
+                <li>
+                    <strong>Coeficientes de actividad:</strong> En soluciones concentradas, las
+                    actividades reemplazan a las concentraciones en la ecuación de Nernst.
+                </li>
+                <li>
+                    <strong>Potencial de celda:</strong> E°<sub>celda</sub> = E°<sub>cátodo</sub> − E°<sub>ánodo</sub>.
+                    Aplica Nernst a cada semi-celda y resta.
+                </li>
+                <li>
+                    <strong>Diagramas de Pourbaix:</strong> Gráficos E vs pH que muestran dominios
+                    de estabilidad de especies en función de potencial y acidez.
+                </li>
+                <li>
+                    <strong>Sobrepotenciales:</strong> En la práctica, la cinética del electrodo
+                    introduce desviaciones del potencial de Nernst (sobrepotenciales de activación).
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <a href="../nernst.html">Abrir Simulación</a>
+    </footer>
+</body>
+</html>

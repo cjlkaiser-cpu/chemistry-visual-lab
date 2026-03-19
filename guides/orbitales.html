@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Orbitales Atómicos - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a1a;
+            --color-surface: #1e293b;
+            --color-accent: #22d3ee;
+            --color-accent-dim: rgba(34, 211, 238, 0.2);
+            --color-text: #e2e8f0;
+            --color-text-dim: #94a3b8;
+            --color-highlight: #fbbf24;
+            --color-s: #22d3ee;
+            --color-p: #a855f7;
+            --color-d: #f97316;
+            --color-f: #22c55e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--color-text);
+            background: var(--color-bg);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-accent-dim);
+        }
+
+        .breadcrumb {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--color-text-dim);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-highlight);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--color-accent);
+        }
+
+        .launch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--color-accent) 0%, #0891b2 100%);
+            color: #0f172a;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 1rem 0;
+            transition: all 0.3s;
+        }
+
+        .launch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(34, 211, 238, 0.4);
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-accent-dim);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .concept-card h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .orbital-showcase {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .orbital-item {
+            background: var(--color-surface);
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+        }
+
+        .orbital-shape {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .orbital-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .orbital-label.s { color: var(--color-s); }
+        .orbital-label.p { color: var(--color-p); }
+        .orbital-label.d { color: var(--color-d); }
+        .orbital-label.f { color: var(--color-f); }
+
+        .orbital-desc {
+            font-size: 0.8rem;
+            color: var(--color-text-dim);
+            margin-top: 0.25rem;
+        }
+
+        .equation-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--color-accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .equation-box .eq-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-box .eq-main {
+            color: var(--color-accent);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-box .eq-desc {
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.95rem;
+            color: var(--color-text-dim);
+        }
+
+        .quantum-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .quantum-table th,
+        .quantum-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-accent-dim);
+        }
+
+        .quantum-table th {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .quantum-table code {
+            font-family: 'Fira Code', monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .key-insight {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        .key-insight strong {
+            color: var(--color-highlight);
+        }
+
+        .experiment-card {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(8, 145, 178, 0.1) 100%);
+            border: 1px solid var(--color-accent-dim);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .experiment-card h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .experiment-card ol {
+            margin-left: 1.5rem;
+            color: var(--color-text-dim);
+        }
+
+        .experiment-card li {
+            margin-bottom: 0.5rem;
+        }
+
+        .filling-diagram {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+        }
+
+        .filling-cell {
+            background: var(--color-surface);
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .filling-cell.s { border-left: 3px solid var(--color-s); }
+        .filling-cell.p { border-left: 3px solid var(--color-p); }
+        .filling-cell.d { border-left: 3px solid var(--color-d); }
+        .filling-cell.f { border-left: 3px solid var(--color-f); }
+
+        .filling-cell .energy {
+            font-size: 0.65rem;
+            color: var(--color-text-dim);
+        }
+
+        .node-diagram {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .node-example {
+            text-align: center;
+        }
+
+        .node-visual {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .node-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: var(--color-accent);
+        }
+
+        .connection-list {
+            display: grid;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .connection-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--color-surface);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: all 0.3s;
+        }
+
+        .connection-item:hover {
+            background: rgba(34, 211, 238, 0.15);
+            transform: translateX(4px);
+        }
+
+        .connection-icon {
+            font-size: 1.5rem;
+        }
+
+        .connection-text strong {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .connection-text span {
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+        }
+
+        .quote {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--color-text-dim);
+            border-left: 3px solid var(--color-highlight);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .quote cite {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            color: var(--color-accent);
+        }
+
+        .hybrid-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .hybrid-item {
+            background: var(--color-surface);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .hybrid-name {
+            font-family: 'Fira Code', monospace;
+            color: var(--color-accent);
+            font-size: 1.1rem;
+        }
+
+        .hybrid-geometry {
+            font-size: 0.9rem;
+            color: var(--color-text-dim);
+        }
+
+        .hybrid-angle {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--color-highlight);
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-accent-dim);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> →
+            <a href="../orbitales.html">Simulación</a> →
+            Guía
+        </nav>
+        <h1>Orbitales Atómicos</h1>
+        <p class="subtitle">Nubes de probabilidad y la geometría de los electrones</p>
+        <a href="../orbitales.html" class="launch-btn">
+            ▶ Abrir Simulación
+        </a>
+    </header>
+
+    <main>
+        <section>
+            <h2>¿Qué observarás?</h2>
+            <p>
+                Esta simulación 3D visualiza los <em>orbitales atómicos</em>: las regiones del espacio
+                donde es más probable encontrar un electrón. A diferencia del modelo de Bohr con órbitas
+                circulares, aquí los electrones forman "nubes" con formas específicas dictadas por
+                la mecánica cuántica.
+            </p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>Densidad de probabilidad</h4>
+                    <p>Cada punto representa una posición posible del electrón.
+                       Más puntos = mayor probabilidad de encontrarlo ahí.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Números cuánticos</h4>
+                    <p>Tres números (n, l, m) determinan completamente
+                       la forma y orientación de cada orbital.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Nodos</h4>
+                    <p>Regiones donde la probabilidad es cero.
+                       Los orbitales más excitados tienen más nodos.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Fase de la función de onda</h4>
+                    <p>El signo (+/-) de la función de onda es crucial
+                       para entender enlaces químicos.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Los Cuatro Tipos de Orbitales</h2>
+
+            <div class="orbital-showcase">
+                <div class="orbital-item">
+                    <div class="orbital-shape">⚪</div>
+                    <div class="orbital-label s">s</div>
+                    <div class="orbital-desc">Esférico</div>
+                </div>
+                <div class="orbital-item">
+                    <div class="orbital-shape">🎳</div>
+                    <div class="orbital-label p">p</div>
+                    <div class="orbital-desc">Pesa (dumbbell)</div>
+                </div>
+                <div class="orbital-item">
+                    <div class="orbital-shape">🍀</div>
+                    <div class="orbital-label d">d</div>
+                    <div class="orbital-desc">Trébol (clover)</div>
+                </div>
+                <div class="orbital-item">
+                    <div class="orbital-shape">✳️</div>
+                    <div class="orbital-label f">f</div>
+                    <div class="orbital-desc">Complejo</div>
+                </div>
+            </div>
+
+            <p>
+                Los orbitales <strong>s</strong> son esféricos. Los <strong>p</strong> tienen forma
+                de pesa con dos lóbulos. Los <strong>d</strong> tienen cuatro lóbulos (excepto d<sub>z²</sub>).
+                Los <strong>f</strong> son aún más complejos con seis u ocho lóbulos.
+            </p>
+        </section>
+
+        <section>
+            <h2>Los Números Cuánticos</h2>
+
+            <table class="quantum-table">
+                <tr>
+                    <th>Número</th>
+                    <th>Símbolo</th>
+                    <th>Valores posibles</th>
+                    <th>Determina</th>
+                </tr>
+                <tr>
+                    <td>Principal</td>
+                    <td><code>n</code></td>
+                    <td>1, 2, 3, 4, ...</td>
+                    <td>Tamaño y energía del orbital</td>
+                </tr>
+                <tr>
+                    <td>Azimutal</td>
+                    <td><code>l</code></td>
+                    <td>0 a (n-1)</td>
+                    <td>Forma: s=0, p=1, d=2, f=3</td>
+                </tr>
+                <tr>
+                    <td>Magnético</td>
+                    <td><code>m_l</code></td>
+                    <td>-l a +l</td>
+                    <td>Orientación en el espacio</td>
+                </tr>
+                <tr>
+                    <td>Spin</td>
+                    <td><code>m_s</code></td>
+                    <td>+½ o -½</td>
+                    <td>Rotación intrínseca del electrón</td>
+                </tr>
+            </table>
+
+            <div class="key-insight">
+                <strong>Principio de exclusión de Pauli:</strong> No puede haber dos electrones
+                con los cuatro números cuánticos idénticos. Por eso cada orbital (definido por n, l, m)
+                puede contener máximo 2 electrones (con spins opuestos).
+            </div>
+        </section>
+
+        <section>
+            <h2>La Función de Onda</h2>
+
+            <div class="equation-box">
+                <div class="eq-name">Función de onda completa</div>
+                <div class="eq-main">Ψ_nlm(r, θ, φ) = R_nl(r) · Y_lm(θ, φ)</div>
+                <div class="eq-desc">
+                    Producto de la parte radial R(r) y la angular Y(θ,φ).
+                    Los armónicos esféricos Y_lm dan la forma; R_nl da el tamaño.
+                </div>
+            </div>
+
+            <div class="equation-box">
+                <div class="eq-name">Densidad de probabilidad</div>
+                <div class="eq-main">|Ψ|² dV = probabilidad de encontrar el e⁻</div>
+                <div class="eq-desc">
+                    La simulación muestra puntos donde |Ψ|² es alto.
+                    Integrar |Ψ|² sobre todo el espacio da 1 (normalización).
+                </div>
+            </div>
+
+            <div class="equation-box">
+                <div class="eq-name">Distribución radial</div>
+                <div class="eq-main">P(r) = 4πr² |R_nl(r)|²</div>
+                <div class="eq-desc">
+                    Probabilidad de encontrar el electrón a distancia r del núcleo.
+                    El gráfico en el panel muestra esta función.
+                </div>
+            </div>
+
+            <h3>Los Nodos: Donde la probabilidad es cero</h3>
+
+            <div class="node-diagram">
+                <div class="node-example">
+                    <div class="node-visual">1s: ○</div>
+                    <div class="node-label">0 nodos</div>
+                </div>
+                <div class="node-example">
+                    <div class="node-visual">2s: ◉</div>
+                    <div class="node-label">1 nodo radial</div>
+                </div>
+                <div class="node-example">
+                    <div class="node-visual">2p: ◐│◑</div>
+                    <div class="node-label">1 nodo angular</div>
+                </div>
+                <div class="node-example">
+                    <div class="node-visual">3d: ✤</div>
+                    <div class="node-label">2 nodos angulares</div>
+                </div>
+            </div>
+
+            <p>
+                <strong>Nodos radiales</strong> = n - l - 1 (esferas donde ψ = 0)<br>
+                <strong>Nodos angulares</strong> = l (planos o conos donde ψ = 0)<br>
+                <strong>Total de nodos</strong> = n - 1
+            </p>
+        </section>
+
+        <section>
+            <h2>Orden de Llenado (Aufbau)</h2>
+
+            <p>
+                Los electrones llenan los orbitales en orden de energía creciente,
+                siguiendo la regla de Madelung (n + l):
+            </p>
+
+            <div class="filling-diagram">
+                <div class="filling-cell s">1s<div class="energy">1</div></div>
+                <div class="filling-cell s">2s<div class="energy">2</div></div>
+                <div class="filling-cell p">2p<div class="energy">3</div></div>
+                <div class="filling-cell s">3s<div class="energy">3</div></div>
+                <div class="filling-cell p">3p<div class="energy">4</div></div>
+                <div class="filling-cell s">4s<div class="energy">4</div></div>
+                <div class="filling-cell d">3d<div class="energy">5</div></div>
+                <div class="filling-cell p">4p<div class="energy">5</div></div>
+                <div class="filling-cell s">5s<div class="energy">5</div></div>
+                <div class="filling-cell d">4d<div class="energy">6</div></div>
+                <div class="filling-cell p">5p<div class="energy">6</div></div>
+                <div class="filling-cell s">6s<div class="energy">6</div></div>
+                <div class="filling-cell f">4f<div class="energy">7</div></div>
+                <div class="filling-cell d">5d<div class="energy">7</div></div>
+            </div>
+
+            <p>
+                Orden: 1s → 2s → 2p → 3s → 3p → 4s → 3d → 4p → 5s → 4d → 5p → 6s → 4f → 5d...
+            </p>
+        </section>
+
+        <section>
+            <h2>Experimentos Sugeridos</h2>
+
+            <div class="experiment-card">
+                <h4>🔬 Experimento 1: Comparar orbitales s</h4>
+                <ol>
+                    <li>Observa 1s: esférico, sin nodos</li>
+                    <li>Cambia a 2s: aparece un nodo radial (esfera interna vacía)</li>
+                    <li>Cambia a 3s: dos nodos radiales concéntricos</li>
+                    <li>Observa cómo el gráfico de P(r) muestra los máximos y mínimos</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>🔬 Experimento 2: Los tres orbitales p</h4>
+                <ol>
+                    <li>Selecciona 2p<sub>z</sub>: dos lóbulos en el eje Z</li>
+                    <li>Cambia a 2p<sub>x</sub>: lóbulos en el eje X</li>
+                    <li>Cambia a 2p<sub>y</sub>: lóbulos en el eje Y</li>
+                    <li>Son idénticos pero con diferente orientación (m = 0, +1, -1)</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>🔬 Experimento 3: Activa "Color por fase"</h4>
+                <ol>
+                    <li>Activa "Color por fase" en el panel</li>
+                    <li>Observa que los lóbulos opuestos tienen colores diferentes</li>
+                    <li>Esto representa el signo de la función de onda (+/−)</li>
+                    <li>La fase es crucial para entender enlaces: lóbulos del mismo signo forman enlaces σ y π</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>🔬 Experimento 4: Orbitales d y su complejidad</h4>
+                <ol>
+                    <li>Explora 3d<sub>z²</sub>: forma de "donut" con lóbulos en Z</li>
+                    <li>Compara con 3d<sub>xy</sub>: cuatro lóbulos entre los ejes</li>
+                    <li>Mira 3d<sub>x²-y²</sub>: cuatro lóbulos sobre los ejes</li>
+                    <li>Estos orbitales d explican la química de los metales de transición</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>Hibridación: Cuando los orbitales se mezclan</h2>
+
+            <p>
+                En moléculas, los orbitales atómicos se combinan para formar
+                <strong>orbitales híbridos</strong> con geometrías específicas:
+            </p>
+
+            <div class="hybrid-grid">
+                <div class="hybrid-item">
+                    <div class="hybrid-name">sp</div>
+                    <div class="hybrid-geometry">Lineal</div>
+                    <div class="hybrid-angle">180°</div>
+                </div>
+                <div class="hybrid-item">
+                    <div class="hybrid-name">sp²</div>
+                    <div class="hybrid-geometry">Trigonal plana</div>
+                    <div class="hybrid-angle">120°</div>
+                </div>
+                <div class="hybrid-item">
+                    <div class="hybrid-name">sp³</div>
+                    <div class="hybrid-geometry">Tetraédrica</div>
+                    <div class="hybrid-angle">109.5°</div>
+                </div>
+                <div class="hybrid-item">
+                    <div class="hybrid-name">sp³d</div>
+                    <div class="hybrid-geometry">Bipirámide trigonal</div>
+                    <div class="hybrid-angle">90°, 120°</div>
+                </div>
+                <div class="hybrid-item">
+                    <div class="hybrid-name">sp³d²</div>
+                    <div class="hybrid-geometry">Octaédrica</div>
+                    <div class="hybrid-angle">90°</div>
+                </div>
+                <div class="hybrid-item">
+                    <div class="hybrid-name">d²sp³</div>
+                    <div class="hybrid-geometry">Octaédrica</div>
+                    <div class="hybrid-angle">90°</div>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>Conexión con VSEPR:</strong> La geometría molecular predicha por VSEPR
+                corresponde a hibridaciones específicas. Un carbono tetraédrico (CH₄) usa
+                hibridación sp³; uno trigonal plano (etileno) usa sp².
+            </div>
+        </section>
+
+        <section>
+            <h2>Contexto Histórico</h2>
+
+            <div class="quote">
+                "La naturaleza no revela sus misterios de una vez, sino que nos ofrece
+                solo fragmentos. Tomó décadas entender que los electrones no orbitan
+                como planetas, sino que existen como ondas de probabilidad."
+                <cite>— Adaptado de Feynman, "QED: The Strange Theory of Light and Matter"</cite>
+            </div>
+
+            <p>
+                <strong>1926:</strong> Erwin Schrödinger formula su ecuación de onda.
+                Las soluciones para el átomo de hidrógeno dan exactamente los orbitales
+                que visualiza esta simulación.
+            </p>
+            <p>
+                <strong>1927:</strong> Max Born interpreta |Ψ|² como densidad de probabilidad.
+                El electrón no "está" en ningún lugar definido hasta que se mide.
+            </p>
+            <p>
+                <strong>1928:</strong> Dirac unifica mecánica cuántica y relatividad especial,
+                prediciendo el spin del electrón de forma natural.
+            </p>
+        </section>
+
+        <section>
+            <h2>Conexiones Interdisciplinarias</h2>
+
+            <div class="connection-list">
+                <a href="modelo-bohr.html" class="connection-item">
+                    <span class="connection-icon">⚛️</span>
+                    <div class="connection-text">
+                        <strong>Modelo de Bohr (Guía)</strong>
+                        <span>El precursor: órbitas circulares y saltos cuánticos</span>
+                    </div>
+                </a>
+                <a href="../vsepr.html" class="connection-item">
+                    <span class="connection-icon">🔷</span>
+                    <div class="connection-text">
+                        <strong>Geometría VSEPR</strong>
+                        <span>Cómo los orbitales determinan la forma de las moléculas</span>
+                    </div>
+                </a>
+                <a href="../tendencias.html" class="connection-item">
+                    <span class="connection-icon">📊</span>
+                    <div class="connection-text">
+                        <strong>Tendencias Periódicas</strong>
+                        <span>El llenado de orbitales explica la tabla periódica</span>
+                    </div>
+                </a>
+                <a href="../../Physics/Physics Visual Lab/efecto-tunel.html" class="connection-item">
+                    <span class="connection-icon">🌊</span>
+                    <div class="connection-text">
+                        <strong>Efecto Túnel (Física)</strong>
+                        <span>Otra consecuencia de la naturaleza ondulatoria de las partículas</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <h2>Para Explorar Más</h2>
+            <ul>
+                <li>
+                    <strong>Espectroscopía de fotoelectrones:</strong>
+                    Mide las energías de los orbitales experimentalmente.
+                </li>
+                <li>
+                    <strong>Química computacional:</strong>
+                    Programas como Gaussian calculan orbitales moleculares complejos.
+                </li>
+                <li>
+                    <strong>Resonancia magnética nuclear (RMN):</strong>
+                    Usa las propiedades de spin predichas por la teoría cuántica.
+                </li>
+                <li>
+                    <strong>Microscopía de efecto túnel (STM):</strong>
+                    Permite "ver" orbitales individuales en superficies.
+                </li>
+            </ul>
+
+            <div class="key-insight">
+                <strong>Reflexión final:</strong> Cada átomo es una catedral cuántica
+                con orbitales de formas precisas. Estas formas determinan cómo los átomos
+                se enlazan, qué moléculas pueden existir, y en última instancia,
+                toda la química de la vida y los materiales.
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Chemistry Visual Lab — EigenLab</p>
+        <p>Una guía para explorar la geometría cuántica de los electrones</p>
+    </footer>
+</body>
+</html>

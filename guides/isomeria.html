@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Isomería Geométrica | Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0a;
+            --color-surface: #141414;
+            --color-surface-elevated: #1a1a1a;
+            --color-border: #262626;
+            --color-text: #e5e5e5;
+            --color-text-secondary: #a3a3a3;
+            --color-accent: #84cc16;
+            --color-accent-dim: rgba(132, 204, 22, 0.1);
+            --font-serif: 'Crimson Pro', Georgia, serif;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            font-size: 19px;
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .breadcrumb {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+            margin-top: 3rem;
+            margin-bottom: 1.25rem;
+        }
+
+        h3 {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+        }
+
+        .intro {
+            font-size: 1.15rem;
+            color: var(--color-text-secondary);
+            border-left: 3px solid var(--color-accent);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .concept-card h4 {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--color-accent);
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--color-text-secondary);
+        }
+
+        .isomer-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .isomer-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .isomer-card h4 {
+            font-family: var(--font-sans);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .isomer-card.cis h4 { color: #22c55e; }
+        .isomer-card.trans h4 { color: #3b82f6; }
+
+        .isomer-card .aka {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .isomer-diagram {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            color: var(--color-text);
+            background: var(--color-bg);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            white-space: pre;
+            line-height: 1.4;
+        }
+
+        .isomer-card p {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            margin: 0;
+        }
+
+        .molecule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .molecule-table th {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            text-align: left;
+            padding: 1rem;
+            background: var(--color-surface);
+            border-bottom: 2px solid var(--color-accent);
+        }
+
+        .molecule-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .molecule-table tr:hover {
+            background: var(--color-surface);
+        }
+
+        .molecule-name {
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+
+        .cis-value { color: #22c55e; }
+        .trans-value { color: #3b82f6; }
+
+        .experiment-block {
+            background: var(--color-surface-elevated);
+            border-radius: 8px;
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .experiment-block h4 {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .experiment-block ol {
+            margin-left: 1.25rem;
+            color: var(--color-text-secondary);
+        }
+
+        .experiment-block li {
+            margin-bottom: 0.5rem;
+        }
+
+        .key-insight {
+            background: var(--color-accent-dim);
+            border: 1px solid var(--color-accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .key-insight strong {
+            color: var(--color-accent);
+        }
+
+        .nomenclature-box {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .nomenclature-box h4 {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--color-accent);
+        }
+
+        .nomenclature-rule {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: flex-start;
+        }
+
+        .rule-label {
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            font-weight: bold;
+            min-width: 40px;
+        }
+
+        .rule-label.e-label { color: #3b82f6; }
+        .rule-label.z-label { color: #22c55e; }
+
+        .rule-text {
+            font-size: 0.95rem;
+            color: var(--color-text-secondary);
+        }
+
+        .timeline {
+            border-left: 2px solid var(--color-border);
+            padding-left: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .timeline-event {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -2.35rem;
+            top: 0.5rem;
+            width: 10px;
+            height: 10px;
+            background: var(--color-accent);
+            border-radius: 50%;
+        }
+
+        .timeline-year {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--color-accent);
+        }
+
+        .timeline-text {
+            color: var(--color-text-secondary);
+        }
+
+        .connections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .connection-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .connection-item:hover {
+            border-color: var(--color-accent);
+            background: var(--color-surface-elevated);
+        }
+
+        .connection-icon {
+            font-size: 1.5rem;
+        }
+
+        .connection-text {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
+
+        ul {
+            margin-left: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        .btn-launch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 1rem 2rem;
+            background: var(--color-accent);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-launch:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+                font-size: 17px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .isomer-comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .isomer-diagram {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → Guía
+        </nav>
+        <h1>Isomería Geométrica</h1>
+        <p class="subtitle">Cuando la posición en el espacio lo cambia todo</p>
+    </header>
+
+    <main>
+        <p class="intro">
+            Dos moléculas con exactamente los mismos átomos conectados de la misma manera pueden
+            tener propiedades físicas completamente diferentes. La isomería geométrica (cis-trans
+            o E-Z) surge cuando la rotación alrededor de un enlace está restringida, permitiendo
+            que los grupos adopten orientaciones espaciales distintas y permanentes.
+        </p>
+
+        <h2>¿Qué Observarás?</h2>
+        <p>
+            La simulación muestra modelos 3D de moléculas con dobles enlaces, permitiéndote
+            alternar entre isómeros cis y trans. Rota las moléculas para apreciar cómo la
+            disposición espacial de los grupos afecta la forma molecular y sus propiedades.
+        </p>
+
+        <div class="concept-grid">
+            <div class="concept-card">
+                <h4>Modelo molecular 3D</h4>
+                <p>Átomos de colores (C gris, H blanco, Cl verde, O rojo) unidos por enlaces simples y dobles.</p>
+            </div>
+            <div class="concept-card">
+                <h4>Cambio cis ↔ trans</h4>
+                <p>Alterna entre isómeros para comparar visualmente la orientación de los sustituyentes.</p>
+            </div>
+            <div class="concept-card">
+                <h4>Propiedades físicas</h4>
+                <p>Punto de fusión, ebullición y momento dipolar para cada isómero. Nota las diferencias.</p>
+            </div>
+            <div class="concept-card">
+                <h4>Rotación interactiva</h4>
+                <p>Arrastra para rotar la molécula y observarla desde cualquier ángulo.</p>
+            </div>
+        </div>
+
+        <h2>Cis vs Trans: La Diferencia</h2>
+
+        <div class="isomer-comparison">
+            <div class="isomer-card cis">
+                <h4>cis (Z)</h4>
+                <div class="aka">"zusammen" = juntos</div>
+                <div class="isomer-diagram">    H       H
+     \     /
+      C = C
+     /     \
+   CH₃     CH₃</div>
+                <p>Grupos principales en el <strong>mismo lado</strong> del doble enlace</p>
+            </div>
+            <div class="isomer-card trans">
+                <h4>trans (E)</h4>
+                <div class="aka">"entgegen" = opuesto</div>
+                <div class="isomer-diagram">    H       CH₃
+     \     /
+      C = C
+     /     \
+   CH₃      H</div>
+                <p>Grupos principales en <strong>lados opuestos</strong> del doble enlace</p>
+            </div>
+        </div>
+
+        <div class="key-insight">
+            <strong>¿Por qué no pueden interconvertirse?</strong>
+            El doble enlace C=C tiene un componente π que requiere alineación de orbitales p.
+            Rotar 180° rompería el enlace π (≈264 kJ/mol de energía). A temperatura ambiente,
+            la barrera es infranqueable: los isómeros son compuestos distintos.
+        </div>
+
+        <h2>Moléculas en la Simulación</h2>
+
+        <table class="molecule-table">
+            <thead>
+                <tr>
+                    <th>Molécula</th>
+                    <th>P.F. cis</th>
+                    <th>P.F. trans</th>
+                    <th>Dipolo cis</th>
+                    <th>Dipolo trans</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="molecule-name">2-Buteno</td>
+                    <td class="cis-value">-139°C</td>
+                    <td class="trans-value">-106°C</td>
+                    <td>0.33 D</td>
+                    <td>0 D</td>
+                </tr>
+                <tr>
+                    <td class="molecule-name">1,2-Dicloroeteno</td>
+                    <td class="cis-value">-80°C</td>
+                    <td class="trans-value">-50°C</td>
+                    <td>1.90 D</td>
+                    <td>0 D</td>
+                </tr>
+                <tr>
+                    <td class="molecule-name">Ác. Butenodioico</td>
+                    <td class="cis-value">130°C (maleico)</td>
+                    <td class="trans-value">287°C (fumárico)</td>
+                    <td>2.54 D</td>
+                    <td>0 D</td>
+                </tr>
+                <tr>
+                    <td class="molecule-name">Estilbeno</td>
+                    <td class="cis-value">-5°C</td>
+                    <td class="trans-value">125°C</td>
+                    <td>0.45 D</td>
+                    <td>0 D</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>¿Por qué trans tiene mayor punto de fusión?</h3>
+        <p>
+            El isómero trans suele ser más simétrico y puede empaquetarse mejor en el cristal,
+            maximizando las interacciones intermoleculares. El isómero cis, con forma "doblada",
+            no encaja tan bien, resultando en un cristal menos estable.
+        </p>
+
+        <h3>¿Por qué cis suele ser polar?</h3>
+        <p>
+            En el isómero cis, los momentos dipolares de los enlaces se suman vectorialmente
+            porque apuntan en direcciones similares. En trans, apuntan en direcciones opuestas
+            y se cancelan, dando momento dipolar neto cero.
+        </p>
+
+        <h2>Nomenclatura E-Z</h2>
+
+        <div class="nomenclature-box">
+            <h4>Sistema Cahn-Ingold-Prelog</h4>
+            <p style="margin-bottom: 1rem; color: var(--color-text-secondary);">
+                Cuando cis-trans es ambiguo (más de dos grupos diferentes), se usa E/Z basado en prioridades.
+            </p>
+            <div class="nomenclature-rule">
+                <span class="rule-label z-label">Z</span>
+                <span class="rule-text">
+                    <strong>Zusammen:</strong> Los grupos de mayor prioridad están del <em>mismo lado</em>.
+                    Prioridad según número atómico: I > Br > Cl > S > O > N > C > H
+                </span>
+            </div>
+            <div class="nomenclature-rule">
+                <span class="rule-label e-label">E</span>
+                <span class="rule-text">
+                    <strong>Entgegen:</strong> Los grupos de mayor prioridad están en <em>lados opuestos</em>.
+                    Ejemplo: en BrCH=CHCl, Br > H (izq) y Cl > H (der); si Br y Cl están opuestos → E.
+                </span>
+            </div>
+        </div>
+
+        <h2>Experimentos Sugeridos</h2>
+
+        <div class="experiment-block">
+            <h4>1. Comparar polaridad visual</h4>
+            <ol>
+                <li>Selecciona 1,2-Dicloroeteno</li>
+                <li>Observa el isómero cis: los dos Cl apuntan hacia abajo</li>
+                <li>Cambia a trans: los Cl están en lados opuestos</li>
+                <li>¿Cuál esperarías que sea más soluble en agua? ¿Por qué?</li>
+            </ol>
+        </div>
+
+        <div class="experiment-block">
+            <h4>2. El caso maleico vs fumárico</h4>
+            <ol>
+                <li>Selecciona "Ác. Butenodioico"</li>
+                <li>Compara los puntos de fusión: 130°C (cis) vs 287°C (trans)</li>
+                <li>¡157°C de diferencia! El fumárico forma cristales muy estables</li>
+                <li>El maleico puede formar un anhídrido intramolecular. ¿Por qué el fumárico no?</li>
+            </ol>
+        </div>
+
+        <div class="experiment-block">
+            <h4>3. Estilbeno y fotoquímica</h4>
+            <ol>
+                <li>Selecciona Estilbeno y observa los anillos bencénicos</li>
+                <li>En cis, los anillos se "estorban" (impedimento estérico)</li>
+                <li>En trans, están alejados y la molécula es plana</li>
+                <li>La luz UV puede interconvertirlos. ¿Qué isómero será más estable?</li>
+            </ol>
+        </div>
+
+        <div class="experiment-block">
+            <h4>4. Predecir propiedades</h4>
+            <ol>
+                <li>Sin mirar los datos, predice cuál isómero del 2-buteno:</li>
+                <li>a) Tiene mayor punto de ebullición (pista: polaridad)</li>
+                <li>b) Tiene mayor punto de fusión (pista: empaquetamiento)</li>
+                <li>Verifica tus predicciones con la simulación</li>
+            </ol>
+        </div>
+
+        <h2>Contexto Histórico</h2>
+
+        <div class="timeline">
+            <div class="timeline-event">
+                <div class="timeline-year">1874</div>
+                <div class="timeline-text">
+                    <strong>Van't Hoff y Le Bel</strong> proponen el carbono tetraédrico,
+                    sentando las bases para entender la isomería espacial.
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1887</div>
+                <div class="timeline-text">
+                    <strong>Wislicenus</strong> estudia los ácidos maleico y fumárico,
+                    demostrando que son isómeros geométricos del ácido butenodioico.
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1956</div>
+                <div class="timeline-text">
+                    <strong>Cahn, Ingold y Prelog</strong> desarrollan las reglas de prioridad
+                    para la nomenclatura E/Z, eliminando la ambigüedad de cis/trans.
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1967</div>
+                <div class="timeline-text">
+                    <strong>Wald y colaboradores</strong> descubren que la visión depende
+                    de la isomerización cis-trans del retinal inducida por luz (Premio Nobel).
+                </div>
+            </div>
+        </div>
+
+        <h2>Importancia Biológica</h2>
+
+        <div class="key-insight">
+            <strong>La visión depende de un cambio cis → trans:</strong>
+            El 11-cis-retinal, unido a la opsina, absorbe un fotón y se isomeriza a
+            all-trans-retinal. Este cambio de forma dispara la cascada de señalización
+            que percibimos como visión. Un fotón, un cambio geométrico, una señal nerviosa.
+        </div>
+
+        <p>
+            Otros ejemplos biológicos incluyen los ácidos grasos insaturados: los naturales
+            suelen ser cis (aceite de oliva, omega-3), mientras que las grasas trans
+            artificiales (margarina hidrogenada) son perjudiciales para la salud cardiovascular.
+        </p>
+
+        <h2>Conexiones Interdisciplinarias</h2>
+
+        <div class="connections-grid">
+            <a href="vsepr.html" class="connection-item">
+                <span class="connection-icon">🔷</span>
+                <span class="connection-text">VSEPR<br><small>Geometría molecular</small></span>
+            </a>
+            <a href="orbitales.html" class="connection-item">
+                <span class="connection-icon">☁️</span>
+                <span class="connection-text">Orbitales<br><small>Enlace π</small></span>
+            </a>
+            <a href="../../Biochemistry/Biochem Visual Lab/guides/lipidos.html" class="connection-item">
+                <span class="connection-icon">🧈</span>
+                <span class="connection-text">Lípidos<br><small>Ácidos grasos cis/trans</small></span>
+            </a>
+            <a href="../../Biology/Biology Visual Lab/guides/vision.html" class="connection-item">
+                <span class="connection-icon">👁️</span>
+                <span class="connection-text">Visión<br><small>Fotoisomerización</small></span>
+            </a>
+        </div>
+
+        <h2>Para Explorar Más</h2>
+        <ul>
+            <li><strong>Isomería óptica:</strong> Otro tipo de estereoisomería con carbonos quirales (enantiómeros)</li>
+            <li><strong>Diastereómeros:</strong> Cuando hay más de un centro de isomería en la molécula</li>
+            <li><strong>Reacciones de adición:</strong> La estereoquímica del ataque determina el producto</li>
+            <li><strong>Catálisis asimétrica:</strong> Cómo sintetizar selectivamente un isómero (Premio Nobel 2001)</li>
+            <li><strong>Polímeros:</strong> El caucho natural (cis-poliisopreno) vs gutapercha (trans)</li>
+        </ul>
+    </main>
+
+    <footer>
+        <a href="../isomeria.html" class="btn-launch">
+            🔀 Abrir Simulación
+        </a>
+    </footer>
+</body>
+</html>

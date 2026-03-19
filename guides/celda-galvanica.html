@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Celda Galvánica - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #252540;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #eab308;
+            --accent-dim: rgba(234, 179, 8, 0.15);
+            --anode: #818cf8;
+            --cathode: #f472b6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .breadcrumb {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #ca8a04 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-dim);
+        }
+
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .concept-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .equation-block {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+
+        .equation-block .main {
+            font-size: 1.4rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-block .note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        th {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--bg-secondary);
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .feature-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .experiment-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--accent-dim);
+        }
+
+        .experiment-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .experiment-card ol {
+            margin-left: 1.5rem;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .cell-diagram {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .cell-notation {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .cell-notation .anode {
+            color: var(--anode);
+        }
+
+        .cell-notation .cathode {
+            color: var(--cathode);
+        }
+
+        .cell-notation .separator {
+            color: var(--text-secondary);
+            margin: 0 0.5rem;
+        }
+
+        .electrode-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid;
+        }
+
+        .electrode-card.anode {
+            border-left-color: var(--anode);
+        }
+
+        .electrode-card.cathode {
+            border-left-color: var(--cathode);
+        }
+
+        .electrode-card h4 {
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 0.75rem;
+        }
+
+        .electrode-card.anode h4 {
+            color: var(--anode);
+        }
+
+        .electrode-card.cathode h4 {
+            color: var(--cathode);
+        }
+
+        .cell-table td:nth-child(2) {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+        }
+
+        .historical-note {
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.1) 0%, rgba(129, 140, 248, 0.1) 100%);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .links-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .sim-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            border: 1px solid var(--bg-tertiary);
+            transition: all 0.3s ease;
+        }
+
+        .sim-link:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .sim-link .icon {
+            font-size: 1.5rem;
+        }
+
+        .sim-link .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .mnemonic-box {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .mnemonic-box h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .mnemonic-box .mnemonic {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--bg-tertiary);
+            text-align: center;
+        }
+
+        footer a {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #ca8a04 100%);
+            color: black;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        footer a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(234, 179, 8, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → Guía
+        </nav>
+        <h1>Celda Galvánica</h1>
+        <p class="subtitle">Convirtiendo energía química en energía eléctrica</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>¿Qué Observarás?</h2>
+            <p>
+                Esta simulación muestra una celda galvánica completa: dos semi-celdas conectadas
+                por un puente salino, con electrones fluyendo espontáneamente del ánodo al cátodo
+                a través de un circuito externo. Es el principio de todas las baterías.
+            </p>
+
+            <div class="grid-2">
+                <div class="feature-card">
+                    <h4>Seis Tipos de Celda</h4>
+                    <p>Desde la clásica pila de Daniell (Zn|Cu) hasta combinaciones como Mg|Ag con potenciales muy altos.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Flujo de Electrones</h4>
+                    <p>Visualiza los electrones moviéndose por el cable desde el ánodo (oxidación) hacia el cátodo (reducción).</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Puente Salino</h4>
+                    <p>Iones K⁺ y NO₃⁻ mantienen la neutralidad eléctrica en cada semi-celda para que la reacción continúe.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Voltímetro en Vivo</h4>
+                    <p>Mide el potencial de celda que cambia según las concentraciones y temperatura (ecuación de Nernst).</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Anatomía de una Celda Galvánica</h2>
+
+            <div class="cell-diagram">
+                <div class="cell-notation">
+                    <span class="anode">Zn(s) | Zn²⁺(aq)</span>
+                    <span class="separator">||</span>
+                    <span class="cathode">Cu²⁺(aq) | Cu(s)</span>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.5rem;">
+                    Notación de celda: ánodo a la izquierda | puente salino || cátodo a la derecha
+                </p>
+            </div>
+
+            <div class="electrode-card anode">
+                <h4>Ánodo (Electrodo Negativo)</h4>
+                <ul>
+                    <li>Ocurre la <strong>oxidación</strong> (pérdida de electrones)</li>
+                    <li>El metal se disuelve: Zn(s) → Zn²⁺(aq) + 2e⁻</li>
+                    <li>Electrones "nacen" aquí y fluyen hacia el cátodo</li>
+                    <li>Los iones positivos liberados van a la solución</li>
+                </ul>
+            </div>
+
+            <div class="electrode-card cathode">
+                <h4>Cátodo (Electrodo Positivo)</h4>
+                <ul>
+                    <li>Ocurre la <strong>reducción</strong> (ganancia de electrones)</li>
+                    <li>Iones se depositan: Cu²⁺(aq) + 2e⁻ → Cu(s)</li>
+                    <li>Electrones "mueren" aquí al reducir los iones</li>
+                    <li>El electrodo crece a medida que se deposita metal</li>
+                </ul>
+            </div>
+
+            <div class="mnemonic-box">
+                <h4>Regla Mnemotécnica</h4>
+                <p class="mnemonic">"AN OX" y "RED CAT"</p>
+                <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                    <strong>AN</strong>ode = <strong>OX</strong>idación<br>
+                    <strong>RED</strong>ucción = <strong>CAT</strong>ode
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>El Puente Salino</h2>
+
+            <div class="concept-box">
+                <p>
+                    El puente salino es crucial. Sin él, la celda dejaría de funcionar casi inmediatamente.
+                    ¿Por qué?
+                </p>
+                <ul style="margin-top: 0.5rem; margin-bottom: 0;">
+                    <li>En el ánodo, se acumulan iones Zn²⁺ (carga positiva)</li>
+                    <li>En el cátodo, se consumen iones Cu²⁺ (déficit de carga positiva)</li>
+                    <li>El desequilibrio de cargas detendría el flujo de electrones</li>
+                </ul>
+            </div>
+
+            <p>
+                El puente salino (usualmente KNO₃ o KCl en gel de agar) permite que:
+            </p>
+            <ul>
+                <li><strong>Aniones (NO₃⁻):</strong> Migran hacia el ánodo para compensar los Zn²⁺ liberados</li>
+                <li><strong>Cationes (K⁺):</strong> Migran hacia el cátodo para reemplazar los Cu²⁺ consumidos</li>
+            </ul>
+            <p>
+                Resultado: Neutralidad eléctrica en ambas semi-celdas, y la reacción continúa.
+            </p>
+        </section>
+
+        <section>
+            <h2>Potencial de Celda</h2>
+
+            <div class="equation-block">
+                <div class="main">E°<sub>celda</sub> = E°<sub>cátodo</sub> − E°<sub>ánodo</sub></div>
+                <div class="note">Siempre: potencial del cátodo menos potencial del ánodo</div>
+            </div>
+
+            <h3>Celdas de la Simulación</h3>
+            <table class="cell-table">
+                <tr>
+                    <th>Celda</th>
+                    <th>E°<sub>celda</sub></th>
+                    <th>Cálculo</th>
+                </tr>
+                <tr>
+                    <td>Zn | Cu (Daniell)</td>
+                    <td>+1.10 V</td>
+                    <td>0.34 − (−0.76) = 1.10</td>
+                </tr>
+                <tr>
+                    <td>Mg | Cu</td>
+                    <td>+2.71 V</td>
+                    <td>0.34 − (−2.37) = 2.71</td>
+                </tr>
+                <tr>
+                    <td>Fe | Cu</td>
+                    <td>+0.78 V</td>
+                    <td>0.34 − (−0.44) = 0.78</td>
+                </tr>
+                <tr>
+                    <td>Zn | Ag</td>
+                    <td>+1.56 V</td>
+                    <td>0.80 − (−0.76) = 1.56</td>
+                </tr>
+                <tr>
+                    <td>Mg | Ag</td>
+                    <td>+3.17 V</td>
+                    <td>0.80 − (−2.37) = 3.17</td>
+                </tr>
+                <tr>
+                    <td>Pb | Cu</td>
+                    <td>+0.47 V</td>
+                    <td>0.34 − (−0.13) = 0.47</td>
+                </tr>
+            </table>
+
+            <h3>Nernst para Celdas Completas</h3>
+            <div class="equation-block">
+                <div class="main">E<sub>celda</sub> = E°<sub>celda</sub> − (0.0592/n) × log Q</div>
+                <div class="note">Q = [productos]/[reactivos] = [ánodo ion]/[cátodo ion]</div>
+            </div>
+
+            <p>
+                Para Zn|Cu: Q = [Zn²⁺]/[Cu²⁺]. Si [Zn²⁺] > [Cu²⁺], Q > 1, y E < E°.
+                La celda pierde voltaje a medida que se descarga.
+            </p>
+        </section>
+
+        <section>
+            <h2>Termodinámica de la Celda</h2>
+
+            <div class="equation-block">
+                <div class="main">ΔG° = −nFE°<sub>celda</sub></div>
+                <div class="note">Si E° > 0, entonces ΔG° < 0 (reacción espontánea)</div>
+            </div>
+
+            <p>
+                Para la pila de Daniell (n = 2, E° = 1.10 V):
+            </p>
+            <p>
+                <code>ΔG° = −2 × 96485 × 1.10 = −212,267 J/mol ≈ −212 kJ/mol</code>
+            </p>
+            <p>
+                Este valor muy negativo indica que la reacción Zn + Cu²⁺ → Zn²⁺ + Cu es altamente
+                favorable termodinámicamente. Esa energía libre se convierte en trabajo eléctrico.
+            </p>
+        </section>
+
+        <section>
+            <h2>Experimentos Sugeridos</h2>
+
+            <div class="experiment-card">
+                <h4>Experimento 1: Comparando Potenciales</h4>
+                <ol>
+                    <li>Comienza con la pila de Daniell (Zn|Cu). E° = 1.10 V</li>
+                    <li>Cambia a Mg|Cu. Observa cómo salta a 2.71 V</li>
+                    <li>Prueba Mg|Ag para el máximo potencial (3.17 V)</li>
+                    <li>Observa: mayor diferencia de E° → mayor voltaje de celda</li>
+                    <li>Pb|Cu tiene el menor potencial (0.47 V). ¿Por qué?</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 2: Efecto de Concentración</h4>
+                <ol>
+                    <li>Con Zn|Cu, comienza con [Zn²⁺] = [Cu²⁺] = 1.0 M (E = E°)</li>
+                    <li>Aumenta [Cu²⁺] a 2.0 M. El voltaje aumenta ligeramente</li>
+                    <li>Ahora aumenta [Zn²⁺] a 2.0 M también. Vuelve a E°</li>
+                    <li>Sube [Zn²⁺] a 2.0 M con [Cu²⁺] = 0.01 M. El voltaje cae</li>
+                    <li>Esto simula una batería "descargándose": mucho producto, poco reactivo</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 3: Observando el Flujo</h4>
+                <ol>
+                    <li>Observa los electrones (puntos amarillos) fluyendo por el cable</li>
+                    <li>Nota que siempre van del ánodo (izquierda) al cátodo (derecha)</li>
+                    <li>En el puente salino, los iones se mueven en direcciones opuestas</li>
+                    <li>Los iones positivos del ánodo (ej: Zn²⁺) se alejan del electrodo</li>
+                    <li>Los iones positivos del cátodo (ej: Cu²⁺) se acercan al electrodo</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 4: Calculando ΔG</h4>
+                <ol>
+                    <li>Selecciona diferentes celdas y observa ΔG° en el panel</li>
+                    <li>Mg|Ag: ΔG° ≈ −612 kJ/mol (muy espontánea)</li>
+                    <li>Pb|Cu: ΔG° ≈ −91 kJ/mol (menos espontánea)</li>
+                    <li>Relaciona: mayor |ΔG°| → mayor "fuerza impulsora"</li>
+                    <li>Por eso Mg se usa en baterías de alto rendimiento</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>Contexto Histórico</h2>
+
+            <div class="historical-note">
+                <h3>La Pila de Daniell (1836)</h3>
+                <p>
+                    John Frederic Daniell, químico británico, inventó su pila para resolver un problema
+                    de la pila de Volta: la polarización del electrodo que causaba caída de voltaje.
+                    Separando las semi-reacciones en dos compartimentos, logró una fuente de corriente
+                    estable y confiable.
+                </p>
+                <p>
+                    La pila de Daniell fue la primera batería "práctica" y alimentó los telégrafos
+                    del siglo XIX. Su diseño (dos semi-celdas + puente salino) sigue siendo el
+                    modelo conceptual para enseñar electroquímica.
+                </p>
+                <p style="margin-bottom: 0;">
+                    Alessandro Volta había inventado la pila voltaica en 1800 (discos de zinc y cobre
+                    separados por cartón empapado en salmuera), pero sin entender la electroquímica
+                    subyacente. Fue Michael Faraday quien estableció las leyes de la electrólisis
+                    y conectó corriente con cantidad de materia transformada.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conexiones Interdisciplinarias</h2>
+
+            <div class="links-section">
+                <a href="../nernst.html" class="sim-link">
+                    <span class="icon">📊</span>
+                    <span class="label">Ecuación de Nernst<br><small>Potenciales de semi-celda</small></span>
+                </a>
+                <a href="../le-chatelier.html" class="sim-link">
+                    <span class="icon">⚖️</span>
+                    <span class="label">Principio de Le Chatelier<br><small>Equilibrio electroquímico</small></span>
+                </a>
+                <a href="../../Physics/Physics Visual Lab/circuitos.html" class="sim-link">
+                    <span class="icon">⚡</span>
+                    <span class="label">Circuitos Eléctricos<br><small>Flujo de electrones</small></span>
+                </a>
+                <a href="../../Biochemistry/Biochem Visual Lab/mitocondria.html" class="sim-link">
+                    <span class="icon">🔋</span>
+                    <span class="label">Cadena Respiratoria<br><small>Gradiente electroquímico</small></span>
+                </a>
+            </div>
+
+            <h3>Aplicaciones en la Vida Real</h3>
+            <ul>
+                <li><strong>Baterías alcalinas:</strong> Zn|MnO₂, evolución de la pila de Daniell</li>
+                <li><strong>Baterías de litio:</strong> Li|diversos cátodos, alta densidad de energía</li>
+                <li><strong>Celdas de combustible:</strong> H₂|O₂, producen electricidad + agua</li>
+                <li><strong>Corrosión galvánica:</strong> Dos metales en contacto + electrolito = pila</li>
+                <li><strong>Protección catódica:</strong> Ánodo de sacrificio protege estructuras metálicas</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Para Explorar Más</h2>
+            <ul>
+                <li>
+                    <strong>Celdas electrolíticas:</strong> Lo opuesto a galvánicas: aplican corriente
+                    externa para forzar reacciones no espontáneas (ej: electrólisis del agua).
+                </li>
+                <li>
+                    <strong>Celdas de concentración:</strong> Mismos electrodos pero diferentes
+                    concentraciones. El voltaje proviene solo de la diferencia de concentración.
+                </li>
+                <li>
+                    <strong>Baterías recargables:</strong> La reacción es reversible: descarga
+                    (galvánica) y carga (electrolítica) alternan.
+                </li>
+                <li>
+                    <strong>Supercapacitores:</strong> Almacenan energía en la doble capa eléctrica,
+                    sin reacciones químicas, para alta potencia y ciclos rápidos.
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <a href="../celda-galvanica.html">Abrir Simulación</a>
+    </footer>
+</body>
+</html>

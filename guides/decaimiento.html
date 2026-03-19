@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Decaimiento Radiactivo | Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0a;
+            --color-surface: #141414;
+            --color-surface-elevated: #1a1a1a;
+            --color-border: #262626;
+            --color-text: #e5e5e5;
+            --color-text-secondary: #a3a3a3;
+            --color-accent: #a855f7;
+            --color-accent-dim: rgba(168, 85, 247, 0.1);
+            --font-serif: 'Crimson Pro', Georgia, serif;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            font-size: 19px;
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .breadcrumb {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+            margin-top: 3rem;
+            margin-bottom: 1.25rem;
+        }
+
+        h3 {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+        }
+
+        .intro {
+            font-size: 1.15rem;
+            color: var(--color-text-secondary);
+            border-left: 3px solid var(--color-accent);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .concept-card h4 {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--color-accent);
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--color-text-secondary);
+        }
+
+        .equation-block {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .equation {
+            font-family: var(--font-mono);
+            font-size: 1.4rem;
+            color: var(--color-accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .equation-label {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        .decay-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .decay-type {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .decay-type-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .decay-symbol {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            color: var(--color-accent);
+        }
+
+        .decay-name {
+            font-family: var(--font-sans);
+            font-weight: 600;
+        }
+
+        .decay-type p {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 0;
+        }
+
+        .isotope-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .isotope-table th {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            text-align: left;
+            padding: 1rem;
+            background: var(--color-surface);
+            border-bottom: 2px solid var(--color-accent);
+        }
+
+        .isotope-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .isotope-table tr:hover {
+            background: var(--color-surface);
+        }
+
+        .isotope-symbol {
+            font-family: var(--font-mono);
+            font-weight: 500;
+            color: var(--color-accent);
+        }
+
+        .experiment-block {
+            background: var(--color-surface-elevated);
+            border-radius: 8px;
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .experiment-block h4 {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .experiment-block ol {
+            margin-left: 1.25rem;
+            color: var(--color-text-secondary);
+        }
+
+        .experiment-block li {
+            margin-bottom: 0.5rem;
+        }
+
+        .key-insight {
+            background: var(--color-accent-dim);
+            border: 1px solid var(--color-accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .key-insight strong {
+            color: var(--color-accent);
+        }
+
+        .timeline {
+            border-left: 2px solid var(--color-border);
+            padding-left: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .timeline-event {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -2.35rem;
+            top: 0.5rem;
+            width: 10px;
+            height: 10px;
+            background: var(--color-accent);
+            border-radius: 50%;
+        }
+
+        .timeline-year {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--color-accent);
+        }
+
+        .timeline-text {
+            color: var(--color-text-secondary);
+        }
+
+        .connections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .connection-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .connection-item:hover {
+            border-color: var(--color-accent);
+            background: var(--color-surface-elevated);
+        }
+
+        .connection-icon {
+            font-size: 1.5rem;
+        }
+
+        .connection-text {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
+
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .warning-box strong {
+            color: #ef4444;
+        }
+
+        ul {
+            margin-left: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        .btn-launch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 1rem 2rem;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-launch:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+                font-size: 17px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .equation {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → Guía
+        </nav>
+        <h1>Decaimiento Radiactivo</h1>
+        <p class="subtitle">Cinética nuclear y vida media de isótopos</p>
+    </header>
+
+    <main>
+        <p class="intro">
+            Los núcleos atómicos inestables se transforman espontáneamente emitiendo radiación.
+            Este proceso, aparentemente aleatorio a nivel individual, sigue patrones matemáticos
+            precisos cuando observamos grandes cantidades de átomos. Explora cómo la constante
+            de decaimiento determina la velocidad a la que desaparecen los núcleos radiactivos.
+        </p>
+
+        <h2>¿Qué Observarás?</h2>
+        <p>
+            La simulación presenta un conjunto de núcleos radiactivos representados como esferas
+            brillantes. A medida que cada núcleo decae, se transforma en un átomo estable (gris)
+            y emite una partícula: alfa (amarilla, grande) o beta (azul, pequeña). El gráfico
+            muestra la curva de decaimiento exponencial en tiempo real.
+        </p>
+
+        <div class="concept-grid">
+            <div class="concept-card">
+                <h4>Núcleos activos</h4>
+                <p>Esferas brillantes que representan átomos aún no decaídos. El color indica el isótopo.</p>
+            </div>
+            <div class="concept-card">
+                <h4>Partículas emitidas</h4>
+                <p>Alfa (α): 2 protones + 2 neutrones. Beta (β): electrón o positrón de alta energía.</p>
+            </div>
+            <div class="concept-card">
+                <h4>Curva de decaimiento</h4>
+                <p>Gráfico N vs t mostrando la disminución exponencial. Opcional: escala logarítmica.</p>
+            </div>
+            <div class="concept-card">
+                <h4>Marcadores de vida media</h4>
+                <p>Líneas verticales que indican cada período de semidesintegración transcurrido.</p>
+            </div>
+        </div>
+
+        <h2>Tipos de Decaimiento</h2>
+
+        <div class="decay-types">
+            <div class="decay-type">
+                <div class="decay-type-header">
+                    <span class="decay-symbol">α</span>
+                    <span class="decay-name">Decaimiento alfa</span>
+                </div>
+                <p>
+                    El núcleo emite una partícula alfa (núcleo de helio-4).
+                    El número atómico disminuye 2, el másico 4.
+                    <br><br>
+                    <strong>Ejemplo:</strong> ²²⁶Ra → ²²²Rn + ⁴He
+                </p>
+            </div>
+            <div class="decay-type">
+                <div class="decay-type-header">
+                    <span class="decay-symbol">β⁻</span>
+                    <span class="decay-name">Decaimiento beta menos</span>
+                </div>
+                <p>
+                    Un neutrón se convierte en protón emitiendo un electrón y antineutrino.
+                    Z aumenta 1, A no cambia.
+                    <br><br>
+                    <strong>Ejemplo:</strong> ¹⁴C → ¹⁴N + e⁻ + ν̄
+                </p>
+            </div>
+            <div class="decay-type">
+                <div class="decay-type-header">
+                    <span class="decay-symbol">β⁺</span>
+                    <span class="decay-name">Decaimiento beta más</span>
+                </div>
+                <p>
+                    Un protón se convierte en neutrón emitiendo un positrón y neutrino.
+                    Z disminuye 1, A no cambia.
+                    <br><br>
+                    <strong>Ejemplo:</strong> ²²Na → ²²Ne + e⁺ + ν
+                </p>
+            </div>
+            <div class="decay-type">
+                <div class="decay-type-header">
+                    <span class="decay-symbol">γ</span>
+                    <span class="decay-name">Emisión gamma</span>
+                </div>
+                <p>
+                    El núcleo en estado excitado libera energía como fotón de alta energía.
+                    Z y A no cambian.
+                    <br><br>
+                    <strong>Ejemplo:</strong> ⁶⁰Co* → ⁶⁰Co + γ
+                </p>
+            </div>
+        </div>
+
+        <h2>Ecuaciones Fundamentales</h2>
+
+        <div class="equation-block">
+            <div class="equation">N(t) = N₀ · e<sup>−λt</sup></div>
+            <div class="equation-label">Ley de decaimiento radiactivo</div>
+        </div>
+
+        <div class="equation-block">
+            <div class="equation">t<sub>½</sub> = ln(2) / λ ≈ 0.693 / λ</div>
+            <div class="equation-label">Vida media (tiempo de semidesintegración)</div>
+        </div>
+
+        <div class="equation-block">
+            <div class="equation">A = λN = A₀ · e<sup>−λt</sup></div>
+            <div class="equation-label">Actividad (desintegraciones por segundo)</div>
+        </div>
+
+        <div class="key-insight">
+            <strong>Naturaleza probabilística:</strong> No podemos predecir cuándo decaerá un átomo
+            individual. La vida media es un concepto estadístico: si tienes 1000 átomos de carbono-14,
+            tras 5730 años quedarán aproximadamente 500. Pero no puedes señalar cuáles serán los que decaigan.
+        </div>
+
+        <h2>Isótopos en la Simulación</h2>
+
+        <table class="isotope-table">
+            <thead>
+                <tr>
+                    <th>Isótopo</th>
+                    <th>Vida media</th>
+                    <th>Tipo de decaimiento</th>
+                    <th>Aplicación</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="isotope-symbol">¹⁴C</span></td>
+                    <td>5730 años</td>
+                    <td>β⁻</td>
+                    <td>Datación arqueológica</td>
+                </tr>
+                <tr>
+                    <td><span class="isotope-symbol">¹³¹I</span></td>
+                    <td>8.02 días</td>
+                    <td>β⁻, γ</td>
+                    <td>Diagnóstico/tratamiento tiroides</td>
+                </tr>
+                <tr>
+                    <td><span class="isotope-symbol">⁶⁰Co</span></td>
+                    <td>5.27 años</td>
+                    <td>β⁻, γ</td>
+                    <td>Radioterapia, esterilización</td>
+                </tr>
+                <tr>
+                    <td><span class="isotope-symbol">²²⁶Ra</span></td>
+                    <td>1600 años</td>
+                    <td>α</td>
+                    <td>Histórico (pinturas luminosas)</td>
+                </tr>
+                <tr>
+                    <td><span class="isotope-symbol">²³⁸U</span></td>
+                    <td>4.47 × 10⁹ años</td>
+                    <td>α</td>
+                    <td>Datación geológica, reactores</td>
+                </tr>
+                <tr>
+                    <td><span class="isotope-symbol">²¹⁰Po</span></td>
+                    <td>138 días</td>
+                    <td>α</td>
+                    <td>Eliminadores estática (histórico)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Experimentos Sugeridos</h2>
+
+        <div class="experiment-block">
+            <h4>1. Verificar la ecuación de decaimiento</h4>
+            <ol>
+                <li>Selecciona un isótopo y comienza con 200 núcleos</li>
+                <li>Anota N cuando t = t½, 2t½, 3t½, 4t½</li>
+                <li>Compara: ¿N ≈ 100, 50, 25, 12.5?</li>
+                <li>Activa la escala logarítmica: ¿la curva se vuelve recta?</li>
+            </ol>
+        </div>
+
+        <div class="experiment-block">
+            <h4>2. Comparar isótopos rápidos vs lentos</h4>
+            <ol>
+                <li>Simula Po-210 (t½ = 138 días) - observa decaimiento rápido</li>
+                <li>Ahora simula U-238 (t½ = 4.5 × 10⁹ años)</li>
+                <li>¿Por qué el uranio apenas decae en la simulación?</li>
+                <li>Reflexiona: ¿qué isótopo es más "peligroso" a corto plazo?</li>
+            </ol>
+        </div>
+
+        <div class="experiment-block">
+            <h4>3. Estadística con pocos núcleos</h4>
+            <ol>
+                <li>Configura solo 10 núcleos de C-14</li>
+                <li>Ejecuta la simulación varias veces</li>
+                <li>¿La curva siempre sigue la exponencial teórica?</li>
+                <li>Aumenta a 500 núcleos y repite: ¿qué cambió?</li>
+            </ol>
+        </div>
+
+        <div class="experiment-block">
+            <h4>4. Calcular la constante de decaimiento</h4>
+            <ol>
+                <li>En escala logarítmica, mide la pendiente de ln(N) vs t</li>
+                <li>La pendiente es -λ (constante de decaimiento)</li>
+                <li>Calcula t½ = 0.693/λ</li>
+                <li>¿Coincide con el valor teórico del isótopo?</li>
+            </ol>
+        </div>
+
+        <h2>Contexto Histórico</h2>
+
+        <div class="timeline">
+            <div class="timeline-event">
+                <div class="timeline-year">1896</div>
+                <div class="timeline-text">
+                    <strong>Henri Becquerel</strong> descubre la radiactividad accidentalmente
+                    al observar que sales de uranio impresionan placas fotográficas en la oscuridad.
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1898</div>
+                <div class="timeline-text">
+                    <strong>Marie y Pierre Curie</strong> descubren el polonio y el radio.
+                    Marie acuña el término "radiactividad".
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1902</div>
+                <div class="timeline-text">
+                    <strong>Rutherford y Soddy</strong> formulan la teoría del decaimiento
+                    radiactivo: los átomos se transmutan espontáneamente en otros elementos.
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1913</div>
+                <div class="timeline-text">
+                    <strong>Soddy</strong> introduce el concepto de "isótopo" para explicar
+                    por qué elementos idénticos tienen masas diferentes.
+                </div>
+            </div>
+            <div class="timeline-event">
+                <div class="timeline-year">1949</div>
+                <div class="timeline-text">
+                    <strong>Willard Libby</strong> desarrolla la datación por carbono-14,
+                    revolucionando la arqueología. Premio Nobel 1960.
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <strong>Seguridad radiológica:</strong> En el laboratorio real, siempre minimiza tiempo
+            de exposición, maximiza distancia a la fuente, y usa blindaje apropiado (papel para α,
+            aluminio para β, plomo para γ). Los isótopos de esta simulación son seguros porque son... virtuales.
+        </div>
+
+        <h2>Conexiones Interdisciplinarias</h2>
+
+        <div class="connections-grid">
+            <a href="cinetica-colisiones.html" class="connection-item">
+                <span class="connection-icon">⚡</span>
+                <span class="connection-text">Cinética química<br><small>Decaimiento de primer orden</small></span>
+            </a>
+            <a href="../../Physics/Physics Visual Lab/guides/fusion-fision.html" class="connection-item">
+                <span class="connection-icon">☢️</span>
+                <span class="connection-text">Fisión y fusión<br><small>Energía nuclear</small></span>
+            </a>
+            <a href="modelo-bohr.html" class="connection-item">
+                <span class="connection-icon">⚛️</span>
+                <span class="connection-text">Modelo atómico<br><small>Estructura nuclear</small></span>
+            </a>
+            <a href="../../Astronomy/Astronomy Visual Lab/guides/nucleosintesis.html" class="connection-item">
+                <span class="connection-icon">✨</span>
+                <span class="connection-text">Nucleosíntesis<br><small>Origen de elementos</small></span>
+            </a>
+        </div>
+
+        <h2>Para Explorar Más</h2>
+        <ul>
+            <li><strong>Cadenas de decaimiento:</strong> El U-238 atraviesa 14 pasos de decaimiento antes de llegar al Pb-206 estable</li>
+            <li><strong>Datación radiométrica:</strong> Además de C-14, se usa K-Ar, Rb-Sr, U-Pb para diferentes escalas temporales</li>
+            <li><strong>Medicina nuclear:</strong> Tecnecio-99m (t½ = 6h) es el isótopo más usado en diagnóstico por imágenes</li>
+            <li><strong>Detectores:</strong> Cámara de niebla, contador Geiger-Müller, detectores de centelleo</li>
+            <li><strong>Equilibrio secular:</strong> Cuando t½ padre >> t½ hijo, las actividades se igualan</li>
+        </ul>
+    </main>
+
+    <footer>
+        <a href="../decaimiento.html" class="btn-launch">
+            ☢️ Abrir Simulación
+        </a>
+    </footer>
+</body>
+</html>

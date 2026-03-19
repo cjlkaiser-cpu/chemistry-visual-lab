@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Cinética y Colisiones - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #252540;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #a855f7;
+            --accent-dim: rgba(168, 85, 247, 0.15);
+            --cyan: #22d3ee;
+            --pink: #f472b6;
+            --yellow: #fbbf24;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .breadcrumb {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-dim);
+        }
+
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .concept-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .equation-block {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+
+        .equation-block .main {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-block .note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        th {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--bg-secondary);
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .feature-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .view-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .view-card h4 {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .view-card .icon {
+            font-size: 1.5rem;
+        }
+
+        .experiment-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--accent-dim);
+        }
+
+        .experiment-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .experiment-card ol {
+            margin-left: 1.5rem;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .collision-diagram {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .collision-diagram .particles {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .particle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: white;
+        }
+
+        .particle.a {
+            background: var(--cyan);
+        }
+
+        .particle.b {
+            background: var(--pink);
+        }
+
+        .particle.product {
+            background: var(--accent);
+            width: 60px;
+            height: 60px;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            color: var(--yellow);
+        }
+
+        .energy-diagram {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .energy-diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .factor-box {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1rem;
+            align-items: start;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+        }
+
+        .factor-box .symbol {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.5rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .historical-note {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .links-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .sim-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            border: 1px solid var(--bg-tertiary);
+            transition: all 0.3s ease;
+        }
+
+        .sim-link:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .sim-link .icon {
+            font-size: 1.5rem;
+        }
+
+        .sim-link .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .highlight {
+            background: var(--accent-dim);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--bg-tertiary);
+            text-align: center;
+        }
+
+        footer a {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #7c3aed 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        footer a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → Guía
+        </nav>
+        <h1>Cinética y Colisiones</h1>
+        <p class="subtitle">Por qué las reacciones tienen la velocidad que tienen</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>¿Qué Observarás?</h2>
+            <p>
+                Esta simulación te permite explorar los fundamentos de la cinética química desde
+                el nivel molecular. Observarás cómo las partículas colisionan, por qué solo algunas
+                colisiones producen reacción, y cómo la temperatura afecta dramáticamente la velocidad.
+            </p>
+
+            <div class="grid-2">
+                <div class="feature-card">
+                    <h4>Tres Vistas Integradas</h4>
+                    <p>Colisiones en tiempo real, perfil de energía de reacción, y distribución de Maxwell-Boltzmann.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Ecuación de Arrhenius</h4>
+                    <p>Observa cómo k = Ae<sup>-Ea/RT</sup> conecta temperatura, energía de activación y velocidad.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Colisiones Efectivas</h4>
+                    <p>Distingue visualmente las colisiones que producen reacción (suficiente energía) de las elásticas.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Control de Parámetros</h4>
+                    <p>Modifica T, Ea, concentración y factor pre-exponencial para ver sus efectos en tiempo real.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Las Tres Vistas de la Simulación</h2>
+
+            <div class="view-card">
+                <h4><span class="icon">⚛️</span> Vista de Colisiones</h4>
+                <p>
+                    Partículas A (cyan) y B (rosa) se mueven según la distribución de velocidades de Maxwell.
+                    Cuando colisionan, la simulación evalúa si tienen suficiente energía para superar
+                    la barrera de activación:
+                </p>
+                <ul>
+                    <li><strong>Colisión efectiva</strong> (destello amarillo): Las partículas se combinan para formar producto AB (púrpura)</li>
+                    <li><strong>Colisión elástica</strong> (destello gris): Las partículas rebotan sin reaccionar</li>
+                </ul>
+                <p>
+                    La fracción de colisiones efectivas está directamente relacionada con el término
+                    exponencial de la ecuación de Arrhenius.
+                </p>
+            </div>
+
+            <div class="view-card">
+                <h4><span class="icon">📈</span> Vista de Energía (Perfil de Reacción)</h4>
+                <p>
+                    Muestra el diagrama clásico de coordenada de reacción:
+                </p>
+                <ul>
+                    <li><strong>Reactantes (A + B):</strong> Estado inicial, energía de referencia</li>
+                    <li><strong>Estado de transición [A···B]‡:</strong> El complejo activado en el máximo de energía</li>
+                    <li><strong>Productos (AB):</strong> Estado final, más estable si ΔH < 0</li>
+                    <li><strong>Ea:</strong> La barrera de activación que las moléculas deben superar</li>
+                </ul>
+            </div>
+
+            <div class="view-card">
+                <h4><span class="icon">📊</span> Vista Maxwell-Boltzmann</h4>
+                <p>
+                    La distribución de energías cinéticas de las moléculas a diferentes temperaturas.
+                    El área sombreada representa las moléculas con energía ≥ Ea:
+                </p>
+                <ul>
+                    <li>A mayor temperatura, la curva se aplana y desplaza a la derecha</li>
+                    <li>Una fracción mayor de moléculas supera la barrera Ea</li>
+                    <li>Por eso la velocidad de reacción aumenta exponencialmente con T</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conceptos Clave</h2>
+
+            <h3>Teoría de Colisiones</h3>
+            <p>
+                Para que ocurra una reacción bimolecular (A + B → AB), las moléculas deben:
+            </p>
+            <ol>
+                <li><strong>Colisionar:</strong> Encontrarse físicamente en el espacio</li>
+                <li><strong>Con suficiente energía:</strong> La energía cinética total debe superar Ea</li>
+                <li><strong>Con orientación correcta:</strong> Los átomos reactivos deben estar alineados</li>
+            </ol>
+
+            <div class="collision-diagram">
+                <h4>A + B → AB</h4>
+                <div class="particles">
+                    <div class="particle a">A</div>
+                    <div class="particle b">B</div>
+                    <span class="arrow">→</span>
+                    <div class="particle product">AB</div>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                    Solo una pequeña fracción de las colisiones totales resulta en reacción
+                </p>
+            </div>
+
+            <h3>La Barrera de Activación</h3>
+            <div class="concept-box">
+                <p>
+                    La <strong>energía de activación (Ea)</strong> es la barrera energética que las
+                    moléculas deben superar para reaccionar. Representa la energía necesaria para:
+                </p>
+                <ul style="margin-top: 0.5rem;">
+                    <li>Romper enlaces existentes en los reactantes</li>
+                    <li>Formar el complejo activado (estado de transición)</li>
+                    <li>Reorganizar los electrones hacia los nuevos enlaces</li>
+                </ul>
+                <p style="margin-bottom: 0;">
+                    Reacciones con Ea pequeña son rápidas; con Ea grande son lentas a temperatura ambiente.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>La Ecuación de Arrhenius</h2>
+
+            <div class="equation-block">
+                <div class="main">k = A × e<sup>−Ea/RT</sup></div>
+                <div class="note">Constante de velocidad en función de T y Ea</div>
+            </div>
+
+            <div class="factor-box">
+                <span class="symbol">k</span>
+                <div>
+                    <strong>Constante de velocidad</strong><br>
+                    Mide cuán rápido ocurre la reacción. Unidades dependen del orden.
+                </div>
+            </div>
+
+            <div class="factor-box">
+                <span class="symbol">A</span>
+                <div>
+                    <strong>Factor pre-exponencial (frecuencia)</strong><br>
+                    Representa la frecuencia de colisiones y el factor de orientación.
+                    Típicamente 10⁸ - 10¹³ s⁻¹ para reacciones en fase gaseosa.
+                </div>
+            </div>
+
+            <div class="factor-box">
+                <span class="symbol">Ea</span>
+                <div>
+                    <strong>Energía de activación</strong><br>
+                    La barrera energética en J/mol o kJ/mol. Determina la sensibilidad a la temperatura.
+                </div>
+            </div>
+
+            <div class="factor-box">
+                <span class="symbol">R</span>
+                <div>
+                    <strong>Constante de los gases</strong><br>
+                    8.314 J/(mol·K). Conecta energía por mol con temperatura.
+                </div>
+            </div>
+
+            <div class="factor-box">
+                <span class="symbol">T</span>
+                <div>
+                    <strong>Temperatura absoluta</strong><br>
+                    En Kelvin. Aparece en el denominador del exponente, así que ↑T → ↑k.
+                </div>
+            </div>
+
+            <h3>Forma Logarítmica (Gráfico de Arrhenius)</h3>
+            <div class="equation-block">
+                <div class="main">ln(k) = ln(A) − Ea/R × (1/T)</div>
+                <div class="note">Graficar ln(k) vs 1/T da una recta con pendiente = −Ea/R</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Factores que Afectan la Velocidad</h2>
+
+            <table>
+                <tr>
+                    <th>Factor</th>
+                    <th>Efecto en k</th>
+                    <th>Explicación Molecular</th>
+                </tr>
+                <tr>
+                    <td>↑ Temperatura</td>
+                    <td>↑↑ Aumenta (exponencial)</td>
+                    <td>Mayor fracción de moléculas supera Ea</td>
+                </tr>
+                <tr>
+                    <td>↓ Ea (catalizador)</td>
+                    <td>↑↑ Aumenta (exponencial)</td>
+                    <td>Barrera más baja, más colisiones efectivas</td>
+                </tr>
+                <tr>
+                    <td>↑ Concentración</td>
+                    <td>↑ Aumenta (lineal)</td>
+                    <td>Más colisiones por unidad de tiempo</td>
+                </tr>
+                <tr>
+                    <td>↑ Presión (gases)</td>
+                    <td>↑ Aumenta</td>
+                    <td>Equivalente a aumentar concentración</td>
+                </tr>
+                <tr>
+                    <td>↑ Superficie (sólidos)</td>
+                    <td>↑ Aumenta</td>
+                    <td>Más área expuesta para colisiones</td>
+                </tr>
+            </table>
+
+            <div class="concept-box">
+                <h4>La Regla del Doble</h4>
+                <p style="margin-bottom: 0;">
+                    Una regla empírica aproximada dice que la velocidad de reacción se duplica
+                    cada 10°C de aumento. Esto es una simplificación que funciona para
+                    reacciones con Ea ≈ 50-60 kJ/mol cerca de temperatura ambiente.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Experimentos Sugeridos</h2>
+
+            <div class="experiment-card">
+                <h4>Experimento 1: Efecto de la Temperatura</h4>
+                <ol>
+                    <li>En vista "Colisiones", observa la tasa de reacciones a 300 K</li>
+                    <li>Aumenta la temperatura a 400 K. Nota cómo las partículas se mueven más rápido</li>
+                    <li>Observa el aumento dramático en "Colisiones efectivas"</li>
+                    <li>Cambia a vista "Maxwell" para ver cómo más moléculas superan Ea</li>
+                    <li>Anota k a 300 K y 400 K. Calcula la razón k₄₀₀/k₃₀₀</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 2: La Barrera de Activación</h4>
+                <ol>
+                    <li>Fija T = 300 K. Observa la fracción efectiva con Ea = 50 kJ/mol</li>
+                    <li>Reduce Ea a 30 kJ/mol. ¿Cuánto aumenta k?</li>
+                    <li>Aumenta Ea a 80 kJ/mol. Ahora casi no hay reacciones</li>
+                    <li>Usa la vista "Energía" para visualizar las barreras</li>
+                    <li>Un catalizador reduce Ea sin cambiar ΔH. ¿Cómo afecta la velocidad?</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 3: Concentración vs Velocidad</h4>
+                <ol>
+                    <li>Con T y Ea fijos, observa el número de reacciones en 30 segundos</li>
+                    <li>Duplica la concentración (de 1.0 a 2.0 M)</li>
+                    <li>¿Se duplicó el número de colisiones por segundo?</li>
+                    <li>La concentración afecta la frecuencia de colisiones, no la fracción efectiva</li>
+                    <li>Por eso su efecto es lineal, no exponencial como T o Ea</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 4: Visualizando Maxwell-Boltzmann</h4>
+                <ol>
+                    <li>Ve a la vista "Maxwell" con T = 300 K y Ea = 50 kJ/mol</li>
+                    <li>Observa la curva de distribución y el área sombreada (moléculas reactivas)</li>
+                    <li>Aumenta T a 500 K. La curva se aplana y desplaza a la derecha</li>
+                    <li>El porcentaje de moléculas con E ≥ Ea aumenta significativamente</li>
+                    <li>Ahora reduce Ea a 30 kJ/mol manteniendo T = 300 K. Mismo efecto visual</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>Contexto Histórico</h2>
+
+            <div class="historical-note">
+                <h3>Svante Arrhenius (1859-1927)</h3>
+                <p>
+                    Químico sueco que en 1889 propuso su famosa ecuación basándose en observaciones
+                    empíricas de cómo la temperatura afecta las velocidades de reacción. Ganó el
+                    Premio Nobel de Química en 1903 (por su trabajo en electrolitos, no por la ecuación).
+                </p>
+                <p>
+                    La teoría de colisiones fue desarrollada por Max Trautz (1916) y William Lewis (1918),
+                    proporcionando una interpretación molecular de la ecuación de Arrhenius.
+                    Henry Eyring (1935) la refinó con la teoría del estado de transición,
+                    que explica el factor pre-exponencial en términos de mecánica estadística.
+                </p>
+                <p style="margin-bottom: 0;">
+                    Curiosamente, Arrhenius fue uno de los primeros en predecir el efecto invernadero
+                    (1896), calculando que duplicar el CO₂ atmosférico aumentaría la temperatura
+                    global ~5°C, una estimación sorprendentemente cercana a los modelos actuales.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conexiones Interdisciplinarias</h2>
+
+            <div class="links-section">
+                <a href="../le-chatelier.html" class="sim-link">
+                    <span class="icon">⚖️</span>
+                    <span class="label">Principio de Le Chatelier<br><small>Equilibrio vs cinética</small></span>
+                </a>
+                <a href="../gases-reales.html" class="sim-link">
+                    <span class="icon">💨</span>
+                    <span class="label">Gases Reales<br><small>Distribución de velocidades</small></span>
+                </a>
+                <a href="../../Biochemistry/Biochem Visual Lab/michaelis-menten.html" class="sim-link">
+                    <span class="icon">🔬</span>
+                    <span class="label">Cinética Enzimática<br><small>Catálisis biológica</small></span>
+                </a>
+                <a href="../decaimiento.html" class="sim-link">
+                    <span class="icon">☢️</span>
+                    <span class="label">Decaimiento Radiactivo<br><small>Cinética de primer orden</small></span>
+                </a>
+            </div>
+
+            <h3>Aplicaciones en la Vida Real</h3>
+            <ul>
+                <li><strong>Refrigeración de alimentos:</strong> Bajar T reduce la velocidad de descomposición</li>
+                <li><strong>Catalizadores automotrices:</strong> Reducen Ea para eliminar contaminantes del escape</li>
+                <li><strong>Síntesis industrial:</strong> Optimizar T y catalizadores para maximizar producción</li>
+                <li><strong>Farmacología:</strong> La vida media de medicamentos sigue cinética de Arrhenius</li>
+                <li><strong>Geología:</strong> Datación por racemización de aminoácidos usa dependencia de T</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Para Explorar Más</h2>
+            <ul>
+                <li>
+                    <strong>Teoría del estado de transición (Eyring):</strong> Trata el estado de
+                    transición como una especie molecular en equilibrio con los reactantes.
+                </li>
+                <li>
+                    <strong>Energía de activación negativa:</strong> Algunas reacciones (ej: recombinación
+                    de radicales) se vuelven más lentas al aumentar T. Esto ocurre cuando hay un
+                    pre-equilibrio involucrado.
+                </li>
+                <li>
+                    <strong>Efecto isotópico cinético:</strong> Reemplazar H por D cambia la velocidad,
+                    revelando qué enlaces se rompen en el paso limitante.
+                </li>
+                <li>
+                    <strong>Catálisis enzimática:</strong> Las enzimas pueden reducir Ea de ~100 kJ/mol
+                    a ~20 kJ/mol, acelerando reacciones millones de veces.
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <a href="../cinetica-colisiones.html">Abrir Simulación</a>
+    </footer>
+</body>
+</html>

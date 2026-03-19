@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Diagrama de Fases - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a1a;
+            --color-surface: #1e293b;
+            --color-accent: #3b82f6;
+            --color-accent-dim: rgba(59, 130, 246, 0.2);
+            --color-text: #e2e8f0;
+            --color-text-dim: #94a3b8;
+            --color-highlight: #fbbf24;
+            --color-solid: #60a5fa;
+            --color-liquid: #22c55e;
+            --color-gas: #f97316;
+            --color-supercritical: #a855f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--color-text);
+            background: var(--color-bg);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-accent-dim);
+        }
+
+        .breadcrumb {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--color-text-dim);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-highlight);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--color-accent);
+        }
+
+        .launch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--color-accent) 0%, #1d4ed8 100%);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 1rem 0;
+            transition: all 0.3s;
+        }
+
+        .launch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-accent-dim);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .concept-card h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .phase-visual {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .phase-item {
+            background: var(--color-surface);
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+        }
+
+        .phase-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .phase-name.solid { color: var(--color-solid); }
+        .phase-name.liquid { color: var(--color-liquid); }
+        .phase-name.gas { color: var(--color-gas); }
+        .phase-name.supercritical { color: var(--color-supercritical); }
+
+        .phase-desc {
+            font-size: 0.8rem;
+            color: var(--color-text-dim);
+            margin-top: 0.25rem;
+        }
+
+        .equation-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 3px solid var(--color-accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .equation-box .eq-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-box .eq-main {
+            color: var(--color-accent);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-box .eq-desc {
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.95rem;
+            color: var(--color-text-dim);
+        }
+
+        .points-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .points-table th,
+        .points-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-accent-dim);
+        }
+
+        .points-table th {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .points-table code {
+            font-family: 'Fira Code', monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .key-insight {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        .key-insight strong {
+            color: var(--color-highlight);
+        }
+
+        .experiment-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.1) 100%);
+            border: 1px solid var(--color-accent-dim);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .experiment-card h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .experiment-card ol {
+            margin-left: 1.5rem;
+            color: var(--color-text-dim);
+        }
+
+        .experiment-card li {
+            margin-bottom: 0.5rem;
+        }
+
+        .transition-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .transition-item {
+            background: var(--color-surface);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .transition-name {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .transition-arrow {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        .transition-desc {
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+            margin-top: 0.5rem;
+        }
+
+        .anomaly-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+        }
+
+        .anomaly-box strong {
+            color: #ef4444;
+        }
+
+        .substance-compare {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .substance-card {
+            background: var(--color-surface);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .substance-name {
+            font-family: 'Fira Code', monospace;
+            color: var(--color-accent);
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .substance-data {
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+        }
+
+        .substance-data div {
+            margin-bottom: 0.25rem;
+        }
+
+        .connection-list {
+            display: grid;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .connection-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--color-surface);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: all 0.3s;
+        }
+
+        .connection-item:hover {
+            background: rgba(59, 130, 246, 0.15);
+            transform: translateX(4px);
+        }
+
+        .connection-icon {
+            font-size: 1.5rem;
+        }
+
+        .connection-text strong {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .connection-text span {
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+        }
+
+        .quote {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--color-text-dim);
+            border-left: 3px solid var(--color-highlight);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .quote cite {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            color: var(--color-accent);
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-accent-dim);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--color-text-dim);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> →
+            <a href="../diagrama-fases.html">Simulación</a> →
+            Guía
+        </nav>
+        <h1>Diagrama de Fases</h1>
+        <p class="subtitle">Mapeando los estados de la materia en función de temperatura y presión</p>
+        <a href="../diagrama-fases.html" class="launch-btn">
+            ▶ Abrir Simulación
+        </a>
+    </header>
+
+    <main>
+        <section>
+            <h2>¿Qué observarás?</h2>
+            <p>
+                Un <strong>diagrama de fases</strong> es un mapa que muestra en qué estado
+                (sólido, líquido, gas) se encuentra una sustancia según su temperatura y presión.
+                Esta simulación te permite explorar los diagramas de fase de varias sustancias
+                y entender los puntos especiales donde coexisten múltiples fases.
+            </p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>Regiones de fase</h4>
+                    <p>Cada zona del diagrama representa un estado estable.
+                       Las líneas marcan los límites entre fases.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Punto triple</h4>
+                    <p>El único punto donde coexisten las tres fases
+                       (sólido, líquido, gas) en equilibrio.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Punto crítico</h4>
+                    <p>Más allá de este punto, líquido y gas son
+                       indistinguibles: fluido supercrítico.</p>
+                </div>
+                <div class="concept-card">
+                    <h4>Transiciones</h4>
+                    <p>Cruzar una línea = cambio de fase.
+                       El proceso depende de la dirección.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Los Cuatro Estados de la Materia</h2>
+
+            <div class="phase-visual">
+                <div class="phase-item">
+                    <div class="phase-icon">🧊</div>
+                    <div class="phase-name solid">Sólido</div>
+                    <div class="phase-desc">Moléculas fijas, vibrando</div>
+                </div>
+                <div class="phase-item">
+                    <div class="phase-icon">💧</div>
+                    <div class="phase-name liquid">Líquido</div>
+                    <div class="phase-desc">Moléculas móviles, juntas</div>
+                </div>
+                <div class="phase-item">
+                    <div class="phase-icon">💨</div>
+                    <div class="phase-name gas">Gas</div>
+                    <div class="phase-desc">Moléculas libres, dispersas</div>
+                </div>
+                <div class="phase-item">
+                    <div class="phase-icon">✨</div>
+                    <div class="phase-name supercritical">Supercrítico</div>
+                    <div class="phase-desc">Propiedades mixtas L/G</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Los Puntos Especiales</h2>
+
+            <h3>Punto Triple</h3>
+            <p>
+                En el punto triple, las tres curvas de equilibrio (fusión, vaporización, sublimación)
+                se encuentran. Es el único punto donde las tres fases pueden coexistir.
+                El punto triple del agua define exactamente 273.16 K (0.01°C) y se usa como
+                referencia para la escala de temperatura Kelvin.
+            </p>
+
+            <h3>Punto Crítico</h3>
+            <p>
+                Por encima del punto crítico (T<sub>c</sub>, P<sub>c</sub>), la distinción entre
+                líquido y gas desaparece. El <strong>fluido supercrítico</strong> tiene propiedades
+                únicas: difunde como un gas pero disuelve como un líquido. Se usa industrialmente
+                para extracción (CO₂ supercrítico para descafeinar café).
+            </p>
+
+            <table class="points-table">
+                <tr>
+                    <th>Sustancia</th>
+                    <th>Punto Triple</th>
+                    <th>Punto Crítico</th>
+                    <th>Peculiaridad</th>
+                </tr>
+                <tr>
+                    <td>H₂O</td>
+                    <td>273.16 K, 0.006 atm</td>
+                    <td>647 K, 218 atm</td>
+                    <td>Pendiente negativa S→L</td>
+                </tr>
+                <tr>
+                    <td>CO₂</td>
+                    <td>216.55 K, 5.11 atm</td>
+                    <td>304.2 K, 72.9 atm</td>
+                    <td>Sublima a 1 atm</td>
+                </tr>
+                <tr>
+                    <td>N₂</td>
+                    <td>63.15 K, 0.125 atm</td>
+                    <td>126.2 K, 33.5 atm</td>
+                    <td>T crítica muy baja</td>
+                </tr>
+                <tr>
+                    <td>Etanol</td>
+                    <td>150 K, ~0 atm</td>
+                    <td>514 K, 61 atm</td>
+                    <td>Amplio rango líquido</td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Las Transiciones de Fase</h2>
+
+            <div class="transition-grid">
+                <div class="transition-item">
+                    <div class="transition-name">Fusión</div>
+                    <div class="transition-arrow">
+                        <span style="color: var(--color-solid);">Sólido</span>
+                        →
+                        <span style="color: var(--color-liquid);">Líquido</span>
+                    </div>
+                    <div class="transition-desc">Absorbe calor (endotérmico). Ejemplo: hielo derritiéndose.</div>
+                </div>
+                <div class="transition-item">
+                    <div class="transition-name">Solidificación</div>
+                    <div class="transition-arrow">
+                        <span style="color: var(--color-liquid);">Líquido</span>
+                        →
+                        <span style="color: var(--color-solid);">Sólido</span>
+                    </div>
+                    <div class="transition-desc">Libera calor (exotérmico). Ejemplo: agua congelándose.</div>
+                </div>
+                <div class="transition-item">
+                    <div class="transition-name">Vaporización</div>
+                    <div class="transition-arrow">
+                        <span style="color: var(--color-liquid);">Líquido</span>
+                        →
+                        <span style="color: var(--color-gas);">Gas</span>
+                    </div>
+                    <div class="transition-desc">Absorbe calor. Ejemplo: agua hirviéndose.</div>
+                </div>
+                <div class="transition-item">
+                    <div class="transition-name">Condensación</div>
+                    <div class="transition-arrow">
+                        <span style="color: var(--color-gas);">Gas</span>
+                        →
+                        <span style="color: var(--color-liquid);">Líquido</span>
+                    </div>
+                    <div class="transition-desc">Libera calor. Ejemplo: rocío formándose.</div>
+                </div>
+                <div class="transition-item">
+                    <div class="transition-name">Sublimación</div>
+                    <div class="transition-arrow">
+                        <span style="color: var(--color-solid);">Sólido</span>
+                        →
+                        <span style="color: var(--color-gas);">Gas</span>
+                    </div>
+                    <div class="transition-desc">Directamente sin pasar por líquido. Ejemplo: hielo seco (CO₂).</div>
+                </div>
+                <div class="transition-item">
+                    <div class="transition-name">Deposición</div>
+                    <div class="transition-arrow">
+                        <span style="color: var(--color-gas);">Gas</span>
+                        →
+                        <span style="color: var(--color-solid);">Sólido</span>
+                    </div>
+                    <div class="transition-desc">Directamente sin pasar por líquido. Ejemplo: escarcha.</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>La Anomalía del Agua</h2>
+
+            <div class="anomaly-box">
+                <strong>El agua es anómala:</strong> La pendiente de la curva sólido-líquido
+                es negativa (inclinada hacia la izquierda). Esto significa que aumentar la presión
+                sobre el hielo puede derretirlo, algo único entre las sustancias comunes.
+            </div>
+
+            <p>
+                Esta anomalía explica por qué:
+            </p>
+            <ul>
+                <li><strong>El hielo flota:</strong> Es menos denso que el agua líquida (otra anomalía relacionada)</li>
+                <li><strong>Los patinadores sobre hielo:</strong> La presión bajo la cuchilla derrite el hielo superficialmente</li>
+                <li><strong>Los glaciares fluyen:</strong> La presión en la base derrite el hielo parcialmente</li>
+            </ul>
+
+            <div class="key-insight">
+                <strong>¿Por qué es anómala?</strong> Los puentes de hidrógeno en el hielo crean
+                una estructura cristalina abierta (hexagonal) que ocupa más volumen que el agua líquida.
+                Al aplicar presión, esta estructura colapsa y el hielo se derrite.
+            </div>
+        </section>
+
+        <section>
+            <h2>Ecuaciones Relevantes</h2>
+
+            <div class="equation-box">
+                <div class="eq-name">Ecuación de Clausius-Clapeyron</div>
+                <div class="eq-main">dP/dT = ΔH / (T · ΔV)</div>
+                <div class="eq-desc">
+                    Describe la pendiente de las curvas de equilibrio.
+                    ΔH = entalpía de transición, ΔV = cambio de volumen.
+                    Si ΔV < 0 (agua), la pendiente puede ser negativa.
+                </div>
+            </div>
+
+            <div class="equation-box">
+                <div class="eq-name">Regla de las fases de Gibbs</div>
+                <div class="eq-main">F = C - P + 2</div>
+                <div class="eq-desc">
+                    F = grados de libertad, C = componentes, P = fases.
+                    En el punto triple (P=3, C=1): F = 0 (punto fijo).
+                    En una línea de equilibrio (P=2): F = 1 (una variable libre).
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Experimentos Sugeridos</h2>
+
+            <div class="experiment-card">
+                <h4>🔬 Experimento 1: Cruzar el punto triple</h4>
+                <ol>
+                    <li>Selecciona H₂O y haz clic en "Ir a Punto Triple"</li>
+                    <li>Observa que estás en el punto donde las tres fases coexisten</li>
+                    <li>Aumenta ligeramente la temperatura: pasas a gas</li>
+                    <li>Vuelve al triple y aumenta la presión: pasas a líquido</li>
+                    <li>Vuelve al triple y disminuye la temperatura: pasas a sólido</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>🔬 Experimento 2: Proceso isobárico (P constante)</h4>
+                <ol>
+                    <li>Fija la presión en 1 atm y haz clic en "Isobárico"</li>
+                    <li>Observa cómo atraviesas las fases al aumentar T</li>
+                    <li>Para H₂O: sólido (< 273K) → líquido → gas (> 373K)</li>
+                    <li>Para CO₂ a 1 atm: ¡No hay fase líquida! Sublima directamente</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>🔬 Experimento 3: El fluido supercrítico</h4>
+                <ol>
+                    <li>Haz clic en "Ir a Punto Crítico"</li>
+                    <li>Observa la visualización molecular: las moléculas se comportan de forma ambigua</li>
+                    <li>Intenta cruzar de líquido a gas pasando "por arriba" del punto crítico</li>
+                    <li>No hay transición abrupta: es un cambio continuo</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>🔬 Experimento 4: La anomalía del agua vs CO₂</h4>
+                <ol>
+                    <li>Compara la pendiente de la línea sólido-líquido en H₂O vs CO₂</li>
+                    <li>En H₂O: se inclina a la izquierda (pendiente negativa)</li>
+                    <li>En CO₂: se inclina a la derecha (pendiente positiva, "normal")</li>
+                    <li>Aumenta P a muy alta presión en H₂O y observa que puedes derretir hielo</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>Comparativa de Sustancias</h2>
+
+            <div class="substance-compare">
+                <div class="substance-card">
+                    <div class="substance-name">H₂O (Agua)</div>
+                    <div class="substance-data">
+                        <div>Punto triple muy bajo en P (0.006 atm)</div>
+                        <div>Líquida a 1 atm entre 273-373 K</div>
+                        <div>Punto crítico alto: 647 K, 218 atm</div>
+                        <div>Anomalía: hielo menos denso que agua</div>
+                    </div>
+                </div>
+                <div class="substance-card">
+                    <div class="substance-name">CO₂ (Dióxido de carbono)</div>
+                    <div class="substance-data">
+                        <div>Punto triple a 5.11 atm (sobre 1 atm)</div>
+                        <div>A 1 atm: sublima directamente a 194.65 K</div>
+                        <div>Punto crítico bajo: 304.2 K, 72.9 atm</div>
+                        <div>Usado como solvente supercrítico</div>
+                    </div>
+                </div>
+                <div class="substance-card">
+                    <div class="substance-name">N₂ (Nitrógeno)</div>
+                    <div class="substance-data">
+                        <div>Todas las temperaturas muy bajas</div>
+                        <div>Líquido a 1 atm: 63-77 K</div>
+                        <div>Punto crítico: 126 K, 33.5 atm</div>
+                        <div>Usado como refrigerante criogénico</div>
+                    </div>
+                </div>
+                <div class="substance-card">
+                    <div class="substance-name">C₂H₅OH (Etanol)</div>
+                    <div class="substance-data">
+                        <div>Amplio rango líquido: 159-351 K</div>
+                        <div>Punto triple prácticamente a P = 0</div>
+                        <div>Punto crítico: 514 K, 61 atm</div>
+                        <div>Siempre líquido a condiciones ambiente</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conexiones Interdisciplinarias</h2>
+
+            <div class="connection-list">
+                <a href="../gases-reales.html" class="connection-item">
+                    <span class="connection-icon">💨</span>
+                    <div class="connection-text">
+                        <strong>Gases Reales</strong>
+                        <span>Ecuación de Van der Waals y desviaciones del gas ideal</span>
+                    </div>
+                </a>
+                <a href="../calorimetria.html" class="connection-item">
+                    <span class="connection-icon">🔥</span>
+                    <div class="connection-text">
+                        <strong>Calorimetría</strong>
+                        <span>Calor latente en las transiciones de fase</span>
+                    </div>
+                </a>
+                <a href="../../Geology/Geology Visual Lab/ciclo-rocas.html" class="connection-item">
+                    <span class="connection-icon">🪨</span>
+                    <div class="connection-text">
+                        <strong>Ciclo de Rocas (Geología)</strong>
+                        <span>Fusión de magma, cristalización, metamorfismo</span>
+                    </div>
+                </a>
+                <a href="../../Physics/Physics Visual Lab/termodinamica.html" class="connection-item">
+                    <span class="connection-icon">🌡️</span>
+                    <div class="connection-text">
+                        <strong>Termodinámica (Física)</strong>
+                        <span>Ciclos termodinámicos y cambios de fase</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <h2>Aplicaciones Prácticas</h2>
+            <ul>
+                <li>
+                    <strong>Liofilización:</strong>
+                    Congelar alimentos y luego sublimar el agua a baja presión preserva mejor los nutrientes.
+                </li>
+                <li>
+                    <strong>Extracción con CO₂ supercrítico:</strong>
+                    Descafeinado del café, extracción de lúpulo para cerveza.
+                </li>
+                <li>
+                    <strong>Refrigeración:</strong>
+                    Los ciclos de refrigeración manipulan las transiciones líquido-gas.
+                </li>
+                <li>
+                    <strong>Meteorología:</strong>
+                    La formación de nubes y precipitación depende del diagrama de fases del agua.
+                </li>
+            </ul>
+
+            <div class="key-insight">
+                <strong>Reflexión final:</strong> El diagrama de fases es un mapa fundamental
+                de la termodinámica. Cada punto representa un estado único de la materia,
+                y las líneas que separan regiones representan equilibrios dinámicos donde
+                dos fases coexisten intercambiando moléculas continuamente.
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Chemistry Visual Lab — EigenLab</p>
+        <p>Una guía para explorar los estados de la materia</p>
+    </footer>
+</body>
+</html>

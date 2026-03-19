@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Principio de Le Chatelier - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #252540;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #22c55e;
+            --accent-dim: rgba(34, 197, 94, 0.15);
+            --reactant-color: #22d3ee;
+            --product-color: #f472b6;
+            --warning-color: #fbbf24;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .breadcrumb {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #16a34a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-dim);
+        }
+
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .principle-box {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .principle-box blockquote {
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .principle-box cite {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .concept-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .equation-block {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+
+        .equation-block .main {
+            font-size: 1.4rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-block .note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        th {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--bg-secondary);
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .feature-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .perturbation-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .perturbation-card h4 {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .perturbation-card .icon {
+            font-size: 1.5rem;
+        }
+
+        .shift-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .shift-right {
+            background: rgba(244, 114, 182, 0.2);
+            color: var(--product-color);
+        }
+
+        .shift-left {
+            background: rgba(34, 211, 238, 0.2);
+            color: var(--reactant-color);
+        }
+
+        .experiment-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--accent-dim);
+        }
+
+        .experiment-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .experiment-card ol {
+            margin-left: 1.5rem;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .reaction-display {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+        }
+
+        .reaction-display .reactants {
+            color: var(--reactant-color);
+        }
+
+        .reaction-display .products {
+            color: var(--product-color);
+        }
+
+        .reaction-display .arrow {
+            color: var(--accent);
+            margin: 0 0.75rem;
+        }
+
+        .q-k-visual {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .q-k-scale {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 1rem 0;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .q-k-scale::after {
+            content: '';
+            position: absolute;
+            left: 15%;
+            right: 15%;
+            top: 50%;
+            height: 2px;
+            background: var(--bg-tertiary);
+            z-index: 0;
+        }
+
+        .q-k-scale .endpoint {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            z-index: 1;
+        }
+
+        .q-k-scale .center {
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+            color: var(--accent);
+            z-index: 1;
+            background: var(--bg-secondary);
+            padding: 0.25rem 0.5rem;
+        }
+
+        .historical-note {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(34, 197, 94, 0.1) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .links-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .sim-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            border: 1px solid var(--bg-tertiary);
+            transition: all 0.3s ease;
+        }
+
+        .sim-link:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .sim-link .icon {
+            font-size: 1.5rem;
+        }
+
+        .sim-link .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .highlight {
+            background: var(--accent-dim);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--bg-tertiary);
+            text-align: center;
+        }
+
+        footer a {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #16a34a 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        footer a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(34, 197, 94, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → Guía
+        </nav>
+        <h1>Principio de Le Chatelier</h1>
+        <p class="subtitle">La respuesta de los sistemas en equilibrio a las perturbaciones</p>
+    </header>
+
+    <main>
+        <section>
+            <div class="principle-box">
+                <blockquote>
+                    "Si un sistema en equilibrio es perturbado, el equilibrio se desplazará en la
+                    dirección que tiende a contrarrestar la perturbación."
+                </blockquote>
+                <cite>— Henry Louis Le Chatelier, 1884</cite>
+            </div>
+
+            <h2>¿Qué Observarás?</h2>
+            <p>
+                Esta simulación te permite experimentar directamente con sistemas en equilibrio químico.
+                Verás partículas de reactantes y productos interconvirtiéndose continuamente, y observarás
+                cómo el sistema responde cuando alteras la concentración, presión o temperatura.
+            </p>
+
+            <div class="grid-2">
+                <div class="feature-card">
+                    <h4>Cuatro Sistemas de Equilibrio</h4>
+                    <p>N₂O₄ ⇌ 2NO₂ (marrón), proceso Haber, esterificación, y descomposición de carbonato de calcio.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Perturbaciones Interactivas</h4>
+                    <p>Añade o elimina reactantes/productos, cambia la presión del sistema, calienta o enfría.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Comparación Q vs K</h4>
+                    <p>Visualización en tiempo real del cociente de reacción Q comparado con la constante de equilibrio K.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Gráfico de Concentraciones</h4>
+                    <p>Observa cómo evolucionan las concentraciones de reactantes y productos hacia el nuevo equilibrio.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conceptos Clave</h2>
+
+            <h3>Equilibrio Dinámico</h3>
+            <p>
+                En el equilibrio, la reacción <em>no se detiene</em>. Las moléculas continúan reaccionando
+                en ambas direcciones, pero las velocidades de la reacción directa e inversa son iguales,
+                por lo que las concentraciones permanecen constantes. Es un estado dinámico, no estático.
+            </p>
+
+            <div class="reaction-display">
+                <span class="reactants">Reactantes</span>
+                <span class="arrow">⇌</span>
+                <span class="products">Productos</span>
+            </div>
+
+            <h3>Q vs K: El Motor del Desplazamiento</h3>
+            <div class="q-k-visual">
+                <p>
+                    El <strong>cociente de reacción Q</strong> tiene la misma forma que K, pero se calcula
+                    con concentraciones en cualquier momento, no necesariamente en equilibrio.
+                </p>
+
+                <div class="q-k-scale">
+                    <span class="endpoint">Q &lt; K<br><small>→ Productos</small></span>
+                    <span class="center">Q = K<br>Equilibrio</span>
+                    <span class="endpoint">Q &gt; K<br><small>← Reactantes</small></span>
+                </div>
+
+                <ul style="margin-top: 1rem;">
+                    <li><strong>Q &lt; K:</strong> Hay "demasiados" reactantes. El sistema favorece la reacción directa.</li>
+                    <li><strong>Q = K:</strong> El sistema está en equilibrio.</li>
+                    <li><strong>Q &gt; K:</strong> Hay "demasiados" productos. El sistema favorece la reacción inversa.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Efectos de las Perturbaciones</h2>
+
+            <div class="perturbation-card">
+                <h4><span class="icon">🧪</span> Cambio de Concentración</h4>
+                <table>
+                    <tr>
+                        <th>Perturbación</th>
+                        <th>Efecto</th>
+                        <th>El Sistema...</th>
+                    </tr>
+                    <tr>
+                        <td>+ Reactante</td>
+                        <td><span class="shift-indicator shift-right">→ Productos</span></td>
+                        <td>Consume el exceso de reactante</td>
+                    </tr>
+                    <tr>
+                        <td>− Reactante</td>
+                        <td><span class="shift-indicator shift-left">← Reactantes</span></td>
+                        <td>Repone el reactante eliminado</td>
+                    </tr>
+                    <tr>
+                        <td>+ Producto</td>
+                        <td><span class="shift-indicator shift-left">← Reactantes</span></td>
+                        <td>Consume el exceso de producto</td>
+                    </tr>
+                    <tr>
+                        <td>− Producto</td>
+                        <td><span class="shift-indicator shift-right">→ Productos</span></td>
+                        <td>Repone el producto eliminado</td>
+                    </tr>
+                </table>
+                <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.95rem;">
+                    Nota: El cambio de concentración <em>no</em> cambia K. Solo cambia Q, que luego
+                    evoluciona hasta igualar K nuevamente.
+                </p>
+            </div>
+
+            <div class="perturbation-card">
+                <h4><span class="icon">📊</span> Cambio de Presión (Solo Gases)</h4>
+                <p>
+                    El efecto de la presión depende del <strong>cambio en moles de gas (Δn)</strong>:
+                </p>
+                <table>
+                    <tr>
+                        <th>Perturbación</th>
+                        <th>Δn &gt; 0 (más moles de producto)</th>
+                        <th>Δn &lt; 0 (menos moles de producto)</th>
+                    </tr>
+                    <tr>
+                        <td>↑ Aumentar P</td>
+                        <td><span class="shift-indicator shift-left">← Reactantes</span></td>
+                        <td><span class="shift-indicator shift-right">→ Productos</span></td>
+                    </tr>
+                    <tr>
+                        <td>↓ Disminuir P</td>
+                        <td><span class="shift-indicator shift-right">→ Productos</span></td>
+                        <td><span class="shift-indicator shift-left">← Reactantes</span></td>
+                    </tr>
+                </table>
+                <div class="concept-box" style="margin-top: 1rem;">
+                    <strong>Ejemplo: N₂O₄ ⇌ 2NO₂</strong><br>
+                    Δn = 2 - 1 = +1 (más moles de gas en productos)<br>
+                    Al aumentar la presión → desplazamiento hacia N₂O₄ (menos moles)
+                </div>
+            </div>
+
+            <div class="perturbation-card">
+                <h4><span class="icon">🔥</span> Cambio de Temperatura</h4>
+                <p>
+                    La temperatura es única porque <strong>sí cambia el valor de K</strong>. El efecto
+                    depende de si la reacción es endotérmica o exotérmica:
+                </p>
+                <table>
+                    <tr>
+                        <th>Tipo de Reacción</th>
+                        <th>ΔH</th>
+                        <th>Al Calentar</th>
+                        <th>Al Enfriar</th>
+                    </tr>
+                    <tr>
+                        <td>Endotérmica</td>
+                        <td>+ΔH</td>
+                        <td><span class="shift-indicator shift-right">→ Productos</span> (K aumenta)</td>
+                        <td><span class="shift-indicator shift-left">← Reactantes</span> (K disminuye)</td>
+                    </tr>
+                    <tr>
+                        <td>Exotérmica</td>
+                        <td>−ΔH</td>
+                        <td><span class="shift-indicator shift-left">← Reactantes</span> (K disminuye)</td>
+                        <td><span class="shift-indicator shift-right">→ Productos</span> (K aumenta)</td>
+                    </tr>
+                </table>
+                <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.95rem;">
+                    Piénsalo así: el calor es como un "reactivo" o "producto". En una reacción endotérmica
+                    (Reactantes + calor → Productos), añadir calor favorece los productos.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Sistemas de la Simulación</h2>
+
+            <table>
+                <tr>
+                    <th>Sistema</th>
+                    <th>Δn</th>
+                    <th>ΔH (kJ/mol)</th>
+                    <th>Notas</th>
+                </tr>
+                <tr>
+                    <td><code>N₂O₄ ⇌ 2NO₂</code></td>
+                    <td>+1</td>
+                    <td>+57.2 (endo)</td>
+                    <td>El NO₂ marrón aumenta con T</td>
+                </tr>
+                <tr>
+                    <td><code>N₂ + 3H₂ ⇌ 2NH₃</code></td>
+                    <td>−2</td>
+                    <td>−92.4 (exo)</td>
+                    <td>Proceso Haber: alta P, baja T</td>
+                </tr>
+                <tr>
+                    <td><code>Ácido + Alcohol ⇌ Éster</code></td>
+                    <td>0</td>
+                    <td>−10 (exo)</td>
+                    <td>Presión no afecta (líquidos)</td>
+                </tr>
+                <tr>
+                    <td><code>CaCO₃ ⇌ CaO + CO₂</code></td>
+                    <td>+1</td>
+                    <td>+178 (endo)</td>
+                    <td>Calcinación de caliza</td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>Ecuaciones Fundamentales</h2>
+
+            <div class="equation-block">
+                <div class="main">Q = [Productos]ⁿ / [Reactantes]ᵐ</div>
+                <div class="note">Cociente de reacción (misma forma que K)</div>
+            </div>
+
+            <div class="equation-block">
+                <div class="main">ln(K₂/K₁) = −ΔH/R × (1/T₂ − 1/T₁)</div>
+                <div class="note">Ecuación de Van't Hoff: cómo K cambia con T</div>
+            </div>
+
+            <p>
+                La ecuación de Van't Hoff muestra que para reacciones endotérmicas (ΔH > 0),
+                aumentar T hace que K aumente. Para exotérmicas (ΔH < 0), aumentar T hace que K disminuya.
+            </p>
+        </section>
+
+        <section>
+            <h2>Experimentos Sugeridos</h2>
+
+            <div class="experiment-card">
+                <h4>Experimento 1: El Sistema N₂O₄/NO₂</h4>
+                <ol>
+                    <li>Selecciona "N₂O₄ ⇌ 2NO₂" y observa el equilibrio inicial</li>
+                    <li>Añade reactante (N₂O₄). Observa: Q disminuye → desplazamiento a productos</li>
+                    <li>Espera al equilibrio. Ahora añade producto (NO₂). ¿Qué ocurre?</li>
+                    <li>Reinicia y calienta el sistema. Como es endotérmica, ¿hacia dónde se desplaza?</li>
+                    <li>Aumenta la presión. Con Δn = +1, ¿hacia dónde favorece?</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 2: Optimización del Proceso Haber</h4>
+                <ol>
+                    <li>Selecciona "N₂ + 3H₂ ⇌ 2NH₃" (proceso Haber-Bosch)</li>
+                    <li>Esta reacción es exotérmica (ΔH = −92.4). Enfría el sistema.</li>
+                    <li>Observa: K aumenta, más amoníaco. Pero... la reacción es más lenta.</li>
+                    <li>Ahora aumenta la presión. Con Δn = −2, ¿favorece productos o reactantes?</li>
+                    <li>Conclusión: alta P y T moderada (con catalizador) es el compromiso industrial.</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 3: Q vs K en Tiempo Real</h4>
+                <ol>
+                    <li>Con cualquier sistema, observa el panel "Comparación Q vs K"</li>
+                    <li>En equilibrio, Q = K (marcador amarillo sobre verde)</li>
+                    <li>Añade reactante. Observa cómo Q se mueve a la izquierda (Q < K)</li>
+                    <li>El sistema reacciona hasta que Q = K nuevamente</li>
+                    <li>Repite con otras perturbaciones y predice la dirección de Q antes de aplicarlas</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 4: La Esterificación</h4>
+                <ol>
+                    <li>Selecciona "Ácido + Alcohol ⇌ Éster + H₂O"</li>
+                    <li>Como Δn = 0, cambia la presión. ¿Hay efecto? (No debería)</li>
+                    <li>¿Cómo desplazarías el equilibrio hacia el éster?</li>
+                    <li>Opciones: añadir reactante, eliminar producto (agua con desecante)</li>
+                    <li>Este es el principio de la síntesis de ésteres en el laboratorio</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>Contexto Histórico</h2>
+
+            <div class="historical-note">
+                <h3>Henry Louis Le Chatelier (1850-1936)</h3>
+                <p>
+                    Ingeniero químico francés que formuló su principio en 1884 mientras estudiaba
+                    equilibrios industriales, particularmente la producción de amoníaco. Su principio
+                    no solo aplica a la química: es un ejemplo de <strong>retroalimentación negativa</strong>
+                    que aparece en sistemas termodinámicos, biológicos y económicos.
+                </p>
+                <p>
+                    Fritz Haber y Carl Bosch aplicaron magistralmente el principio de Le Chatelier
+                    para desarrollar el proceso Haber-Bosch (1909-1913), que sintetiza amoníaco
+                    a partir de nitrógeno atmosférico. Este proceso alimenta a aproximadamente
+                    la mitad de la población mundial actual a través de fertilizantes nitrogenados.
+                </p>
+                <p style="margin-bottom: 0;">
+                    El propio Le Chatelier intentó sintetizar amoníaco pero abandonó después de una
+                    explosión en su laboratorio. Haber tuvo éxito usando presiones extremas (200 atm)
+                    y un catalizador de hierro que aceleraba la reacción sin cambiar el equilibrio.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conexiones Interdisciplinarias</h2>
+
+            <div class="links-section">
+                <a href="../titulacion.html" class="sim-link">
+                    <span class="icon">🧪</span>
+                    <span class="label">Curva de Titulación<br><small>Buffers resisten cambios de pH</small></span>
+                </a>
+                <a href="../solubilidad.html" class="sim-link">
+                    <span class="icon">💎</span>
+                    <span class="label">Producto de Solubilidad<br><small>Equilibrios de precipitación</small></span>
+                </a>
+                <a href="../gases-reales.html" class="sim-link">
+                    <span class="icon">💨</span>
+                    <span class="label">Gases Reales<br><small>Comportamiento bajo presión</small></span>
+                </a>
+                <a href="../../Biochemistry/Biochem Visual Lab/michaelis-menten.html" class="sim-link">
+                    <span class="icon">🔬</span>
+                    <span class="label">Cinética Enzimática<br><small>Inhibición por producto</small></span>
+                </a>
+            </div>
+
+            <h3>Aplicaciones en la Vida Real</h3>
+            <ul>
+                <li><strong>Hemoglobina y O₂:</strong> El efecto Bohr: CO₂ alto desplaza O₂ de la hemoglobina</li>
+                <li><strong>Océanos y CO₂:</strong> Acidificación oceánica por absorción de CO₂ atmosférico</li>
+                <li><strong>Homeostasis:</strong> El cuerpo mantiene pH, glucosa, temperatura mediante equilibrios</li>
+                <li><strong>Economía:</strong> Oferta/demanda es un equilibrio que responde a perturbaciones</li>
+                <li><strong>Metalurgia:</strong> Extracción de metales manipulando equilibrios redox</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Para Explorar Más</h2>
+            <ul>
+                <li>
+                    <strong>Catalizadores:</strong> Aceleran la llegada al equilibrio pero no lo desplazan.
+                    Afectan la cinética, no la termodinámica.
+                </li>
+                <li>
+                    <strong>Gases inertes:</strong> Añadir un gas inerte a volumen constante no cambia
+                    las concentraciones, así que no hay efecto. A presión constante, puede haber dilución.
+                </li>
+                <li>
+                    <strong>Equilibrios múltiples:</strong> Sistemas acoplados donde el producto de una
+                    reacción es reactante de otra (común en bioquímica).
+                </li>
+                <li>
+                    <strong>Principio de mínima acción:</strong> Le Chatelier es un caso específico del
+                    principio más general de que los sistemas tienden a minimizar perturbaciones.
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <a href="../le-chatelier.html">Abrir Simulación</a>
+    </footer>
+</body>
+</html>

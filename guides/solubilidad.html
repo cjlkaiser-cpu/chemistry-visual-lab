@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Solubilidad y Kps - Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #252540;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent: #06b6d4;
+            --accent-dim: rgba(6, 182, 212, 0.15);
+            --unsaturated: #3b82f6;
+            --saturated: #22c55e;
+            --precipitate: #f97316;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        .breadcrumb {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #0891b2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 2.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-dim);
+        }
+
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 1.5rem 0 0.75rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .concept-box {
+            background: var(--bg-secondary);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .equation-block {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            overflow-x: auto;
+        }
+
+        .equation-block .main {
+            font-size: 1.4rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .equation-block .note {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        th {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--bg-secondary);
+        }
+
+        tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .feature-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .state-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid;
+        }
+
+        .state-card.unsaturated {
+            border-left-color: var(--unsaturated);
+        }
+
+        .state-card.saturated {
+            border-left-color: var(--saturated);
+        }
+
+        .state-card.precipitate {
+            border-left-color: var(--precipitate);
+        }
+
+        .state-card h4 {
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 0.75rem;
+        }
+
+        .state-card.unsaturated h4 { color: var(--unsaturated); }
+        .state-card.saturated h4 { color: var(--saturated); }
+        .state-card.precipitate h4 { color: var(--precipitate); }
+
+        .experiment-card {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border: 1px solid var(--accent-dim);
+        }
+
+        .experiment-card h4 {
+            font-family: 'Inter', sans-serif;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .experiment-card ol {
+            margin-left: 1.5rem;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: var(--bg-tertiary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .ksp-table {
+            font-size: 0.95rem;
+        }
+
+        .ksp-table td:nth-child(2) {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+        }
+
+        .historical-note {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .links-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .sim-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            border: 1px solid var(--bg-tertiary);
+            transition: all 0.3s ease;
+        }
+
+        .sim-link:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .sim-link .icon {
+            font-size: 1.5rem;
+        }
+
+        .sim-link .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .highlight {
+            background: var(--accent-dim);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        .diagram-box {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .diagram-box .axes {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--bg-tertiary);
+            text-align: center;
+        }
+
+        footer a {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #0891b2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        footer a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(6, 182, 212, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → Guía
+        </nav>
+        <h1>Solubilidad y Kps</h1>
+        <p class="subtitle">Equilibrios de precipitación y el producto de solubilidad</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>¿Qué Observarás?</h2>
+            <p>
+                Esta simulación visualiza el equilibrio entre una sal iónica sólida y sus iones disueltos.
+                Observarás cómo al cambiar las concentraciones iónicas, la solución puede pasar de
+                insaturada a sobresaturada, provocando la precipitación visual de cristales.
+            </p>
+
+            <div class="grid-2">
+                <div class="feature-card">
+                    <h4>Cinco Sales Iónicas</h4>
+                    <p>AgCl, BaSO₄, PbI₂, CaF₂ y Fe(OH)₃, cada una con su Kps característico y estequiometría.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Comparación Q vs Kps</h4>
+                    <p>Gráfico de barras que compara el producto iónico actual (Q) con la constante de equilibrio (Kps).</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Diagrama de Solubilidad</h4>
+                    <p>Curva hiperbólica que muestra la frontera entre solución insaturada y precipitación.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Precipitación Visual</h4>
+                    <p>Cuando Q > Kps, los iones se combinan formando cristales que caen al fondo del recipiente.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conceptos Clave</h2>
+
+            <h3>El Producto de Solubilidad (Kps)</h3>
+            <p>
+                Para una sal poco soluble en equilibrio con sus iones disueltos:
+            </p>
+
+            <div class="equation-block">
+                <div class="main">MₓAᵧ(s) ⇌ xM⁺(aq) + yA⁻(aq)</div>
+                <div class="note">Equilibrio heterogéneo sólido-solución</div>
+            </div>
+
+            <div class="equation-block">
+                <div class="main">Kps = [M⁺]ˣ × [A⁻]ʸ</div>
+                <div class="note">El sólido no aparece en la expresión (actividad = 1)</div>
+            </div>
+
+            <div class="concept-box">
+                <p>
+                    El <strong>Kps</strong> es una constante de equilibrio que depende solo de la temperatura.
+                    Un Kps pequeño indica una sal muy poco soluble. Por ejemplo, Fe(OH)₃ tiene
+                    Kps ≈ 10⁻³⁹, lo que significa que precipita a concentraciones extremadamente bajas de iones.
+                </p>
+            </div>
+
+            <h3>Los Tres Estados de la Solución</h3>
+
+            <div class="state-card unsaturated">
+                <h4>Insaturada (Q < Kps)</h4>
+                <p>
+                    El producto iónico es menor que Kps. La solución puede disolver más sal.
+                    Si añades sólido, se disolverá completamente hasta que Q = Kps.
+                </p>
+            </div>
+
+            <div class="state-card saturated">
+                <h4>Saturada (Q = Kps)</h4>
+                <p>
+                    El sistema está en equilibrio. La velocidad de disolución iguala la de precipitación.
+                    Añadir más sólido no cambia las concentraciones iónicas.
+                </p>
+            </div>
+
+            <div class="state-card precipitate">
+                <h4>Sobresaturada (Q > Kps)</h4>
+                <p>
+                    El producto iónico excede Kps. El sistema está fuera de equilibrio.
+                    Los iones se combinan para formar precipitado hasta que Q = Kps nuevamente.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Sales de la Simulación</h2>
+
+            <table class="ksp-table">
+                <tr>
+                    <th>Compuesto</th>
+                    <th>Kps (25°C)</th>
+                    <th>Equilibrio</th>
+                    <th>Expresión de Kps</th>
+                </tr>
+                <tr>
+                    <td>AgCl</td>
+                    <td>1.8×10⁻¹⁰</td>
+                    <td>AgCl ⇌ Ag⁺ + Cl⁻</td>
+                    <td>[Ag⁺][Cl⁻]</td>
+                </tr>
+                <tr>
+                    <td>BaSO₄</td>
+                    <td>1.1×10⁻¹⁰</td>
+                    <td>BaSO₄ ⇌ Ba²⁺ + SO₄²⁻</td>
+                    <td>[Ba²⁺][SO₄²⁻]</td>
+                </tr>
+                <tr>
+                    <td>PbI₂</td>
+                    <td>9.8×10⁻⁹</td>
+                    <td>PbI₂ ⇌ Pb²⁺ + 2I⁻</td>
+                    <td>[Pb²⁺][I⁻]²</td>
+                </tr>
+                <tr>
+                    <td>CaF₂</td>
+                    <td>3.9×10⁻¹¹</td>
+                    <td>CaF₂ ⇌ Ca²⁺ + 2F⁻</td>
+                    <td>[Ca²⁺][F⁻]²</td>
+                </tr>
+                <tr>
+                    <td>Fe(OH)₃</td>
+                    <td>2.8×10⁻³⁹</td>
+                    <td>Fe(OH)₃ ⇌ Fe³⁺ + 3OH⁻</td>
+                    <td>[Fe³⁺][OH⁻]³</td>
+                </tr>
+            </table>
+
+            <div class="concept-box">
+                <h4>Estequiometría y Solubilidad</h4>
+                <p>
+                    Para sales con estequiometría diferente (como PbI₂ o CaF₂), la relación entre
+                    solubilidad molar (s) y Kps no es directa:
+                </p>
+                <ul style="margin-top: 0.5rem; margin-bottom: 0;">
+                    <li>AgCl: Kps = s² → s = √Kps</li>
+                    <li>PbI₂: Kps = s × (2s)² = 4s³ → s = ∛(Kps/4)</li>
+                    <li>Fe(OH)₃: Kps = s × (3s)³ = 27s⁴ → s = ⁴√(Kps/27)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>El Diagrama de Solubilidad</h2>
+
+            <div class="diagram-box">
+                <p>
+                    El diagrama muestra [catión] vs [anión] en escala logarítmica.
+                    La curva verde representa Q = Kps (la frontera de solubilidad).
+                </p>
+                <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                    <p style="margin-bottom: 0.5rem;"><strong>Zona azul (debajo de la curva):</strong> Q < Kps → Solución insaturada</p>
+                    <p style="margin-bottom: 0;"><strong>Zona naranja (sobre la curva):</strong> Q > Kps → Precipitación</p>
+                </div>
+            </div>
+
+            <p>
+                El punto actual (marcador circular) indica las concentraciones actuales.
+                Al mover los sliders, el punto se desplaza por el diagrama. Cuando cruza
+                la curva de Kps, el estado de la solución cambia.
+            </p>
+        </section>
+
+        <section>
+            <h2>Efectos Importantes</h2>
+
+            <h3>Efecto del Ion Común</h3>
+            <div class="concept-box">
+                <p>
+                    Si añades un ion que ya está presente en el equilibrio (ion común),
+                    la solubilidad de la sal disminuye según Le Chatelier:
+                </p>
+                <p style="margin-bottom: 0;">
+                    Ejemplo: Añadir NaCl a una solución saturada de AgCl. El exceso de Cl⁻
+                    desplaza el equilibrio hacia la izquierda, precipitando más AgCl.
+                </p>
+            </div>
+
+            <h3>Efecto del pH</h3>
+            <p>
+                Para hidróxidos como Fe(OH)₃, el pH controla [OH⁻]:
+            </p>
+            <ul>
+                <li>A pH bajo: [OH⁻] muy baja → Q < Kps → el hidróxido se disuelve</li>
+                <li>A pH alto: [OH⁻] alta → Q > Kps → precipitación del hidróxido</li>
+            </ul>
+            <p>
+                Esta es la base de la separación de cationes en química analítica cualitativa.
+            </p>
+        </section>
+
+        <section>
+            <h2>Experimentos Sugeridos</h2>
+
+            <div class="experiment-card">
+                <h4>Experimento 1: Provocar Precipitación</h4>
+                <ol>
+                    <li>Selecciona AgCl y observa el Kps (1.8×10⁻¹⁰)</li>
+                    <li>Comienza con [Ag⁺] = [Cl⁻] = 10⁻⁵ M. Q = 10⁻¹⁰ < Kps (insaturada)</li>
+                    <li>Aumenta [Ag⁺] a 10⁻⁴ M. Ahora Q = 10⁻⁹ > Kps</li>
+                    <li>Observa cómo los iones se combinan y precipitan cristales blancos</li>
+                    <li>El precipitado cae al fondo mientras Q disminuye hacia Kps</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 2: Estequiometría del PbI₂</h4>
+                <ol>
+                    <li>Selecciona PbI₂. Kps = 9.8×10⁻⁹ = [Pb²⁺][I⁻]²</li>
+                    <li>Con [Pb²⁺] = 10⁻⁵ M, ¿qué [I⁻] necesitas para Q = Kps?</li>
+                    <li>[I⁻]² = 9.8×10⁻⁹ / 10⁻⁵ = 9.8×10⁻⁴ → [I⁻] ≈ 0.03 M</li>
+                    <li>Verifica: ajusta [I⁻] cerca de 10⁻² y observa el estado</li>
+                    <li>Nota el color amarillo característico del precipitado de PbI₂</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 3: La Extrema Insolubilidad del Fe(OH)₃</h4>
+                <ol>
+                    <li>Selecciona Fe(OH)₃. Kps = 2.8×10⁻³⁹ (!)</li>
+                    <li>Con [Fe³⁺] = 10⁻⁵ M y [OH⁻] = 10⁻⁵ M:</li>
+                    <li>Q = 10⁻⁵ × (10⁻⁵)³ = 10⁻²⁰ >> Kps</li>
+                    <li>¡Incluso a concentraciones muy bajas, precipita!</li>
+                    <li>Calcula: ¿qué [OH⁻] se necesita para no precipitar con [Fe³⁺] = 10⁻⁵?</li>
+                </ol>
+            </div>
+
+            <div class="experiment-card">
+                <h4>Experimento 4: Comparando Sales</h4>
+                <ol>
+                    <li>Con [catión] = [anión] = 10⁻⁵ M, prueba cada sal</li>
+                    <li>AgCl: Q = 10⁻¹⁰ (insaturada, apenas)</li>
+                    <li>BaSO₄: Q = 10⁻¹⁰ (ligeramente saturada)</li>
+                    <li>PbI₂: Q = 10⁻⁵ × (10⁻⁵)² = 10⁻¹⁵ << Kps (muy insaturada)</li>
+                    <li>Fe(OH)₃: Precipita inmediatamente</li>
+                    <li>Ordena las sales por solubilidad efectiva</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>Contexto Histórico</h2>
+
+            <div class="historical-note">
+                <h3>Desarrollo del Concepto de Kps</h3>
+                <p>
+                    El concepto de producto de solubilidad surgió del trabajo de Walther Nernst
+                    (1889) sobre equilibrios iónicos, extendiendo los principios de la ley de
+                    acción de masas a sistemas heterogéneos.
+                </p>
+                <p>
+                    La aplicación práctica más importante fue en química analítica cualitativa,
+                    donde la precipitación selectiva permite identificar cationes. El esquema
+                    clásico de separación (grupos I-V) se basa en diferencias de Kps al variar
+                    el anión precipitante (Cl⁻, S²⁻, OH⁻, CO₃²⁻).
+                </p>
+                <p style="margin-bottom: 0;">
+                    Hoy, los valores de Kps son fundamentales en geoquímica (formación de minerales),
+                    tratamiento de aguas (precipitación de contaminantes), y biomineralización
+                    (formación de huesos, dientes y conchas).
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Conexiones Interdisciplinarias</h2>
+
+            <div class="links-section">
+                <a href="../le-chatelier.html" class="sim-link">
+                    <span class="icon">⚖️</span>
+                    <span class="label">Principio de Le Chatelier<br><small>Efecto del ion común</small></span>
+                </a>
+                <a href="../titulacion.html" class="sim-link">
+                    <span class="icon">🧪</span>
+                    <span class="label">Curva de Titulación<br><small>Precipitación en punto final</small></span>
+                </a>
+                <a href="../../Geology/Geology Visual Lab/rocas.html" class="sim-link">
+                    <span class="icon">🪨</span>
+                    <span class="label">Ciclo de Rocas<br><small>Precipitación de minerales</small></span>
+                </a>
+                <a href="../diagrama-fases.html" class="sim-link">
+                    <span class="icon">📊</span>
+                    <span class="label">Diagrama de Fases<br><small>Transiciones sólido-líquido</small></span>
+                </a>
+            </div>
+
+            <h3>Aplicaciones en la Vida Real</h3>
+            <ul>
+                <li><strong>Tratamiento de agua:</strong> Precipitación de metales pesados como hidróxidos</li>
+                <li><strong>Cálculos renales:</strong> Precipitación de oxalato de calcio (CaC₂O₄)</li>
+                <li><strong>Fotografía analógica:</strong> AgBr como sal fotosensible</li>
+                <li><strong>Radiología:</strong> BaSO₄ como contraste (precipita in situ)</li>
+                <li><strong>Geología:</strong> Formación de estalactitas (CaCO₃)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Para Explorar Más</h2>
+            <ul>
+                <li>
+                    <strong>Coeficientes de actividad:</strong> En soluciones concentradas, las
+                    concentraciones deben reemplazarse por actividades para cálculos precisos.
+                </li>
+                <li>
+                    <strong>Formación de complejos:</strong> Algunos iones forman complejos solubles
+                    que aumentan la solubilidad aparente (ej: AgCl con exceso de NH₃).
+                </li>
+                <li>
+                    <strong>Precipitación selectiva:</strong> Separar iones controlando el pH o
+                    añadiendo precipitantes específicos.
+                </li>
+                <li>
+                    <strong>Nucleación y cristalización:</strong> El proceso real de formación de
+                    precipitados involucra nucleación, crecimiento y maduración de Ostwald.
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <a href="../solubilidad.html">Abrir Simulación</a>
+    </footer>
+</body>
+</html>
