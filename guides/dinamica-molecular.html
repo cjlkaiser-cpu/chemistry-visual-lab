@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Dinámica Molecular | Chemistry Visual Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0a; --color-surface: #141414; --color-surface-elevated: #1a1a1a;
+            --color-border: #262626; --color-text: #e5e5e5; --color-text-secondary: #a3a3a3;
+            --color-accent: #06b6d4; --color-accent-dim: rgba(6,182,212,0.1);
+            --font-serif: 'Crimson Pro', Georgia, serif; --font-sans: 'Inter', system-ui, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-serif); font-size: 19px; line-height: 1.7; color: var(--color-text); background-color: var(--color-bg); padding: 2rem; max-width: 900px; margin: 0 auto; }
+        header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--color-border); }
+        .breadcrumb { font-family: var(--font-sans); font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 1rem; }
+        .breadcrumb a { color: var(--color-accent); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        h1 { font-family: var(--font-serif); font-size: 2.5rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+        .subtitle { font-size: 1.25rem; color: var(--color-text-secondary); font-style: italic; }
+        h2 { font-family: var(--font-sans); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-accent); margin-top: 3rem; margin-bottom: 1.25rem; }
+        p { margin-bottom: 1.25rem; }
+        .intro { font-size: 1.15rem; color: var(--color-text-secondary); border-left: 3px solid var(--color-accent); padding-left: 1.5rem; margin: 2rem 0; }
+        .equation-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 2rem; margin: 1.5rem 0; text-align: center; }
+        .equation { font-family: var(--font-mono); font-size: 1.25rem; color: var(--color-accent); margin-bottom: 0.75rem; }
+        .equation-label { font-family: var(--font-sans); font-size: 0.85rem; color: var(--color-text-secondary); }
+        .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; }
+        .concept-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.5rem; }
+        .concept-card h4 { font-family: var(--font-sans); font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-accent); }
+        .concept-card p { font-size: 0.95rem; margin-bottom: 0; color: var(--color-text-secondary); }
+        .key-insight { background: var(--color-accent-dim); border: 1px solid var(--color-accent); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+        .key-insight strong { color: var(--color-accent); }
+        .experiment-block { background: var(--color-surface-elevated); border-radius: 8px; padding: 1.75rem; margin: 1.5rem 0; border-left: 3px solid var(--color-accent); }
+        .experiment-block h4 { font-family: var(--font-sans); font-weight: 600; margin-bottom: 1rem; }
+        .experiment-block ol { margin-left: 1.25rem; color: var(--color-text-secondary); }
+        .experiment-block li { margin-bottom: 0.5rem; }
+        .connections-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .connection-item { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; text-decoration: none; color: var(--color-text); transition: border-color 0.2s; }
+        .connection-item:hover { border-color: var(--color-accent); background: var(--color-surface-elevated); }
+        .connection-icon { font-size: 1.5rem; }
+        .connection-text { font-family: var(--font-sans); font-size: 0.9rem; }
+        ul { margin-left: 1.25rem; margin-bottom: 1.25rem; }
+        li { margin-bottom: 0.5rem; }
+        footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--color-border); text-align: center; }
+        .btn-launch { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-sans); font-size: 1rem; font-weight: 500; padding: 1rem 2rem; background: var(--color-accent); color: #030712; border-radius: 8px; text-decoration: none; transition: opacity 0.2s; }
+        .btn-launch:hover { opacity: 0.9; }
+        .phase-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.5rem 0; }
+        .phase-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 1.25rem; text-align: center; }
+        .phase-card .phase-name { font-family: var(--font-sans); font-weight: 600; font-size: 0.95rem; margin-bottom: 0.4rem; }
+        .phase-card p { font-size: 0.85rem; color: var(--color-text-secondary); margin: 0; }
+        .phase-solid .phase-name { color: #60a5fa; }
+        .phase-liquid .phase-name { color: #22c55e; }
+        .phase-gas .phase-name { color: #f97316; }
+        .phase-melt .phase-name { color: #f59e0b; }
+        @media (max-width: 600px) { .phase-grid { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="https://cjlkaiser-cpu.github.io/eigenlab/_portal/index.html">EigenLab</a> /
+            <a href="../index.html">Chemistry Visual Lab</a> /
+            <span>Guía: Dinámica Molecular</span>
+        </nav>
+        <h1>Dinámica Molecular</h1>
+        <p class="subtitle">Potencial de Lennard-Jones, fases de la materia y termodinámia emergente</p>
+    </header>
+
+    <p class="intro">
+        La dinámica molecular es la técnica computacional que más ha transformado la química
+        y la biofísica en el siglo XXI. La idea es radical en su sencillez: integrar las ecuaciones
+        de movimiento de Newton para cada átomo, paso a paso. Con solo el potencial de
+        Lennard-Jones entre pares, la simulación reproduce sólidos, líquidos y gases —
+        transiciones de fase, difusión, viscosidad — sin añadir ninguna regla extra.
+    </p>
+
+    <h2>El Potencial de Lennard-Jones</h2>
+
+    <div class="equation-block">
+        <div class="equation">V_LJ(r) = 4ε [ (σ/r)¹² − (σ/r)⁶ ]</div>
+        <div class="equation-label">ε = profundidad del pozo (energía de enlace) · σ = diámetro efectivo · r = distancia entre partículas</div>
+    </div>
+
+    <p>El potencial tiene dos términos con interpretación física clara:</p>
+
+    <ul>
+        <li><strong>(σ/r)¹²</strong> — Repulsión de Pauli a corto alcance. Los núcleos electrónicos no pueden superponerse. Muy pronunciada: al reducir r a la mitad, la repulsión aumenta 4096 veces.</li>
+        <li><strong>−(σ/r)⁶</strong> — Atracción de Van der Waals (dispersión de London). Dipolo inducido-dipolo inducido. Cae como 1/r⁶: actúa a distancias medias.</li>
+    </ul>
+
+    <p>El mínimo del potencial está en r_min = 2^(1/6)·σ ≈ 1.12σ, con energía −ε. Ahí las fuerzas se cancelan: es la separación de equilibrio de dos átomos ligados por Van der Waals.</p>
+
+    <div class="equation-block">
+        <div class="equation">F(r) = −dV/dr = 24ε/r [ 2(σ/r)¹² − (σ/r)⁶ ]</div>
+        <div class="equation-label">Repulsivo para r &lt; r_min · Cero en r_min · Atractivo para r &gt; r_min</div>
+    </div>
+
+    <h2>El Algoritmo de Verlet</h2>
+
+    <p>La simulación integra las ecuaciones de Newton en pasos discretos usando el algoritmo de Verlet de velocidades:</p>
+
+    <div class="equation-block">
+        <div class="equation">r(t+Δt) = r(t) + v(t)·Δt + ½·F(t)/m·Δt²</div>
+        <div class="equation">v(t+Δt) = v(t) + ½·[F(t)+F(t+Δt)]/m·Δt</div>
+        <div class="equation-label">Precisión O(Δt⁴) en posición. Conserva energía mejor que Euler. Reversible en tiempo.</div>
+    </div>
+
+    <h2>Los Cuatro Presets</h2>
+
+    <div class="phase-grid">
+        <div class="phase-card phase-solid">
+            <div class="phase-name">Sólido</div>
+            <p>Temperatura baja, densidad alta. Los átomos vibran alrededor de posiciones fijas en red. Estructura cristalina visible.</p>
+        </div>
+        <div class="phase-card phase-liquid">
+            <div class="phase-name">Líquido</div>
+            <p>Temperatura media. Los átomos se mueven libremente pero mantienen densidad alta. Sin orden de largo alcance.</p>
+        </div>
+        <div class="phase-card phase-gas">
+            <div class="phase-name">Gas</div>
+            <p>Temperatura alta, densidad baja. Los átomos se mueven rápido con colisiones ocasionales. Distribución Maxwell-Boltzmann.</p>
+        </div>
+        <div class="phase-card phase-melt">
+            <div class="phase-name">Fusión</div>
+            <p>Temperatura en el punto de fusión. Coexistencia de zonas sólidas y líquidas. El sistema fluctúa entre fases.</p>
+        </div>
+    </div>
+
+    <h2>Temperatura Emergente</h2>
+
+    <p>En la simulación no hay temperatura como variable: solo posiciones y velocidades. La temperatura <em>emerge</em> del movimiento cinético a través del teorema de equipartición:</p>
+
+    <div class="equation-block">
+        <div class="equation">T = (2/3) · ⟨KE⟩ / (N·k_B) = m⟨v²⟩ / (3k_B)</div>
+        <div class="equation-label">La temperatura medida es exactamente el promedio de energía cinética por grado de libertad. Igual a la T del gas ideal.</div>
+    </div>
+
+    <div class="key-insight">
+        <strong>Las propiedades macroscópicas emergen sin programarlas.</strong> La presión emerge de las colisiones con las paredes (no hay variable "presión" en el código). La viscosidad emerge de las transferencias de momento lateral (no hay término de viscosidad). La tensión superficial emerge de la asimetría de fuerzas en la interfaz líquido-gas. Todo esto surge de V_LJ y las leyes de Newton.
+    </div>
+
+    <h2>El Termostato de Berendsen</h2>
+
+    <p>Para controlar la temperatura, la simulación puede usar el termostato de Berendsen: las velocidades se reescalan suavemente cada cierto número de pasos para acercar T a T_objetivo:</p>
+
+    <div class="equation-block">
+        <div class="equation">dT/dt = (T_obj − T) / τ</div>
+        <div class="equation-label">τ = tiempo de relajación del termostato (ajustable). τ grande → termostato suave. τ pequeño → control rápido pero artefactos.</div>
+    </div>
+
+    <p>Con termostato activo, el sistema se equilibra a la temperatura deseada. Sin él, la energía total (cinética + potencial) se conserva: se simula el ensamble microcanónico (NVE).</p>
+
+    <h2>Experimentos Guiados</h2>
+
+    <div class="experiment-block">
+        <h4>Experimento 1 — Transición de fase líquido → gas</h4>
+        <ol>
+            <li>Empieza con preset <em>Líquido</em>. Observa el movimiento fluido pero denso de los átomos.</li>
+            <li>Sube la temperatura lentamente con el termostato activado. Observa cómo la densidad baja y las partículas empiezan a llenar todo el volumen: transición de fase.</li>
+            <li>En el punto de transición, la variación de energía cinética por unidad de temperatura aumenta bruscamente (calor latente).</li>
+            <li>Compara con preset <em>Gas</em>: mismas partículas, mayor temperatura, comportamiento completamente diferente.</li>
+        </ol>
+    </div>
+
+    <div class="experiment-block">
+        <h4>Experimento 2 — Cristalización: sólido emergente</h4>
+        <ol>
+            <li>Empieza con preset <em>Líquido</em>. Baja la temperatura lentamente usando el termostato.</li>
+            <li>Observa la formación espontánea de estructura cristalina: los átomos se alinean en una red hexagonal (empaquetamiento más eficiente en 2D).</li>
+            <li>La cristalización es una ruptura de simetría espontánea: el líquido es isótropo; el sólido tiene orientación preferente.</li>
+            <li>Baja más T: las vibraciones se reducen. Los átomos oscilan alrededor de sus posiciones de red.</li>
+        </ol>
+    </div>
+
+    <div class="experiment-block">
+        <h4>Experimento 3 — Preset Fusión: coexistencia de fases</h4>
+        <ol>
+            <li>Activa el preset <em>Fusión</em>. El sistema está cerca del punto de fusión.</li>
+            <li>Observa zonas con estructura cristalina (azul) y zonas fluidas (verde) coexistiendo. La frontera entre ellas es dinámica y fluctúa.</li>
+            <li>Desactiva el termostato: ¿el sistema se funde completamente o se solidifica? Depende de si la temperatura fluctúa por encima o por debajo del punto de fusión.</li>
+            <li>La coexistencia de fases es la regla de Gibbs: P + F = C + 2. En este sistema de un componente, en la transición de primer orden, los grados de libertad F = 1 (solo T). Una fase más → menos libertad.</li>
+        </ol>
+    </div>
+
+    <h2>Conexiones</h2>
+
+    <div class="connections-grid">
+        <a href="../gases-reales.html" class="connection-item">
+            <span class="connection-icon">💨</span>
+            <div class="connection-text"><strong>Gases Reales</strong><br>Van der Waals: el LJ a escala molar</div>
+        </a>
+        <a href="../diagrama-fases.html" class="connection-item">
+            <span class="connection-icon">📊</span>
+            <div class="connection-text"><strong>Diagrama de Fases</strong><br>Sólido/líquido/gas en espacio P-T</div>
+        </a>
+        <a href="../cinetica-colisiones.html" class="connection-item">
+            <span class="connection-icon">⚡</span>
+            <div class="connection-text"><strong>Cinética y Colisiones</strong><br>Teoría cinética a nivel microscópico</div>
+        </a>
+        <a href="../../../Biochemistry/Biochem Visual Lab/plegamiento-proteinas.html" class="connection-item">
+            <span class="connection-icon">🌀</span>
+            <div class="connection-text"><strong>Plegamiento de Proteínas</strong><br>MD aplicada a biomoléculas</div>
+        </a>
+    </div>
+
+    <footer>
+        <a href="../dinamica-molecular.html" class="btn-launch">Abrir simulación →</a>
+    </footer>
+</body>
+</html>
