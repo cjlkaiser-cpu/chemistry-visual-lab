@@ -680,6 +680,28 @@
                 </a>
             </div>
         </section>
+
+        <!-- Alto rendimiento (motor WASM): tarjetas añadidas para que todas las simulaciones del lab sean accesibles -->
+        <section id="wasm" class="mb-16">
+            <h2 class="text-2xl font-light mb-2">⚡ Alto rendimiento · Motor WASM</h2>
+            <p class="text-gray-500 text-sm mb-6">Simulaciones con el motor C++ de EigenLab compilado a WebAssembly: miles de partículas en tiempo real, en el navegador.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <a href="dinamica-molecular.html" class="element-card cat-enlace p-5">
+                    <span class="atomic-number">18</span>
+                    <div class="text-center mb-4">
+                        <img src="thumbs/dinamica-molecular.webp" alt="" loading="lazy" class="preview-canvas mx-auto object-cover rounded-lg">
+                    </div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="element-symbol">MD</span>
+                        <span class="category-tag bg-cyan-500/20 text-cyan-300">WASM</span>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-1">Din&aacute;mica Molecular</h3>
+                    <p class="text-slate-400 text-sm mb-3">Potencial Lennard-Jones, transiciones de fase, termostatizacion Berendsen.</p>
+                    <div class="equation mb-4">V(r) = 4&epsilon;[(&sigma;/r)<sup>12</sup> &minus; (&sigma;/r)<sup>6</sup>]</div>
+                    <button class="sim-button w-full">Abrir Simulaci&oacute;n &rarr;</button>
+                </a>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
