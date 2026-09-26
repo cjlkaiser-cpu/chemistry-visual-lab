@@ -46,6 +46,18 @@ CATEGORIAS = {  # GroupBlock de PubChem -> clave interna
 }
 # Sublimación a 1 atm: el punto de fusión tabulado es bajo presión (As: 1090 K a 28 atm; sublima a ~887 K)
 SUBLIMA = {'As'}
+# Valores medidos que corrigen a PubChem (que da estimaciones o valores antiguos), con su fuente.
+CORRECCIONES = {
+    ('Fr', 'ei'): (4.0727, 'S. V. Andreev y cols., Phys. Rev. Lett. 59, 1274 (1987)'),
+    ('At', 'ei'): (9.3175, 'S. Rothe y cols., Nature Communications 4, 1835 (2013)'),
+    ('F', 'ae'): (3.4012, 'C. Blondel, C. Delsart y F. Goldfarb, J. Phys. B 34, L281 (2001)'),
+    ('At', 'ae'): (2.4159, 'D. Leimbach y cols., Nature Communications 11, 3824 (2020)'),
+}
+# Valores que no son medidas (extrapolaciones o asignaciones aproximadas): se marcan con «≈».
+ESTIMADOS = {
+    'Fr': ['fusion', 'en'], 'At': ['fusion', 'densidad', 'en'], 'Ra': ['densidad'],
+    'Cf': ['en'], 'Es': ['en'], 'Fm': ['fusion', 'en'], 'Md': ['fusion', 'en'], 'No': ['fusion', 'en'], 'Lr': ['fusion', 'en'],
+}
 MADELUNG = ['1s', '2s', '2p', '3s', '3p', '4s', '3d', '4p', '5s', '4d', '5p', '6s', '4f', '5d', '6p', '7s', '5f', '6d', '7p']
 CAP = {'s': 2, 'p': 6, 'd': 10, 'f': 14}
 NOBLE = {'He': 2, 'Ne': 10, 'Ar': 18, 'Kr': 36, 'Xe': 54, 'Rn': 86}
@@ -139,6 +151,12 @@ def build(raw):
             'oxidacion': r['OxidationStates'],
             'sublima': r['Symbol'] in SUBLIMA,
         })
+        e = out[-1]
+        e['estimado'] = ESTIMADOS.get(e['sym'], [])
+        for (sym, k), (v, src) in CORRECCIONES.items():
+            if sym == e['sym']:
+                e[k] = v
+                e.setdefault('fuentes', {})[k] = src
     return out
 
 

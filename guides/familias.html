@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Familias Químicas | Chemistry Visual Lab</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Guía teórica de «Familias Químicas»: ecuación principal, experimentos guiados y conexiones. Alcalinos, halógenos, gases nobles, transición, lantánidos y actínidos: cómo cambian sus propiedades de arriba abajo, con tendencias calculadas a partir de datos medidos.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="Guía: Familias Químicas · Chemistry Visual Lab">
+    <meta property="og:description" content="Guía teórica de «Familias Químicas»: ecuación principal, experimentos guiados y conexiones. Alcalinos, halógenos, gases nobles, transición, lantánidos y actínidos: cómo cambian sus propiedades de arriba abajo, con tendencias calculadas a partir de datos medidos.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0a;
+            --color-surface: #141414;
+            --color-surface-elevated: #1a1a1a;
+            --color-border: #262626;
+            --color-text: #e5e5e5;
+            --color-text-secondary: #a3a3a3;
+            --color-accent: #06b6d4;
+            --color-accent-dim: rgba(6, 182, 212, 0.1);
+            --font-serif: 'Crimson Pro', Georgia, serif;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            font-size: 19px;
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .breadcrumb {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+            margin-top: 3rem;
+            margin-bottom: 1.25rem;
+        }
+
+        h3 {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+        }
+
+        .intro {
+            font-size: 1.15rem;
+            color: var(--color-text-secondary);
+            border-left: 3px solid var(--color-accent);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .concept-card h4 {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--color-accent);
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--color-text-secondary);
+        }
+
+        .trend-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .trend-table th {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            text-align: left;
+            padding: 1rem;
+            background: var(--color-surface);
+            border-bottom: 2px solid var(--color-accent);
+        }
+
+        .trend-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+            vertical-align: top;
+        }
+
+        .trend-table tr:hover {
+            background: var(--color-surface);
+        }
+
+        .property-name {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+
+        .arrow-up { color: #22c55e; font-weight: bold; }
+        .arrow-down { color: #ef4444; font-weight: bold; }
+        .arrow-mixed { color: #fbbf24; }
+
+        .periodic-visual {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .periodic-mini {
+            display: inline-grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .mini-cell {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            border-radius: 4px;
+        }
+
+        .gradient-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        .experiment-block {
+            background: var(--color-surface-elevated);
+            border-radius: 8px;
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .experiment-block h4 {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .experiment-block ol {
+            margin-left: 1.25rem;
+            color: var(--color-text-secondary);
+        }
+
+        .experiment-block li {
+            margin-bottom: 0.5rem;
+        }
+
+        .key-insight {
+            background: var(--color-accent-dim);
+            border: 1px solid var(--color-accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .key-insight strong {
+            color: var(--color-accent);
+        }
+
+        .element-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .element-example {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .element-symbol {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+
+        .element-name {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            margin: 0.25rem 0;
+        }
+
+        .element-stat {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .timeline {
+            border-left: 2px solid var(--color-border);
+            padding-left: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .timeline-event {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -2.35rem;
+            top: 0.5rem;
+            width: 10px;
+            height: 10px;
+            background: var(--color-accent);
+            border-radius: 50%;
+        }
+
+        .timeline-year {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--color-accent);
+        }
+
+        .timeline-text {
+            color: var(--color-text-secondary);
+        }
+
+        .connections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .connection-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .connection-item:hover {
+            border-color: var(--color-accent);
+            background: var(--color-surface-elevated);
+        }
+
+        .connection-icon {
+            font-size: 1.5rem;
+        }
+
+        .connection-text {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
+
+        ul {
+            margin-left: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        .btn-launch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 1rem 2rem;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-launch:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+                font-size: 17px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .mini-cell {
+                width: 28px;
+                height: 28px;
+                font-size: 0.65rem;
+            }
+        }
+    
+        .equation-box { background: rgba(0, 0, 0, 0.3); border-left: 3px solid var(--color-accent); padding: 1.5rem; margin: 1.5rem 0;
+                        border-radius: 0 8px 8px 0; font-family: 'Fira Code', monospace; font-size: 1.1rem; }
+        .equation-box .eq-name { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0.5rem; }
+        .equation-box .eq-main { color: var(--color-accent); margin-bottom: 0.5rem; }
+        .equation-box .eq-desc { font-family: var(--font-serif); font-size: 0.95rem; color: var(--color-text-secondary); }
+        .limits { border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+        .limits h4 { font-family: var(--font-sans); font-size: 0.95rem; margin-bottom: 0.5rem; color: #f59e0b; }
+        .source { font-family: var(--font-sans); font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → <a href="../familias.html">Familias Químicas</a> → Guía
+        </nav>
+        <h1>Familias Químicas</h1>
+        <p class="subtitle">Qué comparten los elementos de un grupo y cómo cambian al bajar</p>
+    </header>
+
+    <main>
+        <p class="intro">
+            Los elementos de un mismo grupo tienen la misma configuración electrónica externa y, por eso, una química parecida.
+            Pero no son idénticos: al bajar por el grupo, el electrón de valencia está cada vez más lejos del núcleo y las propiedades
+            cambian de forma gradual. Esta simulación reúne siete familias con datos medidos y describe cada tendencia a partir de los propios datos.
+        </p>
+
+        <h2>¿Qué Observarás?</h2>
+        <div class="concept-grid">
+            <div class="concept-card"><h4>Seis propiedades por familia</h4><p>Fusión, ebullición, densidad, radio, energía de ionización y electronegatividad, miembro a miembro.</p></div>
+            <div class="concept-card"><h4>Tendencias calculadas</h4><p>Cada gráfica dice si la propiedad crece, decrece, cambia de sentido o es irregular, y dónde están las excepciones.</p></div>
+            <div class="concept-card"><h4>Estados de oxidación</h4><p>Un diagrama por familia: +1 en los alcalinos, el pico del manganeso en la transición, la variedad de los primeros actínidos.</p></div>
+            <div class="concept-card"><h4>Medido frente a estimado</h4><p>Los valores que no son medidas (francio, astato, actínidos pesados) aparecen como círculos vacíos y no cuentan para la tendencia.</p></div>
+        </div>
+
+        <h2>Por Qué Se Parecen y Por Qué Cambian</h2>
+        <div class="equation-box">
+            <div class="eq-name">Configuración externa de cada familia</div>
+            <div class="eq-main">ns¹ · ns² · ns²np⁵ · ns²np⁶ · (n−1)dⁿ ns² · 4fⁿ · 5fⁿ</div>
+            <div class="eq-desc">La configuración externa decide el ion habitual (M⁺, M²⁺, X⁻) y el tipo de enlace. Al bajar, el número cuántico n aumenta
+                y la carga nuclear efectiva cambia poco: los electrones externos están más lejos y menos retenidos.</div>
+        </div>
+        <table class="trend-table">
+            <thead><tr><th>Familia</th><th>Al bajar…</th><th>Excepción que enseña algo</th></tr></thead>
+            <tbody>
+                <tr><td class="property-name">Alcalinos</td><td>funden a menor temperatura, más reactivos</td><td>Fr: más energía de ionización que el Cs (efecto relativista)</td></tr>
+                <tr><td class="property-name">Alcalinotérreos</td><td>más reactivos con el agua</td><td>fusión no monótona: cambia la estructura cristalina</td></tr>
+                <tr><td class="property-name">Halógenos</td><td>de gas a sólido, menos oxidantes</td><td>enlace F–F más débil que Cl–Cl</td></tr>
+                <tr><td class="property-name">Gases nobles</td><td>hierven a mayor temperatura, más reactivos</td><td>el xenón forma compuestos (1962)</td></tr>
+                <tr><td class="property-name">Transición (periodo 4)</td><td>(a lo largo del periodo) máximo de oxidación en Mn</td><td>Zn: d¹⁰, incoloro, un solo estado</td></tr>
+                <tr><td class="property-name">Lantánidos</td><td>(a lo largo de la serie) contracción del Ln³⁺</td><td>Eu e Yb: valles de densidad y de fusión</td></tr>
+            </tbody>
+        </table>
+        <p class="key-insight"><strong>Cómo se describe una tendencia:</strong> la simulación usa solo valores medidos. Si todos los pasos van en el mismo sentido, la tendencia es monótona; si cambian de sentido una vez, se indica el máximo o el mínimo; si no, calcula la correlación de rangos de Spearman (ρ) con la posición y señala los elementos que rompen la tendencia.</p>
+
+        <h2>Experimentos Sugeridos</h2>
+        <div class="experiment-block"><h4>1. El último de la fila</h4><ol>
+            <li>En «Alcalinos», mira la energía de ionización del francio.</li><li>Haz lo mismo con el radio en «Alcalinotérreos». ¿Qué tienen en común los dos casos?</li></ol></div>
+        <div class="experiment-block"><h4>2. Cuenta electrones d</h4><ol>
+            <li>En «Transición», lee la tabla de acuoiones.</li><li>¿Qué configuración tienen los iones incoloros? ¿Por qué no absorben luz visible?</li></ol></div>
+        <div class="experiment-block"><h4>3. Los valles de los lantánidos</h4><ol>
+            <li>En «Lantánidos», localiza el europio y el iterbio en las gráficas de densidad y fusión.</li><li>Compara con sus estados de oxidación: ¿qué tienen de especial?</li></ol></div>
+
+        <div class="limits">
+            <h4>Limitaciones</h4>
+            <p>Los datos proceden de PubChem, con correcciones medidas y citadas (energía de ionización del Fr y del At, afinidad electrónica del F y del At).
+            Los estados de oxidación son los habituales, no todos los conocidos (el hierro llega a +6 en el ferrato). Las propiedades de los elementos más pesados
+            son escasas o estimadas, y el radio de van der Waals de los metales es menos regular que el metálico o el covalente.</p>
+        </div>
+
+        <h2>Conexiones</h2>
+        <div class="connections-grid">
+            <a href="../tabla-periodica.html" class="connection-item"><span class="connection-icon">🧪</span><span class="connection-text">Tabla Periódica Viva<br><small>Las familias en la tabla</small></span></a>
+            <a href="../espectros.html" class="connection-item"><span class="connection-icon">🌈</span><span class="connection-text">Espectros Atómicos<br><small>Colores de llama</small></span></a>
+            <a href="../carga-efectiva.html" class="connection-item"><span class="connection-icon">⚛️</span><span class="connection-text">Carga Nuclear Efectiva<br><small>La causa de las tendencias</small></span></a>
+            <a href="../curso-tabla-periodica/modulo-5/leccion-1.html" class="connection-item"><span class="connection-icon">🎓</span><span class="connection-text">Curso, módulo 5<br><small>Familias</small></span></a>
+        </div>
+        <p class="source">Datos: PubChem (NIH). Potenciales y energías de enlace: CRC Handbook of Chemistry and Physics. Radios Ln³⁺: R. D. Shannon (1976). Química descriptiva: Greenwood y Earnshaw, «Chemistry of the Elements».</p>
+    </main>
+
+    <footer>
+        <a href="../familias.html" class="btn-launch">⚛️ Abrir Simulación</a>
+    </footer>
+</body>
+</html>

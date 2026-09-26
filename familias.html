@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Familias Químicas - Chemistry Visual Lab</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Alcalinos, halógenos, gases nobles, transición, lantánidos y actínidos: cómo cambian sus propiedades de arriba abajo, con tendencias calculadas a partir de datos medidos.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="Familias Químicas · Chemistry Visual Lab">
+    <meta property="og:description" content="Alcalinos, halógenos, gases nobles, transición, lantánidos y actínidos: cómo cambian sus propiedades de arriba abajo, con tendencias calculadas a partir de datos medidos.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0a1a; --panel: #111127; --panel-2: #16163a; --border: #262650; --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b; --accent: #22d3ee; --fam: #22d3ee; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        a { color: var(--accent); }
+        header { padding: 18px 24px 8px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+        .crumbs { width: 100%; font-size: .8rem; color: var(--dim); }
+        .crumbs a { color: var(--dim); text-decoration: none; }
+        .crumbs a:hover { color: var(--accent); }
+        h1 { font-size: 1.6rem; font-weight: 600; color: var(--accent); }
+        .subtitle { color: var(--muted); font-size: .9rem; }
+        .guide-link { margin-left: auto; font-size: .85rem; text-decoration: none; border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; }
+        .tabs { display: flex; gap: 6px; padding: 6px 24px 12px; flex-wrap: wrap; }
+        .tab { background: var(--panel); border: 1px solid var(--border); color: var(--muted); border-radius: 999px; padding: 7px 14px; font: inherit; font-size: .85rem; cursor: pointer; }
+        .tab .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+        .tab[aria-selected="true"] { color: var(--text); border-color: var(--fam); background: color-mix(in srgb, var(--fam) 14%, transparent); }
+        main { padding: 0 24px 28px; }
+        .members { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 14px; }
+        .tile { flex: 0 0 auto; width: 92px; border-radius: 10px; border: 1px solid var(--border); background: var(--panel); padding: 7px 8px; cursor: pointer; text-align: left; color: var(--text); font: inherit; }
+        .tile:hover { border-color: var(--fam); }
+        .tile[aria-pressed="true"] { border-color: var(--fam); background: color-mix(in srgb, var(--fam) 16%, var(--panel)); }
+        .tile .z { font-family: 'Fira Code', monospace; font-size: .68rem; color: var(--muted); display: flex; justify-content: space-between; }
+        .tile .s { font-size: 1.6rem; font-weight: 700; line-height: 1.15; }
+        .tile .n { font-size: .7rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tile .c { font-family: 'Fira Code', monospace; font-size: .66rem; color: var(--dim); margin-top: 3px; white-space: nowrap; }
+        .st { font-size: .6rem; padding: 0 4px; border-radius: 4px; }
+        .st.solido { background: #33415588; } .st.liquido { background: #2563eb66; } .st.gas { background: #db277766; }
+        .grid2 { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+        .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; min-width: 0; }
+        .panel h2 { font-size: .8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+        .charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 16px; }
+        .chart .lab { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: .8rem; color: var(--muted); margin-top: 6px; }
+        .chart .lab b { color: var(--text); font-weight: 500; }
+        .chart canvas { width: 100%; height: 130px; display: block; touch-action: pan-y; }
+        .chart .trend { font-size: .74rem; color: var(--dim); min-height: 2.2em; line-height: 1.4; }
+        .chart .trend em { color: var(--fam); font-style: normal; }
+        canvas#ox { width: 100%; height: 190px; display: block; touch-action: pan-y; }
+        .gen { font-family: 'Fira Code', monospace; font-size: 1.05rem; color: var(--fam); margin: 2px 0 10px; }
+        .facts { list-style: none; display: grid; gap: 9px; }
+        .facts li { font-size: .86rem; line-height: 1.55; padding-left: 14px; position: relative; color: #cbd5e1; }
+        .facts li::before { content: ''; position: absolute; left: 0; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--fam); }
+        table.t { width: 100%; border-collapse: collapse; font-size: .82rem; margin-top: 8px; }
+        table.t th { text-align: left; color: var(--muted); font-weight: 500; font-size: .72rem; padding: 5px 6px; border-bottom: 1px solid var(--border); }
+        table.t td { padding: 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+        table.t td.n { font-family: 'Fira Code', monospace; text-align: right; white-space: nowrap; }
+        .keyh { font-size: .85rem; font-weight: 600; margin: 18px 0 2px; }
+        .note { font-size: .8rem; color: var(--muted); background: var(--panel-2); border-left: 3px solid var(--fam); padding: 9px 12px; border-radius: 0 7px 7px 0; line-height: 1.55; margin-top: 12px; }
+        .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+        .links a { font-size: .8rem; text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 5px 11px; }
+        .src { font-size: .7rem; color: var(--dim); margin-top: 14px; line-height: 1.5; }
+        .tip { position: fixed; pointer-events: none; background: #000d; border: 1px solid var(--border); border-radius: 7px; padding: 6px 9px; font-family: 'Fira Code', monospace; font-size: .75rem; display: none; z-index: 10; line-height: 1.5; }
+        .legend { font-size: .72rem; color: var(--dim); margin-top: 6px; }
+        @media (max-width: 1000px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+        @media (max-width: 640px) { header, .tabs, main { padding-left: 14px; padding-right: 14px; } h1 { font-size: 1.3rem; } .guide-link { margin-left: 0; }
+            .charts { grid-template-columns: minmax(0, 1fr); } .tile { width: 82px; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="crumbs"><a href="../../_portal/index.html">EigenLab</a> / <a href="index.html">Chemistry Visual Lab</a> / <a href="tabla-periodica.html">Tabla Periódica</a> / Familias</div>
+        <h1>Familias Químicas</h1>
+        <p class="subtitle">Qué comparten los elementos de una familia y cómo cambian de arriba abajo, con datos medidos.</p>
+        <a class="guide-link" href="guides/familias.html">📖 Guía teórica</a>
+    </header>
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Familia"></nav>
+    <main>
+        <div class="members" id="members" role="group" aria-label="Elementos de la familia"></div>
+        <div class="grid2">
+            <section class="panel">
+                <h2 id="charts-title">Propiedades al bajar por el grupo</h2>
+                <div class="charts" id="charts"></div>
+                <h2 style="margin-top:18px">Estados de oxidación habituales</h2>
+                <canvas id="ox"></canvas>
+                <p class="legend">Cada punto es un estado de oxidación habitual (PubChem). ○ = valor estimado, no medido. Pulsa un elemento para destacarlo.</p>
+            </section>
+            <section class="panel">
+                <h2>Química de la familia</h2>
+                <div class="gen" id="gen"></div>
+                <ul class="facts" id="facts"></ul>
+                <div id="key"></div>
+                <div class="note" id="anom"></div>
+                <div class="links" id="links"></div>
+                <p class="src" id="src"></p>
+            </section>
+        </div>
+    </main>
+    <div class="tip" id="tip"></div>
+
+    <script src="data/elements.js"></script>
+    <script>
+    (() => {
+        const $ = id => document.getElementById(id);
+        const DATA = window.EIGENLAB_ELEMENTS, E = DATA.elementos, BY = Object.fromEntries(E.map(e => [e.sym, e]));
+        const range = (a, b) => E.filter(e => e.z >= BY[a].z && e.z <= BY[b].z);
+
+        // Radios iónicos Ln³⁺ (coordinación 6): muestran la contracción lantánida mejor que el radio de van der Waals.
+        const LN3 = { La: 103.2, Ce: 101.0, Pr: 99.0, Nd: 98.3, Pm: 97.0, Sm: 95.8, Eu: 94.7, Gd: 93.8, Tb: 92.3, Dy: 91.2, Ho: 90.1, Er: 89.0, Tm: 88.0, Yb: 86.8, Lu: 86.1 };
+
+        const P = {
+            fusion: { t: 'Punto de fusión', u: 'K', f: e => e.fusion },
+            ebullicion: { t: 'Punto de ebullición', u: 'K', f: e => e.ebullicion },
+            densidad: { t: 'Densidad', u: 'g/cm³', f: e => e.densidad },
+            radio: { t: 'Radio (van der Waals)', u: 'pm', f: e => e.radio },
+            ln3: { t: 'Radio iónico Ln³⁺', u: 'pm', f: e => LN3[e.sym] ?? null, src: 'Shannon (1976)' },
+            ei: { t: '1.ª energía de ionización', u: 'eV', f: e => e.ei },
+            en: { t: 'Electronegatividad', u: 'Pauling', f: e => e.en },
+        };
+
+        const FAM = [
+            { id: 'alcalinos', name: 'Alcalinos', color: '#ef4444', members: ['Li', 'Na', 'K', 'Rb', 'Cs', 'Fr'], gen: 'ns¹  →  M⁺', props: ['fusion', 'densidad', 'radio', 'ei', 'en', 'ebullicion'],
+              facts: [
+                'Un solo electrón de valencia, lejos del núcleo y muy apantallado: se pierde con facilidad. Todos forman iones M⁺ y son los metales más reactivos.',
+                'Reaccionan con el agua liberando hidrógeno, cada vez con más violencia al bajar: 2 M + 2 H₂O → 2 MOH + H₂. El litio burbujea, el sodio corre por la superficie, el potasio inflama el hidrógeno y el rubidio y el cesio explotan.',
+                'Son blandos (se cortan con un cuchillo), poco densos (Li, Na y K flotan en el agua) y funden a baja temperatura: el cesio, a 28 °C.',
+                'Se guardan en aceite o atmósfera inerte: con el aire forman óxido (Li₂O), peróxido (Na₂O₂) o superóxido (KO₂).'],
+              key: { h: 'Color a la llama (líneas atómicas)', cols: ['', 'color', 'λ principal'], rows: [['Li', 'rojo carmín', '670,8 nm'], ['Na', 'amarillo', '589,0 / 589,6 nm'], ['K', 'lila', '766,5 / 769,9 nm'], ['Rb', 'rojo violáceo', '780,0 nm'], ['Cs', 'azul', '455,5 / 459,3 nm']], src: 'Líneas: NIST ASD.' },
+              anom: '<b>El primero es distinto.</b> El litio es pequeño y polarizante: forma nitruro (Li₃N) y su carbonato se descompone con facilidad, como los del magnesio (relación diagonal). Y su potencial E°(Li⁺/Li) = −3,04 V es el más negativo del grupo a pesar de tener la mayor energía de ionización: el ion Li⁺, diminuto, se hidrata con mucha energía. <b>Y el último también:</b> el francio tiene más energía de ionización que el cesio (4,07 frente a 3,89 eV) porque su electrón 7s se contrae por efectos relativistas; lo mismo le ocurre al radio frente al bario.',
+              links: [['espectros.html?el=Na', 'Espectro del sodio'], ['espectros.html?el=Li', 'Espectro del litio'], ['curso-tabla-periodica/modulo-5/leccion-1.html', 'Curso · lección 5.1']],
+              src: 'Potenciales estándar: CRC Handbook of Chemistry and Physics.' },
+            { id: 'alcalinoterreos', name: 'Alcalinotérreos', color: '#f97316', members: ['Be', 'Mg', 'Ca', 'Sr', 'Ba', 'Ra'], gen: 'ns²  →  M²⁺', props: ['fusion', 'densidad', 'radio', 'ei', 'en', 'ebullicion'],
+              facts: [
+                'Dos electrones de valencia: forman iones M²⁺. Son más duros, densos y de mayor punto de fusión que los alcalinos del mismo periodo.',
+                'La reactividad con el agua crece al bajar: el berilio no reacciona, el magnesio solo con agua caliente o vapor, y del calcio en adelante con agua fría.',
+                'El punto de fusión no sigue una tendencia monótona: cambia la estructura cristalina (hexagonal en Be y Mg, cúbica centrada en caras en Ca y Sr, centrada en el cuerpo en Ba y Ra).',
+                'El calcio y el magnesio son esenciales para la vida: huesos (hidroxiapatito de calcio) y clorofila (con Mg²⁺ en el centro).'],
+              key: { h: 'Solubilidad: dos tendencias opuestas (25 °C)', cols: ['', 'hidróxido M(OH)₂', 'sulfato MSO₄'], rows: [['Mg', 'Ksp 5,6·10⁻¹²', 'soluble'], ['Ca', 'Ksp 5,0·10⁻⁶', 'Ksp 4,9·10⁻⁵'], ['Sr', 'soluble', 'Ksp 3,4·10⁻⁷'], ['Ba', 'soluble', 'Ksp 1,1·10⁻¹⁰']], src: 'Ksp: CRC Handbook. El BaSO₄, tan insoluble que no es tóxico, se usa como contraste en radiografías.' },
+              anom: '<b>El berilio es casi un no metal.</b> Su ion Be²⁺ sería tan pequeño y tan cargado que sus enlaces son en buena parte covalentes; su óxido e hidróxido son anfóteros, como los del aluminio (relación diagonal Be–Al).',
+              links: [['espectros.html?el=Ca', 'Espectro del calcio'], ['espectros.html?el=Sr', 'Espectro del estroncio'], ['curso-tabla-periodica/modulo-5/leccion-1.html', 'Curso · lección 5.1']],
+              src: 'Los colores de llama de Ca (rojo ladrillo), Sr (carmesí) y Ba (verde) proceden sobre todo de moléculas en la llama (MOH, MCl), no solo de líneas atómicas.' },
+            { id: 'halogenos', name: 'Halógenos', color: '#a3e635', members: ['F', 'Cl', 'Br', 'I', 'At'], gen: 'ns² np⁵  →  X⁻ · X₂', props: ['fusion', 'ebullicion', 'radio', 'ei', 'en', 'densidad'],
+              facts: [
+                'Les falta un electrón para completar la capa: lo captan con facilidad (X⁻) o lo comparten formando moléculas diatómicas X₂.',
+                'Al bajar, la nube electrónica es mayor y más polarizable: las fuerzas de London crecen y pasan de gas (F₂, Cl₂) a líquido (Br₂) y a sólido (I₂).',
+                'El poder oxidante disminuye al bajar: un halógeno desplaza a los de debajo de sus sales. Cl₂ + 2 Br⁻ → 2 Cl⁻ + Br₂, pero el I₂ no oxida al Br⁻.',
+                'Colores: F₂ amarillo pálido, Cl₂ amarillo verdoso, Br₂ rojo pardo, I₂ gris violáceo (vapor violeta). Del astato nunca se ha reunido una muestra visible.'],
+              key: { h: 'Poder oxidante y fuerza del enlace X–X', cols: ['', 'E°(X₂/X⁻)', 'energía X–X'], rows: [['F', '+2,87 V', '159 kJ/mol'], ['Cl', '+1,36 V', '243 kJ/mol'], ['Br', '+1,07 V', '193 kJ/mol'], ['I', '+0,54 V', '151 kJ/mol']], src: 'CRC Handbook of Chemistry and Physics.' },
+              anom: '<b>El enlace F–F es sorprendentemente débil</b> (159 kJ/mol, menos que Cl–Cl): los átomos son tan pequeños que los pares no enlazantes se repelen. Enlace débil más gran electronegatividad hacen del flúor el elemento más reactivo. Tampoco sigue la tendencia su afinidad electrónica: la del cloro es mayor.',
+              links: [['tabla-periodica.html?modo=en', 'Electronegatividad en la Tabla Viva'], ['curso-tabla-periodica/modulo-5/leccion-2.html', 'Curso · lección 5.2']],
+              src: 'Astato: energía de ionización medida en 2013 (Rothe y cols.); el resto de sus propiedades son estimaciones.' },
+            { id: 'nobles', name: 'Gases nobles', color: '#c084fc', members: ['He', 'Ne', 'Ar', 'Kr', 'Xe', 'Rn'], gen: 'ns² np⁶ (He: 1s²)', props: ['ebullicion', 'fusion', 'radio', 'ei', 'densidad', 'en'],
+              facts: [
+                'Capa completa: energías de ionización máximas en cada periodo y afinidad electrónica nula o negativa. Son monoatómicos.',
+                'Entre sus átomos solo actúan fuerzas de London, muy débiles en los ligeros: el helio hierve a 4,2 K y no solidifica a presión atmosférica ni en el cero absoluto.',
+                'No son inertes. En 1962 Neil Bartlett obtuvo el primer compuesto de un gas noble (con xenón y PtF₆). Hoy se conocen XeF₂, XeF₄, XeF₆, XeO₃ o KrF₂. Del helio y el neón no hay compuestos neutros estables.',
+                'El argón es el 0,93 % del aire. El radón, radiactivo, se acumula en sótanos de zonas graníticas: es la segunda causa de cáncer de pulmón, tras el tabaco.'],
+              key: { h: 'Compuestos conocidos', cols: ['', 'compuestos', 'desde'], rows: [['He, Ne', 'ninguno neutro estable', '—'], ['Ar', 'HArF (solo a menos de 27 K)', '2000'], ['Kr', 'KrF₂', '1963'], ['Xe', 'XePtF₆ (Xe⁺[PtF₆]⁻, fórmula aproximada), XeF₂, XeF₄, XeO₃…', '1962']], src: 'N. Bartlett, Proc. Chem. Soc. 218 (1962); L. Khriachtchev y cols., Nature 406, 874 (2000).' },
+              anom: '<b>La reactividad crece al bajar.</b> El xenón tiene una energía de ionización (12,1 eV) parecida a la del O₂ (12,1 eV): Bartlett lo razonó así, porque ya había oxidado el O₂ con PtF₆. Los gases nobles ligeros retienen sus electrones con demasiada fuerza.',
+              links: [['espectros.html?el=Ne', 'Espectro del neón'], ['diagrama-fases.html', 'Diagrama de fases'], ['curso-tabla-periodica/modulo-5/leccion-3.html', 'Curso · lección 5.3']],
+              src: 'La electronegatividad de Pauling solo existe para Kr y Xe, los únicos con compuestos que la permiten calcular.' },
+            { id: 'transicion', name: 'Transición (periodo 4)', axis: 'periodo', color: '#60a5fa', members: ['Sc', 'Ti', 'V', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn'], gen: '3dⁿ 4s²  (Cr, Cu: 4s¹)', props: ['fusion', 'densidad', 'ei', 'en', 'radio', 'ebullicion'],
+              facts: [
+                'Se llena la subcapa 3d mientras la 4s ya está ocupada. Al ionizarse pierden primero los electrones 4s: el Fe²⁺ es [Ar]3d⁶.',
+                'Estados de oxidación variables: el máximo coincide con el número de grupo hasta el manganeso (+7 en el permanganato); después los electrones d se retienen con más fuerza y el máximo baja.',
+                'Muchos compuestos coloreados: los iones con la subcapa d incompleta absorben luz visible al saltar un electrón entre orbitales d, que el entorno del ion desdobla en energía. Con d⁰ (Sc³⁺) o d¹⁰ (Zn²⁺) no hay tal salto: son incoloros.',
+                'Metales duros, densos y de alto punto de fusión. Buenos catalizadores: hierro en la síntesis del amoniaco, V₂O₅ en la del ácido sulfúrico, níquel en la hidrogenación.'],
+              key: { h: 'Color de los acuoiones: cuenta los electrones d', cols: ['ion', 'config.', 'color en agua'], dyn: 'aqua', rows: [['Sc³⁺', 'incoloro'], ['Ti³⁺', 'violeta'], ['V³⁺', 'verde'], ['Cr³⁺', 'violeta (verde con cloruro)'], ['Mn²⁺', 'rosa muy pálido'], ['Fe²⁺', 'verde pálido'], ['Fe³⁺', 'amarillo pardo (por hidrólisis)'], ['Co²⁺', 'rosa'], ['Ni²⁺', 'verde'], ['Cu²⁺', 'azul'], ['Zn²⁺', 'incoloro']], src: 'Colores de los acuoiones [M(H₂O)₆]ⁿ⁺: Greenwood y Earnshaw, «Chemistry of the Elements».' },
+              anom: '<b>Dos excepciones de configuración:</b> Cr ([Ar]3d⁵4s¹) y Cu ([Ar]3d¹⁰4s¹). Y el zinc, con la subcapa d llena, se parece poco a sus vecinos: un único estado de oxidación, iones incoloros y un punto de fusión bajo (693 K).',
+              links: [['aufbau.html?z=24', 'Configuración del cromo'], ['tabla-periodica.html?modo=densidad', 'Densidad en la Tabla Viva'], ['curso-tabla-periodica/modulo-5/leccion-4.html', 'Curso · lección 5.4']],
+              src: '' },
+            { id: 'lantanidos', name: 'Lantánidos', axis: 'serie', color: '#f472b6', members: ['La', 'Ce', 'Pr', 'Nd', 'Pm', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu'], gen: '[Xe] 4fⁿ 6s²  →  Ln³⁺', props: ['ln3', 'densidad', 'fusion', 'ei', 'radio', 'en'],
+              facts: [
+                'Se llena la subcapa 4f, que queda por dentro de las 5s y 5p: apenas participa en el enlace. Por eso los quince tienen una química casi idéntica, dominada por el ion Ln³⁺.',
+                'El radio del Ln³⁺ disminuye con regularidad a lo largo de la serie: es la contracción lantánida. Esa pequeña diferencia de tamaño es lo que permite separarlos, con cromatografía de intercambio iónico (F. Spedding, años 40).',
+                'Estados +2 y +4 donde la subcapa f queda vacía, semillena o llena: Ce⁴⁺ (f⁰), Eu²⁺ (f⁷), Yb²⁺ (f¹⁴).',
+                'Imprescindibles en tecnología: imanes de Nd₂Fe₁₄B, luminóforos rojos con Eu³⁺, amplificadores de fibra óptica con Er³⁺ (1550 nm) y contraste de resonancia magnética con Gd³⁺ (siete electrones desapareados).'],
+              anom: '<b>Mira el europio y el iterbio en las gráficas de densidad y de fusión.</b> Son los dos valles de la serie. En el metal, Eu y Yb ceden solo dos electrones al enlace metálico (conservan f⁷ y f¹⁴), no tres como los demás: el enlace es más débil y los átomos más grandes.',
+              links: [['tabla-periodica.html?modo=densidad', 'Densidad en la Tabla Viva'], ['curso-tabla-periodica/modulo-5/leccion-5.html', 'Curso · lección 5.5']],
+              src: 'Radios iónicos Ln³⁺ (coordinación 6): R. D. Shannon, Acta Cryst. A32, 751 (1976). El prometio no tiene isótopos estables.' },
+            { id: 'actinidos', name: 'Actínidos', axis: 'serie', color: '#fb7185', members: ['Ac', 'Th', 'Pa', 'U', 'Np', 'Pu', 'Am', 'Cm', 'Bk', 'Cf', 'Es', 'Fm', 'Md', 'No', 'Lr'], gen: '[Rn] 5fⁿ 7s²', props: ['densidad', 'fusion', 'ei', 'en', 'radio', 'ebullicion'],
+              facts: [
+                'Todos son radiactivos. Solo el torio y el uranio tienen isótopos de vida suficientemente larga para haber llegado desde la formación de la Tierra (²³²Th: 14 000 millones de años; ²³⁸U: 4 470 millones).',
+                'Del neptunio en adelante son sintéticos: Np y Pu (1940, Berkeley). En 1944 Glenn Seaborg propuso que formaban una segunda serie f, y los movió a la fila que hoy ocupan bajo los lantánidos.',
+                'Los primeros actínidos (Th–Pu) tienen muchos estados de oxidación, hasta +6 en el uranio y el plutonio: los orbitales 5f, más extensos que los 4f, participan en el enlace. Del americio en adelante domina el +3, como en los lantánidos.',
+                'El ²³⁵U se fisiona con neutrones lentos (Hahn y Strassmann, 1938; interpretación de Meitner y Frisch): es la base de la energía nuclear.'],
+              anom: '<b>Datos cada vez más escasos.</b> Del californio en adelante solo se han producido cantidades mínimas, a veces átomos sueltos: su densidad no se ha medido y los puntos de fusión de Fm a Lr son estimaciones (○ en las gráficas).',
+              links: [['decaimiento.html', 'Decaimiento radiactivo'], ['tabla-periodica.html?modo=anio', 'Historia de los descubrimientos'], ['curso-tabla-periodica/modulo-5/leccion-5.html', 'Curso · lección 5.5']],
+              src: 'Periodos de semidesintegración: NUBASE2020.' },
+        ];
+
+        // ---------------------------------------------------------------- utilidades
+        const SUP = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+        const sup = s => s.replace(/\d+$/, d => [...d].map(c => SUP[c]).join(''));
+        const valence = e => e.config.replace(/^\[\w+\]\s*/, '').split(/\s+/).map(sup).join(' ');
+        const isEst = (e, k) => (e.estimado || []).includes(k);
+        const fmt = (v, u) => v == null ? '—' : (v < 0.01 ? v.toExponential(2) : v >= 100 ? v.toFixed(0) : v.toFixed(2).replace(/\.?0+$/, '')) + ' ' + u;
+        const pretty = v => v < 0.01 ? v.toExponential(1) : v >= 100 ? v.toFixed(0) : +v.toFixed(2);
+        const STATE = { solido: 'sólido', liquido: 'líquido', gas: 'gas' };
+
+        // configuración de un ion de transición: pierde primero 4s y después 3d
+        function dCount(sym, q) {
+            const e = BY[sym]; let d = e.ocupacion['3d'] || 0, s = e.ocupacion['4s'] || 0;
+            const take = Math.min(q, s); s -= take; d -= q - take; return d;
+        }
+
+        // ---------------------------------------------------------------- tendencia descrita con los datos
+        function describe(fam, key) {
+            const pr = P[key], ms = fam.members.map(s => BY[s]);
+            const pts = ms.map((e, i) => ({ e, i, v: pr.f(e) })).filter(p => p.v != null && !isEst(p.e, key));
+            const where = fam.axis === 'periodo' ? 'a lo largo del periodo' : fam.axis === 'serie' ? 'a lo largo de la serie' : 'al bajar';
+            if (pts.length < 3) return 'Datos medidos insuficientes.';
+            const up = pts.slice(1).map((p, j) => p.v > pts[j].v);
+            const nUp = up.filter(Boolean).length, nDown = up.length - nUp;
+            if (nDown === 0) return `<em>Crece</em> ${where}, sin excepciones.`;
+            if (nUp === 0) return `<em>Decrece</em> ${where}, sin excepciones.`;
+            // un solo cambio de sentido: sube y luego baja (o al revés)
+            const turns = up.slice(1).filter((u, j) => u !== up[j]).length;
+            if (turns === 1) { const k = up.findIndex(u => u !== up[0]); const peak = pts[k].e.sym;
+                return up[0] ? `<em>Crece hasta ${peak}</em> y después decrece.` : `<em>Decrece hasta ${peak}</em> y después crece.`; }
+            // correlación de rangos con la posición
+            const rank = a => { const s = [...a].map((v, i) => [v, i]).sort((x, y) => x[0] - y[0]); const r = []; s.forEach(([, i], k) => r[i] = k); return r; };
+            const rv = rank(pts.map(p => p.v)), ri = pts.map((_, k) => k), n = pts.length;
+            const rho = 1 - 6 * rv.reduce((a, r, k) => a + (r - ri[k]) ** 2, 0) / (n * (n * n - 1));
+            const hi = pts.reduce((a, p) => p.v > a.v ? p : a), lo = pts.reduce((a, p) => p.v < a.v ? p : a);
+            if (Math.abs(rho) >= 0.75) {
+                const inc = rho > 0, off = pts.slice(1).filter((p, j) => (p.v > pts[j].v) !== inc).map(p => p.e.sym);
+                if (off.length > 2) return `<em>Irregular</em>, con tendencia general a ${inc ? 'crecer' : 'decrecer'} (ρ = ${rho.toFixed(2)}): máximo en ${hi.e.sym}, mínimo en ${lo.e.sym}.`;
+                return `<em>Tiende a ${inc ? 'crecer' : 'decrecer'}</em> ${where} (ρ = ${rho.toFixed(2)}), con excepción en ${off.join(', ')}.`;
+            }
+            return `<em>Sin tendencia monótona</em> (ρ = ${rho.toFixed(2)}): máximo en ${hi.e.sym}, mínimo en ${lo.e.sym}.`;
+        }
+
+        // ---------------------------------------------------------------- estado y dibujo
+        const state = { fam: FAM[0], sel: null };
+        const tip = $('tip');
+
+        function axes(ctx, W, H, pad, lo, hi, n, labels) {
+            ctx.font = '10px Fira Code, monospace'; ctx.strokeStyle = '#1e1e44'; ctx.fillStyle = '#64748b'; ctx.lineWidth = 1;
+            [0, 0.5, 1].forEach(t => { const v = lo + (hi - lo) * t, y = H - pad.b - t * (H - pad.t - pad.b);
+                ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke(); ctx.fillText(String(pretty(v)), 2, y + 3); });
+            const X = i => pad.l + (n === 1 ? 0.5 : i / (n - 1)) * (W - pad.l - pad.r);
+            labels.forEach((s, i) => { ctx.fillStyle = state.sel === s ? '#e2e8f0' : '#64748b'; ctx.fillText(s, X(i) - ctx.measureText(s).width / 2, H - 4); });
+            return X;
+        }
+        function setup(c) {
+            const dpr = window.devicePixelRatio || 1, W = c.clientWidth, H = c.clientHeight;
+            c.width = W * dpr; c.height = H * dpr; const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+            return [ctx, W, H];
+        }
+
+        function drawChart(c, key) {
+            const fam = state.fam, pr = P[key], ms = fam.members.map(s => BY[s]);
+            const [ctx, W, H] = setup(c), pad = { l: 40, r: 10, t: 8, b: 16 };
+            const vals = ms.map(e => pr.f(e)), got = vals.filter(v => v != null);
+            if (!got.length) { ctx.fillStyle = '#64748b'; ctx.font = '12px Inter'; ctx.fillText('sin datos', W / 2 - 25, H / 2); return; }
+            let lo = Math.min(...got), hi = Math.max(...got); const m = (hi - lo) * 0.12 || hi * 0.1 || 1; lo = Math.max(0, lo - m); hi += m;
+            const X = axes(ctx, W, H, pad, lo, hi, ms.length, fam.members), Y = v => H - pad.b - (v - lo) / (hi - lo) * (H - pad.t - pad.b);
+            if (state.sel) { const i = fam.members.indexOf(state.sel); ctx.fillStyle = 'rgba(255,255,255,.05)'; ctx.fillRect(X(i) - 9, pad.t, 18, H - pad.t - pad.b); }
+            ctx.strokeStyle = fam.color; ctx.lineWidth = 1.6; ctx.beginPath(); let pen = false;
+            vals.forEach((v, i) => { if (v == null) { pen = false; return; } pen ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v)); pen = true; }); ctx.stroke();
+            vals.forEach((v, i) => { if (v == null) return; const est = isEst(ms[i], key);
+                ctx.beginPath(); ctx.arc(X(i), Y(v), state.sel === ms[i].sym ? 5 : 3.5, 0, 2 * Math.PI);
+                if (est) { ctx.fillStyle = '#0a0a1a'; ctx.fill(); ctx.strokeStyle = fam.color; ctx.lineWidth = 1.5; ctx.stroke(); } else { ctx.fillStyle = fam.color; ctx.fill(); } });
+            c._hit = { X, n: ms.length, text: i => `${ms[i].sym} · ${pr.t}<br>${isEst(ms[i], key) ? '≈ ' : ''}${fmt(vals[i], pr.u)}${isEst(ms[i], key) ? ' (estimado)' : ''}` };
+        }
+
+        function drawOx() {
+            const c = $('ox'), fam = state.fam, ms = fam.members.map(s => BY[s]);
+            const [ctx, W, H] = setup(c), pad = { l: 30, r: 10, t: 8, b: 16 };
+            const ox = ms.map(e => (e.oxidacion || '').split(',').map(s => parseInt(s.trim(), 10)).filter(v => !isNaN(v)));
+            const all = ox.flat(), lo = Math.min(-1, ...all), hi = Math.max(1, ...all);
+            const X = (() => { const n = ms.length; return i => pad.l + (n === 1 ? .5 : i / (n - 1)) * (W - pad.l - pad.r); })();
+            const Y = v => H - pad.b - (v - lo) / (hi - lo) * (H - pad.t - pad.b);
+            ctx.font = '10px Fira Code, monospace';
+            for (let v = lo; v <= hi; v++) { ctx.strokeStyle = v === 0 ? '#334155' : '#1a1a3e'; ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(W - pad.r, Y(v)); ctx.stroke();
+                ctx.fillStyle = '#64748b'; ctx.fillText((v > 0 ? '+' : '') + v, 2, Y(v) + 3); }
+            ms.forEach((e, i) => { ctx.fillStyle = state.sel === e.sym ? '#e2e8f0' : '#64748b'; ctx.fillText(e.sym, X(i) - ctx.measureText(e.sym).width / 2, H - 4);
+                if (state.sel === e.sym) { ctx.fillStyle = 'rgba(255,255,255,.05)'; ctx.fillRect(X(i) - 9, pad.t, 18, H - pad.t - pad.b); }
+                const mx = Math.max(...ox[i]);
+                ox[i].forEach(v => { ctx.beginPath(); ctx.arc(X(i), Y(v), v === mx && v > 0 ? 5 : 4, 0, 2 * Math.PI); ctx.fillStyle = fam.color; ctx.globalAlpha = v === 0 ? .5 : 1; ctx.fill(); ctx.globalAlpha = 1; }); });
+            if (ms.some((_, i) => ox[i].length > 1)) {
+                ctx.strokeStyle = fam.color + '88'; ctx.setLineDash([4, 3]); ctx.beginPath();
+                ms.forEach((_, i) => { const v = Math.max(...ox[i]); i ? ctx.lineTo(X(i), Y(v)) : ctx.moveTo(X(i), Y(v)); }); ctx.stroke(); ctx.setLineDash([]);
+            }
+            c._hit = { X, n: ms.length, text: i => `${ms[i].sym}: ${ms[i].oxidacion}` };
+        }
+
+        function renderCharts() {
+            state.fam.props.forEach(k => drawChart($('ch-' + k), k));
+            drawOx();
+        }
+
+        function renderMembers() {
+            $('members').innerHTML = state.fam.members.map(s => { const e = BY[s];
+                return `<button class="tile" data-s="${s}" aria-pressed="${state.sel === s}"><div class="z"><span>${e.z}</span><span class="st ${e.estado}">${STATE[e.estado] || ''}</span></div>
+                    <div class="s">${s}</div><div class="n">${e.nombre}</div><div class="c">${valence(e)}</div></button>`; }).join('');
+        }
+
+        function renderFamily() {
+            const fam = state.fam;
+            document.documentElement.style.setProperty('--fam', fam.color);
+            document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.id === fam.id));
+            $('charts-title').textContent = fam.axis === 'periodo' ? 'Propiedades a lo largo del periodo 4' : fam.axis === 'serie' ? 'Propiedades a lo largo de la serie' : 'Propiedades al bajar por el grupo';
+            renderMembers();
+            $('charts').innerHTML = fam.props.map(k => `<div class="chart"><div class="lab"><b>${P[k].t}</b><span>${P[k].u}</span></div><canvas id="ch-${k}"></canvas><div class="trend">${describe(fam, k)}</div></div>`).join('');
+            $('gen').textContent = fam.gen;
+            $('facts').innerHTML = fam.facts.map(f => `<li>${f}</li>`).join('');
+            const k = fam.key;
+            $('key').innerHTML = !k ? '' : `<div class="keyh">${k.h}</div><table class="t"><thead><tr>${k.cols.map(c => `<th>${c}</th>`).join('')}</tr></thead><tbody>${
+                k.rows.map(r => k.dyn === 'aqua'
+                    ? (() => { const [sym, q] = [r[0].replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁺]+$/, ''), '⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(r[0].match(/([⁰¹²³⁴⁵⁶⁷⁸⁹])⁺$/)[1])];
+                        const d = dCount(sym, q); return `<tr><td>${r[0]}</td><td class="n">d${sup(String(d))}</td><td>${r[1]}</td></tr>`; })()
+                    : `<tr>${r.map((c, i) => `<td${i ? ' class="n"' : ''}>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>${k.src ? `<p class="src" style="margin-top:6px">${k.src}</p>` : ''}`;
+            $('anom').innerHTML = fam.anom;
+            $('links').innerHTML = fam.links.map(([h, t]) => `<a href="${h}">${t}</a>`).join('') + (state.sel ? `<a href="tabla-periodica.html#${state.sel}">Ficha de ${BY[state.sel].nombre} →</a>` : '');
+            $('src').innerHTML = `Datos: ${DATA.fuente}, con correcciones medidas citadas en la ficha de cada elemento. ${fam.src}`;
+            renderCharts();
+        }
+
+        // ---------------------------------------------------------------- eventos
+        $('tabs').innerHTML = FAM.map(f => `<button class="tab" role="tab" data-id="${f.id}" style="--fam:${f.color}"><span class="dot" style="background:${f.color}"></span>${f.name}</button>`).join('');
+        $('tabs').addEventListener('click', ev => { const t = ev.target.closest('.tab'); if (!t) return;
+            state.fam = FAM.find(f => f.id === t.dataset.id); state.sel = null; renderFamily();
+            history.replaceState(null, '', '?f=' + state.fam.id); });
+        $('members').addEventListener('click', ev => { const t = ev.target.closest('.tile'); if (!t) return;
+            state.sel = state.sel === t.dataset.s ? null : t.dataset.s; renderMembers(); renderCharts();
+            $('links').innerHTML = state.fam.links.map(([h, x]) => `<a href="${h}">${x}</a>`).join('') + (state.sel ? `<a href="tabla-periodica.html#${state.sel}">Ficha de ${BY[state.sel].nombre} →</a>` : ''); });
+        document.addEventListener('pointermove', ev => {
+            const c = ev.target; if (!(c instanceof HTMLCanvasElement) || !c._hit) { tip.style.display = 'none'; return; }
+            const r = c.getBoundingClientRect(), x = ev.clientX - r.left; let best = 0, bd = 1e9;
+            for (let i = 0; i < c._hit.n; i++) { const d = Math.abs(c._hit.X(i) - x); if (d < bd) { bd = d; best = i; } }
+            if (bd > 24) { tip.style.display = 'none'; return; }
+            tip.innerHTML = c._hit.text(best); tip.style.display = 'block';
+            tip.style.left = Math.min(ev.clientX + 12, innerWidth - tip.offsetWidth - 8) + 'px'; tip.style.top = (ev.clientY + 12) + 'px';
+        });
+        let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(renderCharts, 120); });
+
+        const q = new URLSearchParams(location.search).get('f');
+        state.fam = FAM.find(f => f.id === q) || FAM[0];
+        const h = location.hash.slice(1); if (state.fam.members.includes(h)) state.sel = h;
+        renderFamily();
+    })();
+    </script>
+</body>
+</html>

@@ -66,7 +66,22 @@ window.EIGENLAB_COURSE = {
          "objetivos": ["Describir la tendencia del carácter metálico", "Explicar la contracción lantánida y sus consecuencias", "Reconocer las relaciones diagonales"]}
       ]
     },
-    {"n": 5, "titulo": "Familias", "proximamente": true, "resumen": "Alcalinos, halógenos, gases nobles, metales de transición, lantánidos y actínidos.", "lecciones": []},
+    {
+      "n": 5, "titulo": "Familias",
+      "resumen": "Alcalinos, halógenos, gases nobles, metales de transición, lantánidos y actínidos.",
+      "lecciones": [
+        {"n": 1, "titulo": "Alcalinos y alcalinotérreos", "min": 15,
+         "objetivos": ["Relacionar la configuración ns¹ y ns² con los iones M⁺ y M²⁺", "Explicar por qué la reactividad crece al bajar en el grupo", "Interpretar los colores de llama como espectros de emisión"]},
+        {"n": 2, "titulo": "Halógenos", "min": 15,
+         "objetivos": ["Relacionar la configuración ns² np⁵ con el ion X⁻ y la molécula X₂", "Explicar el paso de gas a sólido con las fuerzas de London", "Predecir reacciones de desplazamiento con el poder oxidante"]},
+        {"n": 3, "titulo": "Gases nobles", "min": 15,
+         "objetivos": ["Relacionar la capa completa con su baja reactividad", "Conocer los compuestos de xenón y kriptón y su historia", "Explicar por qué la reactividad crece al bajar"]},
+        {"n": 4, "titulo": "Metales de transición", "min": 20,
+         "objetivos": ["Escribir la configuración de iones de transición", "Explicar los estados de oxidación variables", "Relacionar el color y el magnetismo con la subcapa d incompleta"]},
+        {"n": 5, "titulo": "Lantánidos y actínidos", "min": 20,
+         "objetivos": ["Explicar la química uniforme de los lantánidos", "Relacionar la contracción lantánida con su separación", "Distinguir el comportamiento de los primeros actínidos"]}
+      ]
+    },
     {"n": 6, "titulo": "Más allá de la tabla", "proximamente": true, "resumen": "Origen cósmico, efectos relativistas, superpesados y los elementos de la tecnología.", "lecciones": []}
   ]
 };

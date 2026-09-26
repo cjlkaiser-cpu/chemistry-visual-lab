@@ -395,8 +395,10 @@
         function row(k, v, pred) { return `<tr><td>${k}</td><td>${v}${pred ? '<span class="pred">predicho</span>' : ''}</td></tr>`; }
         function showCard(z) {
             const e = BY_Z[z], U = DATA.unidades, cat = CAT[e.categoria];
-            const K = v => v == null ? '—' : `${v.toFixed(v < 100 ? 2 : 0)} K <span style="color:var(--dim)">(${(v - 273.15).toFixed(0)} °C)</span>`;
-            const f = (v, d, u) => v == null ? '—' : `${v.toFixed(d)} ${u}`;
+            const est = k => (e.estimado || []).includes(k), src = k => e.fuentes && e.fuentes[k];
+            const mark = k => (est(k) ? ' <span class="pred">estimado</span>' : '') + (src(k) ? ` <span class="pred" title="${src(k)}">medido*</span>` : '');
+            const f = (v, d, u, k) => v == null ? '—' : `${est(k) ? '≈ ' : ''}${v.toFixed(d)} ${u}${mark(k)}`;
+            const K = (v, k) => v == null ? '—' : `${est(k) ? '≈ ' : ''}${v.toFixed(v < 100 ? 2 : 0)} K <span style="color:var(--dim)">(${(v - 273.15).toFixed(0)} °C)</span>${mark(k)}`;
             const phase = phaseAt(e, 298.15);
             let notes = '';
             if (EXCEPTIONS.has(e.sym)) notes += `<p class="note warn">Excepción a la regla de Madelung: su configuración real no es la que predice el llenado por n + l. <a href="aufbau.html?z=${e.z}">Ver por qué →</a></p>`;
@@ -419,13 +421,13 @@
                 <table class="props">
                     ${row('Masa atómica', massText(e) + ' u' + (noStandardWeight(e.z) ? ' <span style="color:var(--dim)">(isótopo más estable)</span>' : ''))}
                     ${row('Estado a 25 °C', phase ? PHASE[phase][0] : '—', e.estado_predicho)}
-                    ${row('Electronegatividad', f(e.en, 2, ''))}
-                    ${row('1.ª energía de ionización', f(e.ei, 3, 'eV'))}
-                    ${row('Afinidad electrónica', f(e.ae, 3, 'eV'))}
+                    ${row('Electronegatividad', f(e.en, 2, '', 'en'))}
+                    ${row('1.ª energía de ionización', f(e.ei, 3, 'eV', 'ei'))}
+                    ${row('Afinidad electrónica', f(e.ae, 3, 'eV', 'ae'))}
                     ${row('Radio (van der Waals)', f(e.radio, 0, 'pm'))}
-                    ${row('Fusión', K(e.fusion))}
-                    ${row('Ebullición', K(e.ebullicion))}
-                    ${row('Densidad', e.densidad == null ? '—' : `${e.densidad < 0.01 ? e.densidad.toExponential(3) : e.densidad} g/cm³`)}
+                    ${row('Fusión', K(e.fusion, 'fusion'))}
+                    ${row('Ebullición', K(e.ebullicion, 'ebullicion'))}
+                    ${row('Densidad', e.densidad == null ? '—' : `${est('densidad') ? '≈ ' : ''}${e.densidad < 0.01 ? e.densidad.toExponential(3) : e.densidad} g/cm³${mark('densidad')}`)}
                     ${row('Estados de oxidación', e.oxidacion || '—')}
                     ${row('Descubrimiento', e.antiguedad ? 'Antigüedad' : e.anio ?? '—')}
                 </table>
@@ -434,7 +436,7 @@
                     <a href="tendencias.html">Tendencias periódicas</a>
                     <a href="orbitales.html">Orbitales atómicos</a>
                 </div>
-                <p class="source">${DATA.fuente}</p>`;
+                <p class="source">${DATA.fuente}${e.fuentes ? '<br>* ' + Object.entries(e.fuentes).map(([k, v]) => `${{ei: 'Energía de ionización', ae: 'Afinidad electrónica'}[k] || k}: ${v}`).join(' · ') : ''}</p>`;
         }
 
         // ------------------------------------------------------------ selección y teclado

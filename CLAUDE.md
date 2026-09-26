@@ -2,9 +2,9 @@
 
 ## Descripción
 
-El **Chemistry Visual Lab** contiene **23 simulaciones** interactivas que cubren todo el espectro de química general: desde estructura atómica hasta química nuclear. Cada simulación implementa modelos científicos rigurosos con visualización en Canvas 2D y Three.js para moléculas 3D.
+El **Chemistry Visual Lab** contiene **24 simulaciones** interactivas que cubren todo el espectro de química general: desde estructura atómica hasta química nuclear. Cada simulación implementa modelos científicos rigurosos con visualización en Canvas 2D y Three.js para moléculas 3D.
 
-## Simulaciones (23 Total)
+## Simulaciones (24 Total)
 
 ### Estructura Atómica (2)
 1. **Modelo de Bohr** - Saltos electrónicos, espectros de emisión
@@ -44,7 +44,7 @@ El **Chemistry Visual Lab** contiene **23 simulaciones** interactivas que cubren
 ### Química Nuclear (1)
 16. **Decaimiento** - N(t) = N₀e^(-λt)
 
-### Tabla Periódica (7)
+### Tabla Periódica (8)
 17. **Tendencias** - Radio atómico, energía de ionización (36 elementos)
 18. **Tabla Periódica Viva** (`tabla-periodica.html`) - Los 118 elementos: familias, bloques, 6 propiedades, estado según T, historia de descubrimientos, ficha por elemento
 19. **Constructor de Configuraciones** (`aufbau.html`) - Madelung/Pauli/Hund electrón a electrón; la tabla se ilumina por bloques; 19 excepciones explicadas. Acepta `?z=`
@@ -53,6 +53,7 @@ El **Chemistry Visual Lab** contiene **23 simulaciones** interactivas que cubren
 22. **El Reto de Mendeléyev** (`mendeleyev.html`) - Predicciones de 1871 (Ga, Sc, Ge) con vecinos conocidos en 1871; reto libre; evaluación de estrategias (4 vecinos / periodo / grupo)
 
 23. **Carga Nuclear Efectiva** (`carga-efectiva.html`) - Reglas de Slater paso a paso (Z ≤ 86), cualquier electrón; pestaña de tendencias Z_ef/radio/EI frente a Z. Acepta `?z=` y `#tendencias`
+24. **Familias Químicas** (`familias.html`) - 7 familias (`?f=alcalinos|alcalinoterreos|halogenos|nobles|transicion|lantanidos|actinidos`, `#Sym`): 6 propiedades con la tendencia descrita desde los datos, estados de oxidación, química descriptiva citada
 
 ### Dinámica Molecular (WASM)
 20. **Dinámica Molecular** - Lennard-Jones con el motor WASM de EigenLab
@@ -64,7 +65,7 @@ El **Chemistry Visual Lab** contiene **23 simulaciones** interactivas que cubren
   `.predict` (predicción que se revela), `.quiz` (autoevaluación con `data-why` en cada opción), `figure.sim[data-src]` (simulación embebida),
   `.ion-lab` (configuración de iones; necesita `data/elements.js`).
 - Cada lección `modulo-N/leccion-M.html` solo contiene su `<article class="lesson" data-mod data-lesson>`; la cabecera la pone el motor.
-- Módulos 1–4 escritos (18 lecciones); 5–6 marcados como «próximamente» en `course-data.js`.
+- Módulos 1–5 escritos (23 lecciones); el 6 está marcado como «próximamente» en `course-data.js`.
 
 ## Datos de los elementos (`data/`)
 
@@ -72,6 +73,7 @@ El **Chemistry Visual Lab** contiene **23 simulaciones** interactivas que cubren
 - El script valida: 118 elementos, electrones = Z, capacidad de subcapas, rangos físicos, celdas únicas, disposición IUPAC (grupo 3 = Sc, Y, Lu, Lr). Falla si algo no cuadra.
 - Configuraciones en notación del NIST (subcapas ordenadas por n y l); `ocupacion` en orden de llenado.
 - `data/spectra.js` lo genera `python3 data/build_spectra.py` (NIST ASD + CIE 1931 del CVRL); valida Balmer por Rydberg frente al NIST (< 0,01 nm).
+- `CORRECCIONES` en `build_elements.py`: valores medidos que sustituyen a PubChem, con su fuente (campo `fuentes` del elemento). `ESTIMADOS`: valores no medidos (campo `estimado`), marcados con ≈ en la Tabla Viva y como ○ en Familias.
 - Casos especiales documentados: As sublima a 1 atm; He no solidifica a 1 atm; masas entre corchetes para elementos sin peso atómico estándar.
 
 ## Modelos Científicos
