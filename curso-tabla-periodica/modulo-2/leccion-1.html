@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.1 La luz de los átomos · Curso de la Tabla Periódica</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Distinguir espectro continuo y espectro de líneas; Relacionar cada línea con un salto entre niveles: E = hc/λ; Usar los espectros para identificar elementos.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="2.1 La luz de los átomos · Curso">
+    <meta property="og:description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Distinguir espectro continuo y espectro de líneas; Relacionar cada línea con un salto entre niveles: E = hc/λ; Usar los espectros para identificar elementos.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../curso.css">
+</head>
+<body>
+    <article class="lesson" data-mod="2" data-lesson="1">
+
+        <div class="box predict" data-answer="b"><span class="label">Predice antes de seguir</span>
+            <p>Calientas sal común (cloruro de sodio) en una llama y miras la luz con un espectroscopio. ¿Qué ves?</p><ul class="options"><li data-k="a">Un arcoíris continuo, como el de una bombilla</li><li data-k="b">Unas pocas líneas brillantes de colores concretos</li><li data-k="c">Nada: la sal no emite luz</li></ul>
+            <div class="reveal"><p>Aparece sobre todo una línea amarilla doble, a 589 nm: las líneas D del sodio. Un gas excitado no emite todos los colores, solo algunos muy concretos.</p></div>
+        </div>
+
+        <h2>Espectros continuos y de líneas</h2>
+        <p>Un sólido muy caliente, como el filamento de una bombilla, emite todos los colores: un <b>espectro continuo</b>. Un gas de átomos excitados, en cambio, emite solo en algunas longitudes de onda: un <b>espectro de líneas</b>. Cada elemento tiene las suyas, siempre las mismas: son su huella dactilar.</p>
+        <p>Si la luz continua atraviesa ese mismo gas frío, faltan exactamente esos colores: aparece un <b>espectro de absorción</b> con líneas oscuras en las mismas posiciones. Así se leen los elementos en las estrellas.</p>
+
+        <h2>Cada línea, un salto</h2>
+        <p>Los electrones de un átomo solo pueden tener ciertas energías: sus <b>niveles</b>. Cuando un electrón baja de un nivel a otro, el átomo emite un fotón con una energía exactamente igual a la diferencia, y esa energía fija el color.</p>
+        <div class="eq">E(fotón) = E(superior) − E(inferior) = h·c / λ      (h·c = 1239,84 eV·nm)</div>
+        <p>La línea D del sodio, a 589 nm, corresponde a un salto de 1239,84 / 589 = 2,10 eV.</p>
+
+        <h2>Descubrir elementos con luz</h2>
+        <p>En 1859 Bunsen y Kirchhoff construyeron el primer espectroscopio y descubrieron con él dos elementos nuevos: el <b>cesio</b> (1860), por dos líneas azules (<i>caesius</i>, «azul celeste»), y el <b>rubidio</b> (1861), por sus líneas rojas (<i>rubidus</i>, «rojo oscuro»). En 1868 una línea amarilla del Sol, a 587,6 nm, no correspondía a ningún elemento conocido: era el <b>helio</b>, que no se encontró en la Tierra hasta 1895.</p>
+
+        <figure class="sim" data-src="../../espectros.html?el=Na" data-title="Espectros Atómicos" data-h="760">
+            <figcaption><span class="task">Tarea</span><ol><li>Observa el espectro del sodio y pásale el cursor por encima: ¿dónde está la línea más intensa?</li><li>Pulsa «Comparar con…» y elige el mercurio: ¿comparten alguna línea?</li><li>Cambia a «Absorción»: las líneas oscuras están en el mismo sitio.</li><li>Pasa a la pestaña «Espectro misterioso» e identifica un elemento.</li></ol></figcaption>
+        </figure>
+
+        <div class="box idea"><span class="label">Idea clave</span><p>Las líneas espectrales demuestran que la energía de los electrones de un átomo está <b>cuantizada</b>: solo puede tomar ciertos valores.</p></div>
+        <div class="box mistake"><span class="label">Error frecuente</span><p>«El color de una llama es el color del elemento». A menudo no: el rojo de los fuegos artificiales de estroncio procede de la molécula SrOH; el estroncio atómico emite sobre todo en azul.</p></div>
+        <details class="deep"><summary>Profundizar: por qué el color de una lámpara no se lee directamente en el espectro</summary><div><p>El color que percibimos depende de las líneas visibles, de su intensidad y de la sensibilidad del ojo a cada longitud de onda. La simulación lo calcula con las funciones de igualación de color CIE 1931. La intensidad de cada línea depende de cuántos átomos hay en el nivel de partida (factor de Boltzmann, e<sup>−E/kT</sup>) y de la probabilidad de la transición: por eso el color cambia con la temperatura.</p></div></details>
+
+        <h2>Autoevaluación</h2>
+        <div class="quiz"><div class="q" data-answer="a"><p>¿Qué energía tiene un fotón de 589 nm?</p><ul class="options"><li data-k="a" data-why="1239,84 / 589 = 2,10 eV.">Unos 2,1 eV</li><li data-k="b" data-why="Confundes la longitud de onda con la energía.">Unos 589 eV</li><li data-k="c" data-why="Eso correspondería a unos 2500 nm, en el infrarrojo.">Unos 0,5 eV</li></ul></div><div class="q" data-answer="a"><p>Las líneas oscuras de absorción de un gas aparecen…</p><ul class="options"><li data-k="a" data-why="Correcto: son los mismos saltos, recorridos al revés.">en las mismas longitudes de onda que sus líneas de emisión</li><li data-k="b" data-why="Son las mismas.">en longitudes de onda distintas</li><li data-k="c" data-why="Pueden estar en cualquier región.">solo en el ultravioleta</li></ul></div><div class="q" data-answer="a"><p>¿Qué produce una línea de emisión?</p><ul class="options"><li data-k="a" data-why="Correcto: el fotón se lleva la diferencia de energía.">Un electrón que baja de un nivel de energía a otro inferior</li><li data-k="b" data-why="No es el origen de las líneas atómicas visibles.">La rotación del núcleo</li><li data-k="c" data-why="El calor excita los átomos, pero cada línea es un salto concreto.">El calor del gas en conjunto</li></ul></div><div class="q" data-answer="a"><p>¿Cómo se descubrió el helio?</p><ul class="options"><li data-k="a" data-why="Correcto: en 1868; en la Tierra no se aisló hasta 1895.">Por una línea amarilla desconocida en el espectro del Sol</li><li data-k="b" data-why="Ahí se encontró después, en 1895.">En una mina de uranio</li><li data-k="c" data-why="La electrólisis del agua da hidrógeno y oxígeno.">Por electrólisis del agua</li></ul></div></div>
+        <div class="box summary"><span class="label">En resumen</span><ul><li>Un gas excitado emite un espectro de líneas propio de cada elemento.</li><li>Cada línea corresponde a un salto entre dos niveles: E = hc/λ.</li><li>La espectroscopia permitió descubrir el cesio, el rubidio y el helio.</li></ul></div>
+        <p class="sources">Fuentes: NIST Atomic Spectra Database; G. Kirchhoff y R. Bunsen, Annalen der Physik 110 (1860); CIE 1931.</p>
+
+    </article>
+    <script src="../course-data.js"></script>
+    <script src="../course.js"></script>
+</body>
+</html>

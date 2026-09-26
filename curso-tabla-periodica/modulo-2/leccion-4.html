@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.4 Tres reglas: Madelung, Pauli y Hund · Curso de la Tabla Periódica</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Escribir configuraciones electrónicas con la regla n + l; Aplicar el principio de exclusión de Pauli; Aplicar la regla de Hund y contar electrones desapareados.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="2.4 Tres reglas: Madelung, Pauli y Hund · Curso">
+    <meta property="og:description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Escribir configuraciones electrónicas con la regla n + l; Aplicar el principio de exclusión de Pauli; Aplicar la regla de Hund y contar electrones desapareados.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../curso.css">
+</head>
+<body>
+    <article class="lesson" data-mod="2" data-lesson="4">
+
+        <div class="box predict" data-answer="b"><span class="label">Predice antes de seguir</span>
+            <p>El argón (Z = 18) completa las subcapas 3s y 3p. ¿A dónde va el electrón número 19, el del potasio?</p><ul class="options"><li data-k="a">A 3d, que es la siguiente de la capa 3</li><li data-k="b">A 4s</li><li data-k="c">A 4p</li></ul>
+            <div class="reveal"><p>Va a 4s. Aunque 3d pertenezca a una capa más baja, en un átomo con muchos electrones el 4s tiene menos energía: n + l vale 4 para 4s y 5 para 3d.</p></div>
+        </div>
+
+        <h2>1. Regla de Madelung: el orden de llenado</h2>
+        <p>Los electrones ocupan primero las subcapas de menor energía (principio de <i>Aufbau</i>, «construcción»). En átomos con varios electrones ese orden sigue, casi siempre, una regla empírica: <b>se llenan en orden creciente de n + l; si dos subcapas empatan, primero la de menor n</b>.</p>
+        <div class="eq">1s · 2s · 2p · 3s · 3p · 4s · 3d · 4p · 5s · 4d · 5p · 6s · 4f · 5d · 6p · 7s · 5f · 6d · 7p</div>
+
+        <h2>2. Principio de exclusión de Pauli</h2>
+        <p>Dos electrones de un átomo no pueden tener los cuatro números cuánticos iguales. En consecuencia, cada orbital admite como máximo <b>dos electrones, con espines opuestos</b> (↑↓).</p>
+
+        <h2>3. Regla de Hund</h2>
+        <p>Dentro de una subcapa, los electrones ocupan primero orbitales <b>distintos, con espines paralelos</b>, y solo después se emparejan. El nitrógeno (2p³) tiene tres electrones desapareados: ↑ ↑ ↑, y no ↑↓ ↑.</p>
+        <div class="eq">N: 1s² 2s² 2p³     O: 1s² 2s² 2p⁴ (2 desapareados)     K: [Ar] 4s¹</div>
+
+        <figure class="sim" data-src="../../aufbau.html?z=18" data-title="Constructor de Configuraciones" data-h="820">
+            <figcaption><span class="task">Tarea</span><ol><li>Parte del argón (18) y añade electrones uno a uno hasta el zinc (30). Fíjate en qué regla se resalta en cada paso.</li><li>Cuenta los desapareados del nitrógeno (7) y del oxígeno (8).</li><li>Pulsa ▶ Construir desde 0 y observa cómo se ilumina la mini-tabla.</li></ol></figcaption>
+        </figure>
+
+        <div class="box idea"><span class="label">Idea clave</span><p>Tres reglas (Madelung, Pauli y Hund) bastan para predecir la configuración de casi todos los elementos y, con ella, la forma de la tabla periódica.</p></div>
+        <div class="box mistake"><span class="label">Error frecuente</span><p>«El 4s se llena antes que el 3d porque siempre tiene menos energía». El orden de llenado refleja la energía total del átomo. Una vez ocupados los 3d, en los metales de transición el 4s queda más alto, y por eso es el primero que se pierde al formar iones (lección 3.3).</p></div>
+        <details class="deep"><summary>Profundizar: por qué funciona la regla n + l</summary><div><p>En un átomo con varios electrones, los orbitales s y p penetran más cerca del núcleo que los d y f de la misma capa, sufren menos apantallamiento y bajan de energía. Cuanto mayor es l, menos penetra el orbital y más sube. La regla n + l resume ese efecto sin cálculos. No se deduce de primeros principios: es una regularidad empírica (Madelung, 1936; Klechkowski, 1962).</p></div></details>
+
+        <h2>Autoevaluación</h2>
+        <div class="quiz"><div class="q" data-answer="a"><p>¿Cuál es la configuración del azufre (Z = 16)?</p><ul class="options"><li data-k="a" data-why="Correcto: [Ne] 3s² 3p⁴.">1s² 2s² 2p⁶ 3s² 3p⁴</li><li data-k="b" data-why="El 3d no se ocupa antes que el 3p.">1s² 2s² 2p⁶ 3s² 3p² 3d²</li><li data-k="c" data-why="La subcapa p admite como máximo 6 electrones.">1s² 2s² 2p⁸ 3s² 3p²</li></ul></div><div class="q" data-answer="b"><p>¿Cuántos electrones desapareados tiene el nitrógeno?</p><ul class="options"><li data-k="a" data-why="Por la regla de Hund, los tres electrones 2p van a orbitales distintos.">1</li><li data-k="b" data-why="Correcto: ↑ ↑ ↑.">3</li><li data-k="c" data-why="Los electrones 1s y 2s están emparejados.">5</li></ul></div><div class="q" data-answer="a"><p>¿Qué dice el principio de exclusión de Pauli?</p><ul class="options"><li data-k="a" data-why="Correcto: por eso caben dos por orbital, con espines opuestos.">Que dos electrones de un átomo no pueden tener los cuatro números cuánticos iguales</li><li data-k="b" data-why="Eso es la ley de Coulomb.">Que los electrones se repelen</li><li data-k="c" data-why="Esa es la regla de Hund.">Que los electrones ocupan primero orbitales vacíos</li></ul></div><div class="q" data-answer="b"><p>¿Qué subcapa se llena antes: 5s o 4d?</p><ul class="options"><li data-k="a" data-why="Hay que mirar n + l: 4d suma 6.">4d, porque n es menor</li><li data-k="b" data-why="Correcto.">5s, porque n + l = 5, menor que el 6 del 4d</li><li data-k="c" data-why="El orden está definido.">A la vez</li></ul></div></div>
+        <div class="box summary"><span class="label">En resumen</span><ul><li>Madelung: las subcapas se llenan por n + l creciente, y a igualdad, por n creciente.</li><li>Pauli: como máximo dos electrones por orbital, con espines opuestos.</li><li>Hund: en una subcapa, primero orbitales distintos con espines paralelos.</li></ul></div>
+        <p class="sources">Fuentes: E. Madelung (1936); V. M. Klechkowski (1962); W. Pauli, Zeitschrift für Physik 31 (1925); configuraciones: NIST.</p>
+
+    </article>
+    <script src="../course-data.js"></script>
+    <script src="../course.js"></script>
+</body>
+</html>

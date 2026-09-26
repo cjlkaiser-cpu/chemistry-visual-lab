@@ -55,6 +55,15 @@ El **Chemistry Visual Lab** contiene **22 simulaciones** interactivas que cubren
 ### Dinámica Molecular (WASM)
 20. **Dinámica Molecular** - Lennard-Jones con el motor WASM de EigenLab
 
+## Curso «La Tabla Periódica, de dentro afuera» (`curso-tabla-periodica/`)
+
+- `course-data.js`: estructura (módulos, lecciones, objetivos). La leen `course.js` y `tools/build_catalog.py` (buscador).
+- `course.js` + `curso.css`: motor común (índice lateral, progreso en localStorage, anterior/siguiente) y componentes:
+  `.predict` (predicción que se revela), `.quiz` (autoevaluación con `data-why` en cada opción), `figure.sim[data-src]` (simulación embebida),
+  `.ion-lab` (configuración de iones; necesita `data/elements.js`).
+- Cada lección `modulo-N/leccion-M.html` solo contiene su `<article class="lesson" data-mod data-lesson>`; la cabecera la pone el motor.
+- Módulos 1–3 escritos (13 lecciones); 4–6 marcados como «próximamente» en `course-data.js`.
+
 ## Datos de los elementos (`data/`)
 
 - `data/elements.js` (`window.EIGENLAB_ELEMENTS`) lo genera `python3 data/build_elements.py` desde la tabla de PubChem (NIH, dominio público): masas IUPAC, configuraciones y energías de ionización del NIST, etc. **No editar a mano.**

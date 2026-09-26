@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.4 Moseley: el número atómico · Curso de la Tabla Periódica</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Explicar por qué la tabla se ordena por Z y no por masa; Identificar las inversiones de masa (Ar–K, Co–Ni, Te–I); Relacionar la ley de Moseley con la carga…">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="1.4 Moseley: el número atómico · Curso">
+    <meta property="og:description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Explicar por qué la tabla se ordena por Z y no por masa; Identificar las inversiones de masa (Ar–K, Co–Ni, Te–I); Relacionar la ley de Moseley con la carga…">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../curso.css">
+</head>
+<body>
+    <article class="lesson" data-mod="1" data-lesson="4">
+
+        <div class="box predict" data-answer="b"><span class="label">Predice antes de seguir</span>
+            <p>El argón (Z = 18) tiene una masa de 39,95 u y el potasio (Z = 19), de 39,10 u. Si la tabla se ordenara por masa, ¿qué pasaría?</p><ul class="options"><li data-k="a">Nada: el orden sería el mismo</li><li data-k="b">El potasio iría antes que el argón, entre los gases nobles</li><li data-k="c">El argón desaparecería de la tabla</li></ul>
+            <div class="reveal"><p>El potasio, un metal alcalino muy reactivo, caería en la columna de los gases nobles, y el argón, un gas inerte, entre los alcalinos. El orden correcto no es el de la masa.</p></div>
+        </div>
+
+        <h2>Moseley y los rayos X</h2>
+        <p>En 1913, Henry Moseley bombardeó con electrones blancos de distintos metales y midió la frecuencia de los rayos X que emitían. Encontró una relación asombrosamente simple: la raíz cuadrada de la frecuencia crecía en línea recta, paso a paso, de un elemento al siguiente.</p>
+        <div class="eq">E(Kα) ≈ 10,2 eV · (Z − 1)²     →  √ν ∝ (Z − 1)</div>
+        <p>El número que aumentaba de uno en uno no era la masa, sino la <b>carga del núcleo</b>: el número de protones. Así nació el <b>número atómico</b> como magnitud física, y la tabla pasó a ordenarse por Z. Por ejemplo, para el cobre (Z = 29): 10,2 eV × 28² ≈ 8,0 keV, el valor medido.</p>
+        <p>La ley de Moseley permitió además contar los huecos: faltaban exactamente los elementos 43, 61, 72 y 75. El hafnio (1923) y el renio (1925) se encontraron en minerales; el tecnecio (1937) y el prometio (1945) hubo que fabricarlos, porque no tienen isótopos estables. Moseley murió en la batalla de Galípoli en 1915, con 27 años.</p>
+
+        <h2>Las inversiones de masa</h2>
+        <p>En ocho parejas de la tabla el elemento con mayor Z pesa menos que el anterior: Ar–K, Co–Ni, Te–I, Th–Pa, U–Np, Pu–Am, Cm–Bk y Bh–Hs. No es ninguna anomalía: la masa depende de cuántos neutrones tienen los isótopos más abundantes. El argón pesa más que el potasio porque casi todo el argón terrestre es argón-40, producido durante miles de millones de años por la desintegración del potasio-40 de las rocas.</p>
+
+        <figure class="sim" data-src="../../tabla-periodica.html#Te" data-title="Tabla Periódica Viva · teluro" data-h="600">
+            <figcaption><span class="task">Tarea</span><ol><li>Lee la nota de la ficha del teluro sobre su masa.</li><li>Busca las otras inversiones: argón, cobalto, torio…</li><li>Con el modo «Familia», comprueba que el orden por Z coloca cada elemento con los de su química.</li></ol></figcaption>
+        </figure>
+
+        <div class="box idea"><span class="label">Idea clave</span><p>La tabla se ordena por número atómico Z, la carga del núcleo. La masa suele crecer con Z, pero no siempre.</p></div>
+        <div class="box mistake"><span class="label">Error frecuente</span><p>«Mendeléyev ya sabía que había que ordenar por Z». No: ordenaba por masa, y en el caso del teluro y el yodo creyó que la masa del teluro estaba mal medida. No lo estaba: el orden verdadero es otro, y solo Moseley pudo explicarlo.</p></div>
+        <details class="deep"><summary>Profundizar: de dónde sale el factor (Z − 1)²</summary><div><p>La línea Kα se emite cuando un electrón pasa de la capa n = 2 a un hueco en la capa n = 1. Ese electrón «ve» el núcleo apantallado por el electrón que queda en la capa 1, así que siente una carga efectiva de unos Z − 1. Aplicando la fórmula de Bohr: E = 13,6 eV · (Z − 1)² · (1 − 1/4) = 10,2 eV · (Z − 1)². Es una primera muestra de la carga nuclear efectiva, que verás en el módulo de tendencias.</p></div></details>
+
+        <h2>Autoevaluación</h2>
+        <div class="quiz"><div class="q" data-answer="a"><p>¿Qué es el número atómico Z?</p><ul class="options"><li data-k="a" data-why="Correcto: su carga en unidades de la carga del electrón.">El número de protones del núcleo</li><li data-k="b" data-why="No siempre coinciden en orden, como en Ar–K.">La masa atómica redondeada</li><li data-k="c" data-why="Los neutrones no tienen carga.">El número de neutrones</li></ul></div><div class="q" data-answer="a"><p>Según la ley de Moseley, si Z aumenta en 1, la raíz cuadrada de la frecuencia de rayos X…</p><ul class="options"><li data-k="a" data-why="Crece linealmente con Z − 1.">aumenta en un paso constante</li><li data-k="b" data-why="El aumento es lineal en √ν, no un factor 2.">se duplica</li><li data-k="c" data-why="Cambia de forma regular.">no cambia</li></ul></div><div class="q" data-answer="b"><p>¿Por qué el argón pesa más que el potasio?</p><ul class="options"><li data-k="a" data-why="Tiene uno menos (18 frente a 19).">Porque tiene más protones</li><li data-k="b" data-why="Correcto: y procede en gran parte de la desintegración del potasio-40.">Porque su isótopo más abundante, el argón-40, tiene más neutrones</li><li data-k="c" data-why="El estado físico no influye en la masa atómica.">Porque los gases pesan más</li></ul></div><div class="q" data-answer="a"><p>¿Qué elementos faltaban, según la ley de Moseley, entre el hidrógeno y el uranio?</p><ul class="options"><li data-k="a" data-why="Correcto: Tc, Pm, Hf y Re.">Los números 43, 61, 72 y 75</li><li data-k="b" data-why="Ya se conocían en 1913.">Los gases nobles</li><li data-k="c" data-why="Faltaban cuatro.">Ninguno</li></ul></div></div>
+        <div class="box summary"><span class="label">En resumen</span><ul><li>Moseley (1913) demostró que el orden de la tabla es el de la carga nuclear, Z.</li><li>Hay ocho inversiones de masa, explicadas por la abundancia de los isótopos.</li><li>Su ley predijo los elementos que faltaban: 43, 61, 72 y 75.</li></ul></div>
+        <p class="sources">Fuentes: H. G. J. Moseley, Philosophical Magazine 26, 1024 (1913) y 27, 703 (1914); IUPAC CIAAW.</p>
+
+    </article>
+    <script src="../course-data.js"></script>
+    <script src="../course.js"></script>
+</body>
+</html>

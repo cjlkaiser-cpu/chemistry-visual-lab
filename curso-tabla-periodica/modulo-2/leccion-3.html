@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.3 Orbitales y números cuánticos · Curso de la Tabla Periódica</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Describir los números cuánticos n, l, mₗ y mₛ; Relacionar l con la forma de los orbitales s, p, d y f; Deducir la capacidad de cada subcapa: 2(2l + 1).">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="2.3 Orbitales y números cuánticos · Curso">
+    <meta property="og:description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Describir los números cuánticos n, l, mₗ y mₛ; Relacionar l con la forma de los orbitales s, p, d y f; Deducir la capacidad de cada subcapa: 2(2l + 1).">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../curso.css">
+</head>
+<body>
+    <article class="lesson" data-mod="2" data-lesson="3">
+
+        <div class="box predict" data-answer="b"><span class="label">Predice antes de seguir</span>
+            <p>¿Cuántos orbitales hay en la capa n = 3?</p><ul class="options"><li data-k="a">3</li><li data-k="b">9</li><li data-k="c">18</li></ul>
+            <div class="reveal"><p>Uno 3s, tres 3p y cinco 3d: 9 orbitales. Con dos electrones cada uno caben 18 electrones: no confundas orbitales con electrones.</p></div>
+        </div>
+
+        <h2>Del órbita al orbital</h2>
+        <p>La mecánica cuántica (Schrödinger, 1926) no describe la trayectoria del electrón, sino una <b>función de onda</b> ψ. El cuadrado |ψ|² da la probabilidad de encontrarlo en cada punto. Un <b>orbital</b> es cada una de las soluciones posibles: una región del espacio con una forma y una energía determinadas.</p>
+
+        <h2>Los cuatro números cuánticos</h2>
+        <div class="table-wrap"><table class="t"><thead><tr><th>Número</th><th>Valores</th><th>Qué indica</th></tr></thead><tbody>
+            <tr><td>n (principal)</td><td class="n">1, 2, 3…</td><td>la capa: tamaño y, sobre todo, energía</td></tr>
+            <tr><td>l (secundario)</td><td class="n">0 … n − 1</td><td>la forma: s (0), p (1), d (2), f (3)</td></tr>
+            <tr><td>mₗ (magnético)</td><td class="n">−l … +l</td><td>la orientación: hay 2l + 1 orbitales en cada subcapa</td></tr>
+            <tr><td>mₛ (espín)</td><td class="n">+½ o −½</td><td>el espín del electrón</td></tr></tbody></table></div>
+        <p>De aquí salen las capacidades: una subcapa tiene 2l + 1 orbitales y cada orbital admite dos electrones, así que caben <b>2(2l + 1)</b>: 2 en s, 6 en p, 10 en d y 14 en f. Una capa completa admite <b>2n²</b> electrones.</p>
+        <div class="eq">s: 2 · p: 6 · d: 10 · f: 14      capa n: 2n²</div>
+
+        <figure class="sim" data-src="../../orbitales.html" data-title="Orbitales Atómicos" data-h="640">
+            <figcaption><span class="task">Tarea</span><ol><li>Observa un orbital s y uno p: ¿cuál tiene simetría esférica?</li><li>Busca los cinco orbitales d: ¿en qué se diferencian?</li><li>Compara un 2p con un 3p: ¿qué cambia al aumentar n?</li></ol></figcaption>
+        </figure>
+
+        <div class="box idea"><span class="label">Idea clave</span><p>Los números 2, 6, 10 y 14 no son arbitrarios: salen de las reglas de los números cuánticos. Y son, exactamente, las anchuras de los bloques de la tabla periódica.</p></div>
+        <div class="box mistake"><span class="label">Error frecuente</span><p>«El orbital es el camino que sigue el electrón». No hay camino: el orbital describe dónde es probable encontrarlo. Su dibujo suele ser la superficie que encierra el 90 % de la probabilidad.</p></div>
+        <details class="deep"><summary>Profundizar: nodos</summary><div><p>Un orbital tiene n − 1 nodos, superficies donde la probabilidad es cero: l nodos angulares (planos o conos) y n − l − 1 nodos radiales (esferas). El 1s no tiene ninguno; el 2s tiene un nodo esférico; el 2p, un plano nodal que pasa por el núcleo.</p></div></details>
+
+        <h2>Autoevaluación</h2>
+        <div class="quiz"><div class="q" data-answer="a"><p>¿Qué valores puede tomar l si n = 2?</p><ul class="options"><li data-k="a" data-why="Correcto: l va de 0 a n − 1, así que hay subcapas 2s y 2p.">0 y 1</li><li data-k="b" data-why="l empieza en 0.">1 y 2</li><li data-k="c" data-why="l = 2 (d) exige n ≥ 3.">0, 1 y 2</li></ul></div><div class="q" data-answer="b"><p>¿Cuántos electrones caben en una subcapa d?</p><ul class="options"><li data-k="a" data-why="Son 5 orbitales, pero cada uno admite 2 electrones.">5</li><li data-k="b" data-why="Correcto: 2(2·2 + 1) = 10.">10</li><li data-k="c" data-why="Esa es la capacidad de la subcapa f.">14</li></ul></div><div class="q" data-answer="b"><p>¿Qué combinación de números cuánticos es imposible?</p><ul class="options"><li data-k="a" data-why="Posible: es un orbital 3d.">n = 3, l = 2</li><li data-k="b" data-why="Correcto: l debe ser menor que n; no existe el 2d.">n = 2, l = 2</li><li data-k="c" data-why="Posible: es un orbital 4f.">n = 4, l = 3</li></ul></div><div class="q" data-answer="b"><p>¿Cuántos electrones caben en la capa n = 4?</p><ul class="options"><li data-k="a" data-why="Esa es la capacidad de n = 3.">18</li><li data-k="b" data-why="Correcto: 2n² = 32 (4s, 4p, 4d y 4f).">32</li><li data-k="c" data-why="Serían los orbitales, no los electrones.">16</li></ul></div></div>
+        <div class="box summary"><span class="label">En resumen</span><ul><li>Un orbital es una región de probabilidad descrita por una función de onda.</li><li>Los números cuánticos n, l, mₗ y mₛ determinan la capa, la forma, la orientación y el espín.</li><li>Una subcapa admite 2(2l + 1) electrones: 2, 6, 10 y 14.</li></ul></div>
+        <p class="sources">Fuentes: E. Schrödinger, Annalen der Physik 79 (1926); P. Atkins y J. de Paula, «Physical Chemistry», cap. 9.</p>
+
+    </article>
+    <script src="../course-data.js"></script>
+    <script src="../course.js"></script>
+</body>
+</html>

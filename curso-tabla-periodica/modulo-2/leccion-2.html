@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.2 Niveles de energía: el hidrógeno · Curso de la Tabla Periódica</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Calcular longitudes de onda con la fórmula de Rydberg; Relacionar las series de Lyman, Balmer y Paschen con los niveles; Conocer el alcance y los límites del…">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="2.2 Niveles de energía: el hidrógeno · Curso">
+    <meta property="og:description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Calcular longitudes de onda con la fórmula de Rydberg; Relacionar las series de Lyman, Balmer y Paschen con los niveles; Conocer el alcance y los límites del…">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../curso.css">
+</head>
+<body>
+    <article class="lesson" data-mod="2" data-lesson="2">
+
+        <div class="box predict" data-answer="c"><span class="label">Predice antes de seguir</span>
+            <p>En el hidrógeno, ¿qué salto emite la luz de menor longitud de onda: del nivel 3 al 2, del 4 al 2 o del 6 al 2?</p><ul class="options"><li data-k="a">Del 3 al 2</li><li data-k="b">Del 4 al 2</li><li data-k="c">Del 6 al 2</li></ul>
+            <div class="reveal"><p>Cuanto más alto el nivel de partida, mayor la energía liberada y menor la longitud de onda: 6 → 2 emite a 410 nm (violeta); 3 → 2, a 656 nm (rojo).</p></div>
+        </div>
+
+        <h2>De Balmer a Bohr</h2>
+        <p>En 1885 Johann Balmer encontró una fórmula que reproducía las cuatro líneas visibles del hidrógeno. Johannes Rydberg la generalizó en 1888:</p>
+        <div class="eq">1/λ = R<sub>H</sub> · (1/n₁² − 1/n₂²)      R<sub>H</sub> = 1,0968 × 10⁷ m⁻¹</div>
+        <p>En 1913 Niels Bohr explicó el porqué: si el electrón solo puede ocupar niveles de energía</p>
+        <div class="eq">E<sub>n</sub> = −13,6 eV / n²</div>
+        <p>el fotón emitido al pasar de n₂ a n₁ tiene exactamente la energía de la fórmula de Rydberg. Bohr calculó además R<sub>H</sub> a partir de la masa y la carga del electrón y de la constante de Planck, y obtuvo el valor medido.</p>
+
+        <h2>Tres series</h2>
+        <div class="table-wrap"><table class="t"><thead><tr><th>Serie</th><th>Nivel final</th><th>Región</th><th>Primera línea</th></tr></thead><tbody>
+            <tr><td>Lyman</td><td class="n">n₁ = 1</td><td>ultravioleta</td><td class="n">121,6 nm</td></tr>
+            <tr><td>Balmer</td><td class="n">n₁ = 2</td><td>visible</td><td class="n">656,3 nm (Hα)</td></tr>
+            <tr><td>Paschen</td><td class="n">n₁ = 3</td><td>infrarrojo</td><td class="n">1875 nm</td></tr></tbody></table></div>
+
+        <figure class="sim" data-src="../../espectros.html#hidrogeno" data-title="Espectros Atómicos · hidrógeno" data-h="700">
+            <figcaption><span class="task">Tarea</span><ol><li>Toca cada flecha de la serie de Balmer y comprueba el cálculo de λ.</li><li>Cambia a Lyman: ¿por qué todas sus líneas son invisibles?</li><li>Mira el espectro de 90 a 2000 nm: ¿en qué región se amontonan las líneas de cada serie?</li></ol></figcaption>
+        </figure>
+
+        <div class="box idea"><span class="label">Idea clave</span><p>La fórmula de Rydberg describe todas las líneas del hidrógeno con un solo número. Su éxito fue la primera gran prueba de que la energía del átomo está cuantizada.</p></div>
+        <div class="box mistake"><span class="label">Error frecuente</span><p>«El electrón gira en órbitas circulares, como un planeta». El modelo de Bohr acierta con las energías, pero la imagen de órbitas es falsa: la mecánica cuántica describe el electrón con orbitales, zonas de probabilidad. Lo verás en la lección siguiente.</p></div>
+        <details class="deep"><summary>Profundizar: los límites del modelo de Bohr</summary><div><p>El modelo solo funciona para átomos con un electrón (H, He⁺, Li²⁺). No explica la intensidad de las líneas, ni su desdoblamiento fino, ni el enlace químico. Tampoco hay que olvidar un detalle de precisión: la simulación usa R<sub>H</sub> = R<sub>∞</sub>/(1 + m<sub>e</sub>/m<sub>p</sub>), que corrige el movimiento del núcleo, y convierte las longitudes de onda de vacío a aire. Con eso coincide con las medidas del NIST en menos de 0,01 nm.</p></div></details>
+
+        <h2>Autoevaluación</h2>
+        <div class="quiz"><div class="q" data-answer="a"><p>¿Cuánta energía hace falta para ionizar un átomo de hidrógeno en su estado fundamental?</p><ul class="options"><li data-k="a" data-why="Correcto: de n = 1 (−13,6 eV) a n = ∞ (0 eV).">13,6 eV</li><li data-k="b" data-why="Esa es la energía para ionizarlo desde n = 2.">3,4 eV</li><li data-k="c" data-why="Esa es la energía del fotón Hα.">1,89 eV</li></ul></div><div class="q" data-answer="b"><p>La línea Hβ (486 nm) corresponde al salto…</p><ul class="options"><li data-k="a" data-why="Ese es Hα, a 656 nm.">3 → 2</li><li data-k="b" data-why="Correcto.">4 → 2</li><li data-k="c" data-why="Pertenece a la serie de Paschen, en el infrarrojo.">4 → 3</li></ul></div><div class="q" data-answer="a"><p>¿Por qué la serie de Lyman está en el ultravioleta?</p><ul class="options"><li data-k="a" data-why="Correcto: al menos 10,2 eV, por encima de lo visible.">Porque termina en n = 1 y los saltos hasta ese nivel liberan mucha energía</li><li data-k="b" data-why="La región depende del salto, no de la temperatura.">Porque la emiten átomos muy calientes</li><li data-k="c" data-why="No tiene que ver con la intensidad.">Porque es la serie más débil</li></ul></div><div class="q" data-answer="a"><p>Con la fórmula de Rydberg, el salto 3 → 2 da una longitud de onda de unos…</p><ul class="options"><li data-k="a" data-why="1/λ = 1,0968·10⁷ × (1/4 − 1/9) → λ ≈ 656 nm.">656 nm</li><li data-k="b" data-why="Ese es el salto 4 → 2.">486 nm</li><li data-k="c" data-why="Ese es el salto 2 → 1.">122 nm</li></ul></div></div>
+        <div class="box summary"><span class="label">En resumen</span><ul><li>La fórmula de Rydberg reproduce todas las líneas del hidrógeno.</li><li>Bohr la explicó con niveles de energía Eₙ = −13,6 eV/n².</li><li>Lyman (UV), Balmer (visible) y Paschen (IR) terminan en n = 1, 2 y 3.</li></ul></div>
+        <p class="sources">Fuentes: N. Bohr, Philosophical Magazine 26, 1 (1913); NIST Atomic Spectra Database; CODATA 2018.</p>
+
+    </article>
+    <script src="../course-data.js"></script>
+    <script src="../course.js"></script>
+</body>
+</html>

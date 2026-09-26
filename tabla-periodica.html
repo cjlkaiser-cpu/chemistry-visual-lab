@@ -497,6 +497,14 @@
         });
 
         // ------------------------------------------------------------ arranque
+        // Parámetros para enlazar un estado concreto (lo usan las lecciones del curso): ?modo=bloque, ?modo=anio&anio=1869, ?modo=estado&T=303
+        const params = new URLSearchParams(location.search);
+        if (MODES.some(m => m[0] === params.get('modo'))) {
+            state.mode = params.get('modo');
+            document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.mode === state.mode));
+        }
+        if (params.get('anio')) state.year = Math.max(1660, Math.min(2025, +params.get('anio') || 2025));
+        if (params.get('T')) state.T = Math.max(0, Math.min(6000, +params.get('T') || 298));
         paint();
         const hash = decodeURIComponent(location.hash.slice(1));
         const start = ELS.find(e => e.sym.toLowerCase() === hash.toLowerCase() || String(e.z) === hash);
