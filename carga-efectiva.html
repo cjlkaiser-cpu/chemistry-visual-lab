@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga Nuclear Efectiva - Chemistry Visual Lab</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Apantallamiento con las reglas de Slater hasta el radón, paso a paso, y su relación con el radio y la energía de ionización.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="Carga Nuclear Efectiva · Chemistry Visual Lab">
+    <meta property="og:description" content="Apantallamiento con las reglas de Slater hasta el radón, paso a paso, y su relación con el radio y la energía de ionización.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0a1a; --panel: #111127; --panel-2: #16163a; --border: #262650; --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b; --accent: #22d3ee;
+                --c100: #475569; --c085: #7c3aed; --c035: #db2777; --zef: #22d3ee; --gold: #fbbf24; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        a { color: var(--accent); }
+        header { padding: 18px 24px 8px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+        .crumbs { width: 100%; font-size: .8rem; color: var(--dim); }
+        .crumbs a { color: var(--dim); text-decoration: none; }
+        .crumbs a:hover { color: var(--accent); }
+        h1 { font-size: 1.6rem; font-weight: 600; color: var(--accent); }
+        .subtitle { color: var(--muted); font-size: .9rem; }
+        .guide-link { margin-left: auto; font-size: .85rem; text-decoration: none; border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; }
+        .tabs { display: flex; gap: 6px; padding: 6px 24px 12px; flex-wrap: wrap; }
+        .tab { background: var(--panel); border: 1px solid var(--border); color: var(--muted); border-radius: 999px; padding: 7px 14px; font: inherit; font-size: .85rem; cursor: pointer; }
+        .tab[aria-selected="true"] { background: rgba(34,211,238,.12); border-color: var(--accent); color: var(--accent); }
+        main { padding: 0 24px 28px; }
+        .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 16px; }
+        .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; min-width: 0; }
+        .panel h2 { font-size: .8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+        .btn { background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 9px; padding: 7px 12px; font: inherit; font-size: .85rem; cursor: pointer; }
+        .btn:hover { border-color: var(--accent); }
+        .btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: rgba(34,211,238,.12); }
+        select { background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 9px; padding: 7px 10px; font: inherit; font-size: .9rem; }
+        .pick { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .elhead { display: flex; gap: 14px; align-items: center; margin: 14px 0 6px; }
+        .tile { width: 78px; height: 84px; border-radius: 10px; border: 1px solid var(--border); background: var(--panel-2); padding: 7px; display: flex; flex-direction: column; justify-content: space-between; flex: none; }
+        .tile .z { font-family: 'Fira Code', monospace; font-size: .75rem; color: var(--muted); }
+        .tile .s { font-size: 2rem; font-weight: 700; line-height: 1; }
+        .cfg { font-family: 'Fira Code', monospace; font-size: 1rem; }
+        .subs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+        .subs .btn { font-family: 'Fira Code', monospace; }
+        .big { font-family: 'Fira Code', monospace; font-size: 1.6rem; margin: 10px 0 4px; }
+        .big .v { color: var(--zef); }
+        .note { font-size: .82rem; color: var(--muted); background: var(--panel-2); border-left: 3px solid var(--accent); padding: 9px 12px; border-radius: 0 7px 7px 0; line-height: 1.55; margin-top: 12px; }
+        .note.gold { border-left-color: var(--gold); }
+        table.t { width: 100%; border-collapse: collapse; font-size: .85rem; margin-top: 8px; }
+        table.t th { text-align: left; color: var(--muted); font-weight: 500; font-size: .75rem; padding: 6px; border-bottom: 1px solid var(--border); }
+        table.t td { padding: 7px 6px; border-bottom: 1px solid var(--border); }
+        table.t td.n { font-family: 'Fira Code', monospace; text-align: right; }
+        .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+        .stack { display: flex; height: 30px; border-radius: 7px; overflow: hidden; margin-top: 12px; border: 1px solid var(--border); }
+        .stack div { display: flex; align-items: center; justify-content: center; font-family: 'Fira Code', monospace; font-size: .72rem; color: #fff; white-space: nowrap; overflow: hidden; transition: flex-grow .35s; }
+        .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: .78rem; color: var(--muted); margin-top: 8px; }
+        canvas.atom { width: 100%; height: 330px; display: block; }
+        .charts canvas { width: 100%; height: 170px; display: block; }
+        .chart-label { display: flex; justify-content: space-between; align-items: baseline; font-size: .82rem; margin: 12px 0 4px; color: var(--muted); }
+        .chart-label b { color: var(--text); font-weight: 500; }
+        .tip { position: fixed; pointer-events: none; background: #000d; border: 1px solid var(--border); border-radius: 7px; padding: 6px 9px; font-family: 'Fira Code', monospace; font-size: .75rem; display: none; z-index: 10; line-height: 1.5; }
+        .src { font-size: .7rem; color: var(--dim); margin-top: 14px; }
+        [hidden] { display: none !important; }
+        @media (max-width: 900px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+        @media (max-width: 640px) { header, .tabs, main { padding-left: 14px; padding-right: 14px; } h1 { font-size: 1.3rem; } .guide-link { margin-left: 0; } canvas.atom { height: 260px; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="crumbs"><a href="../../_portal/index.html">EigenLab</a> / <a href="index.html">Chemistry Visual Lab</a> / <a href="tabla-periodica.html">Tabla Periódica</a> / Carga efectiva</div>
+        <h1>Carga Nuclear Efectiva</h1>
+        <p class="subtitle">Los electrones internos tapan parte de la carga del núcleo. Lo que queda, Z<sub>ef</sub>, explica las tendencias de la tabla.</p>
+        <a class="guide-link" href="guides/carga-efectiva.html">📖 Guía teórica</a>
+    </header>
+    <div class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="slater" aria-selected="true">Apantallamiento (reglas de Slater)</button>
+        <button class="tab" role="tab" data-tab="tendencias" aria-selected="false">Tendencias frente a Z</button>
+    </div>
+    <main>
+        <!-- ============ SLATER ============ -->
+        <section data-panel="slater">
+            <div class="grid2">
+                <div class="panel">
+                    <h2>Elemento y electrón</h2>
+                    <div class="pick">
+                        <button class="btn" id="prev" aria-label="Elemento anterior">←</button>
+                        <select id="el" aria-label="Elemento"></select>
+                        <button class="btn" id="next" aria-label="Elemento siguiente">→</button>
+                    </div>
+                    <div class="elhead"><div class="tile"><span class="z" id="t-z"></span><span class="s" id="t-s"></span><span class="z" id="t-b"></span></div>
+                        <div><div style="font-size:1.25rem;font-weight:600" id="t-name"></div><div class="cfg" id="t-cfg"></div></div></div>
+                    <p style="font-size:.82rem;color:var(--muted)">¿Qué electrón miramos? Por defecto, el más externo.</p>
+                    <div class="subs" id="subs"></div>
+                    <canvas class="atom" id="atom"></canvas>
+                </div>
+                <div class="panel">
+                    <h2>Cuánta carga «siente» ese electrón</h2>
+                    <div class="big">Z<sub>ef</sub> = <span id="eq-z"></span> − <span id="eq-s"></span> = <span class="v" id="eq-zef"></span></div>
+                    <div class="stack" id="stack"></div>
+                    <div class="legend">
+                        <span><span class="sw" style="background:var(--c100)"></span>capas más internas · 1,00</span>
+                        <span><span class="sw" style="background:var(--c085)"></span>capa n − 1 · 0,85</span>
+                        <span><span class="sw" style="background:var(--c035)"></span>mismo grupo · 0,35</span>
+                        <span><span class="sw" style="background:var(--zef)"></span>Z<sub>ef</sub></span>
+                    </div>
+                    <table class="t"><thead><tr><th>Grupo de Slater</th><th style="text-align:right">electrones</th><th style="text-align:right">× coeficiente</th><th style="text-align:right">apantallan</th></tr></thead><tbody id="rows"></tbody></table>
+                    <p class="note" id="insight"></p>
+                    <p class="note gold"><b>Reglas de Slater (1930).</b> Se agrupan las subcapas: (1s) (2s,2p) (3s,3p) (3d) (4s,4p) (4d) (4f) (5s,5p)… Para un electrón s o p: cada electrón de su grupo apantalla 0,35 (0,30 en 1s); cada uno de la capa n − 1, 0,85; los de capas inferiores, 1,00. Para un electrón d o f: 0,35 los de su grupo y 1,00 todos los de grupos anteriores. Los grupos posteriores no apantallan.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ TENDENCIAS ============ -->
+        <section data-panel="tendencias" hidden>
+            <div class="panel charts">
+                <h2>Del hidrógeno al radón (Z = 1–86)</h2>
+                <div class="chart-label"><b>Z<sub>ef</sub> del electrón más externo (Slater)</b><span>salta al empezar cada periodo</span></div>
+                <canvas id="c-zef"></canvas>
+                <div class="chart-label"><b>Radio atómico (van der Waals, pm)</b><span>datos PubChem</span></div>
+                <canvas id="c-rad"></canvas>
+                <div class="chart-label"><b>1.ª energía de ionización (eV, escala logarítmica)</b><span><span class="sw" style="background:#4ade80"></span>real (NIST) · <span class="sw" style="background:#fbbf24"></span>estimación de Slater 13,6·(Z<sub>ef</sub>/n*)²</span></div>
+                <canvas id="c-ei"></canvas>
+                <p class="note" id="fit"></p>
+                <p class="note">Las líneas verticales marcan los gases nobles: al empezar un periodo, el electrón nuevo va a una capa nueva, Z<sub>ef</sub> cae de golpe y el radio salta. Dentro de un periodo Z<sub>ef</sub> sube (cada protón nuevo solo queda apantallado en 0,35) y el radio baja. Toca un punto para abrir ese elemento.</p>
+            </div>
+        </section>
+        <p class="src">Datos: PubChem (NIH) / NIST. Reglas: J. C. Slater, «Atomic Shielding Constants», Physical Review 36, 57 (1930). Las reglas de Slater son una aproximación: los cálculos de Clementi y Raimondi (1963) dan valores de Z<sub>ef</sub> más precisos.</p>
+    </main>
+    <div class="tip" id="tip"></div>
+
+    <script src="data/elements.js"></script>
+    <script>
+    (() => {
+        const E = window.EIGENLAB_ELEMENTS.elementos;
+        const $ = id => document.getElementById(id);
+        const MAXZ = 86;   // Slater definió n* hasta n = 6
+        const ORDER = ['1s', '2s', '2p', '3s', '3p', '4s', '3d', '4p', '5s', '4d', '5p', '6s', '4f', '5d', '6p', '7s', '5f', '6d', '7p'];
+        const GROUPS = ['1s', '2sp', '3sp', '3d', '4sp', '4d', '4f', '5sp', '5d', '5f', '6sp', '6d', '7sp'];
+        const NSTAR = { 1: 1, 2: 2, 3: 3, 4: 3.7, 5: 4.0, 6: 4.2 };
+        const SUP = '⁰¹²³⁴⁵⁶⁷⁸⁹', sup = n => String(n).split('').map(d => SUP[d]).join('');
+        const pretty = c => c.replace(/(\d[spdf])(\d+)/g, (_, s, n) => s + sup(n)).replace(/\]\s*/, '] ');
+        const groupOf = sub => sub[1] === 's' || sub[1] === 'p' ? (sub[0] === '1' ? '1s' : sub[0] + 'sp') : sub;
+
+        // ------------------------------------------------------------ reglas de Slater
+        function slater(e, target) {
+            const tg = groupOf(target), ti = GROUPS.indexOf(tg), tn = +target[0], sp = target[1] === 's' || target[1] === 'p';
+            const rows = {};
+            Object.entries(e.ocupacion).forEach(([sub, k]) => {
+                const g = groupOf(sub), gi = GROUPS.indexOf(g), gn = +sub[0];
+                let n = k, coef;
+                if (g === tg) { n = k - (sub === target ? 1 : 0); coef = tg === '1s' ? 0.30 : 0.35; }
+                else if (gi > ti) coef = 0;
+                else if (sp) coef = gn === tn - 1 ? 0.85 : gn <= tn - 2 ? 1.00 : 0.35;
+                else coef = 1.00;
+                if (!rows[g]) rows[g] = { g, n: 0, coef, kind: g === tg ? 'same' : coef === 0.85 ? 'n1' : coef === 1 ? 'in' : 'out' };
+                rows[g].n += n;
+            });
+            const list = GROUPS.filter(g => rows[g]).map(g => ({ ...rows[g], s: rows[g].n * rows[g].coef }));
+            const S = list.reduce((a, r) => a + r.s, 0);
+            return { S, zef: e.z - S, rows: list };
+        }
+        // Electrón más externo: capa n más alta y, dentro de ella, mayor l (el primero que sale al ionizar).
+        // Zn → 4s, Ga → 4p, Pd ([Kr] 4d¹⁰, sin 5s) → 4d.
+        const LV = { s: 0, p: 1, d: 2, f: 3 };
+        const outer = e => Object.keys(e.ocupacion).sort((a, b) => (+b[0] - +a[0]) || (LV[b[1]] - LV[a[1]]))[0];
+        const zefOuter = e => slater(e, outer(e)).zef;
+        const eiSlater = e => { const o = outer(e); return 13.6 * (zefOuter(e) / NSTAR[+o[0]]) ** 2; };
+
+        // ------------------------------------------------------------ pestaña Slater
+        const els = E.filter(e => e.z <= MAXZ);
+        $('el').innerHTML = els.map(e => `<option value="${e.z}">${e.z} · ${e.sym} · ${e.nombre}</option>`).join('');
+        const st = { z: 11, target: null };
+        function setEl(z) { st.z = Math.max(1, Math.min(MAXZ, z)); st.target = null; render(); }
+        $('el').addEventListener('change', ev => setEl(+ev.target.value));
+        $('prev').addEventListener('click', () => setEl(st.z - 1));
+        $('next').addEventListener('click', () => setEl(st.z + 1));
+
+        function render() {
+            const e = E[st.z - 1];
+            if (!st.target) st.target = outer(e);
+            $('el').value = e.z;
+            $('t-z').textContent = e.z; $('t-s').textContent = e.sym; $('t-b').textContent = 'bloque ' + e.bloque;
+            $('t-name').textContent = e.nombre; $('t-cfg').textContent = pretty(e.config);
+            $('subs').innerHTML = ORDER.filter(s => e.ocupacion[s]).map(s => `<button class="btn" data-s="${s}" aria-pressed="${s === st.target}">${s}${sup(e.ocupacion[s])}</button>`).join('');
+            const r = slater(e, st.target);
+            $('eq-z').textContent = e.z; $('eq-s').textContent = r.S.toFixed(2); $('eq-zef').textContent = r.zef.toFixed(2);
+            const col = { in: 'var(--c100)', n1: 'var(--c085)', same: 'var(--c035)' };
+            const parts = ['in', 'n1', 'same'].map(k => [k, r.rows.filter(x => x.kind === k).reduce((a, x) => a + x.s, 0)]).filter(([, v]) => v > 0);
+            $('stack').innerHTML = parts.map(([k, v]) => `<div style="flex-grow:${v};background:${col[k]}" title="${v.toFixed(2)}">${v.toFixed(2)}</div>`).join('') +
+                `<div style="flex-grow:${r.zef};background:var(--zef);color:#0a0a1a;font-weight:600">Z<sub>ef</sub> ${r.zef.toFixed(2)}</div>`;
+            $('rows').innerHTML = r.rows.map(x => `<tr><td><span class="sw" style="background:${col[x.kind] || 'transparent'};border:1px solid var(--border)"></span>(${x.g.replace('sp', 's,' + x.g[0] + 'p')})${x.kind === 'same' ? ' · el suyo' : ''}</td>
+                <td class="n">${x.n}</td><td class="n">${x.coef.toFixed(2)}</td><td class="n">${x.s.toFixed(2)}</td></tr>`).join('');
+            const o = outer(e);
+            const tsub = st.target;
+            $('insight').innerHTML = tsub === o
+                ? `El electrón ${tsub} del ${e.nombre.toLowerCase()} siente solo <b>${r.zef.toFixed(2)}</b> de las ${e.z} cargas del núcleo (${(r.zef / e.z * 100).toFixed(0)} %). ${e.periodo > 1 ? `Compáralo con el elemento anterior o el siguiente con las flechas: dentro de un periodo, Z<sub>ef</sub> sube unas 0,65 unidades por elemento.` : ''}`
+                : `Un electrón ${tsub}, interno, siente <b>${r.zef.toFixed(2)}</b> cargas: casi todo el núcleo. Por eso los electrones internos están tan ligados y no participan en la química.`;
+            document.querySelectorAll('#subs .btn').forEach(b => b.addEventListener('click', () => { st.target = b.dataset.s; render(); }));
+            drawAtom(e, r);
+            history.replaceState(null, '', `?z=${e.z}${location.hash}`);
+        }
+
+        function drawAtom(e, r) {
+            const c = $('atom'), dpr = window.devicePixelRatio || 1, W = c.clientWidth, H = c.clientHeight;
+            c.width = W * dpr; c.height = H * dpr;
+            const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+            const cx = W / 2, cy = H / 2, maxN = Math.max(...Object.keys(e.ocupacion).map(s => +s[0]));
+            const R = n => 26 + (Math.min(W, H) / 2 - 36) * (n / maxN);
+            const kindOf = sub => r.rows.find(x => x.g === groupOf(sub))?.kind;
+            const col = { in: '#64748b', n1: '#a78bfa', same: '#f472b6', out: '#334155' };
+            for (let n = 1; n <= maxN; n++) {
+                ctx.strokeStyle = '#262650'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(cx, cy, R(n), 0, 2 * Math.PI); ctx.stroke();
+            }
+            // electrones por capa
+            const byN = {};
+            ORDER.filter(s => e.ocupacion[s]).forEach(s => { (byN[+s[0]] = byN[+s[0]] || []).push(s); });
+            Object.entries(byN).forEach(([n, subs]) => {
+                const list = subs.flatMap(s => Array(e.ocupacion[s]).fill(s));
+                list.forEach((s, i) => {
+                    const a = (i / list.length) * 2 * Math.PI - Math.PI / 2;
+                    const x = cx + R(+n) * Math.cos(a), y = cy + R(+n) * Math.sin(a);
+                    const isT = s === st.target && i === list.lastIndexOf(s);
+                    ctx.fillStyle = isT ? '#22d3ee' : col[kindOf(s)] || '#334155';
+                    ctx.beginPath(); ctx.arc(x, y, isT ? 6 : 3.4, 0, 2 * Math.PI); ctx.fill();
+                    if (isT) { ctx.strokeStyle = '#22d3ee'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x, y, 11, 0, 2 * Math.PI); ctx.stroke(); }
+                });
+            });
+            // núcleo con la carga que ve el electrón
+            ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(cx, cy, 16, 0, 2 * Math.PI); ctx.fill();
+            ctx.fillStyle = '#0a0a1a'; ctx.font = '600 11px Fira Code, monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('+' + e.z, cx, cy);
+            ctx.fillStyle = '#94a3b8'; ctx.font = '11px Inter, sans-serif'; ctx.textAlign = 'left';
+            ctx.fillText('capas n = 1 … ' + maxN + ' (esquema, no a escala)', 8, H - 8);
+        }
+
+        // ------------------------------------------------------------ pestaña Tendencias
+        const XS = E.filter(e => e.z <= MAXZ);
+        const NOBLE = [2, 10, 18, 36, 54, 86];
+        function chart(id, series, log = false) {
+            const c = $(id), dpr = window.devicePixelRatio || 1, W = c.clientWidth, H = c.clientHeight;
+            c.width = W * dpr; c.height = H * dpr;
+            const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+            const pad = { l: 38, r: 8, t: 8, b: 18 };
+            const all = series.flatMap(s => XS.map(s.f).filter(v => v != null && (!log || v > 0)));
+            const tf = log ? Math.log10 : v => v;
+            const lo = log ? Math.floor(tf(Math.min(...all))) : Math.min(0, ...all), hi = log ? Math.ceil(tf(Math.max(...all))) : Math.max(...all) * 1.05;
+            const X = z => pad.l + (z - 1) / (MAXZ - 1) * (W - pad.l - pad.r), Y = v => H - pad.b - (tf(v) - lo) / (hi - lo) * (H - pad.t - pad.b);
+            ctx.font = '10px Fira Code, monospace'; ctx.fillStyle = '#64748b'; ctx.strokeStyle = '#1e1e44';
+            const ticks = log ? Array.from({ length: hi - lo + 1 }, (_, i) => 10 ** (lo + i)) : [0, 1, 2, 3, 4].map(i => lo + (hi - lo) * i / 4);
+            ticks.forEach(v => { const y = Y(v); ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke(); ctx.fillText(v >= 10 || v === 0 ? v.toFixed(0) : v.toFixed(1), 2, y + 3); });
+            NOBLE.forEach(z => { const x = X(z); ctx.strokeStyle = '#334155'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, H - pad.b); ctx.stroke(); ctx.setLineDash([]);
+                ctx.fillStyle = '#64748b'; ctx.fillText(E[z - 1].sym, x + 2, H - 5); });
+            series.forEach(s => {
+                ctx.strokeStyle = s.color; ctx.lineWidth = 1.6; ctx.beginPath(); let pen = false;
+                XS.forEach(e => { const v = s.f(e); if (v == null) { pen = false; return; } const x = X(e.z), y = Y(v); pen ? ctx.lineTo(x, y) : ctx.moveTo(x, y); pen = true; });
+                ctx.stroke();
+                ctx.fillStyle = s.color; XS.forEach(e => { const v = s.f(e); if (v != null) { ctx.beginPath(); ctx.arc(X(e.z), Y(v), 1.8, 0, 2 * Math.PI); ctx.fill(); } });
+            });
+            c._X = X; c._series = series; c._pad = pad;
+        }
+        function renderTrends() {
+            chart('c-zef', [{ f: zefOuter, color: '#22d3ee', name: 'Zef' }]);
+            chart('c-rad', [{ f: e => e.radio, color: '#a78bfa', name: 'radio' }]);
+            chart('c-ei', [{ f: e => e.ei, color: '#4ade80', name: 'EI real' }, { f: eiSlater, color: '#fbbf24', name: 'EI Slater' }], true);
+            // calidad de la estimación
+            const pairs = XS.filter(e => e.ei != null).map(e => [e.ei, eiSlater(e)]);
+            const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+            const mx = mean(pairs.map(p => p[0])), my = mean(pairs.map(p => p[1]));
+            const r = pairs.reduce((a, [x, y]) => a + (x - mx) * (y - my), 0) / Math.sqrt(pairs.reduce((a, [x]) => a + (x - mx) ** 2, 0) * pairs.reduce((a, [, y]) => a + (y - my) ** 2, 0));
+            const ratios = pairs.map(([x, y]) => y / x).sort((a, b) => a - b), med = ratios[Math.floor(ratios.length / 2)];
+            // ¿acierta la dirección del cambio de un elemento al siguiente?
+            const seq = XS.filter(e => e.ei != null);
+            let same = 0, tot = 0;
+            for (let i = 1; i < seq.length; i++) { if (seq[i].z !== seq[i - 1].z + 1) continue; tot++; if (Math.sign(seq[i].ei - seq[i - 1].ei) === Math.sign(eiSlater(seq[i]) - eiSlater(seq[i - 1]))) same++; }
+            const ne = E[9];
+            $('fit').innerHTML = `<b>¿Qué tal predice Slater la energía de ionización?</b> Mal en valor y mejor en tendencia. En valor, la estimación es de mediana ${med.toFixed(1)} veces la real (neón: ${eiSlater(ne).toFixed(0)} eV frente a ${ne.ei}); la correlación es r = ${r.toFixed(2)}. En tendencia, acierta si la energía sube o baja de un elemento al siguiente en ${(same / tot * 100).toFixed(0)} % de los casos: capta los saltos entre periodos, no los detalles. La fórmula 13,6·(Z<sub>ef</sub>/n*)² es la energía de un orbital aislado, no la diferencia de energía entre el átomo y su ion. Sirve para entender por qué cambian las propiedades, no para calcularlas.`;
+        }
+        ['c-zef', 'c-rad', 'c-ei'].forEach(id => {
+            const c = $(id), tip = $('tip');
+            const zAt = ev => { const r = c.getBoundingClientRect(); const x = ev.clientX - r.left, p = c._pad;
+                return Math.round(1 + (x - p.l) / (r.width - p.l - p.r) * (MAXZ - 1)); };
+            c.addEventListener('pointermove', ev => {
+                const z = zAt(ev); if (z < 1 || z > MAXZ) { tip.style.display = 'none'; return; }
+                const e = E[z - 1];
+                tip.style.display = 'block'; tip.style.left = ev.clientX + 12 + 'px'; tip.style.top = ev.clientY + 12 + 'px';
+                tip.innerHTML = `${e.z} ${e.sym} · ${e.nombre}<br>Z<sub>ef</sub> ${zefOuter(e).toFixed(2)} · radio ${e.radio ?? '—'} pm<br>EI ${e.ei ?? '—'} eV · Slater ${eiSlater(e).toFixed(1)} eV`;
+            });
+            c.addEventListener('pointerleave', () => { tip.style.display = 'none'; });
+            c.addEventListener('click', ev => { const z = zAt(ev); if (z >= 1 && z <= MAXZ) { tip.style.display = 'none'; document.querySelector('[data-tab="slater"]').click(); setEl(z); } });
+        });
+
+        // ------------------------------------------------------------ pestañas y arranque
+        document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x === t));
+            document.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== t.dataset.tab; });
+            history.replaceState(null, '', location.search + '#' + t.dataset.tab);
+            if (t.dataset.tab === 'tendencias') renderTrends(); else render();
+        }));
+        let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => {
+            document.querySelector('[data-tab="tendencias"]').getAttribute('aria-selected') === 'true' ? renderTrends() : render(); }, 150); });
+        const qz = +new URLSearchParams(location.search).get('z');
+        if (qz >= 1 && qz <= MAXZ) st.z = qz;
+        render();
+        const start = document.querySelector(`.tab[data-tab="${location.hash.slice(1)}"]`);
+        if (start) start.click();
+    })();
+    </script>
+</body>
+</html>

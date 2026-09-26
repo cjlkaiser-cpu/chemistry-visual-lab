@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4.1 Carga nuclear efectiva · Curso de la Tabla Periódica</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Explicar el apantallamiento de los electrones internos; Calcular Z_ef con las reglas de Slater; Usar Z_ef para explicar las tendencias dentro de un periodo y de…">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="4.1 Carga nuclear efectiva · Curso">
+    <meta property="og:description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Explicar el apantallamiento de los electrones internos; Calcular Z_ef con las reglas de Slater; Usar Z_ef para explicar las tendencias dentro de un periodo y de…">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../curso.css">
+</head>
+<body>
+    <article class="lesson" data-mod="4" data-lesson="1">
+
+        <div class="box predict" data-answer="b"><span class="label">Predice antes de seguir</span>
+            <p>El sodio tiene 11 protones. ¿Cuánta de esa carga «siente» su electrón más externo, el 3s?</p><ul class="options"><li data-k="a">Las 11 cargas completas</li><li data-k="b">Algo más de 2</li><li data-k="c">Exactamente 1</li></ul>
+            <div class="reveal"><p>Unas 2,2 cargas. Los 10 electrones internos se interponen entre el núcleo y el electrón 3s y tapan la mayor parte de su carga.</p></div>
+        </div>
+
+        <h2>El apantallamiento</h2>
+        <p>En el hidrógeno, el único electrón siente toda la carga del núcleo. En un átomo con muchos electrones, cada uno es repelido por los demás, y el efecto neto es que los electrones internos <b>apantallan</b> parte de la carga nuclear. Lo que queda es la <b>carga nuclear efectiva</b>:</p>
+        <div class="eq">Z<sub>ef</sub> = Z − S      (S: constante de apantallamiento)</div>
+
+        <h2>Las reglas de Slater</h2>
+        <p>En 1930 John Slater propuso unas reglas sencillas para estimar S. Se agrupan las subcapas: (1s) (2s,2p) (3s,3p) (3d) (4s,4p) (4d) (4f) (5s,5p)… Para un electrón s o p:</p>
+        <ul><li>cada electrón de su mismo grupo apantalla <b>0,35</b> (0,30 en el 1s);</li>
+            <li>cada electrón de la capa n − 1 apantalla <b>0,85</b>;</li>
+            <li>cada electrón de capas más internas apantalla <b>1,00</b>;</li>
+            <li>los electrones de grupos posteriores no apantallan.</li></ul>
+        <p>Para el sodio (1s² 2s² 2p⁶ 3s¹): S = 8 × 0,85 + 2 × 1,00 = 8,80, así que Z<sub>ef</sub> = 11 − 8,80 = <b>2,20</b>. Para el cloro, su electrón 3p siente 6,10.</p>
+
+        <h2>Por qué explica las tendencias</h2>
+        <p><b>Dentro de un periodo</b>, cada elemento añade un protón (+1) y un electrón en la misma capa, que solo apantalla 0,35: Z<sub>ef</sub> sube unas 0,65 unidades por paso. Los electrones externos están cada vez más atraídos: el átomo se encoge y cuesta más ionizarlo.</p>
+        <p><b>Al empezar un periodo nuevo</b>, el electrón entra en una capa nueva, apantallado casi por completo: Z<sub>ef</sub> cae de golpe (del 5,85 del neón al 2,20 del sodio). Al bajar en un grupo Z<sub>ef</sub> cambia poco, pero n aumenta: el electrón está más lejos.</p>
+
+        <figure class="sim" data-src="../../carga-efectiva.html?z=11" data-title="Carga Nuclear Efectiva" data-h="820">
+            <figcaption><span class="task">Tarea</span><ol><li>Con el sodio, compara la Z<sub>ef</sub> de su electrón 3s con la de un electrón 1s.</li><li>Avanza con → hasta el argón y observa cómo sube Z<sub>ef</sub>.</li><li>En «Tendencias frente a Z», relaciona los dientes de sierra de Z<sub>ef</sub> con los del radio y la ionización.</li></ol></figcaption>
+        </figure>
+
+        <div class="box idea"><span class="label">Idea clave</span><p>Una sola magnitud, Z<sub>ef</sub>, junto con la capa n del electrón externo, explica casi todas las tendencias periódicas.</p></div>
+        <div class="box mistake"><span class="label">Error frecuente</span><p>«Los átomos de la derecha tienen más electrones, así que son más grandes». Tienen más electrones, pero en la misma capa y atraídos por un núcleo con más carga efectiva: son más pequeños.</p></div>
+        <details class="deep"><summary>Profundizar: ¿cuánto acierta Slater?</summary><div><p>Las reglas de Slater son una aproximación empírica. Cálculos más completos (Clementi y Raimondi, 1963, con funciones de onda de Hartree-Fock) dan valores algo distintos: por ejemplo, 2,51 para el sodio frente al 2,20 de Slater. En la simulación puedes comparar la energía de ionización estimada con Slater y la real: acierta la forma de la tendencia, pero no el valor.</p></div></details>
+
+        <h2>Autoevaluación</h2>
+        <div class="quiz"><div class="q" data-answer="a"><p>¿Qué Z<sub>ef</sub> siente el electrón 2p del nitrógeno (1s² 2s² 2p³) según Slater?</p><ul class="options"><li data-k="a" data-why="S = 4 × 0,35 + 2 × 0,85 = 3,10; Z&lt;sub&gt;ef&lt;/sub&gt; = 7 − 3,10 = 3,90.">3,90</li><li data-k="b" data-why="Olvidas el apantallamiento de los otros electrones de la capa 2.">5,00</li><li data-k="c" data-why="Sería la carga sin apantallar.">7,00</li></ul></div><div class="q" data-answer="a"><p>Dentro de un periodo, Z<sub>ef</sub> del electrón externo…</p><ul class="options"><li data-k="a" data-why="Correcto: sube unas 0,65 por elemento.">aumenta, porque cada protón nuevo solo queda apantallado en 0,35</li><li data-k="b" data-why="Aumenta.">disminuye</li><li data-k="c" data-why="Cambia de forma regular.">no cambia</li></ul></div><div class="q" data-answer="c"><p>¿Por qué Z<sub>ef</sub> cae al pasar del neón al sodio?</p><ul class="options"><li data-k="a" data-why="Tiene uno más.">Porque el sodio tiene menos protones</li><li data-k="b" data-why="Es consecuencia, no causa.">Porque el sodio es un metal</li><li data-k="c" data-why="Correcto.">Porque el electrón nuevo entra en una capa nueva, apantallado por las capas internas completas</li></ul></div><div class="q" data-answer="c"><p>Un electrón 1s del sodio siente una Z<sub>ef</sub> de…</p><ul class="options"><li data-k="a" data-why="Esa es la del electrón 3s.">2,2</li><li data-k="b" data-why="Está fortísimamente atraído.">0</li><li data-k="c" data-why="Correcto: solo lo apantalla el otro electrón 1s (0,30).">unas 10,7: casi toda la carga del núcleo</li></ul></div></div>
+        <div class="box summary"><span class="label">En resumen</span><ul><li>Z<sub>ef</sub> = Z − S: la carga que queda tras el apantallamiento de los demás electrones.</li><li>Las reglas de Slater estiman S con coeficientes 0,35, 0,85 y 1,00.</li><li>Z<sub>ef</sub> sube dentro de un periodo y cae al empezar el siguiente.</li></ul></div>
+        <p class="sources">Fuentes: J. C. Slater, Physical Review 36, 57 (1930); E. Clementi y D. L. Raimondi, J. Chem. Phys. 38, 2686 (1963).</p>
+
+    </article>
+    <script src="../course-data.js"></script>
+    <script src="../course.js"></script>
+</body>
+</html>

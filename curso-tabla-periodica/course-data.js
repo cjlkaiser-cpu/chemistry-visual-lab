@@ -50,7 +50,22 @@ window.EIGENLAB_COURSE = {
          "objetivos": ["Escribir la configuración de cationes y aniones", "Aplicar que los metales de transición pierden primero los electrones ns", "Relacionar la carga habitual de un ion con su grupo"]}
       ]
     },
-    {"n": 4, "titulo": "Tendencias periódicas", "proximamente": true, "resumen": "Carga nuclear efectiva, radio, ionización, electronegatividad y carácter metálico.", "lecciones": []},
+    {
+      "n": 4, "titulo": "Tendencias periódicas",
+      "resumen": "Carga nuclear efectiva, radio, ionización, electronegatividad y carácter metálico.",
+      "lecciones": [
+        {"n": 1, "titulo": "Carga nuclear efectiva", "min": 20,
+         "objetivos": ["Explicar el apantallamiento de los electrones internos", "Calcular Z_ef con las reglas de Slater", "Usar Z_ef para explicar las tendencias dentro de un periodo y de un grupo"]},
+        {"n": 2, "titulo": "El tamaño de los átomos y de los iones", "min": 15,
+         "objetivos": ["Describir la tendencia del radio en periodos y grupos", "Distinguir radio covalente, metálico, de van der Waals e iónico", "Ordenar por tamaño una serie isoelectrónica"]},
+        {"n": 3, "titulo": "Energía de ionización", "min": 20,
+         "objetivos": ["Relacionar la energía de ionización con Z_ef y la distancia al núcleo", "Explicar las irregularidades Be–B y N–O", "Deducir el grupo de un elemento con sus energías de ionización sucesivas"]},
+        {"n": 4, "titulo": "Afinidad electrónica y electronegatividad", "min": 20,
+         "objetivos": ["Distinguir afinidad electrónica (átomo aislado) y electronegatividad (átomo enlazado)", "Leer la escala de Pauling y su tendencia", "Predecir el tipo de enlace con la diferencia de electronegatividad"]},
+        {"n": 5, "titulo": "Carácter metálico y dos sorpresas", "min": 15,
+         "objetivos": ["Describir la tendencia del carácter metálico", "Explicar la contracción lantánida y sus consecuencias", "Reconocer las relaciones diagonales"]}
+      ]
+    },
     {"n": 5, "titulo": "Familias", "proximamente": true, "resumen": "Alcalinos, halógenos, gases nobles, metales de transición, lantánidos y actínidos.", "lecciones": []},
     {"n": 6, "titulo": "Más allá de la tabla", "proximamente": true, "resumen": "Origen cósmico, efectos relativistas, superpesados y los elementos de la tecnología.", "lecciones": []}
   ]

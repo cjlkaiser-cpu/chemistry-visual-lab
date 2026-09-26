@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Carga Nuclear Efectiva | Chemistry Visual Lab</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Guía teórica de «Carga Nuclear Efectiva»: ecuación principal, experimentos guiados y conexiones. Apantallamiento con las reglas de Slater hasta el radón, paso a paso, y su relación con el radio y la energía de ionización.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="Guía: Carga Nuclear Efectiva · Chemistry Visual Lab">
+    <meta property="og:description" content="Guía teórica de «Carga Nuclear Efectiva»: ecuación principal, experimentos guiados y conexiones. Apantallamiento con las reglas de Slater hasta el radón, paso a paso, y su relación con el radio y la energía de ionización.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0a;
+            --color-surface: #141414;
+            --color-surface-elevated: #1a1a1a;
+            --color-border: #262626;
+            --color-text: #e5e5e5;
+            --color-text-secondary: #a3a3a3;
+            --color-accent: #06b6d4;
+            --color-accent-dim: rgba(6, 182, 212, 0.1);
+            --font-serif: 'Crimson Pro', Georgia, serif;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            font-size: 19px;
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .breadcrumb {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+            margin-top: 3rem;
+            margin-bottom: 1.25rem;
+        }
+
+        h3 {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+        }
+
+        .intro {
+            font-size: 1.15rem;
+            color: var(--color-text-secondary);
+            border-left: 3px solid var(--color-accent);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .concept-card h4 {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--color-accent);
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--color-text-secondary);
+        }
+
+        .trend-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .trend-table th {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            text-align: left;
+            padding: 1rem;
+            background: var(--color-surface);
+            border-bottom: 2px solid var(--color-accent);
+        }
+
+        .trend-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+            vertical-align: top;
+        }
+
+        .trend-table tr:hover {
+            background: var(--color-surface);
+        }
+
+        .property-name {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+
+        .arrow-up { color: #22c55e; font-weight: bold; }
+        .arrow-down { color: #ef4444; font-weight: bold; }
+        .arrow-mixed { color: #fbbf24; }
+
+        .periodic-visual {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .periodic-mini {
+            display: inline-grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .mini-cell {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            border-radius: 4px;
+        }
+
+        .gradient-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        .experiment-block {
+            background: var(--color-surface-elevated);
+            border-radius: 8px;
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .experiment-block h4 {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .experiment-block ol {
+            margin-left: 1.25rem;
+            color: var(--color-text-secondary);
+        }
+
+        .experiment-block li {
+            margin-bottom: 0.5rem;
+        }
+
+        .key-insight {
+            background: var(--color-accent-dim);
+            border: 1px solid var(--color-accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .key-insight strong {
+            color: var(--color-accent);
+        }
+
+        .element-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .element-example {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .element-symbol {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+
+        .element-name {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            margin: 0.25rem 0;
+        }
+
+        .element-stat {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .timeline {
+            border-left: 2px solid var(--color-border);
+            padding-left: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .timeline-event {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -2.35rem;
+            top: 0.5rem;
+            width: 10px;
+            height: 10px;
+            background: var(--color-accent);
+            border-radius: 50%;
+        }
+
+        .timeline-year {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--color-accent);
+        }
+
+        .timeline-text {
+            color: var(--color-text-secondary);
+        }
+
+        .connections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .connection-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .connection-item:hover {
+            border-color: var(--color-accent);
+            background: var(--color-surface-elevated);
+        }
+
+        .connection-icon {
+            font-size: 1.5rem;
+        }
+
+        .connection-text {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
+
+        ul {
+            margin-left: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        .btn-launch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 1rem 2rem;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-launch:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+                font-size: 17px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .mini-cell {
+                width: 28px;
+                height: 28px;
+                font-size: 0.65rem;
+            }
+        }
+    
+        .equation-box { background: rgba(0, 0, 0, 0.3); border-left: 3px solid var(--color-accent); padding: 1.5rem; margin: 1.5rem 0;
+                        border-radius: 0 8px 8px 0; font-family: 'Fira Code', monospace; font-size: 1.1rem; }
+        .equation-box .eq-name { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0.5rem; }
+        .equation-box .eq-main { color: var(--color-accent); margin-bottom: 0.5rem; }
+        .equation-box .eq-desc { font-family: var(--font-serif); font-size: 0.95rem; color: var(--color-text-secondary); }
+        .limits { border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+        .limits h4 { font-family: var(--font-sans); font-size: 0.95rem; margin-bottom: 0.5rem; color: #f59e0b; }
+        .source { font-family: var(--font-sans); font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → <a href="../carga-efectiva.html">Carga Nuclear Efectiva</a> → Guía
+        </nav>
+        <h1>Carga Nuclear Efectiva</h1>
+        <p class="subtitle">Apantallamiento y reglas de Slater: la causa de las tendencias periódicas</p>
+    </header>
+
+    <main>
+        <p class="intro">
+            En un átomo con muchos electrones, el electrón más externo no siente toda la carga del núcleo: los electrones
+            internos se interponen y la <strong>apantallan</strong>. Lo que queda, la <strong>carga nuclear efectiva</strong>,
+            es la clave de casi todas las tendencias periódicas. Esta simulación la calcula con las reglas de Slater para los
+            elementos hasta el radón y la compara con el radio y la energía de ionización.
+        </p>
+
+        <h2>¿Qué Observarás?</h2>
+        <div class="concept-grid">
+            <div class="concept-card"><h4>El cálculo paso a paso</h4><p>Para cada elemento, la contribución de cada grupo de electrones al apantallamiento, con su coeficiente.</p></div>
+            <div class="concept-card"><h4>Cualquier electrón</h4><p>Elige el electrón que quieras: el 1s del sodio siente casi 11 cargas; su 3s, solo 2,2.</p></div>
+            <div class="concept-card"><h4>Tendencias frente a Z</h4><p>Z<sub>ef</sub>, radio y energía de ionización en la misma escala de Z: los dientes de sierra coinciden.</p></div>
+            <div class="concept-card"><h4>Límites del modelo</h4><p>La energía de ionización estimada con Slater frente a la medida, con el acierto calculado a partir de los datos.</p></div>
+        </div>
+
+        <h2>Las Reglas de Slater</h2>
+        <div class="equation-box">
+            <div class="eq-name">Carga nuclear efectiva</div>
+            <div class="eq-main">Z<sub>ef</sub> = Z − S</div>
+            <div class="eq-desc">Grupos: (1s) (2s,2p) (3s,3p) (3d) (4s,4p) (4d) (4f) (5s,5p)… Para un electrón s o p, cada electrón de su grupo aporta 0,35
+                (0,30 en el 1s), los de la capa n − 1 aportan 0,85 y los más internos 1,00. Para un electrón d o f, los de su grupo aportan 0,35
+                y todos los de su izquierda 1,00. Los grupos a la derecha no apantallan.</div>
+        </div>
+        <div class="equation-box">
+            <div class="eq-name">Estimación de la energía de ionización</div>
+            <div class="eq-main">EI ≈ 13,6 eV · (Z<sub>ef</sub> / n*)²</div>
+            <div class="eq-desc">n* es el número cuántico efectivo de Slater: 1, 2, 3, 3,7, 4,0 y 4,2 para n = 1…6. Es la fórmula del hidrógeno con la carga apantallada.</div>
+        </div>
+        <table class="trend-table">
+            <thead><tr><th>Elemento</th><th>Electrón</th><th>S</th><th>Z<sub>ef</sub></th></tr></thead>
+            <tbody>
+                <tr><td class="property-name">He</td><td>1s</td><td>0,30</td><td>1,70</td></tr>
+                <tr><td class="property-name">N</td><td>2p</td><td>3,10</td><td>3,90</td></tr>
+                <tr><td class="property-name">Na</td><td>3s</td><td>8,80</td><td>2,20</td></tr>
+                <tr><td class="property-name">Cl</td><td>3p</td><td>10,90</td><td>6,10</td></tr>
+                <tr><td class="property-name">Zn</td><td>4s · 3d</td><td>25,65 · 21,15</td><td>4,35 · 8,85</td></tr>
+            </tbody>
+        </table>
+        <p class="key-insight"><strong>La lectura de las tendencias:</strong> en un periodo cada protón nuevo solo queda apantallado en 0,35 y Z<sub>ef</sub> sube unas 0,65
+            por elemento; al empezar un periodo el electrón estrena capa y Z<sub>ef</sub> cae de golpe. Radio y energía de ionización siguen ese ritmo.</p>
+
+        <h2>Experimentos Sugeridos</h2>
+        <div class="experiment-block"><h4>1. Recorre el periodo 3</h4><ol>
+            <li>Empieza en el sodio (Z = 11) y avanza con → hasta el argón.</li><li>Anota Z<sub>ef</sub> del electrón externo en cada paso: ¿cuánto sube?</li>
+            <li>Pasa al potasio: ¿qué le ocurre a Z<sub>ef</sub>?</li></ol></div>
+        <div class="experiment-block"><h4>2. El electrón interno</h4><ol>
+            <li>En el sodio, elige el electrón 1s y después el 2p.</li><li>Compara con el 3s. ¿Por qué el 1s está tan retenido?</li></ol></div>
+        <div class="experiment-block"><h4>3. ¿Cuánto acierta Slater?</h4><ol>
+            <li>Abre «Tendencias frente a Z» y compara la EI estimada con la medida.</li><li>¿Acierta la forma de la curva? ¿Y el valor? Fíjate en los gases nobles.</li></ol></div>
+
+        <div class="limits">
+            <h4>Limitaciones del modelo</h4>
+            <p>Las reglas de Slater (1930) son empíricas: dan la dirección de las tendencias, pero sus valores absolutos son aproximados. La energía de ionización estimada
+            suele ser mayor que la medida (en los gases nobles, varias veces mayor). Cálculos de Hartree-Fock (Clementi y Raimondi, 1963) dan Z<sub>ef</sub> más realistas,
+            por ejemplo 2,51 para el 3s del sodio. La simulación llega hasta Z = 86; para elementos más pesados los efectos relativistas invalidan el esquema.</p>
+        </div>
+
+        <h2>Conexiones</h2>
+        <div class="connections-grid">
+            <a href="../tabla-periodica.html" class="connection-item"><span class="connection-icon">🧪</span><span class="connection-text">Tabla Periódica Viva<br><small>Radio y EI medidos</small></span></a>
+            <a href="../aufbau.html" class="connection-item"><span class="connection-icon">🔢</span><span class="connection-text">Constructor Aufbau<br><small>De dónde sale la configuración</small></span></a>
+            <a href="../tendencias.html" class="connection-item"><span class="connection-icon">📈</span><span class="connection-text">Tendencias<br><small>Periodos 1–4</small></span></a>
+            <a href="../curso-tabla-periodica/modulo-4/leccion-1.html" class="connection-item"><span class="connection-icon">🎓</span><span class="connection-text">Curso, lección 4.1<br><small>Carga nuclear efectiva</small></span></a>
+        </div>
+        <p class="source">J. C. Slater, Physical Review 36, 57 (1930); E. Clementi y D. L. Raimondi, J. Chem. Phys. 38, 2686 (1963). Energías de ionización y radios: PubChem (NIST).</p>
+    </main>
+
+    <footer>
+        <a href="../carga-efectiva.html" class="btn-launch">⚛️ Abrir Simulación</a>
+    </footer>
+</body>
+</html>

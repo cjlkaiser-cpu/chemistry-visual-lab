@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4.3 Energía de ionización · Curso de la Tabla Periódica</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Relacionar la energía de ionización con Z_ef y la distancia al núcleo; Explicar las irregularidades Be–B y N–O; Deducir el grupo de un elemento con sus energías…">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="4.3 Energía de ionización · Curso">
+    <meta property="og:description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Relacionar la energía de ionización con Z_ef y la distancia al núcleo; Explicar las irregularidades Be–B y N–O; Deducir el grupo de un elemento con sus energías…">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../curso.css">
+</head>
+<body>
+    <article class="lesson" data-mod="4" data-lesson="3">
+
+        <div class="box predict" data-answer="a"><span class="label">Predice antes de seguir</span>
+            <p>El magnesio tiene energías de ionización sucesivas de 7,6, 15,0 y 80,1 eV. ¿Por qué el tercer salto es tan grande?</p><ul class="options"><li data-k="a">Porque el tercer electrón sale de una capa interna completa</li><li data-k="b">Porque el magnesio es un metal</li><li data-k="c">Por un error de medida</li></ul>
+            <div class="reveal"><p>Los dos primeros electrones son los de valencia (3s²). El tercero tendría que salir del núcleo de neón, mucho más cerca del núcleo y con una Z<sub>ef</sub> enorme: cuesta cinco veces más.</p></div>
+        </div>
+
+        <h2>Qué mide</h2>
+        <p>La <b>primera energía de ionización</b> es la energía mínima para arrancar un electrón de un átomo aislado en estado gaseoso:</p>
+        <div class="eq">X(g) → X⁺(g) + e⁻      ΔE = EI₁</div>
+        <p>Crece a lo largo de un periodo (más Z<sub>ef</sub>) y disminuye al bajar en un grupo (electrón más lejos). Los extremos: el helio, 24,59 eV, y el cesio, 3,89 eV.</p>
+
+        <h2>Dos irregularidades con explicación</h2>
+        <div class="table-wrap"><table class="t"><thead><tr><th>Li</th><th>Be</th><th>B</th><th>C</th><th>N</th><th>O</th><th>F</th><th>Ne</th></tr></thead><tbody>
+            <tr><td class="n">5,39</td><td class="n">9,32</td><td class="n">8,30</td><td class="n">11,26</td><td class="n">14,53</td><td class="n">13,62</td><td class="n">17,42</td><td class="n">21,56</td></tr></tbody></table></div>
+        <p><b>Be → B baja:</b> el electrón que sale del boro es un 2p, de más energía y algo apantallado por los electrones 2s. <b>N → O baja:</b> en el oxígeno, el cuarto electrón 2p comparte orbital con otro; su repulsión mutua facilita arrancarlo. En el nitrógeno los tres 2p están desapareados (regla de Hund).</p>
+
+        <h2>Energías sucesivas: una huella del grupo</h2>
+        <p>Si arrancas electrones uno a uno, la energía crece siempre, pero da un <b>salto enorme</b> al llegar a la capa interna. El número de electrones antes del salto es el número de electrones de valencia: dos en el magnesio (grupo 2), uno en el sodio (5,14 eV y luego 47,3 eV).</p>
+
+        <figure class="sim" data-src="../../tabla-periodica.html?modo=ei" data-title="Tabla Periódica Viva · energía de ionización" data-h="620">
+            <figcaption><span class="task">Tarea</span><ol><li>¿Dónde están los valores más altos? ¿Y los más bajos?</li><li>Compara Be con B y N con O en el periodo 2.</li><li>Abre la <a href="../../carga-efectiva.html#tendencias" target="_blank" rel="noopener">gráfica frente a Z</a> y localiza los máximos en los gases nobles.</li></ol></figcaption>
+        </figure>
+
+        <div class="box idea"><span class="label">Idea clave</span><p>La energía de ionización refleja lo fuerte que el núcleo retiene al electrón externo: Z<sub>ef</sub> alta y n pequeño dan valores altos.</p></div>
+        <div class="box mistake"><span class="label">Error frecuente</span><p>«Los gases nobles no se pueden ionizar». Se pueden, pero cuesta mucho: el helio es el elemento con la mayor energía de ionización. En los tubos de neón, el gas está parcialmente ionizado.</p></div>
+        <details class="deep"><summary>Profundizar: ionizar de verdad</summary><div><p>La energía de ionización se mide con espectroscopia (el límite de las series de líneas) o con fotoionización. Para el hidrógeno coincide con 13,6 eV, el límite de la serie de Lyman. En química se usa a menudo en kJ/mol: 1 eV por átomo equivale a 96,485 kJ/mol, así que la EI del sodio es de unos 496 kJ/mol.</p></div></details>
+
+        <h2>Autoevaluación</h2>
+        <div class="quiz"><div class="q" data-answer="c"><p>¿Qué elemento del periodo 3 tiene la mayor primera energía de ionización?</p><ul class="options"><li data-k="a" data-why="Es alta, pero el argón la supera.">Cloro</li><li data-k="b" data-why="Tiene la menor.">Sodio</li><li data-k="c" data-why="Correcto: capa completa y máxima Z&lt;sub&gt;ef&lt;/sub&gt; del periodo.">Argón</li></ul></div><div class="q" data-answer="a"><p>¿Por qué la EI del oxígeno es menor que la del nitrógeno?</p><ul class="options"><li data-k="a" data-why="Correcto.">Porque el cuarto electrón 2p del oxígeno está emparejado y la repulsión facilita arrancarlo</li><li data-k="b" data-why="Tiene uno más.">Porque el oxígeno tiene menos protones</li><li data-k="c" data-why="Es algo más pequeño.">Porque el oxígeno es más grande</li></ul></div><div class="q" data-answer="c"><p>Un elemento tiene energías sucesivas de 6,0, 18,8, 28,4 y 120 eV. ¿De qué grupo es?</p><ul class="options"><li data-k="a" data-why="Tendría seis electrones antes del salto.">Grupo 16</li><li data-k="b" data-why="El salto está después del tercer electrón.">Grupo 1</li><li data-k="c" data-why="Correcto: tres electrones de valencia y luego el salto (es el aluminio).">Grupo 13</li></ul></div><div class="q" data-answer="c"><p>¿Qué elemento tiene la menor energía de ionización de toda la tabla?</p><ul class="options"><li data-k="a" data-why="Tiene 13,6 eV.">Hidrógeno</li><li data-k="b" data-why="Tiene una de las más altas.">Flúor</li><li data-k="c" data-why="Correcto: 3,89 eV. El francio, más pesado, tiene 4,07 eV: sus electrones 7s se contraen por efectos relativistas.">Cesio</li></ul></div></div>
+        <div class="box summary"><span class="label">En resumen</span><ul><li>La EI crece en el periodo y baja en el grupo, siguiendo a Z<sub>ef</sub> y n.</li><li>Be → B y N → O bajan por la subcapa 2p y por el emparejamiento.</li><li>El salto en las energías sucesivas revela el número de electrones de valencia.</li></ul></div>
+        <p class="sources">Fuentes: NIST Atomic Spectra Database, energías de ionización; C. E. Moore, «Ionization Potentials and Ionization Limits» (NSRDS-NBS 34).</p>
+
+    </article>
+    <script src="../course-data.js"></script>
+    <script src="../course.js"></script>
+</body>
+</html>

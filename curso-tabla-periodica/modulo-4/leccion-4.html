@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4.4 Afinidad electrónica y electronegatividad · Curso de la Tabla Periódica</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Distinguir afinidad electrónica (átomo aislado) y electronegatividad (átomo enlazado); Leer la escala de Pauling y su tendencia; Predecir el tipo de enlace con…">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="4.4 Afinidad electrónica y electronegatividad · Curso">
+    <meta property="og:description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Distinguir afinidad electrónica (átomo aislado) y electronegatividad (átomo enlazado); Leer la escala de Pauling y su tendencia; Predecir el tipo de enlace con…">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../curso.css">
+</head>
+<body>
+    <article class="lesson" data-mod="4" data-lesson="4">
+
+        <div class="box predict" data-answer="b"><span class="label">Predice antes de seguir</span>
+            <p>¿Qué átomo libera más energía al captar un electrón: el flúor o el cloro?</p><ul class="options"><li data-k="a">El flúor, porque es el más electronegativo</li><li data-k="b">El cloro</li><li data-k="c">Liberan lo mismo</li></ul>
+            <div class="reveal"><p>El cloro, unos 3,6 eV frente a unos 3,4 eV del flúor. El flúor es tan pequeño que el electrón nuevo se apiña con los que ya hay en la capa 2 y la repulsión le resta energía. Afinidad electrónica y electronegatividad no son lo mismo.</p></div>
+        </div>
+
+        <h2>Afinidad electrónica: el átomo aislado</h2>
+        <p>La <b>afinidad electrónica</b> es la energía que se libera cuando un átomo gaseoso aislado capta un electrón:</p>
+        <div class="eq">X(g) + e⁻ → X⁻(g)</div>
+        <p>Es máxima en los halógenos, a los que les falta un electrón para completar la capa p, y casi nula o negativa en los gases nobles, el berilio o el nitrógeno, que tendrían que colocar el electrón en una subcapa nueva o emparejarlo. El valor medido más reciente para el flúor es 3,401 eV; algunas tablas, como la de PubChem que usa la Tabla Viva, dan 3,34.</p>
+
+        <h2>Electronegatividad: el átomo en un enlace</h2>
+        <p>La <b>electronegatividad</b> mide la tendencia de un átomo a atraer hacia sí los electrones de un enlace. No es una medida directa, sino una escala. La de Linus Pauling (1932) se construye con energías de enlace: si un enlace A–B es más fuerte que la media de A–A y B–B, la diferencia se atribuye a la distinta electronegatividad.</p>
+        <div class="table-wrap"><table class="t"><thead><tr><th>F</th><th>O</th><th>Cl</th><th>N</th><th>C</th><th>H</th><th>Na</th><th>Cs</th></tr></thead><tbody>
+            <tr><td class="n">3,98</td><td class="n">3,44</td><td class="n">3,16</td><td class="n">3,04</td><td class="n">2,55</td><td class="n">2,20</td><td class="n">0,93</td><td class="n">0,79</td></tr></tbody></table></div>
+        <p>Aumenta hacia arriba y a la derecha, como Z<sub>ef</sub>. Robert Mulliken propuso otra escala, más física: la media de la energía de ionización y la afinidad electrónica.</p>
+
+        <h2>Del enlace covalente al iónico</h2>
+        <p>La diferencia de electronegatividad entre dos átomos orienta sobre el tipo de enlace: casi nula en el Cl₂ (covalente apolar), moderada en el HCl (covalente polar, 0,96) y grande en el NaCl (iónico, 2,23). Es una guía, no una frontera nítida: hay un paso continuo de un tipo a otro.</p>
+
+        <figure class="sim" data-src="../../tabla-periodica.html?modo=en" data-title="Tabla Periódica Viva · electronegatividad" data-h="620">
+            <figcaption><span class="task">Tarea</span><ol><li>Localiza el máximo (flúor) y el mínimo (cesio, 0,79).</li><li>¿Por qué muchos gases nobles aparecen sin dato?</li><li>Cambia al modo «Afinidad e⁻» y compara el cloro con el flúor.</li></ol></figcaption>
+        </figure>
+
+        <div class="box idea"><span class="label">Idea clave</span><p>La afinidad electrónica es una propiedad del átomo aislado y se mide; la electronegatividad describe al átomo dentro de un enlace y es una escala construida.</p></div>
+        <div class="box mistake"><span class="label">Error frecuente</span><p>«El flúor tiene la mayor afinidad electrónica porque es el más electronegativo». La tiene el cloro. Son magnitudes distintas.</p></div>
+        <details class="deep"><summary>Profundizar: por qué no hay electronegatividad del helio o del neón</summary><div><p>La escala de Pauling se basa en energías de enlace, y el helio y el neón no forman compuestos estables. El kriptón y el xenón sí (KrF₂, XeF₄), y para ellos hay valores (3,00 y 2,60). Por eso la tabla muestra celdas sin dato: no es un olvido, es que la magnitud no está definida.</p></div></details>
+
+        <h2>Autoevaluación</h2>
+        <div class="quiz"><div class="q" data-answer="b"><p>¿Qué elemento es el más electronegativo?</p><ul class="options"><li data-k="a" data-why="Tiene la mayor afinidad electrónica, no la mayor electronegatividad.">Cloro</li><li data-k="b" data-why="Correcto: 3,98 en la escala de Pauling.">Flúor</li><li data-k="c" data-why="Es el segundo: 3,44.">Oxígeno</li></ul></div><div class="q" data-answer="a"><p>¿Qué mide la afinidad electrónica?</p><ul class="options"><li data-k="a" data-why="Correcto.">La energía liberada cuando un átomo gaseoso aislado capta un electrón</li><li data-k="b" data-why="Eso es la electronegatividad.">La atracción de un átomo por los electrones de un enlace</li><li data-k="c" data-why="Eso es la energía de ionización.">La energía para arrancar un electrón</li></ul></div><div class="q" data-answer="b"><p>Diferencias de electronegatividad: Cl–Cl 0; H–Cl 0,96; Na–Cl 2,23. ¿Qué enlace es predominantemente iónico?</p><ul class="options"><li data-k="a" data-why="Es covalente apolar.">Cl–Cl</li><li data-k="b" data-why="Correcto: la gran diferencia favorece la transferencia de electrones.">Na–Cl</li><li data-k="c" data-why="Es covalente polar.">H–Cl</li></ul></div><div class="q" data-answer="b"><p>¿Por qué la afinidad electrónica del flúor es menor que la del cloro?</p><ul class="options"><li data-k="a" data-why="El cloro también lo es.">Porque el flúor es un gas</li><li data-k="b" data-why="Correcto.">Porque el flúor es muy pequeño y el electrón nuevo sufre mucha repulsión en la capa 2</li><li data-k="c" data-why="Tiene menos.">Porque el flúor tiene más capas</li></ul></div></div>
+        <div class="box summary"><span class="label">En resumen</span><ul><li>Afinidad electrónica: energía liberada al captar un electrón (átomo aislado); máxima en el cloro.</li><li>Electronegatividad: atracción de los electrones de un enlace; máxima en el flúor (3,98).</li><li>La diferencia de electronegatividad orienta sobre el tipo de enlace.</li></ul></div>
+        <p class="sources">Fuentes: L. Pauling, J. Am. Chem. Soc. 54, 3570 (1932); R. S. Mulliken, J. Chem. Phys. 2, 782 (1934); afinidad del flúor: C. Blondel y cols. (2001).</p>
+
+    </article>
+    <script src="../course-data.js"></script>
+    <script src="../course.js"></script>
+</body>
+</html>
