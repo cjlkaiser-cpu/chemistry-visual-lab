@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía: Tabla Periódica Viva | Chemistry Visual Lab</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Guía teórica de «Tabla Periódica Viva»: ecuación principal, experimentos guiados y conexiones. Los 118 elementos con datos del NIST/IUPAC: familias, bloques, tendencias, estado según la temperatura e historia de los descubrimientos.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="Guía: Tabla Periódica Viva · Chemistry Visual Lab">
+    <meta property="og:description" content="Guía teórica de «Tabla Periódica Viva»: ecuación principal, experimentos guiados y conexiones. Los 118 elementos con datos del NIST/IUPAC: familias, bloques, tendencias, estado según la temperatura e historia de los descubrimientos.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0a;
+            --color-surface: #141414;
+            --color-surface-elevated: #1a1a1a;
+            --color-border: #262626;
+            --color-text: #e5e5e5;
+            --color-text-secondary: #a3a3a3;
+            --color-accent: #06b6d4;
+            --color-accent-dim: rgba(6, 182, 212, 0.1);
+            --font-serif: 'Crimson Pro', Georgia, serif;
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-serif);
+            font-size: 19px;
+            line-height: 1.7;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .breadcrumb {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
+
+        h2 {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+            margin-top: 3rem;
+            margin-bottom: 1.25rem;
+        }
+
+        h3 {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+        }
+
+        .intro {
+            font-size: 1.15rem;
+            color: var(--color-text-secondary);
+            border-left: 3px solid var(--color-accent);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .concept-card h4 {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--color-accent);
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--color-text-secondary);
+        }
+
+        .trend-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .trend-table th {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            text-align: left;
+            padding: 1rem;
+            background: var(--color-surface);
+            border-bottom: 2px solid var(--color-accent);
+        }
+
+        .trend-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+            vertical-align: top;
+        }
+
+        .trend-table tr:hover {
+            background: var(--color-surface);
+        }
+
+        .property-name {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+
+        .arrow-up { color: #22c55e; font-weight: bold; }
+        .arrow-down { color: #ef4444; font-weight: bold; }
+        .arrow-mixed { color: #fbbf24; }
+
+        .periodic-visual {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .periodic-mini {
+            display: inline-grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .mini-cell {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            border-radius: 4px;
+        }
+
+        .gradient-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        .experiment-block {
+            background: var(--color-surface-elevated);
+            border-radius: 8px;
+            padding: 1.75rem;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .experiment-block h4 {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .experiment-block ol {
+            margin-left: 1.25rem;
+            color: var(--color-text-secondary);
+        }
+
+        .experiment-block li {
+            margin-bottom: 0.5rem;
+        }
+
+        .key-insight {
+            background: var(--color-accent-dim);
+            border: 1px solid var(--color-accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .key-insight strong {
+            color: var(--color-accent);
+        }
+
+        .element-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .element-example {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .element-symbol {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+
+        .element-name {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            margin: 0.25rem 0;
+        }
+
+        .element-stat {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--color-text);
+        }
+
+        .timeline {
+            border-left: 2px solid var(--color-border);
+            padding-left: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .timeline-event {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            left: -2.35rem;
+            top: 0.5rem;
+            width: 10px;
+            height: 10px;
+            background: var(--color-accent);
+            border-radius: 50%;
+        }
+
+        .timeline-year {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--color-accent);
+        }
+
+        .timeline-text {
+            color: var(--color-text-secondary);
+        }
+
+        .connections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .connection-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .connection-item:hover {
+            border-color: var(--color-accent);
+            background: var(--color-surface-elevated);
+        }
+
+        .connection-icon {
+            font-size: 1.5rem;
+        }
+
+        .connection-text {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+        }
+
+        ul {
+            margin-left: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        .btn-launch {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 1rem 2rem;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-launch:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+                font-size: 17px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .mini-cell {
+                width: 28px;
+                height: 28px;
+                font-size: 0.65rem;
+            }
+        }
+    
+        .equation-box { background: rgba(0, 0, 0, 0.3); border-left: 3px solid var(--color-accent); padding: 1.5rem; margin: 1.5rem 0;
+                        border-radius: 0 8px 8px 0; font-family: 'Fira Code', monospace; font-size: 1.1rem; }
+        .equation-box .eq-name { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 0.5rem; }
+        .equation-box .eq-main { color: var(--color-accent); margin-bottom: 0.5rem; }
+        .equation-box .eq-desc { font-family: var(--font-serif); font-size: 0.95rem; color: var(--color-text-secondary); }
+        .limits { border: 1px solid var(--color-border); border-radius: 10px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+        .limits h4 { font-family: var(--font-sans); font-size: 0.95rem; margin-bottom: 0.5rem; color: #f59e0b; }
+        .source { font-family: var(--font-sans); font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="breadcrumb">
+            <a href="../index.html">Chemistry Visual Lab</a> → <a href="../tabla-periodica.html">Tabla Periódica Viva</a> → Guía
+        </nav>
+        <h1>Tabla Periódica Viva</h1>
+        <p class="subtitle">Por qué tiene esta forma y cómo varían sus propiedades</p>
+    </header>
+
+    <main>
+        <p class="intro">
+            La tabla periódica no es una lista para memorizar: es la <strong>estructura electrónica</strong> de los átomos
+            dibujada en dos dimensiones. Cada periodo empieza cuando los electrones estrenan una capa; cada grupo reúne
+            átomos con la misma disposición de electrones externos, y por eso con química parecida. Esta simulación
+            muestra los 118 elementos con datos medidos y permite ver cómo varían sus propiedades.
+        </p>
+
+        <h2>¿Qué Observarás?</h2>
+        <div class="concept-grid">
+            <div class="concept-card"><h4>Familias y bloques</h4><p>El color separa metales, no metales y gases nobles, o los bloques s, p, d y f, cuyo ancho (2, 6, 10, 14 columnas) es la capacidad de cada subcapa.</p></div>
+            <div class="concept-card"><h4>Tendencias</h4><p>Electronegatividad, radio, energía de ionización, afinidad electrónica, densidad y fusión sobre un mapa de color continuo.</p></div>
+            <div class="concept-card"><h4>Estado según la temperatura</h4><p>Mueve la temperatura y observa qué elementos son sólidos, líquidos o gases a 1 atm: del cero absoluto a la superficie del Sol.</p></div>
+            <div class="concept-card"><h4>Historia</h4><p>Reproduce los descubrimientos año a año. En 1869 aparecen los huecos que Mendeléyev dejó para elementos aún desconocidos.</p></div>
+        </div>
+
+        <h2>La Idea Central</h2>
+        <div class="equation-box">
+            <div class="eq-name">Ley periódica (formulación moderna)</div>
+            <div class="eq-main">propiedades = f(Z) periódica</div>
+            <div class="eq-desc">Las propiedades de los elementos son función periódica de su número atómico Z (número de protones), no de su masa.
+                La periodicidad procede de que la configuración electrónica externa se repite al completar cada capa.</div>
+        </div>
+        <p class="key-insight"><strong>Por qué Z y no la masa:</strong> la simulación señala las 8 parejas en las que el orden por masa
+            contradice el orden por Z (Ar > K, Co > Ni, Te > I…). Mendeléyev ya invirtió el teluro y el yodo guiándose por su química;
+            Moseley (1913) demostró que el orden correcto es el de la carga nuclear.</p>
+
+        <h2>Tendencias y Su Causa</h2>
+        <table class="trend-table">
+            <thead><tr><th>Propiedad</th><th>Periodo →</th><th>Grupo ↓</th><th>Causa</th></tr></thead>
+            <tbody>
+                <tr><td class="property-name">Radio atómico</td><td><span class="arrow-down">↓ disminuye</span></td><td><span class="arrow-up">↑ aumenta</span></td><td>En un periodo crece la carga nuclear efectiva sin añadir capas; en un grupo se añaden capas.</td></tr>
+                <tr><td class="property-name">Energía de ionización</td><td><span class="arrow-up">↑ aumenta</span></td><td><span class="arrow-down">↓ disminuye</span></td><td>Electrones más cercanos y menos apantallados cuestan más de arrancar.</td></tr>
+                <tr><td class="property-name">Electronegatividad</td><td><span class="arrow-up">↑ aumenta</span></td><td><span class="arrow-down">↓ disminuye</span></td><td>Misma causa: atracción del núcleo sobre los electrones de enlace. Máximo en el flúor (3,98).</td></tr>
+                <tr><td class="property-name">Afinidad electrónica</td><td><span class="arrow-mixed">↗ irregular</span></td><td><span class="arrow-mixed">↘ irregular</span></td><td>Máxima en los halógenos (completan su capa p); casi nula en gases nobles y en el grupo 2.</td></tr>
+            </tbody>
+        </table>
+
+        <h2>Rigor: Datos y Decisiones</h2>
+        <ul>
+            <li><strong>Fuente única:</strong> tabla periódica de PubChem (NIH), que recoge masas atómicas estándar de la IUPAC, configuraciones y energías de ionización del NIST.</li>
+            <li><strong>Radio:</strong> se usa el radio de van der Waals. Existen otras definiciones (covalente, metálico, calculado) con valores distintos; no se mezclan.</li>
+            <li><strong>Masas entre corchetes:</strong> Tc, Pm y casi todos los elementos desde el polonio no tienen isótopos estables ni composición isotópica característica; se muestra el número másico de su isótopo más estable.</li>
+            <li><strong>Valores predichos:</strong> para muchos elementos superpesados no hay medidas; la ficha lo indica y las celdas sin dato aparecen rayadas.</li>
+            <li><strong>Disposición IUPAC:</strong> el grupo 3 lo forman Sc, Y, <strong>Lu y Lr</strong>, y el bloque f abarca La–Yb y Ac–No. Muchos libros ponen La y Ac en el grupo 3; la IUPAC recomienda esta versión porque respeta mejor la estructura electrónica y los bloques de 14 elementos.</li>
+            <li><strong>Estado a 1 atm:</strong> el helio no solidifica a presión atmosférica, y el arsénico sublima (el punto de fusión tabulado es a 28 atm).</li>
+        </ul>
+
+        <h2>Experimentos Sugeridos</h2>
+        <div class="experiment-block"><h4>1. La forma es la estructura electrónica</h4><ol>
+            <li>Elige el modo <em>Bloque</em>.</li><li>Cuenta columnas de cada color: 2, 6, 10 y 14.</li>
+            <li>Relaciónalo con la capacidad de las subcapas s, p, d y f (2·(2l+1) electrones).</li>
+            <li>Abre el <a href="../aufbau.html">Constructor Aufbau</a> y observa cómo se llenan en ese orden.</li></ol></div>
+        <div class="experiment-block"><h4>2. ¿Qué funde antes?</h4><ol>
+            <li>Modo <em>Estado según T</em>, temperatura 298 K: solo dos elementos son líquidos (Br y Hg).</li>
+            <li>Sube a 303 K: el galio se funde (en la mano). A 302 K el cesio, a 312 K el rubidio.</li>
+            <li>¿En qué zona de la tabla quedan los últimos sólidos al acercarte a 4000 K? ¿Por qué el carbono y el wolframio?</li></ol></div>
+        <div class="experiment-block"><h4>3. Los huecos de Mendeléyev</h4><ol>
+            <li>Modo <em>Descubrimiento</em>, botón «1869».</li><li>Localiza los huecos bajo el aluminio y el silicio.</li>
+            <li>Predice sus propiedades promediando las de sus vecinos y compáralas con el galio y el germanio reales.</li></ol></div>
+        <div class="experiment-block"><h4>4. La diagonal de la electronegatividad</h4><ol>
+            <li>Modo <em>Electronegatividad</em>.</li><li>Compara Li–Mg, Be–Al y B–Si: parejas en diagonal con valores parecidos.</li>
+            <li>Esa semejanza explica las «relaciones diagonales» de su química.</li></ol></div>
+
+        <div class="limits">
+            <h4>Limitaciones del modelo</h4>
+            <p>Las tendencias son generales, no leyes estrictas: hay irregularidades reales (la energía de ionización baja del N al O y del Be al B).
+            En los elementos pesados los efectos relativistas alteran radios y energías (el color del oro, el mercurio líquido). Y la propia
+            frontera entre metales y no metales es difusa: los metaloides la ocupan.</p>
+        </div>
+
+        <h2>Conexiones</h2>
+        <div class="connections-grid">
+            <a href="../aufbau.html" class="connection-item"><span class="connection-icon">🧱</span><span class="connection-text">Constructor Aufbau<br><small>Por qué tiene esta forma</small></span></a>
+            <a href="../tendencias.html" class="connection-item"><span class="connection-icon">📈</span><span class="connection-text">Tendencias<br><small>Propiedades frente a Z</small></span></a>
+            <a href="../orbitales.html" class="connection-item"><span class="connection-icon">☁️</span><span class="connection-text">Orbitales<br><small>Forma de s, p, d, f</small></span></a>
+            <a href="../../../Astronomy/Astronomy Visual Lab/nucleosintesis.html" class="connection-item"><span class="connection-icon">⭐</span><span class="connection-text">Nucleosíntesis<br><small>Dónde nacen los elementos</small></span></a>
+        </div>
+        <p class="source">Datos: PubChem Periodic Table (NIH), IUPAC, NIST. Recomendación IUPAC sobre el grupo 3: Scerri y Parsons (2021).</p>
+    </main>
+
+    <footer>
+        <a href="../tabla-periodica.html" class="btn-launch">⚛️ Abrir Simulación</a>
+    </footer>
+</body>
+</html>

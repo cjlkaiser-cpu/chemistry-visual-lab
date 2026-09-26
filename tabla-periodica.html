@@ -2,53 +2,506 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=tendencias.html">
-    <title>Tabla Periódica - Chemistry Visual Lab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla Periódica Viva - Chemistry Visual Lab</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Los 118 elementos con datos del NIST/IUPAC: familias, bloques, tendencias, estado según la temperatura e historia de los descubrimientos.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="Tabla Periódica Viva · Chemistry Visual Lab">
+    <meta property="og:description" content="Los 118 elementos con datos del NIST/IUPAC: familias, bloques, tendencias, estado según la temperatura e historia de los descubrimientos.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: #0a0a1a;
-            color: #e2e8f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
+        :root {
+            --bg: #0a0a1a;
+            --panel: #111127;
+            --panel-2: #16163a;
+            --border: #262650;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --dim: #64748b;
+            --accent: #22d3ee;
         }
-        .redirect-message {
-            padding: 2rem;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        a { color: var(--accent); }
+        .mono { font-family: 'Fira Code', monospace; }
+
+        header { padding: 18px 24px 10px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+        .crumbs { width: 100%; font-size: .8rem; color: var(--dim); }
+        .crumbs a { color: var(--dim); text-decoration: none; }
+        .crumbs a:hover { color: var(--accent); }
+        h1 { font-size: 1.7rem; font-weight: 600; color: var(--accent); }
+        .subtitle { color: var(--muted); font-size: .92rem; }
+        .guide-link { margin-left: auto; font-size: .85rem; text-decoration: none; border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; }
+        .guide-link:hover { border-color: var(--accent); }
+
+        .toolbar { padding: 6px 24px 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .search { background: var(--panel); border: 1px solid var(--border); color: var(--text); border-radius: 999px; padding: 7px 14px; font: inherit; font-size: .88rem; width: 210px; }
+        .search:focus { outline: none; border-color: var(--accent); }
+        .modes { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+        .modes::-webkit-scrollbar { display: none; }
+        .chip { flex: none; background: var(--panel); border: 1px solid var(--border); color: var(--muted); border-radius: 999px; padding: 6px 12px; font: inherit; font-size: .8rem; cursor: pointer; white-space: nowrap; }
+        .chip:hover { color: var(--text); }
+        .chip[aria-pressed="true"] { background: rgba(34, 211, 238, .12); border-color: var(--accent); color: var(--accent); }
+
+        .layout { display: flex; gap: 20px; padding: 0 24px 24px; align-items: flex-start; }
+        .table-area { flex: 1; min-width: 0; }
+        .table-scroll { overflow-x: auto; padding-bottom: 6px; }
+        .scroll-hint { display: none; font-size: .75rem; color: var(--dim); margin-bottom: 6px; }
+        .ptable { display: grid; grid-template-columns: 22px repeat(18, minmax(38px, 1fr)); grid-template-rows: 18px repeat(7, auto) 12px auto auto; gap: 3px; min-width: 760px; }
+        .glabel, .plabel { font-size: .68rem; color: var(--dim); display: flex; align-items: center; justify-content: center; font-family: 'Fira Code', monospace; }
+        .flabel { font-size: .66rem; color: var(--dim); display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; white-space: nowrap; }
+
+        .cell { position: relative; aspect-ratio: 1 / 1.08; border: 1px solid transparent; border-radius: 5px; background: var(--panel);
+                color: var(--text); font: inherit; line-height: 1; cursor: pointer; padding: 3px 4px; text-align: left; overflow: hidden;
+                transition: transform .12s ease, box-shadow .12s ease, opacity .25s ease; }
+        .cell .z { display: block; font-size: .58rem; opacity: .75; font-family: 'Fira Code', monospace; }
+        .cell .s { display: block; font-size: 1.05rem; font-weight: 600; line-height: 1.1; margin-top: 2px; }
+        .cell .v { position: absolute; left: 4px; right: 3px; bottom: 2px; font-size: .56rem; opacity: .85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Fira Code', monospace; }
+        .cell:hover { transform: scale(1.08); z-index: 2; box-shadow: 0 6px 18px rgba(0,0,0,.5); }
+        .cell:focus-visible { outline: 2px solid #fff; outline-offset: 1px; z-index: 3; }
+        .cell.selected { outline: 2px solid #fff; outline-offset: 1px; z-index: 3; }
+        .cell.related { box-shadow: inset 0 0 0 1px rgba(255,255,255,.35); }
+        .cell.dim { opacity: .18; }
+        .cell.ghost { background: transparent !important; border: 1px dashed var(--border); color: var(--dim); }
+        .cell.ghost .s { opacity: .35; }
+        .cell.nodata { background-image: repeating-linear-gradient(135deg, rgba(255,255,255,.06) 0 4px, transparent 4px 8px) !important; }
+        .cell.match { box-shadow: 0 0 0 2px var(--accent); }
+
+        .legend { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: .78rem; color: var(--muted); min-height: 30px; }
+        .legend .item { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; background: none; border: 0; color: inherit; font: inherit; }
+        .legend .sw { width: 13px; height: 13px; border-radius: 3px; }
+        .legend .item[aria-pressed="true"] { color: var(--text); text-decoration: underline; }
+        .cbar { display: flex; align-items: center; gap: 8px; }
+        .cbar .bar { width: 240px; height: 10px; border-radius: 5px; }
+        .control { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: .85rem; color: var(--muted); flex-wrap: wrap; }
+        .control input[type=range] { width: min(420px, 60vw); accent-color: var(--accent); }
+        .control .big { font-size: 1.1rem; color: var(--text); font-family: 'Fira Code', monospace; min-width: 150px; }
+        .btn { background: var(--panel); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 6px 12px; font: inherit; font-size: .82rem; cursor: pointer; }
+        .btn:hover { border-color: var(--accent); }
+
+        aside.card { width: 360px; flex: none; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px; position: sticky; top: 14px; }
+        .intro h2 { font-size: 1.05rem; margin-bottom: 8px; }
+        .intro p, .intro li { color: var(--muted); font-size: .88rem; line-height: 1.55; }
+        .intro ul { padding-left: 18px; margin: 8px 0; }
+        .el-head { display: flex; gap: 14px; align-items: stretch; }
+        .el-tile { width: 96px; height: 104px; border-radius: 10px; padding: 8px; display: flex; flex-direction: column; justify-content: space-between; flex: none; }
+        .el-tile .z { font-family: 'Fira Code', monospace; font-size: .8rem; }
+        .el-tile .s { font-size: 2.4rem; font-weight: 700; line-height: 1; }
+        .el-tile .m { font-family: 'Fira Code', monospace; font-size: .72rem; opacity: .85; }
+        .el-name { font-size: 1.35rem; font-weight: 600; }
+        .el-en { color: var(--dim); font-size: .8rem; }
+        .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+        .tag { font-size: .7rem; padding: 2px 8px; border-radius: 999px; background: var(--panel-2); color: var(--muted); border: 1px solid var(--border); }
+        .config { margin: 14px 0 4px; font-family: 'Fira Code', monospace; font-size: 1.05rem; }
+        .note { font-size: .78rem; color: var(--muted); background: var(--panel-2); border-left: 3px solid var(--accent); padding: 7px 10px; border-radius: 0 6px 6px 0; margin-top: 8px; line-height: 1.45; }
+        .note.warn { border-left-color: #f59e0b; }
+        .props { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: .84rem; }
+        .props td { padding: 6px 0; border-bottom: 1px solid var(--border); vertical-align: top; }
+        .props td:first-child { color: var(--muted); padding-right: 10px; }
+        .props td:last-child { text-align: right; font-family: 'Fira Code', monospace; }
+        .pred { font-size: .65rem; color: #f59e0b; font-family: 'Inter', sans-serif; margin-left: 4px; }
+        .actions { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+        .actions a { text-decoration: none; text-align: center; padding: 9px; border-radius: 9px; font-size: .85rem; border: 1px solid var(--border); color: var(--text); }
+        .actions a.primary { background: rgba(34, 211, 238, .14); border-color: var(--accent); color: var(--accent); }
+        .actions a:hover { border-color: var(--accent); }
+        .source { margin-top: 14px; font-size: .7rem; color: var(--dim); line-height: 1.5; }
+
+        @media (max-width: 1100px) {
+            .layout { flex-direction: column; align-items: stretch; }   /* sin stretch, la tabla tomaría su ancho mínimo y desbordaría la página */
+            aside.card { width: 100%; position: static; }
         }
-        .redirect-message h1 {
-            font-size: 1.5rem;
-            color: #06b6d4;
-            margin-bottom: 1rem;
+        @media (max-width: 640px) {
+            header, .toolbar, .layout { padding-left: 14px; padding-right: 14px; }
+            h1 { font-size: 1.35rem; }
+            .guide-link { margin-left: 0; }
+            .search { width: 100%; }
+            .ptable { min-width: 640px; grid-template-columns: 18px repeat(18, minmax(32px, 1fr)); }
+            .cell .s { font-size: .9rem; }
+            .cell .v { display: none; }
+            .cell .s { font-size: .95rem; margin-top: 3px; }
+            .scroll-hint { display: block; }
         }
-        .redirect-message p {
-            color: #94a3b8;
-            margin-bottom: 1rem;
-        }
-        .redirect-message a {
-            color: #06b6d4;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .redirect-message a:hover {
-            text-decoration: underline;
-        }
+        @media (prefers-reduced-motion: reduce) { .cell { transition: none; } }
     </style>
 </head>
 <body>
-    <div class="redirect-message">
-        <h1>Redirigiendo a Tabla Periódica...</h1>
-        <p>Si no eres redirigido automáticamente, haz clic <a href="tendencias.html">aquí</a>.</p>
+    <header>
+        <div class="crumbs"><a href="../../_portal/index.html">EigenLab</a> / <a href="index.html">Chemistry Visual Lab</a> / Tabla Periódica</div>
+        <h1>Tabla Periódica Viva</h1>
+        <p class="subtitle">Los 118 elementos: su forma sale de la mecánica cuántica y sus propiedades varían con ella.</p>
+        <a class="guide-link" href="guides/tabla-periodica.html">📖 Guía teórica</a>
+    </header>
+
+    <div class="toolbar">
+        <input class="search" id="search" type="search" placeholder="Buscar: Fe, hierro, 26…" aria-label="Buscar elemento" autocomplete="off">
+        <div class="modes" id="modes" role="toolbar" aria-label="Qué representa el color"></div>
     </div>
+
+    <div class="layout">
+        <div class="table-area">
+            <p class="scroll-hint">Desliza la tabla en horizontal · toca un elemento para ver su ficha</p>
+            <div class="table-scroll"><div class="ptable" id="ptable" aria-label="Tabla periódica"></div></div>
+            <div class="legend" id="legend"></div>
+            <div id="extra"></div>
+        </div>
+        <aside class="card" id="card" aria-live="polite"></aside>
+    </div>
+
+    <script src="data/elements.js"></script>
     <script>
-        // Fallback redirect
-        setTimeout(() => {
-            window.location.href = 'tendencias.html';
-        }, 100);
+    (() => {
+        const DATA = window.EIGENLAB_ELEMENTS;
+        const ELS = DATA.elementos;
+        const BY_Z = Object.fromEntries(ELS.map(e => [e.z, e]));
+        const $ = id => document.getElementById(id);
+
+        // ------------------------------------------------------------ vocabulario
+        const CAT = {
+            'alcalino': ['Metales alcalinos', '#ef4444'], 'alcalinoterreo': ['Alcalinotérreos', '#f97316'],
+            'transicion': ['Metales de transición', '#eab308'], 'post-transicion': ['Otros metales', '#84cc16'],
+            'metaloide': ['Metaloides', '#14b8a6'], 'no-metal': ['No metales', '#22d3ee'],
+            'halogeno': ['Halógenos', '#3b82f6'], 'gas-noble': ['Gases nobles', '#a855f7'],
+            'lantanido': ['Lantánidos', '#ec4899'], 'actinido': ['Actínidos', '#d946ef'], 'desconocida': ['Sin clasificar', '#64748b'],
+        };
+        const BLOCK = { s: ['Bloque s', '#ef4444'], p: ['Bloque p', '#eab308'], d: ['Bloque d', '#3b82f6'], f: ['Bloque f', '#22c55e'] };
+        const PHASE = { solido: ['Sólido', '#94a3b8'], liquido: ['Líquido', '#3b82f6'], gas: ['Gas', '#fbbf24'], null: ['Sin datos', '#334155'] };
+        const NUMERIC = {
+            en:        { label: 'Electronegatividad', unit: 'Pauling', fmt: v => v.toFixed(2) },
+            radio:     { label: 'Radio atómico', unit: 'pm (van der Waals)', fmt: v => v.toFixed(0) },
+            ei:        { label: 'Energía de ionización', unit: 'eV (1.ª)', fmt: v => v.toFixed(2) },
+            ae:        { label: 'Afinidad electrónica', unit: 'eV', fmt: v => v.toFixed(2) },
+            densidad:  { label: 'Densidad', unit: 'g/cm³ (escala log)', fmt: v => v < 0.01 ? v.toExponential(1) : v.toFixed(2), log: true },
+            fusion:    { label: 'Punto de fusión', unit: 'K', fmt: v => v.toFixed(0) },
+        };
+        const MODES = [
+            ['categoria', 'Familia'], ['bloque', 'Bloque'], ['estado', 'Estado según T'],
+            ['en', 'Electronegatividad'], ['radio', 'Radio'], ['ei', 'Ionización'], ['ae', 'Afinidad e⁻'],
+            ['densidad', 'Densidad'], ['fusion', 'Fusión'], ['anio', 'Descubrimiento'],
+        ];
+        const SUP = { 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' };
+        const sup = n => String(n).split('').map(d => SUP[d]).join('');
+        const prettyConfig = c => c.replace(/(\d[spdf])(\d+)/g, (_, s, n) => s + sup(n)).replace(/\]\s*/, '] ');
+        // Sin peso atómico estándar (IUPAC): no tienen isótopos estables ni composición isotópica característica
+        const noStandardWeight = z => z === 43 || z === 61 || (z >= 84 && ![90, 91, 92].includes(z));
+        const massText = e => e.masa == null ? '—' : noStandardWeight(e.z) ? `[${Math.round(e.masa)}]` : e.masa.toFixed(e.masa < 10 ? 4 : 3);
+        const INVERSIONS = {};
+        ELS.forEach((e, i) => { const n = ELS[i + 1]; if (n && e.masa && n.masa && e.masa > n.masa) { INVERSIONS[e.z] = n; INVERSIONS[n.z] = e; } });
+        const EXCEPTIONS = new Set(DATA.excepciones_madelung);
+
+        // ------------------------------------------------------------ color
+        const STOPS = [[30, 27, 75], [79, 70, 229], [34, 211, 238], [167, 243, 208], [254, 240, 138]];
+        function ramp(t) {
+            t = Math.min(1, Math.max(0, t)) * (STOPS.length - 1);
+            const i = Math.min(Math.floor(t), STOPS.length - 2), f = t - i;
+            const c = STOPS[i].map((a, k) => Math.round(a + (STOPS[i + 1][k] - a) * f));
+            return `rgb(${c.join(',')})`;
+        }
+        function textOn(rgb) {
+            const [r, g, b] = rgb.match(/\d+/g).map(Number);
+            return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? '#0a0a1a' : '#f8fafc';
+        }
+        function tint(hex, a) {
+            const n = parseInt(hex.slice(1), 16);
+            return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
+        }
+
+        // ------------------------------------------------------------ estado
+        const state = { mode: 'categoria', T: 298, year: 2025, selected: null, focus: null, highlight: null };
+        try { const saved = localStorage.getItem('eigenlab-tabla-mode'); if (saved && MODES.some(m => m[0] === saved)) state.mode = saved; } catch (e) { }
+
+        function phaseAt(e, T) {
+            if (e.sublima && e.ebullicion) return T < e.ebullicion ? 'solido' : 'gas';
+            if (e.fusion == null && e.ebullicion == null) return null;
+            if (e.fusion == null) return T < e.ebullicion ? 'liquido' : 'gas';   // He: no solidifica a 1 atm
+            if (T < e.fusion) return 'solido';
+            if (e.ebullicion == null || T < e.ebullicion) return 'liquido';
+            return 'gas';
+        }
+
+        // ------------------------------------------------------------ construcción de la tabla
+        const table = $('ptable');
+        for (let g = 1; g <= 18; g++) {
+            const l = document.createElement('div');
+            l.className = 'glabel'; l.textContent = g; l.style.gridColumn = g + 1; l.style.gridRow = 1;
+            l.title = `Grupo ${g}`;
+            table.appendChild(l);
+        }
+        for (let p = 1; p <= 7; p++) {
+            const l = document.createElement('div');
+            l.className = 'plabel'; l.textContent = p; l.style.gridColumn = 1; l.style.gridRow = p + 1;
+            l.title = `Periodo ${p}`;
+            table.appendChild(l);
+        }
+        [['Lantánidos', 10], ['Actínidos', 11]].forEach(([t, row]) => {
+            const l = document.createElement('div');
+            l.className = 'flabel'; l.textContent = t; l.style.gridColumn = '1 / 4'; l.style.gridRow = row;
+            table.appendChild(l);
+        });
+        const cells = {};
+        ELS.forEach(e => {
+            const b = document.createElement('button');
+            b.className = 'cell';
+            b.style.gridColumn = e.col + 1;
+            b.style.gridRow = e.fila + 1;   // fila de rejilla 1 = números de grupo; la fila 9 queda como separador del bloque f
+            b.dataset.z = e.z;
+            b.setAttribute('aria-label', `${e.nombre}, número atómico ${e.z}`);
+            b.innerHTML = `<span class="z">${e.z}</span><span class="s">${e.sym}</span><span class="v"></span>`;
+            b.addEventListener('click', () => select(e.z, true));
+            b.addEventListener('pointerenter', ev => { if (ev.pointerType === 'mouse' && !state.selected) showCard(e.z); });
+            b.addEventListener('focus', () => { state.focus = e.z; });
+            table.appendChild(b);
+            cells[e.z] = b;
+        });
+        table.addEventListener('pointerleave', () => { if (!state.selected) showIntro(); });
+
+        // ------------------------------------------------------------ pintar
+        function numericDomain(key) {
+            const vals = ELS.map(e => e[key]).filter(v => v != null && (!NUMERIC[key].log || v > 0));
+            const f = NUMERIC[key].log ? Math.log10 : x => x;
+            return [Math.min(...vals.map(f)), Math.max(...vals.map(f))];
+        }
+        function paint() {
+            const m = state.mode;
+            const dom = NUMERIC[m] ? numericDomain(m) : null;
+            ELS.forEach(e => {
+                const c = cells[e.z];
+                const v = c.querySelector('.v');
+                c.classList.remove('ghost', 'nodata');
+                c.style.background = ''; c.style.color = ''; c.style.borderColor = 'transparent';
+                let col = null, label = '';
+                if (m === 'categoria') col = CAT[e.categoria][1];
+                else if (m === 'bloque') col = BLOCK[e.bloque][1];
+                else if (m === 'estado') {
+                    const ph = phaseAt(e, state.T);
+                    col = PHASE[ph][1];
+                    label = ph ? PHASE[ph][0] : '';
+                    if (!ph) c.classList.add('nodata');
+                } else if (m === 'anio') {
+                    const y = e.antiguedad ? -1 : e.anio;
+                    if (y != null && y > state.year) c.classList.add('ghost');
+                    const t = e.antiguedad ? 0 : (e.anio - 1650) / (2020 - 1650);
+                    const rgb = ramp(t);
+                    c.style.background = rgb; c.style.color = textOn(rgb);
+                    label = e.antiguedad ? 'antig.' : e.anio ?? '';
+                } else if (NUMERIC[m]) {
+                    const val = e[m];
+                    if (val == null || (NUMERIC[m].log && val <= 0)) {
+                        c.classList.add('nodata');
+                    } else {
+                        const f = NUMERIC[m].log ? Math.log10(val) : val;
+                        const rgb = ramp((f - dom[0]) / (dom[1] - dom[0]));
+                        c.style.background = rgb; c.style.color = textOn(rgb);
+                        label = NUMERIC[m].fmt(val);
+                    }
+                }
+                if (col) {
+                    c.style.background = tint(col, m === 'estado' ? 0.55 : 0.26);
+                    c.style.borderColor = tint(col, 0.75);
+                }
+                if (m === 'categoria' || m === 'bloque') label = massText(e);
+                v.textContent = label;
+                const hl = state.highlight;
+                c.classList.toggle('dim', !!hl && !(m === 'categoria' ? e.categoria === hl : m === 'bloque' ? e.bloque === hl : true));
+            });
+            paintLegend();
+            markRelated();
+        }
+
+        function paintLegend() {
+            const L = $('legend'), X = $('extra'), m = state.mode;
+            X.innerHTML = '';
+            if (m === 'categoria' || m === 'bloque') {
+                const src = m === 'categoria' ? CAT : BLOCK;
+                const used = new Set(ELS.map(e => m === 'categoria' ? e.categoria : e.bloque));
+                L.innerHTML = Object.entries(src).filter(([k]) => used.has(k)).map(([k, [name, col]]) =>
+                    `<button class="item" data-k="${k}" aria-pressed="${state.highlight === k}"><span class="sw" style="background:${tint(col, .5)};border:1px solid ${col}"></span>${name}</button>`).join('');
+                L.querySelectorAll('.item').forEach(b => b.addEventListener('click', () => {
+                    state.highlight = state.highlight === b.dataset.k ? null : b.dataset.k; paint();
+                }));
+                if (m === 'bloque') X.innerHTML = `<p class="note">La anchura de cada bloque es la capacidad de su subcapa: <b>s</b> = 2, <b>p</b> = 6, <b>d</b> = 10, <b>f</b> = 14 electrones. La forma de la tabla es la estructura electrónica. <a href="aufbau.html">Constrúyela electrón a electrón →</a></p>`;
+            } else if (m === 'estado') {
+                L.innerHTML = Object.values(PHASE).map(([n, c]) => `<span class="item"><span class="sw" style="background:${tint(c, .55)}"></span>${n}</span>`).join('');
+                X.innerHTML = `<div class="control"><label for="temp">Temperatura</label>
+                    <input id="temp" type="range" min="0" max="6000" step="1" value="${state.T}">
+                    <span class="big" id="tempv"></span>
+                    <button class="btn" data-t="0">0 K</button><button class="btn" data-t="298">25 °C</button><button class="btn" data-t="1811">Fe funde</button><button class="btn" data-t="5778">Sol</button></div>
+                    <p class="note">Estado a 1 atm. Algunos datos son de fusión/ebullición medidas; los de elementos superpesados no existen o son predicciones.</p>`;
+                const upd = () => { $('tempv').textContent = `${state.T} K · ${(state.T - 273.15).toFixed(0)} °C`; };
+                upd();
+                $('temp').addEventListener('input', ev => { state.T = +ev.target.value; upd(); paint(); });
+                X.querySelectorAll('[data-t]').forEach(b => b.addEventListener('click', () => { state.T = +b.dataset.t; paintLegend(); paint(); }));
+            } else if (m === 'anio') {
+                L.innerHTML = `<span class="cbar">Antigüedad <span class="bar" style="background:linear-gradient(90deg,${[0, .25, .5, .75, 1].map(ramp).join(',')})"></span> 2020</span>`;
+                X.innerHTML = `<div class="control"><label for="year">Año</label>
+                    <input id="year" type="range" min="1660" max="2025" step="1" value="${state.year}">
+                    <span class="big" id="yearv"></span><button class="btn" id="play">▶ Historia</button><button class="btn" data-y="1869">1869 · Mendeléyev</button></div>
+                    <p class="note" id="yearnote"></p>`;
+                const upd = () => {
+                    const n = ELS.filter(e => e.antiguedad || (e.anio && e.anio <= state.year)).length;
+                    $('yearv').textContent = `${state.year} · ${n} elementos`;
+                    $('yearnote').innerHTML = state.year >= 1869 && state.year < 1875
+                        ? 'En 1869 Mendeléyev ordenó 63 elementos y dejó <b>huecos</b> para los que faltaban, prediciendo sus propiedades: galio (1875), escandio (1879) y germanio (1886) los confirmaron.'
+                        : 'Los recuadros discontinuos son elementos aún no descubiertos en ese año. Los marcados «antig.» se conocían desde la Antigüedad.';
+                };
+                upd();
+                $('year').addEventListener('input', ev => { state.year = +ev.target.value; upd(); paint(); });
+                X.querySelector('[data-y]').addEventListener('click', () => { state.year = 1869; $('year').value = 1869; upd(); paint(); });
+                let timer = null;
+                $('play').addEventListener('click', ev => {
+                    if (timer) { clearInterval(timer); timer = null; ev.target.textContent = '▶ Historia'; return; }
+                    if (state.year >= 2025) state.year = 1660;
+                    ev.target.textContent = '❚❚ Pausa';
+                    timer = setInterval(() => {
+                        state.year = Math.min(2025, state.year + 2); $('year').value = state.year; upd(); paint();
+                        if (state.year >= 2025) { clearInterval(timer); timer = null; ev.target.textContent = '▶ Historia'; }
+                    }, 60);
+                });
+            } else if (NUMERIC[m]) {
+                const d = numericDomain(m), inv = NUMERIC[m].log ? v => 10 ** v : v => v;
+                L.innerHTML = `<span class="cbar">${NUMERIC[m].fmt(inv(d[0]))} <span class="bar" style="background:linear-gradient(90deg,${[0, .25, .5, .75, 1].map(ramp).join(',')})"></span> ${NUMERIC[m].fmt(inv(d[1]))} ${NUMERIC[m].unit}</span>
+                    <span class="item"><span class="sw nodata" style="background:var(--panel);background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.15) 0 3px,transparent 3px 6px)"></span>sin dato</span>`;
+                const trend = {
+                    en: 'Aumenta hacia arriba y a la derecha: más carga nuclear efectiva y menos capas atraen más a los electrones de enlace. Máximo: flúor.',
+                    radio: 'Disminuye a lo largo de un periodo (más carga nuclear efectiva) y aumenta al bajar en un grupo (capas nuevas).',
+                    ei: 'Arrancar un electrón cuesta más arriba a la derecha; los gases nobles, con capas completas, son los máximos de cada periodo.',
+                    ae: 'Los halógenos liberan más energía al captar un electrón: completan su capa p.',
+                    densidad: 'Escala logarítmica: de los gases (~10⁻⁴ g/cm³) al osmio e iridio (~22,6 g/cm³).',
+                    fusion: 'Máximos en el centro del bloque d (enlace metálico con muchos electrones d) y en el carbono.',
+                }[m];
+                X.innerHTML = `<p class="note">${trend} <a href="tendencias.html">Explorar tendencias →</a></p>`;
+            }
+        }
+
+        // ------------------------------------------------------------ ficha
+        function showIntro() {
+            $('card').innerHTML = `<div class="intro">
+                <h2>¿Por qué tiene esta forma?</h2>
+                <p>Cada fila (<b>periodo</b>) empieza cuando los electrones ocupan una capa nueva; cada columna (<b>grupo</b>) reúne elementos con la misma disposición de electrones externos, y por eso con química parecida.</p>
+                <ul><li>Pulsa un elemento para ver su ficha.</li><li>Cambia lo que representa el color con los botones de arriba.</li><li>Flechas del teclado para moverte por la tabla.</li></ul>
+                <p>Disposición recomendada por la IUPAC: Lu y Lr en el grupo 3.</p>
+                <p class="source">${DATA.fuente}<br>Valores predichos o sin medir: marcados como tales.</p></div>`;
+        }
+        function row(k, v, pred) { return `<tr><td>${k}</td><td>${v}${pred ? '<span class="pred">predicho</span>' : ''}</td></tr>`; }
+        function showCard(z) {
+            const e = BY_Z[z], U = DATA.unidades, cat = CAT[e.categoria];
+            const K = v => v == null ? '—' : `${v.toFixed(v < 100 ? 2 : 0)} K <span style="color:var(--dim)">(${(v - 273.15).toFixed(0)} °C)</span>`;
+            const f = (v, d, u) => v == null ? '—' : `${v.toFixed(d)} ${u}`;
+            const phase = phaseAt(e, 298.15);
+            let notes = '';
+            if (EXCEPTIONS.has(e.sym)) notes += `<p class="note warn">Excepción a la regla de Madelung: su configuración real no es la que predice el llenado por n + l. <a href="aufbau.html?z=${e.z}">Ver por qué →</a></p>`;
+            if (INVERSIONS[e.z]) { const o = INVERSIONS[e.z]; notes += `<p class="note">${e.masa > o.masa ? `Pesa más que ${o.sym}, que va después` : `Pesa menos que ${o.sym}, que va antes`}: la tabla se ordena por número atómico (protones), no por masa.</p>`; }
+            if (e.sublima) notes += `<p class="note">A 1 atm <b>sublima</b> (pasa de sólido a gas) a ${e.ebullicion} K; solo funde bajo presión (${e.fusion} K a 28 atm).</p>`;
+            if (e.z === 79 || e.z === 80) notes += `<p class="note">Sus electrones internos se mueven a fracciones apreciables de la velocidad de la luz: los <b>efectos relativistas</b> explican ${e.z === 79 ? 'el color dorado del oro' : 'que el mercurio sea líquido a temperatura ambiente'}.</p>`;
+            if (e.grupo === 3 && e.periodo >= 6) notes += `<p class="note">Según la recomendación IUPAC, ${e.nombre.toLowerCase()} ocupa el grupo 3; muchos libros ponen ahí ${e.z === 71 ? 'el lantano' : 'el actinio'}.</p>`;
+            $('card').innerHTML = `
+                <div class="el-head">
+                    <div class="el-tile" style="background:${tint(cat[1], .3)};border:1px solid ${cat[1]}">
+                        <span class="z">${e.z}</span><span class="s">${e.sym}</span><span class="m">${massText(e)}</span>
+                    </div>
+                    <div><div class="el-name">${e.nombre}</div><div class="el-en">${e.name_en}</div>
+                        <div class="tags"><span class="tag" style="border-color:${cat[1]};color:${cat[1]}">${cat[0]}</span>
+                        <span class="tag">bloque ${e.bloque}</span>${e.grupo ? `<span class="tag">grupo ${e.grupo}</span>` : ''}<span class="tag">periodo ${e.periodo}</span></div>
+                    </div>
+                </div>
+                <div class="config" title="Configuración electrónica del estado fundamental">${prettyConfig(e.config)}${e.config_predicha ? '<span class="pred">predicha</span>' : ''}</div>
+                ${notes}
+                <table class="props">
+                    ${row('Masa atómica', massText(e) + ' u' + (noStandardWeight(e.z) ? ' <span style="color:var(--dim)">(isótopo más estable)</span>' : ''))}
+                    ${row('Estado a 25 °C', phase ? PHASE[phase][0] : '—', e.estado_predicho)}
+                    ${row('Electronegatividad', f(e.en, 2, ''))}
+                    ${row('1.ª energía de ionización', f(e.ei, 3, 'eV'))}
+                    ${row('Afinidad electrónica', f(e.ae, 3, 'eV'))}
+                    ${row('Radio (van der Waals)', f(e.radio, 0, 'pm'))}
+                    ${row('Fusión', K(e.fusion))}
+                    ${row('Ebullición', K(e.ebullicion))}
+                    ${row('Densidad', e.densidad == null ? '—' : `${e.densidad < 0.01 ? e.densidad.toExponential(3) : e.densidad} g/cm³`)}
+                    ${row('Estados de oxidación', e.oxidacion || '—')}
+                    ${row('Descubrimiento', e.antiguedad ? 'Antigüedad' : e.anio ?? '—')}
+                </table>
+                <div class="actions">
+                    <a class="primary" href="aufbau.html?z=${e.z}">Construir su configuración electrón a electrón →</a>
+                    <a href="tendencias.html">Tendencias periódicas</a>
+                    <a href="orbitales.html">Orbitales atómicos</a>
+                </div>
+                <p class="source">${DATA.fuente}</p>`;
+        }
+
+        // ------------------------------------------------------------ selección y teclado
+        function markRelated() {
+            const s = state.selected ? BY_Z[state.selected] : null;
+            ELS.forEach(e => {
+                cells[e.z].classList.toggle('selected', !!s && e.z === s.z);
+                cells[e.z].classList.toggle('related', !!s && e.z !== s.z && ((e.grupo && e.grupo === s.grupo) || e.periodo === s.periodo && e.fila === s.fila));
+            });
+        }
+        function select(z, fromClick) {
+            state.selected = state.selected === z && fromClick ? null : z;
+            if (state.selected) {
+                showCard(state.selected);
+                history.replaceState(null, '', '#' + BY_Z[state.selected].sym);
+                if (fromClick && window.innerWidth <= 1100) $('card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                showIntro(); history.replaceState(null, '', location.pathname + location.search);
+            }
+            markRelated();
+        }
+        document.addEventListener('keydown', ev => {
+            if (ev.target.tagName === 'INPUT') return;
+            const cur = BY_Z[state.focus || state.selected || 1];
+            const moves = { ArrowLeft: [0, -1], ArrowRight: [0, 1], ArrowUp: [-1, 0], ArrowDown: [1, 0] };
+            if (!moves[ev.key]) return;
+            ev.preventDefault();
+            const [dr, dc] = moves[ev.key];
+            let r = cur.fila, c = cur.col, next = null;
+            for (let i = 0; i < 18 && !next; i++) {
+                r += dr; c += dc;
+                if (r === 8) r += dr;
+                if (r < 1 || r > 10 || c < 1 || c > 18) break;
+                next = ELS.find(e => e.fila === r && e.col === c);
+            }
+            if (next) { cells[next.z].focus(); select(next.z, false); }
+        });
+
+        // ------------------------------------------------------------ búsqueda
+        const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        $('search').addEventListener('input', ev => {
+            const q = norm(ev.target.value.trim());
+            ELS.forEach(e => cells[e.z].classList.toggle('match', !!q && (norm(e.nombre).startsWith(q) || e.sym.toLowerCase() === q || String(e.z) === q || norm(e.name_en).startsWith(q))));
+        });
+        $('search').addEventListener('keydown', ev => {
+            if (ev.key !== 'Enter') return;
+            ev.preventDefault();   // si no, el mismo Enter «pulsaría» la celda que recibe el foco y la deseleccionaría
+            const m = document.querySelector('.cell.match');
+            if (m) { select(+m.dataset.z, false); m.focus(); }
+        });
+
+        // ------------------------------------------------------------ modos
+        $('modes').innerHTML = MODES.map(([k, n]) => `<button class="chip" data-mode="${k}" aria-pressed="${k === state.mode}">${n}</button>`).join('');
+        $('modes').addEventListener('click', ev => {
+            const b = ev.target.closest('.chip'); if (!b) return;
+            state.mode = b.dataset.mode; state.highlight = null;
+            try { localStorage.setItem('eigenlab-tabla-mode', state.mode); } catch (e) { }
+            document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b));
+            paint();
+        });
+
+        // ------------------------------------------------------------ arranque
+        paint();
+        const hash = decodeURIComponent(location.hash.slice(1));
+        const start = ELS.find(e => e.sym.toLowerCase() === hash.toLowerCase() || String(e.z) === hash);
+        if (start) select(start.z, false); else showIntro();
+    })();
     </script>
 </body>
 </html>

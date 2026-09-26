@@ -2,9 +2,9 @@
 
 ## Descripción
 
-El **Chemistry Visual Lab** contiene **17 simulaciones** interactivas que cubren todo el espectro de química general: desde estructura atómica hasta química nuclear. Cada simulación implementa modelos científicos rigurosos con visualización en Canvas 2D y Three.js para moléculas 3D.
+El **Chemistry Visual Lab** contiene **20 simulaciones** interactivas que cubren todo el espectro de química general: desde estructura atómica hasta química nuclear. Cada simulación implementa modelos científicos rigurosos con visualización en Canvas 2D y Three.js para moléculas 3D.
 
-## Simulaciones (17 Total)
+## Simulaciones (20 Total)
 
 ### Estructura Atómica (2)
 1. **Modelo de Bohr** - Saltos electrónicos, espectros de emisión
@@ -44,8 +44,20 @@ El **Chemistry Visual Lab** contiene **17 simulaciones** interactivas que cubren
 ### Química Nuclear (1)
 16. **Decaimiento** - N(t) = N₀e^(-λt)
 
-### Tabla Periódica (1)
-17. **Tendencias** - Radio atómico, energía de ionización
+### Tabla Periódica (3)
+17. **Tendencias** - Radio atómico, energía de ionización (36 elementos)
+18. **Tabla Periódica Viva** (`tabla-periodica.html`) - Los 118 elementos: familias, bloques, 6 propiedades, estado según T, historia de descubrimientos, ficha por elemento
+19. **Constructor de Configuraciones** (`aufbau.html`) - Madelung/Pauli/Hund electrón a electrón; la tabla se ilumina por bloques; 19 excepciones explicadas. Acepta `?z=`
+
+### Dinámica Molecular (WASM)
+20. **Dinámica Molecular** - Lennard-Jones con el motor WASM de EigenLab
+
+## Datos de los elementos (`data/`)
+
+- `data/elements.js` (`window.EIGENLAB_ELEMENTS`) lo genera `python3 data/build_elements.py` desde la tabla de PubChem (NIH, dominio público): masas IUPAC, configuraciones y energías de ionización del NIST, etc. **No editar a mano.**
+- El script valida: 118 elementos, electrones = Z, capacidad de subcapas, rangos físicos, celdas únicas, disposición IUPAC (grupo 3 = Sc, Y, Lu, Lr). Falla si algo no cuadra.
+- Configuraciones en notación del NIST (subcapas ordenadas por n y l); `ocupacion` en orden de llenado.
+- Casos especiales documentados: As sublima a 1 atm; He no solidifica a 1 atm; masas entre corchetes para elementos sin peso atómico estándar.
 
 ## Modelos Científicos
 
@@ -108,4 +120,4 @@ E = E° - (RT/nF)ln(Q)
 
 ---
 
-**Última actualización:** 2026-01-10
+**Última actualización:** 2026-09-26

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constructor de Configuraciones · Aufbau - Chemistry Visual Lab</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Añade electrones uno a uno: Madelung, Pauli y Hund dibujan la tabla. Con las 19 excepciones y por qué ocurren.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="Constructor de Configuraciones · Chemistry Visual Lab">
+    <meta property="og:description" content="Añade electrones uno a uno: Madelung, Pauli y Hund dibujan la tabla. Con las 19 excepciones y por qué ocurren.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a1a; --panel: #111127; --panel-2: #16163a; --border: #262650;
+            --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b; --accent: #22d3ee;
+            --up: #22d3ee; --down: #f472b6;
+            --s: #ef4444; --p: #eab308; --d: #3b82f6; --f: #22c55e;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        a { color: var(--accent); }
+        header { padding: 18px 24px 8px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+        .crumbs { width: 100%; font-size: .8rem; color: var(--dim); }
+        .crumbs a { color: var(--dim); text-decoration: none; }
+        .crumbs a:hover { color: var(--accent); }
+        h1 { font-size: 1.6rem; font-weight: 600; color: var(--accent); }
+        .subtitle { color: var(--muted); font-size: .9rem; }
+        .guide-link { margin-left: auto; font-size: .85rem; text-decoration: none; border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; }
+
+        .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 8px 24px 14px; }
+        .btn { background: var(--panel); border: 1px solid var(--border); color: var(--text); border-radius: 9px; padding: 8px 14px; font: inherit; font-size: .9rem; cursor: pointer; min-width: 44px; }
+        .btn:hover { border-color: var(--accent); }
+        .btn.primary { background: rgba(34,211,238,.14); border-color: var(--accent); color: var(--accent); }
+        .zslider { flex: 1; min-width: 180px; accent-color: var(--accent); }
+        .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+        .seg button { background: var(--panel); border: 0; color: var(--muted); padding: 8px 12px; font: inherit; font-size: .82rem; cursor: pointer; }
+        .seg button[aria-pressed="true"] { background: rgba(34,211,238,.14); color: var(--accent); }
+
+        .layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 20px; padding: 0 24px 28px; }
+        .panel { min-width: 0; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+        .panel h2 { font-size: .8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+
+        /* elemento actual */
+        .el { display: flex; gap: 14px; align-items: center; }
+        .tile { width: 84px; height: 90px; border-radius: 10px; padding: 7px; display: flex; flex-direction: column; justify-content: space-between; flex: none; border: 1px solid var(--border); background: var(--panel-2); }
+        .tile .z { font-family: 'Fira Code', monospace; font-size: .78rem; color: var(--muted); }
+        .tile .s { font-size: 2.1rem; font-weight: 700; line-height: 1; }
+        .el-name { font-size: 1.3rem; font-weight: 600; }
+        .cfg { font-family: 'Fira Code', monospace; font-size: 1.02rem; margin-top: 6px; }
+        .cfg-label { font-size: .7rem; color: var(--dim); text-transform: uppercase; letter-spacing: .05em; margin-top: 8px; }
+        .stats { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; font-size: .8rem; color: var(--muted); }
+        .stats b { color: var(--text); font-family: 'Fira Code', monospace; }
+
+        /* diagrama de energía */
+        .diagram-wrap { overflow-x: auto; }
+        .diagram { position: relative; min-width: 470px; }
+        .sub { position: absolute; display: flex; align-items: center; gap: 4px; }
+        .sub .lab { width: 26px; text-align: right; font-family: 'Fira Code', monospace; font-size: .75rem; color: var(--dim); margin-right: 3px; }
+        .sub.active .lab { color: var(--accent); font-weight: 600; }
+        .orb { width: 28px; height: 24px; border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; gap: 0; font-size: .9rem; line-height: 1; background: rgba(255,255,255,.02); }
+        .sub.active .orb { border-color: var(--accent); box-shadow: 0 0 8px rgba(34,211,238,.35); }
+        .sub.full .orb { border-color: #334155; }
+        .arrow { display: inline-block; width: 11px; text-align: center; font-weight: 700; }
+        .arrow.up { color: var(--up); }
+        .arrow.down { color: var(--down); }
+        .arrow.new { animation: pop .35s ease-out; }
+        @keyframes pop { from { transform: translateY(-10px) scale(1.6); opacity: 0; } to { transform: none; opacity: 1; } }
+        .energy-axis { position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(to top, var(--border), transparent); }
+        .axis-label { position: absolute; left: 6px; top: 0; font-size: .68rem; color: var(--dim); }
+        .diff-mark { position: absolute; font-size: .66rem; color: #f59e0b; font-family: 'Fira Code', monospace; }
+
+        /* mini tabla */
+        .mini { display: grid; grid-template-columns: repeat(18, 1fr); grid-template-rows: repeat(7, auto) 6px auto auto; gap: 2px; }
+        .mc { aspect-ratio: 1; border-radius: 3px; border: 1px solid var(--border); font-size: .55rem; display: flex; align-items: center; justify-content: center; color: transparent; transition: background .2s, color .2s; cursor: pointer; padding: 0; background: none; font-family: inherit; }
+        .mc.built { color: #0a0a1a; font-weight: 600; }
+        .mc.current { outline: 2px solid #fff; outline-offset: 1px; z-index: 1; }
+        .mini-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; font-size: .75rem; color: var(--muted); }
+        .mini-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; background: var(--c); }
+
+        /* explicación y reglas */
+        .explain { font-size: .9rem; line-height: 1.55; color: var(--text); min-height: 3.2em; }
+        .explain .k { font-family: 'Fira Code', monospace; color: var(--accent); }
+        .exception { margin-top: 10px; border-left: 3px solid #f59e0b; background: var(--panel-2); padding: 9px 12px; border-radius: 0 8px 8px 0; font-size: .84rem; line-height: 1.5; }
+        .exception .cfg { font-size: .9rem; }
+        .rules { display: grid; gap: 8px; margin-top: 12px; }
+        .rule { border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; font-size: .82rem; color: var(--muted); line-height: 1.45; transition: border-color .2s, background .2s; }
+        .rule b { color: var(--text); }
+        .rule.on { border-color: var(--accent); background: rgba(34,211,238,.08); color: var(--text); }
+        .madelung { display: grid; grid-template-columns: 26px repeat(4, 34px); gap: 3px; font-family: 'Fira Code', monospace; font-size: .72rem; margin-top: 8px; }
+        .madelung div { text-align: center; padding: 3px 0; border-radius: 4px; color: var(--dim); }
+        .madelung .h { color: var(--muted); }
+        .madelung .c { background: var(--panel-2); color: var(--muted); }
+        .madelung .c.done { color: var(--text); }
+        .madelung .c.cur { background: rgba(34,211,238,.25); color: var(--accent); font-weight: 600; }
+        details { margin-top: 14px; font-size: .85rem; color: var(--muted); line-height: 1.55; }
+        details summary { cursor: pointer; color: var(--text); font-weight: 500; }
+        details p { margin-top: 8px; }
+        .links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+        .links a { font-size: .82rem; text-decoration: none; border: 1px solid var(--border); padding: 7px 12px; border-radius: 9px; color: var(--text); }
+        .links a:hover { border-color: var(--accent); }
+        .col-right { display: grid; gap: 16px; align-content: start; }
+
+        @media (max-width: 980px) { .layout { grid-template-columns: minmax(0, 1fr); } }   /* minmax(0, …): si no, el diagrama ensancha la columna y desborda la página */
+        @media (max-width: 640px) {
+            header, .controls, .layout { padding-left: 14px; padding-right: 14px; }
+            h1 { font-size: 1.3rem; }
+            .guide-link { margin-left: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) { .arrow.new { animation: none; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="crumbs"><a href="../../_portal/index.html">EigenLab</a> / <a href="index.html">Chemistry Visual Lab</a> / <a href="tabla-periodica.html">Tabla Periódica</a> / Aufbau</div>
+        <h1>Constructor de Configuraciones</h1>
+        <p class="subtitle">Añade electrones uno a uno: tres reglas bastan para que aparezca la forma de la tabla periódica.</p>
+        <a class="guide-link" href="guides/aufbau.html">📖 Guía teórica</a>
+    </header>
+
+    <div class="controls">
+        <button class="btn" id="prev" aria-label="Quitar un electrón">−1 e⁻</button>
+        <button class="btn primary" id="next" aria-label="Añadir un electrón">+1 e⁻</button>
+        <button class="btn" id="play">▶ Construir</button>
+        <input class="zslider" id="z" type="range" min="0" max="118" value="0" aria-label="Número de electrones (Z)">
+        <div class="seg" role="group" aria-label="Qué configuración mostrar">
+            <button id="m-mad" aria-pressed="true" title="Llenado por la regla n + l">Predicción (Madelung)</button>
+            <button id="m-real" aria-pressed="false" title="Estado fundamental medido (NIST)">Real</button>
+        </div>
+    </div>
+
+    <div class="layout">
+        <section class="panel">
+            <h2>Niveles de energía · orden de llenado</h2>
+            <div class="diagram-wrap"><div class="diagram" id="diagram"></div></div>
+        </section>
+        <div class="col-right">
+            <section class="panel">
+                <div class="el" id="el"></div>
+                <div class="cfg-label" id="cfg-label">Configuración</div>
+                <div class="cfg" id="cfg"></div>
+                <div class="stats" id="stats"></div>
+                <div id="exc"></div>
+            </section>
+            <section class="panel">
+                <h2>La tabla aparece al llenar</h2>
+                <div class="mini" id="mini"></div>
+                <div class="mini-legend">
+                    <span style="--c:var(--s)">s · 2 columnas</span><span style="--c:var(--p)">p · 6</span><span style="--c:var(--d)">d · 10</span><span style="--c:var(--f)">f · 14</span>
+                </div>
+            </section>
+            <section class="panel">
+                <h2>Qué acaba de pasar</h2>
+                <p class="explain" id="explain"></p>
+                <div class="rules">
+                    <div class="rule" id="r-mad"><b>Madelung (n + l):</b> las subcapas se llenan en orden creciente de n + l; si empatan, primero la de menor n.
+                        <div class="madelung" id="mgrid"></div></div>
+                    <div class="rule" id="r-pauli"><b>Pauli:</b> cada orbital admite como máximo dos electrones, con espines opuestos (↑↓).</div>
+                    <div class="rule" id="r-hund"><b>Hund:</b> en una subcapa, los electrones ocupan primero orbitales vacíos con espines paralelos, y solo después se emparejan.</div>
+                </div>
+                <details>
+                    <summary>Profundizar: por qué funciona y dónde falla</summary>
+                    <p>La energía de una subcapa no depende solo de <i>n</i>: los electrones <b>s</b> y <b>p</b> penetran más cerca del núcleo que los <b>d</b> y <b>f</b>, sufren menos apantallamiento y bajan de energía. Por eso 4s se llena antes que 3d. La regla n + l resume ese efecto de forma empírica.</p>
+                    <p><b>Límites:</b> describe átomos neutros en su estado fundamental. En los iones cambia el orden (Fe²⁺ es [Ar]3d⁶: pierde primero los 4s). Cuando dos subcapas están casi a la misma energía (3d/4s, 4f/5d, 5f/6d) aparecen las 19 excepciones. En los elementos más pesados los efectos relativistas contraen los orbitales s y p, y las configuraciones más allá de Z ≈ 104 son predicciones teóricas.</p>
+                </details>
+                <div class="links">
+                    <a href="tabla-periodica.html" id="to-table">Ver en la tabla periódica</a>
+                    <a href="orbitales.html">Forma de los orbitales</a>
+                    <a href="modelo-bohr.html">Modelo de Bohr</a>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="data/elements.js"></script>
+    <script>
+    (() => {
+        const DATA = window.EIGENLAB_ELEMENTS;
+        const ELS = DATA.elementos;
+        const BY_Z = Object.fromEntries(ELS.map(e => [e.z, e]));
+        const EXC = new Set(DATA.excepciones_madelung);
+        const $ = id => document.getElementById(id);
+
+        const ORDER = ['1s', '2s', '2p', '3s', '3p', '4s', '3d', '4p', '5s', '4d', '5p', '6s', '4f', '5d', '6p', '7s', '5f', '6d', '7p'];
+        const L = { s: 0, p: 1, d: 2, f: 3 };
+        const NORB = { s: 1, p: 3, d: 5, f: 7 };
+        const CAP = { s: 2, p: 6, d: 10, f: 14 };
+        const NOBLE = [[2, 'He'], [10, 'Ne'], [18, 'Ar'], [36, 'Kr'], [54, 'Xe'], [86, 'Rn'], [118, 'Og']];
+        const SUP = { 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' };
+        const sup = n => String(n).split('').map(d => SUP[d]).join('');
+        const BLOCKCOL = { s: 'var(--s)', p: 'var(--p)', d: 'var(--d)', f: 'var(--f)' };
+
+        function madelung(z) {
+            const occ = {}; let left = z;
+            for (const s of ORDER) { if (!left) break; const n = Math.min(CAP[s[1]], left); occ[s] = n; left -= n; }
+            return occ;
+        }
+        // Notación de gas noble, subcapas ordenadas por n y l (convención del NIST)
+        function notation(occ, z) {
+            const core = NOBLE.filter(([n]) => n < z).pop();
+            const coreOcc = core ? madelung(core[0]) : {};
+            const parts = ORDER.filter(s => occ[s] && occ[s] !== coreOcc[s])   // lo que no forma parte del gas noble
+                .sort((a, b) => (+a[0] - +b[0]) || (L[a[1]] - L[b[1]]))
+                .map(s => s + sup(occ[s]));
+            return (core ? `[${core[1]}] ` : '') + (parts.join(' ') || '');
+        }
+        function unpaired(occ) {
+            return Object.entries(occ).reduce((t, [s, k]) => { const m = NORB[s[1]]; return t + (k <= m ? k : 2 * m - k); }, 0);
+        }
+
+        // ------------------------------------------------------------ diagrama (escalera de energía)
+        const ROW = 29, COLX = { s: 34, p: 104, d: 230, f: 410 };
+        const diagram = $('diagram');
+        diagram.style.height = (ORDER.length * ROW + 24) + 'px';
+        diagram.style.minWidth = (COLX.f + 7 * 32 + 40) + 'px';
+        diagram.innerHTML = '<div class="energy-axis"></div><div class="axis-label">energía ↑</div>';
+        const subEls = {};
+        ORDER.forEach((s, i) => {
+            const d = document.createElement('div');
+            d.className = 'sub';
+            d.style.left = COLX[s[1]] + 'px';
+            d.style.top = ((ORDER.length - 1 - i) * ROW + 18) + 'px';
+            d.innerHTML = `<span class="lab">${s}</span>` + '<span class="orb"></span>'.repeat(NORB[s[1]]);
+            diagram.appendChild(d);
+            subEls[s] = d;
+        });
+
+        // ------------------------------------------------------------ mini tabla
+        const mini = $('mini'), miniCells = {};
+        ELS.forEach(e => {
+            const c = document.createElement('button');
+            c.className = 'mc'; c.textContent = e.sym;
+            c.style.gridColumn = e.col; c.style.gridRow = e.fila;
+            c.title = `${e.nombre} (Z = ${e.z})`;
+            c.setAttribute('aria-label', `Ir a ${e.nombre}, ${e.z} electrones`);
+            c.addEventListener('click', () => go(e.z));
+            mini.appendChild(c); miniCells[e.z] = c;
+        });
+
+        // Madelung: rejilla n × l con el orden de llenado
+        const mgrid = $('mgrid');
+        mgrid.innerHTML = '<div class="h"></div>' + ['s', 'p', 'd', 'f'].map(l => `<div class="h">${l}</div>`).join('') +
+            [1, 2, 3, 4, 5, 6, 7].map(n => `<div class="h">${n}</div>` + ['s', 'p', 'd', 'f'].map(l => {
+                const s = n + l, ok = ORDER.includes(s);
+                return ok ? `<div class="c" data-s="${s}" title="n + l = ${n + L[l]}">${n + L[l]}</div>` : '<div></div>';
+            }).join('')).join('');
+
+        // ------------------------------------------------------------ textos de excepciones
+        function exceptionText(e) {
+            const t = {
+                d5: 'La subcapa <b>d semillena</b> (d⁵, un electrón en cada orbital con espines paralelos) es especialmente estable por la energía de intercambio: compensa promocionar un electrón desde s.',
+                d10: 'La subcapa <b>d completa</b> (d¹⁰) es especialmente estable: un electrón s pasa a completar d.',
+                close: 'Las subcapas (n−1)d y ns están casi a la misma energía y la repulsión entre electrones decide un reparto distinto al de la regla.',
+                fd: 'Las subcapas 4f y 5d (o 5f y 6d) están casi degeneradas: un electrón entra en d en lugar de en f.',
+                f7: 'Conserva la subcapa f <b>semillena</b> (f⁷) y coloca el electrón siguiente en d.',
+            };
+            const map = { Cr: 'd5', Mo: 'd5', Cu: 'd10', Ag: 'd10', Au: 'd10', Pd: 'd10', Nb: 'close', Ru: 'close', Rh: 'close', Pt: 'close',
+                          La: 'fd', Ce: 'fd', Ac: 'fd', Th: 'fd', Pa: 'fd', U: 'fd', Np: 'fd', Gd: 'f7', Cm: 'f7' };
+            return t[map[e.sym]] || t.close;
+        }
+
+        // ------------------------------------------------------------ estado y render
+        const state = { z: 0, mode: 'mad', prevOcc: {} };
+        function occFor(z) { return !z ? {} : state.mode === 'real' ? BY_Z[z].ocupacion : madelung(z); }
+
+        function render(animate) {
+            const z = state.z, e = BY_Z[z], occ = occFor(z), pred = madelung(z);
+            const lastSub = z ? ORDER.filter(s => pred[s]).pop() : null;
+            const differs = z && EXC.has(e.sym);
+            // diagrama
+            ORDER.forEach(s => {
+                const k = occ[s] || 0, m = NORB[s[1]], el = subEls[s];
+                const orbs = el.querySelectorAll('.orb');
+                orbs.forEach((o, i) => {
+                    const up = k > i, down = k > m + i;
+                    const wasUp = (state.prevOcc[s] || 0) > i, wasDown = (state.prevOcc[s] || 0) > m + i;
+                    o.innerHTML = (up ? `<span class="arrow up${animate && !wasUp ? ' new' : ''}">↑</span>` : '') +
+                                  (down ? `<span class="arrow down${animate && !wasDown ? ' new' : ''}">↓</span>` : '');
+                });
+                el.classList.toggle('active', state.mode === 'mad' ? s === lastSub : (occ[s] || 0) !== (state.prevOcc[s] || 0) && animate);
+                el.classList.toggle('full', k === CAP[s[1]]);
+            });
+            state.prevOcc = { ...occ };
+            // elemento
+            if (!z) {
+                $('el').innerHTML = `<div class="tile"><span class="z">0</span><span class="s">·</span><span></span></div><div><div class="el-name">Núcleo sin electrones</div><div style="color:var(--muted);font-size:.85rem">Pulsa <b>+1 e⁻</b> o <b>▶ Construir</b></div></div>`;
+                $('cfg').textContent = '—'; $('stats').innerHTML = ''; $('exc').innerHTML = '';
+            } else {
+                $('el').innerHTML = `<div class="tile" style="border-color:${BLOCKCOL[e.bloque]}"><span class="z">${z}</span><span class="s">${e.sym}</span><span class="z">bloque ${e.bloque}</span></div>
+                    <div><div class="el-name">${e.nombre}</div><div style="color:var(--muted);font-size:.85rem">${e.grupo ? 'Grupo ' + e.grupo + ' · ' : ''}Periodo ${e.periodo}</div></div>`;
+                $('cfg-label').textContent = state.mode === 'real' ? 'Configuración real (estado fundamental, NIST)' : 'Configuración predicha por la regla n + l';
+                $('cfg').textContent = notation(occ, z) + (state.mode === 'real' && e.config_predicha ? '  (predicha)' : '');
+                const u = unpaired(occ);
+                $('stats').innerHTML = `<span>Electrones: <b>${z}</b></span><span>Desapareados: <b>${u}</b> · ${u ? 'paramagnético' : 'diamagnético'}</span>`;
+                $('exc').innerHTML = differs ? `<div class="exception">⚠ <b>Excepción:</b> la regla predice <span class="cfg">${notation(pred, z)}</span> pero el estado fundamental real es <span class="cfg">${notation(e.ocupacion, z)}</span>.<br>${exceptionText(e)}
+                    ${state.mode === 'mad' ? '<br><button class="btn" id="show-real" style="margin-top:8px">Ver la configuración real</button>' : ''}</div>` : '';
+                const sr = $('show-real'); if (sr) sr.addEventListener('click', () => setMode('real'));
+            }
+            // mini tabla
+            ELS.forEach(x => {
+                const c = miniCells[x.z], built = x.z <= z;
+                c.classList.toggle('built', built); c.classList.toggle('current', x.z === z);
+                c.style.background = built ? BLOCKCOL[x.bloque] : 'none';
+                c.style.opacity = built ? (x.z === z ? 1 : .8) : 1;
+            });
+            // explicación
+            explain(z, pred, lastSub);
+            // rejilla de Madelung
+            mgrid.querySelectorAll('.c').forEach(c => {
+                c.classList.toggle('done', !!pred[c.dataset.s]);
+                c.classList.toggle('cur', c.dataset.s === lastSub);
+            });
+            $('z').value = z;
+            $('prev').disabled = z === 0; $('next').disabled = z === 118;
+            $('to-table').href = z ? `tabla-periodica.html#${e.sym}` : 'tabla-periodica.html';
+            history.replaceState(null, '', z ? `?z=${z}` : location.pathname);
+        }
+
+        function explain(z, pred, sub) {
+            ['r-mad', 'r-pauli', 'r-hund'].forEach(id => $(id).classList.remove('on'));
+            if (!z) { $('explain').innerHTML = 'Un núcleo con carga +Z atraerá Z electrones. Cada uno ocupará el hueco disponible de menor energía, respetando tres reglas.'; return; }
+            const k = pred[sub], m = NORB[sub[1]], nl = +sub[0] + L[sub[1]];
+            let txt = `El electrón <span class="k">${z}</span> entra en <span class="k">${sub}</span> (n + l = ${nl}). `;
+            if (k === 1) {
+                txt += 'Se abre una subcapa nueva: es la de menor n + l que queda libre' + (ORDER.some(o => o !== sub && !pred[o] && (+o[0] + L[o[1]]) === nl) ? ', y ante el empate gana la de menor n.' : '.');
+                $('r-mad').classList.add('on');
+            } else if (k <= m) {
+                txt += `Ocupa un orbital vacío con el mismo espín que los demás: ${k} electrones desapareados en ${sub}.`;
+                $('r-hund').classList.add('on');
+            } else {
+                txt += `Todos los orbitales de ${sub} tienen ya un electrón: este se empareja con espín opuesto.`;
+                $('r-pauli').classList.add('on');
+            }
+            if (k === CAP[sub[1]]) txt += ` Subcapa ${sub} completa.`;
+            const noble = NOBLE.find(([n]) => n === z);
+            if (noble) txt += ` <b>Capa externa completa: ${BY_Z[z].nombre} es un gas noble</b> y aquí termina el periodo ${BY_Z[z].periodo}.`;
+            if (state.mode === 'real' && EXC.has(BY_Z[z].sym)) txt = '<b>Según la regla</b>, ' + txt.charAt(0).toLowerCase() + txt.slice(1) + ' <b>En la realidad</b> los electrones se reparten como muestra el diagrama (ver la excepción arriba).';
+            $('explain').innerHTML = txt;
+        }
+
+        // ------------------------------------------------------------ interacción
+        function go(z, animate = true) { state.z = Math.max(0, Math.min(118, z)); render(animate); }
+        function setMode(m) {
+            state.mode = m;
+            $('m-mad').setAttribute('aria-pressed', m === 'mad'); $('m-real').setAttribute('aria-pressed', m === 'real');
+            render(false);
+        }
+        $('next').addEventListener('click', () => go(state.z + 1));
+        $('prev').addEventListener('click', () => go(state.z - 1, false));
+        $('z').addEventListener('input', ev => go(+ev.target.value, false));
+        $('m-mad').addEventListener('click', () => setMode('mad'));
+        $('m-real').addEventListener('click', () => setMode('real'));
+        let timer = null;
+        function stop() { clearInterval(timer); timer = null; $('play').textContent = '▶ Construir'; }
+        $('play').addEventListener('click', () => {
+            if (timer) return stop();
+            if (state.z >= 118) go(0, false);
+            $('play').textContent = '❚❚ Pausa';
+            timer = setInterval(() => { if (state.z >= 118) return stop(); go(state.z + 1); }, 450);
+        });
+        document.addEventListener('keydown', ev => {
+            if (ev.target.tagName === 'INPUT' && ev.target.type !== 'range') return;
+            if (ev.key === 'ArrowRight') { ev.preventDefault(); go(state.z + 1); }
+            else if (ev.key === 'ArrowLeft') { ev.preventDefault(); go(state.z - 1, false); }
+            else if (ev.key === ' ' && ev.target.tagName !== 'BUTTON') { ev.preventDefault(); $('play').click(); }
+        });
+
+        const qz = +new URLSearchParams(location.search).get('z');
+        go(qz >= 0 && qz <= 118 ? qz : 0, false);
+    })();
+    </script>
+</body>
+</html>
