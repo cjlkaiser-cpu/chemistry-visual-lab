@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Reto de Mendeléyev - Chemistry Visual Lab</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Predice el galio, el escandio y el germanio como en 1871, y comprueba en toda la tabla cuándo funciona el promedio de vecinos.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="El Reto de Mendeléyev · Chemistry Visual Lab">
+    <meta property="og:description" content="Predice el galio, el escandio y el germanio como en 1871, y comprueba en toda la tabla cuándo funciona el promedio de vecinos.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0a1a; --panel: #111127; --panel-2: #16163a; --border: #262650; --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b; --accent: #22d3ee; --gold: #fbbf24; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        a { color: var(--accent); }
+        header { padding: 18px 24px 8px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+        .crumbs { width: 100%; font-size: .8rem; color: var(--dim); }
+        .crumbs a { color: var(--dim); text-decoration: none; }
+        .crumbs a:hover { color: var(--accent); }
+        h1 { font-size: 1.6rem; font-weight: 600; color: var(--accent); }
+        .subtitle { color: var(--muted); font-size: .9rem; }
+        .guide-link { margin-left: auto; font-size: .85rem; text-decoration: none; border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; }
+        .tabs { display: flex; gap: 6px; padding: 6px 24px 12px; flex-wrap: wrap; }
+        .tab { background: var(--panel); border: 1px solid var(--border); color: var(--muted); border-radius: 999px; padding: 7px 14px; font: inherit; font-size: .85rem; cursor: pointer; }
+        .tab[aria-selected="true"] { background: rgba(34,211,238,.12); border-color: var(--accent); color: var(--accent); }
+        main { padding: 0 24px 28px; }
+        .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; min-width: 0; }
+        .panel h2 { font-size: .8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+        .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 16px; }
+        .btn { background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 9px; padding: 8px 14px; font: inherit; font-size: .85rem; cursor: pointer; }
+        .btn:hover { border-color: var(--accent); }
+        .btn.primary { background: rgba(34,211,238,.14); border-color: var(--accent); color: var(--accent); }
+        .btn[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); background: rgba(251,191,36,.1); }
+        .note { font-size: .82rem; color: var(--muted); background: var(--panel-2); border-left: 3px solid var(--accent); padding: 9px 12px; border-radius: 0 7px 7px 0; line-height: 1.55; margin-top: 12px; }
+        .note.gold { border-left-color: var(--gold); }
+        [hidden] { display: none !important; }
+
+        /* vecindario */
+        .hood { display: grid; grid-template-columns: repeat(3, 92px); grid-template-rows: repeat(3, 96px); gap: 6px; justify-content: center; margin: 8px 0 14px; }
+        .cell { border: 1px solid var(--border); border-radius: 9px; background: var(--panel-2); padding: 6px 8px; display: flex; flex-direction: column; justify-content: space-between; }
+        .cell .z { font-family: 'Fira Code', monospace; font-size: .7rem; color: var(--dim); }
+        .cell .s { font-size: 1.5rem; font-weight: 700; line-height: 1; }
+        .cell .v { font-family: 'Fira Code', monospace; font-size: .74rem; color: var(--accent); }
+        .cell.gap { border: 2px dashed var(--gold); background: rgba(251,191,36,.06); align-items: center; justify-content: center; text-align: center; }
+        .cell.gap .s { color: var(--gold); font-size: 1.05rem; }
+        .cell.gap.revealed { border-style: solid; }
+        .cell.empty { visibility: hidden; }
+
+        .est { display: grid; gap: 12px; }
+        .est label { font-size: .85rem; color: var(--muted); display: flex; justify-content: space-between; }
+        .est label b { color: var(--text); font-family: 'Fira Code', monospace; }
+        .est input[type=range] { width: 100%; accent-color: var(--gold); }
+        table.cmp { width: 100%; border-collapse: collapse; font-size: .85rem; margin-top: 8px; }
+        table.cmp th { text-align: left; color: var(--muted); font-weight: 500; font-size: .75rem; padding: 6px 6px; border-bottom: 1px solid var(--border); }
+        table.cmp td { padding: 7px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+        table.cmp td.n { font-family: 'Fira Code', monospace; }
+        .you { color: var(--gold); } .mend { color: #c4b5fd; } .real { color: #4ade80; }
+        .err { font-size: .72rem; color: var(--dim); }
+        .choose { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+
+        /* reto libre */
+        .answer { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+        .answer input[type=number] { background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 9px; padding: 8px 12px; font: inherit; font-family: 'Fira Code', monospace; width: 150px; }
+        .big { font-size: 1.05rem; line-height: 1.6; margin-top: 12px; }
+        .score { font-family: 'Fira Code', monospace; color: var(--muted); font-size: .85rem; }
+        .bars { display: grid; gap: 10px; margin-top: 6px; }
+        .bar-row { display: grid; grid-template-columns: 170px 1fr 60px; gap: 10px; align-items: center; font-size: .85rem; }
+        .bar { height: 12px; background: var(--panel-2); border-radius: 6px; overflow: hidden; }
+        .bar span { display: block; height: 100%; background: linear-gradient(90deg, #22d3ee, #4ade80); }
+        .fails { font-size: .82rem; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+        .fails b { color: var(--text); }
+
+        @media (max-width: 900px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+        @media (max-width: 640px) {
+            header, .tabs, main { padding-left: 14px; padding-right: 14px; }
+            h1 { font-size: 1.3rem; }
+            .guide-link { margin-left: 0; }
+            .hood { grid-template-columns: repeat(3, 84px); grid-template-rows: repeat(3, 88px); }
+            .bar-row { grid-template-columns: 110px 1fr 48px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="crumbs"><a href="../../_portal/index.html">EigenLab</a> / <a href="index.html">Chemistry Visual Lab</a> / <a href="tabla-periodica.html">Tabla Periódica</a> / Mendeléyev</div>
+        <h1>El Reto de Mendeléyev</h1>
+        <p class="subtitle">En 1871 predijo elementos que nadie había visto. ¿Puedes hacerlo tú con la misma herramienta: sus vecinos?</p>
+        <a class="guide-link" href="guides/mendeleyev.html">📖 Guía teórica</a>
+    </header>
+    <div class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="historia" aria-selected="true">Las predicciones de 1871</button>
+        <button class="tab" role="tab" data-tab="reto" aria-selected="false">Reto: predice un elemento</button>
+        <button class="tab" role="tab" data-tab="metodo" aria-selected="false">¿Funciona el método?</button>
+    </div>
+
+    <main>
+        <!-- ============ HISTORIA ============ -->
+        <section data-panel="historia">
+            <div class="choose" id="choose"></div>
+            <div class="grid2">
+                <div class="panel">
+                    <h2 id="h-title"></h2>
+                    <div class="hood" id="hood"></div>
+                    <div class="est" id="est"></div>
+                    <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+                        <button class="btn" id="avg">Usar el promedio de los vecinos</button>
+                        <button class="btn primary" id="reveal">Revelar</button>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h2>Tu predicción, la de Mendeléyev y la realidad</h2>
+                    <div id="cmp"><p style="color:var(--muted);font-size:.9rem;line-height:1.6">Estima las propiedades con los controles y pulsa <b>Revelar</b>. Mendeléyev partió de los mismos vecinos: la masa, por ejemplo, la obtuvo promediando los cuatro elementos que rodeaban el hueco.</p></div>
+                    <div id="story"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ RETO ============ -->
+        <section data-panel="reto" hidden>
+            <div class="grid2">
+                <div class="panel">
+                    <h2>Elemento oculto</h2>
+                    <div class="hood" id="hood2"></div>
+                    <p style="font-size:.85rem;color:var(--muted)">Propiedad: <b id="prop-name" style="color:var(--text)"></b> <span id="prop-unit"></span></p>
+                    <div class="answer">
+                        <input type="number" id="guess" step="any" aria-label="Tu estimación">
+                        <button class="btn primary" id="check">Comprobar</button>
+                        <button class="btn" id="next">Otro elemento</button>
+                    </div>
+                    <p class="score" id="score2" style="margin-top:10px"></p>
+                </div>
+                <div class="panel">
+                    <h2>Resultado</h2>
+                    <div class="big" id="res2"><span style="color:var(--muted)">Mira los valores de los vecinos y escribe tu estimación.</span></div>
+                    <p class="note">Los mejores predictores combinan el vecino de arriba y el de abajo (mismo grupo: misma química) con los de los lados (tendencia a lo largo del periodo).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ MÉTODO ============ -->
+        <section data-panel="metodo" hidden>
+            <div class="panel">
+                <h2>El promedio de los vecinos, probado en toda la tabla</h2>
+                <p style="font-size:.88rem;color:var(--muted);line-height:1.6">Para cada elemento con al menos tres vecinos conocidos (arriba, abajo, izquierda, derecha) se predice la propiedad como su media y se compara con el valor real. Porcentaje de elementos en que el error es menor del 10 %:</p>
+                <div class="bars" id="bars"></div>
+                <div class="fails" id="fails"></div>
+                <p class="note gold"><b>No hay un único método: depende de la propiedad.</b> La masa crece casi linealmente <i>a lo largo de un periodo</i>, pero entre periodos salta de forma desigual (8, 18 o 32 elementos por periodo): por eso se predice con los vecinos de izquierda y derecha, como hizo Mendeléyev con el escandio. El radio y la química se parecen más <i>dentro de un grupo</i>. La densidad y el punto de fusión dependen del tipo de enlace del sólido, que cambia bruscamente (metal, red covalente, moléculas), y ahí cualquier promedio falla con frecuencia. Mendeléyev acertó porque combinó los promedios con la química de los compuestos.</p>
+            </div>
+        </section>
+        <p style="font-size:.7rem;color:var(--dim);margin-top:12px" id="src"></p>
+    </main>
+
+    <script src="data/elements.js"></script>
+    <script>
+    (() => {
+        const DATA = window.EIGENLAB_ELEMENTS, ELS = DATA.elementos;
+        const BY = Object.fromEntries(ELS.map(e => [e.sym, e]));
+        const AT = (f, c) => ELS.find(e => e.fila === f && e.col === c && f <= 7);
+        const $ = id => document.getElementById(id);
+        $('src').textContent = `Valores actuales: ${DATA.fuente}. Predicciones de 1871: D. Mendeléyev, Annalen der Chemie, Suppl. 8 (1871); tabla comparativa según E. Scerri, «The Periodic Table: Its Story and Its Significance» (2007).`;
+
+        // ------------------------------------------------------------ predicciones históricas
+        const HIST = [
+            { eka: 'Eka-aluminio', sym: 'Ga', year: 1875, who: 'Paul-Émile Lecoq de Boisbaudran',
+              props: [
+                  ['Masa atómica', 'masa', 68, 'u', 55, 85, 0.5],
+                  ['Densidad', 'densidad', 5.9, 'g/cm³', 2, 9, 0.05],
+              ],
+              extra: [['Punto de fusión', 'bajo', '29,8 °C (se funde en la mano)'], ['Óxido', 'Ea₂O₃', 'Ga₂O₃'], ['Cómo se descubriría', 'por espectroscopia', 'sí: dos líneas violetas (403 y 417 nm)']],
+              story: `Lecoq de Boisbaudran publicó una densidad de <b>4,7 g/cm³</b>. Mendeléyev le escribió: el valor debía ser cercano a 5,9 y la muestra estaría impura (contenía sodio). Lecoq purificó el galio y midió <b>5,935 g/cm³</b>. Un teórico corregía al experimentador sobre un elemento que solo este había tenido en las manos.` },
+            { eka: 'Eka-boro', sym: 'Sc', year: 1879, who: 'Lars Fredrik Nilson',
+              props: [
+                  ['Masa atómica', 'masa', 44, 'u', 30, 60, 0.5],
+              ],
+              extra: [['Óxido', 'Eb₂O₃, densidad 3,5 g/cm³', 'Sc₂O₃, densidad 3,86 g/cm³'], ['Sulfato', 'Eb₂(SO₄)₃', 'Sc₂(SO₄)₃'], ['Carácter del óxido', 'básico, más que el de aluminio', 'básico']],
+              story: `Nilson aisló el escandio de minerales escandinavos (euxenita y gadolinita). Fue Per Teodor Cleve quien advirtió que era el eka-boro de Mendeléyev. Sin embargo, el escandio acabó en el grupo 3, no bajo el boro: la tabla de 1871 aún no distinguía los metales de transición. <b>Nota de método:</b> Mendeléyev estimó 44 promediando calcio (40) y titanio (48). Si se añade el itrio de abajo, la media sube a 59: entre periodos la masa salta de forma desigual.` },
+            { eka: 'Eka-silicio', sym: 'Ge', year: 1886, who: 'Clemens Winkler',
+              props: [
+                  ['Masa atómica', 'masa', 72, 'u', 60, 90, 0.5],
+                  ['Densidad', 'densidad', 5.5, 'g/cm³', 2, 9, 0.05],
+              ],
+              extra: [['Color', 'gris oscuro', 'blanco grisáceo'], ['Calor específico', '0,073 cal/(g·°C)', '0,076 cal/(g·°C)'], ['Óxido', 'EsO₂, densidad 4,7 g/cm³', 'GeO₂, densidad 4,703 g/cm³'],
+                      ['Cloruro', 'EsCl₄, ebulle por debajo de 100 °C, densidad 1,9', 'GeCl₄, ebulle a 86 °C, densidad 1,887']],
+              story: `El caso más espectacular: Winkler encontró el germanio en la argirodita en 1886 y casi todas las propiedades coincidieron con lo previsto quince años antes, incluidas las de sus compuestos. Desde entonces la ley periódica dejó de ser una clasificación y se convirtió en una teoría con poder predictivo.` },
+        ];
+
+        // vecinos inmediatos en la tabla
+        function neighbours(e) {
+            return { up: AT(e.fila - 1, e.col), down: AT(e.fila + 1, e.col), left: AT(e.fila, e.col - 1), right: AT(e.fila, e.col + 1) };
+        }
+        const fmt = (v, key) => v == null ? '—' : key === 'masa' ? v.toFixed(2) : key === 'densidad' ? (v < 0.01 ? v.toExponential(2) : v.toFixed(3)) : key === 'en' ? v.toFixed(2) : v.toFixed(v < 100 ? 2 : 0);
+        function drawHood(el, target, key, revealed, label, histMode = false) {
+            const n = neighbours(target);
+            const pos = { up: [1, 2], left: [2, 1], right: [2, 3], down: [3, 2] };
+            let html = '';
+            for (let r = 1; r <= 3; r++) for (let c = 1; c <= 3; c++) {
+                const k = Object.keys(pos).find(k2 => pos[k2][0] === r && pos[k2][1] === c);
+                if (r === 2 && c === 2) {
+                    html += revealed
+                        ? `<div class="cell gap revealed"><span class="z">${target.z}</span><span class="s" style="font-size:1.5rem">${target.sym}</span><span class="v">${fmt(target[key], key)}</span></div>`
+                        : `<div class="cell gap"><span class="s">${label || '?'}</span></div>`;
+                } else if (k && n[k] && histMode && !known1871(n[k])) {
+                    html += `<div class="cell" style="opacity:.45;border-style:dashed"><span class="z">${n[k].z}</span><span class="s">${n[k].sym}</span><span class="v" style="color:var(--dim)">desconocido en 1871</span></div>`;
+                } else if (k && n[k]) {
+                    html += `<div class="cell"><span class="z">${n[k].z}</span><span class="s">${n[k].sym}</span><span class="v">${fmt(n[k][key], key)}</span></div>`;
+                } else html += '<div class="cell empty"></div>';
+            }
+            el.innerHTML = html;
+        }
+        const known1871 = x => x && (x.antiguedad || (x.anio && x.anio <= 1871));
+        const avg = a => a.reduce((x, y) => x + y, 0) / a.length;
+        // estrategia: 'todos' (4 vecinos, mínimo 3), 'periodo' (izquierda + derecha) o 'grupo' (arriba + abajo)
+        function neighbourMean(e, key, strategy = 'todos', filter = x => !!x) {
+            const n = neighbours(e);
+            const pick = { todos: [n.up, n.down, n.left, n.right], periodo: [n.left, n.right], grupo: [n.up, n.down] }[strategy];
+            const vals = pick.filter(x => filter(x) && x[key] != null).map(x => x[key]);
+            if (strategy === 'todos' ? vals.length < 3 : vals.length < 2) return null;
+            return avg(vals);
+        }
+
+        // ------------------------------------------------------------ pestaña Historia
+        let cur = HIST[2], revealed = false, keyShown = 'masa';
+        const INTRO = $('cmp').innerHTML;
+        $('choose').innerHTML = HIST.map((h, i) => `<button class="btn" data-i="${i}">${h.eka} (${h.year})</button>`).join('');
+        $('choose').addEventListener('click', ev => { const b = ev.target.closest('[data-i]'); if (b) { cur = HIST[+b.dataset.i]; revealed = false; renderHist(); } });
+        function renderHist() {
+            const t = BY[cur.sym];
+            document.querySelectorAll('#choose .btn').forEach(b => b.setAttribute('aria-pressed', HIST[+b.dataset.i] === cur));
+            const nb = neighbours(t);
+            $('h-title').textContent = nb.up ? `${cur.eka}: el hueco bajo el ${nb.up.nombre.toLowerCase()}`
+                                             : `${cur.eka}: el hueco entre el ${nb.left.nombre.toLowerCase()} y el ${nb.right.nombre.toLowerCase()}`;
+            drawHood($('hood'), t, keyShown, revealed, cur.eka, true);
+            $('est').innerHTML = cur.props.map(([name, key, , unit, lo, hi, step]) =>
+                `<div><label for="s-${key}">${name} <b id="o-${key}"></b></label><input type="range" id="s-${key}" min="${lo}" max="${hi}" step="${step}" value="${((lo + hi) / 2).toFixed(2)}"></div>`).join('');
+            cur.props.forEach(([, key, , unit]) => {
+                const s = $('s-' + key), o = $('o-' + key);
+                const upd = () => { o.textContent = `${(+s.value).toFixed(key === 'masa' ? 1 : 2)} ${unit}`; };
+                s.addEventListener('input', upd);
+                s.addEventListener('focus', () => { keyShown = key; drawHood($('hood'), t, key, revealed, cur.eka, true); });
+                s.addEventListener('pointerdown', () => { keyShown = key; drawHood($('hood'), t, key, revealed, cur.eka, true); });
+                upd();
+            });
+            if (revealed) reveal(); else { $('cmp').innerHTML = INTRO; $('story').innerHTML = ''; }
+        }
+        $('avg').addEventListener('click', () => {
+            const t = BY[cur.sym];
+            // Como Mendeléyev: solo vecinos conocidos en 1871; si el periodo está completo, se promedia a lo largo del periodo
+            const used = [];
+            cur.props.forEach(([name, key]) => {
+                let m = neighbourMean(t, key, 'periodo', known1871), how = 'sus vecinos del periodo';
+                if (m == null) { m = neighbourMean(t, key, 'todos', known1871) ?? avg(Object.values(neighbours(t)).filter(x => known1871(x) && x[key] != null).map(x => x[key])); how = 'los vecinos conocidos en 1871'; }
+                $('s-' + key).value = m; $('s-' + key).dispatchEvent(new Event('input'));
+                used.push(`${name.toLowerCase()}: media de ${how}`);
+            });
+            $('cmp').innerHTML = INTRO + `<p class="note">Promedio aplicado — ${used.join('; ')}.</p>`;
+        });
+        function err(v, real) { return `${v > real ? '+' : ''}${((v - real) / real * 100).toFixed(1)} %`; }
+        function reveal() {
+            revealed = true;
+            const t = BY[cur.sym];
+            drawHood($('hood'), t, keyShown, true, cur.eka, true);
+            const rows = cur.props.map(([name, key, mend, unit]) => {
+                const you = +$('s-' + key).value, real = t[key];
+                return `<tr><td>${name}</td><td class="n you">${you.toFixed(key === 'masa' ? 1 : 2)}<div class="err">${err(you, real)}</div></td>
+                    <td class="n mend">${mend}<div class="err">${err(mend, real)}</div></td><td class="n real">${fmt(real, key)} ${unit}</td></tr>`;
+            }).join('') + cur.extra.map(([name, mend, real]) => `<tr><td>${name}</td><td class="err">—</td><td class="mend">${mend}</td><td class="real">${real}</td></tr>`).join('');
+            $('cmp').innerHTML = `<table class="cmp"><thead><tr><th>Propiedad</th><th class="you">Tú</th><th class="mend">Mendeléyev (1871)</th><th class="real">${t.nombre} real</th></tr></thead><tbody>${rows}</tbody></table>
+                <p style="font-size:.8rem;color:var(--muted);margin-top:8px">Descubierto en ${cur.year} por ${cur.who}. Valores reales actuales (IUPAC / PubChem).</p>`;
+            $('story').innerHTML = `<p class="note gold">${cur.story}</p>`;
+        }
+        $('reveal').addEventListener('click', reveal);
+
+        // ------------------------------------------------------------ pestaña Reto
+        const PROPS = { masa: ['Masa atómica', 'u'], densidad: ['Densidad', 'g/cm³'], en: ['Electronegatividad', '(Pauling)'], ei: ['1.ª energía de ionización', 'eV'], radio: ['Radio atómico', 'pm'], fusion: ['Punto de fusión', 'K'] };
+        const candidates = key => ELS.filter(e => e.fila <= 7 && e[key] != null && e.z <= 103 && neighbourMean(e, key) != null);
+        const reto = { e: null, key: 'masa', ok: 0, n: 0, done: false };
+        function newChallenge() {
+            const keys = Object.keys(PROPS);
+            reto.key = keys[Math.floor(Math.random() * keys.length)];
+            const c = candidates(reto.key);
+            reto.e = c[Math.floor(Math.random() * c.length)]; reto.done = false;
+            drawHood($('hood2'), reto.e, reto.key, false, '?');
+            $('prop-name').textContent = PROPS[reto.key][0]; $('prop-unit').textContent = PROPS[reto.key][1];
+            $('guess').value = ''; $('res2').innerHTML = '<span style="color:var(--muted)">Mira los valores de los vecinos y escribe tu estimación.</span>';
+            $('guess').focus({ preventScroll: true });
+        }
+        function check() {
+            const g = parseFloat($('guess').value);
+            if (isNaN(g) || reto.done) return;
+            reto.done = true; reto.n++;
+            const real = reto.e[reto.key], mean = neighbourMean(reto.e, reto.key);
+            const eYou = Math.abs(g - real) / real * 100, eAvg = Math.abs(mean - real) / real * 100;
+            const good = eYou <= 10; if (good) reto.ok++;
+            drawHood($('hood2'), reto.e, reto.key, true);
+            $('res2').innerHTML = `Era <b>${reto.e.nombre} (${reto.e.sym})</b>: ${PROPS[reto.key][0].toLowerCase()} = <span class="real">${fmt(real, reto.key)} ${PROPS[reto.key][1]}</span>.<br>
+                Tu estimación: <span class="you">${g}</span> → error ${eYou.toFixed(1)} % ${good ? '<span class="real">✓</span>' : ''}<br>
+                Promedio de los 4 vecinos: <span class="mend">${fmt(mean, reto.key)}</span> → error ${eAvg.toFixed(1)} %` +
+                ['periodo', 'grupo'].map(st => { const m = neighbourMean(reto.e, reto.key, st); return m == null ? '' : `<br>Solo el ${st}: <span class="mend">${fmt(m, reto.key)}</span> → error ${(Math.abs(m - real) / real * 100).toFixed(1)} %`; }).join('');
+            $('score2').textContent = `aciertos (error < 10 %): ${reto.ok} de ${reto.n}`;
+        }
+        $('check').addEventListener('click', check);
+        $('guess').addEventListener('keydown', ev => { if (ev.key === 'Enter') check(); });
+        $('next').addEventListener('click', newChallenge);
+
+        // ------------------------------------------------------------ pestaña Método
+        const STRAT = { todos: ['4 vecinos', '#22d3ee'], periodo: ['periodo (izq. + dcha.)', '#fbbf24'], grupo: ['grupo (arriba + abajo)', '#4ade80'] };
+        function score(key, st) {
+            const c = ELS.filter(e => e.fila <= 7 && e.z <= 103 && e[key] != null && neighbourMean(e, key, st) != null);
+            const errs = c.map(e => ({ e, er: Math.abs(neighbourMean(e, key, st) - e[key]) / e[key] }));
+            return { pct: errs.filter(x => x.er < 0.1).length / errs.length * 100, n: errs.length, errs };
+        }
+        function renderMethod() {
+            let html = '', best = [], fails = [];
+            Object.entries(PROPS).forEach(([key, [name]]) => {
+                const sc = Object.fromEntries(Object.keys(STRAT).map(st => [st, score(key, st)]));
+                const top = Object.keys(STRAT).reduce((a, b) => sc[a].pct >= sc[b].pct ? a : b);
+                best.push(`<b>${name}</b>: mejor por ${STRAT[top][0].split(' ')[0] === '4' ? 'los 4 vecinos' : 'el ' + STRAT[top][0].split(' ')[0]} (${sc[top].pct.toFixed(0)} %)`);
+                html += `<div style="margin-top:10px;font-size:.85rem;color:var(--text)">${name}</div>` + Object.entries(STRAT).map(([st, [label, col]]) =>
+                    `<div class="bar-row"><span style="color:var(--muted)">${label}</span><div class="bar"><span style="width:${sc[st].pct}%;background:${col}"></span></div><span class="score">${sc[st].pct.toFixed(0)} %</span></div>`).join('');
+                sc.todos.errs.sort((a, b) => b.er - a.er).slice(0, 1).forEach(x => fails.push(`<b>${x.e.nombre}</b> (${name.toLowerCase()}): real ${fmt(x.e[key], key)}, media de vecinos ${fmt(neighbourMean(x.e, key), key)}`));
+            });
+            $('bars').innerHTML = html;
+            $('fails').innerHTML = '<p style="margin-top:12px">' + best.join(' · ') + '</p><p style="margin-top:8px">Fallos más grandes (4 vecinos): ' + fails.join(' · ') + '</p>';
+        }
+
+        // ------------------------------------------------------------ pestañas
+        let retoReady = false, methodReady = false;
+        document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x === t));
+            document.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== t.dataset.tab; });
+            if (t.dataset.tab === 'reto' && !retoReady) { retoReady = true; newChallenge(); }
+            if (t.dataset.tab === 'metodo' && !methodReady) { methodReady = true; renderMethod(); }
+            history.replaceState(null, '', '#' + t.dataset.tab);
+        }));
+        renderHist();
+        const start = document.querySelector(`.tab[data-tab="${location.hash.slice(1)}"]`);
+        if (start) start.click();
+    })();
+    </script>
+</body>
+</html>

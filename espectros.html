@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espectros Atómicos - Chemistry Visual Lab</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Líneas del NIST de 23 elementos, color de lámpara calculado (CIE 1931), fórmula de Rydberg y espectro misterioso.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="Espectros Atómicos · Chemistry Visual Lab">
+    <meta property="og:description" content="Líneas del NIST de 23 elementos, color de lámpara calculado (CIE 1931), fórmula de Rydberg y espectro misterioso.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0a1a; --panel: #111127; --panel-2: #16163a; --border: #262650; --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b; --accent: #22d3ee; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        a { color: var(--accent); }
+        header { padding: 18px 24px 8px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+        .crumbs { width: 100%; font-size: .8rem; color: var(--dim); }
+        .crumbs a { color: var(--dim); text-decoration: none; }
+        .crumbs a:hover { color: var(--accent); }
+        h1 { font-size: 1.6rem; font-weight: 600; color: var(--accent); }
+        .subtitle { color: var(--muted); font-size: .9rem; }
+        .guide-link { margin-left: auto; font-size: .85rem; text-decoration: none; border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; }
+
+        .tabs { display: flex; gap: 6px; padding: 6px 24px 12px; flex-wrap: wrap; }
+        .tab { background: var(--panel); border: 1px solid var(--border); color: var(--muted); border-radius: 999px; padding: 7px 14px; font: inherit; font-size: .85rem; cursor: pointer; }
+        .tab[aria-selected="true"] { background: rgba(34,211,238,.12); border-color: var(--accent); color: var(--accent); }
+
+        main { padding: 0 24px 28px; display: grid; gap: 16px; }
+        .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; min-width: 0; }
+        .panel h2 { font-size: .8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+        .row { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+        .grow { flex: 1; min-width: 0; }
+
+        .picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 5px; }
+        .el { background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 7px; padding: 6px 0 4px; font: inherit; cursor: pointer; text-align: center; line-height: 1.1; }
+        .el .s { font-weight: 600; font-size: 1rem; display: block; }
+        .el .z { font-size: .6rem; color: var(--dim); font-family: 'Fira Code', monospace; }
+        .el[aria-pressed="true"] { border-color: var(--accent); background: rgba(34,211,238,.14); }
+        .el.b[aria-pressed="true"] { border-color: #f472b6; background: rgba(244,114,182,.14); }
+
+        .spec-wrap { position: relative; }
+        canvas.spec { width: 100%; height: 110px; display: block; border-radius: 8px; touch-action: pan-y pinch-zoom; }
+        .spec-label { display: flex; justify-content: space-between; align-items: baseline; margin: 10px 0 6px; font-size: .9rem; }
+        .spec-label b { font-size: 1.05rem; }
+        .tip { position: absolute; pointer-events: none; background: #000c; border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; font-family: 'Fira Code', monospace; font-size: .75rem; display: none; white-space: nowrap; z-index: 5; }
+        .axis { position: relative; height: 16px; font-family: 'Fira Code', monospace; font-size: .68rem; color: var(--dim); margin-top: 3px; }
+        .axis span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+        .axis span:first-child { transform: none; } .axis span:last-child { transform: translateX(-100%); }
+        .lamp { width: 92px; height: 92px; border-radius: 50%; flex: none; box-shadow: 0 0 40px 6px var(--glow, transparent); border: 1px solid var(--border); }
+        .lamp-box { display: flex; gap: 14px; align-items: center; }
+        .lamp-box p { font-size: .82rem; color: var(--muted); line-height: 1.5; max-width: 360px; }
+        .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+        .seg button { background: var(--panel); border: 0; color: var(--muted); padding: 7px 12px; font: inherit; font-size: .8rem; cursor: pointer; }
+        .seg button[aria-pressed="true"] { background: rgba(34,211,238,.14); color: var(--accent); }
+        .note { font-size: .8rem; color: var(--muted); background: var(--panel-2); border-left: 3px solid var(--accent); padding: 8px 11px; border-radius: 0 7px 7px 0; line-height: 1.5; margin-top: 10px; }
+        .btn { background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 9px; padding: 8px 14px; font: inherit; font-size: .85rem; cursor: pointer; }
+        .btn:hover { border-color: var(--accent); }
+        .btn.primary { background: rgba(34,211,238,.14); border-color: var(--accent); color: var(--accent); }
+
+        /* hidrógeno */
+        .levels { width: 100%; height: 320px; display: block; }
+        .formula { font-family: 'Fira Code', monospace; font-size: .95rem; background: var(--panel-2); padding: 10px 12px; border-radius: 8px; margin-top: 10px; line-height: 1.7; }
+        .formula .v { color: var(--accent); }
+        .series { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+        canvas.wide { width: 100%; height: 70px; display: block; border-radius: 8px; }
+        .bands { display: flex; font-size: .68rem; color: var(--dim); font-family: 'Fira Code', monospace; margin-top: 3px; }
+
+        /* misterio */
+        .result { font-size: .95rem; margin-top: 10px; min-height: 1.5em; }
+        .ok { color: #4ade80; } .ko { color: #f87171; }
+        .score { font-family: 'Fira Code', monospace; color: var(--muted); font-size: .85rem; }
+        .source { font-size: .7rem; color: var(--dim); margin-top: 8px; }
+        [hidden] { display: none !important; }
+
+        @media (max-width: 640px) {
+            header, .tabs, main { padding-left: 14px; padding-right: 14px; }
+            h1 { font-size: 1.3rem; }
+            .guide-link { margin-left: 0; }
+            .lamp { width: 70px; height: 70px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="crumbs"><a href="../../_portal/index.html">EigenLab</a> / <a href="index.html">Chemistry Visual Lab</a> / <a href="tabla-periodica.html">Tabla Periódica</a> / Espectros</div>
+        <h1>Espectros Atómicos</h1>
+        <p class="subtitle">Cada elemento emite luz en longitudes de onda propias: su huella dactilar, legible hasta en las estrellas.</p>
+        <a class="guide-link" href="guides/espectros.html">📖 Guía teórica</a>
+    </header>
+
+    <div class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="explorar" aria-selected="true">Explorar espectros</button>
+        <button class="tab" role="tab" data-tab="hidrogeno" aria-selected="false">Hidrógeno: la fórmula de Rydberg</button>
+        <button class="tab" role="tab" data-tab="misterio" aria-selected="false">Espectro misterioso</button>
+    </div>
+
+    <main>
+        <!-- ============ EXPLORAR ============ -->
+        <section data-panel="explorar">
+            <div class="panel">
+                <h2>Elige elementos <span style="text-transform:none;letter-spacing:0;font-weight:400">· clic: principal · Mayús+clic o segundo toque en «Comparar»: comparación</span></h2>
+                <div class="picker" id="picker"></div>
+                <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                    <div class="seg" role="group" aria-label="Tipo de espectro">
+                        <button id="m-em" aria-pressed="true">Emisión</button><button id="m-ab" aria-pressed="false">Absorción</button>
+                    </div>
+                    <div class="seg" role="group" aria-label="Intensidad de las líneas">
+                        <button id="i-th" aria-pressed="true" title="I ∝ g·A·e^(−E/kT)/λ">Modelo térmico</button><button id="i-ob" aria-pressed="false" title="Intensidades relativas publicadas por el NIST">Observada (NIST)</button>
+                    </div>
+                    <label id="t-box" style="display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted)">T
+                        <input id="temp" type="range" min="2000" max="12000" step="100" value="3500" style="accent-color:var(--accent)">
+                        <span id="tval" style="font-family:'Fira Code',monospace;color:var(--text);min-width:64px"></span></label>
+                    <button class="btn" id="compare">Comparar con…</button>
+                    <span id="cmp-hint" style="font-size:.8rem;color:var(--muted)"></span>
+                </div>
+            </div>
+            <div class="panel" style="margin-top:16px">
+                <div class="spec-label"><span><b id="a-name"></b> <span id="a-meta" style="color:var(--muted)"></span></span><span class="score" id="a-count"></span></div>
+                <div class="spec-wrap"><canvas class="spec" id="specA"></canvas><div class="tip" id="tipA"></div></div>
+                <div class="axis" data-axis></div>
+                <div id="b-block" hidden>
+                    <div class="spec-label"><span><b id="b-name" style="color:#f472b6"></b></span><button class="btn" id="b-clear">Quitar comparación</button></div>
+                    <div class="spec-wrap"><canvas class="spec" id="specB"></canvas><div class="tip" id="tipB"></div></div>
+                </div>
+            </div>
+            <div class="panel" style="margin-top:16px">
+                <h2>Color de una lámpara de descarga</h2>
+                <div class="row">
+                    <div class="lamp-box"><div class="lamp" id="lampA"></div><p id="lamp-text"></p></div>
+                    <div class="lamp-box" id="lampB-box" hidden><div class="lamp" id="lampB"></div></div>
+                </div>
+                <p class="note"><b>Modelo térmico:</b> la intensidad de cada línea es I ∝ g·A·e<sup>−E/kT</sup>/λ (probabilidad de transición A y energía del nivel superior E, del NIST). Supone equilibrio térmico, una simplificación: en una lámpara real las poblaciones no siguen exactamente a Boltzmann. Sube T y verás aparecer líneas de niveles más altos. Las intensidades «observadas» del NIST no sirven para calcular colores: proceden de fuentes distintas.</p>
+                <p class="note">El color se <b>calcula</b> sumando las líneas ponderadas por su intensidad con las funciones de igualación de color CIE 1931 (tabla oficial) y convirtiendo a sRGB. Es el color de una lámpara con ese gas o vapor (el neón de los rótulos, el sodio de las farolas). Los colores de llama del Ca, Sr, Ba o Cu proceden sobre todo de moléculas (CaOH, SrOH, CuCl), no de estas líneas atómicas.</p>
+            </div>
+        </section>
+
+        <!-- ============ HIDRÓGENO ============ -->
+        <section data-panel="hidrogeno" hidden>
+            <div class="row">
+                <div class="panel grow" style="min-width:300px">
+                    <h2>Niveles de energía del hidrógeno</h2>
+                    <div class="series" id="series"></div>
+                    <canvas class="levels" id="levels"></canvas>
+                    <p style="font-size:.8rem;color:var(--muted)">Toca una flecha o elige el nivel superior para ver la transición.</p>
+                </div>
+                <div class="panel grow" style="min-width:300px">
+                    <h2>Transición seleccionada</h2>
+                    <div class="formula" id="formula"></div>
+                    <div class="lamp-box" style="margin-top:12px"><div class="lamp" id="lineSwatch" style="width:54px;height:54px"></div><p id="line-text"></p></div>
+                    <h2 style="margin-top:16px">Las tres series, de 90 a 2000 nm</h2>
+                    <canvas class="wide" id="wide"></canvas>
+                    <div class="bands" id="bands"></div>
+                    <p class="note">Las líneas se calculan con R<sub>H</sub> = R<sub>∞</sub>/(1 + m<sub>e</sub>/m<sub>p</sub>) y se pasan de vacío a aire (índice del aire estándar). Coinciden con las del NIST en menos de 0,01 nm.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ MISTERIO ============ -->
+        <section data-panel="misterio" hidden>
+            <div class="panel">
+                <h2>¿Qué elemento emite este espectro?</h2>
+                <div class="spec-wrap"><canvas class="spec" id="specM"></canvas><div class="tip" id="tipM"></div></div>
+                <div class="axis" data-axis></div>
+                <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                    <div class="seg" role="group" aria-label="Dificultad">
+                        <button id="d1" aria-pressed="true">Un elemento</button><button id="d2" aria-pressed="false">Mezcla de dos</button>
+                    </div>
+                    <button class="btn" id="hint">Ver referencia</button>
+                    <button class="btn primary" id="new">Nuevo espectro</button>
+                    <span class="score" id="score"></span>
+                </div>
+                <div class="picker" id="guess" style="margin-top:12px"></div>
+                <div class="result" id="result"></div>
+                <p class="note">Así se descubrió el <b>helio</b>: en 1868 apareció en el espectro del Sol una línea amarilla (587,6 nm) que no correspondía a ningún elemento conocido. Se aisló en la Tierra en 1895. <a href="../../Astronomy/Astronomy Visual Lab/diagrama-hr.html">Espectros estelares →</a></p>
+            </div>
+        </section>
+        <p class="source" id="source"></p>
+    </main>
+
+    <script src="data/elements.js"></script>
+    <script src="data/spectra.js"></script>
+    <script>
+    (() => {
+        const SP = window.EIGENLAB_SPECTRA, EL = window.EIGENLAB_ELEMENTS;
+        const BY_SYM = Object.fromEntries(EL.elementos.map(e => [e.sym, e]));
+        const SYMS = Object.keys(SP.lineas);
+        const [L0, L1] = SP.rango_nm;
+        const $ = id => document.getElementById(id);
+        $('source').textContent = `Líneas: ${SP.fuente}. ${SP.nota} Color: ${SP.fuente_cmf}.`;
+        document.querySelectorAll('[data-axis]').forEach(ax => {
+            ax.innerHTML = [380, 450, 500, 550, 600, 650, 700, 780].map(nm =>
+                `<span style="left:${(nm - L0) / (L1 - L0) * 100}%">${nm}${nm === 380 || nm === 780 ? ' nm' : ''}</span>`).join('');
+        });
+
+        // ------------------------------------------------------------ color: tabla oficial CIE 1931 (2°), interpolada
+        const CMF = SP.cmf_cie1931;
+        function cmf(l) {
+            const i = (l - CMF.desde_nm) / CMF.paso_nm, a = Math.floor(i), f = i - a;
+            const A = CMF.xyz[a], B = CMF.xyz[a + 1] || A;
+            if (!A) return [0, 0, 0];
+            return A.map((v, k) => v + (B[k] - v) * f);
+        }
+        function xyzToRgb([X, Y, Z]) {
+            let r = 3.2406 * X - 1.5372 * Y - 0.4986 * Z, gg = -0.9689 * X + 1.8758 * Y + 0.0415 * Z, b = 0.0557 * X - 0.2040 * Y + 1.0570 * Z;
+            r = Math.max(0, r); gg = Math.max(0, gg); b = Math.max(0, b);                  // fuera de la gama sRGB: se recorta
+            const M = Math.max(r, gg, b) || 1; [r, gg, b] = [r / M, gg / M, b / M];
+            const enc = c => c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
+            return [enc(r), enc(gg), enc(b)].map(c => Math.round(Math.min(1, Math.max(0, c)) * 255));
+        }
+        const wlRgb = l => xyzToRgb(cmf(l));
+        function lampRgb(lines) {
+            const XYZ = [0, 0, 0];
+            lines.forEach(({ nm, rel }) => { const c = cmf(nm); XYZ[0] += rel * c[0]; XYZ[1] += rel * c[1]; XYZ[2] += rel * c[2]; });
+            return xyzToRgb(XYZ);
+        }
+        const css = ([r, g2, b], a = 1) => `rgba(${r},${g2},${b},${a})`;
+
+        // ------------------------------------------------------------ intensidades: observadas (NIST) o modelo térmico
+        const KB = 8.617333e-5;   // eV/K
+        const imodel = { mode: 'termico', T: 3500 };
+        const coverage = sym => { const L = SP.lineas[sym]; return L.filter(l => l.A).length / L.length; };
+        const thermalOK = sym => coverage(sym) >= 0.5;
+        function linesFor(sym) {
+            const L = SP.lineas[sym];
+            if (imodel.mode === 'termico' && thermalOK(sym)) {
+                const I = L.filter(l => l.A).map(l => ({ nm: l.nm, i: l.g * l.A * Math.exp(-l.Ek / (KB * imodel.T)) / l.nm }));
+                const mx = Math.max(...I.map(x => x.i));
+                return I.map(x => ({ nm: x.nm, rel: x.i / mx }));
+            }
+            return L.map(l => ({ nm: l.nm, rel: l.rel }));
+        }
+
+        // ------------------------------------------------------------ dibujo de un espectro
+        function setupCanvas(c) {
+            const dpr = window.devicePixelRatio || 1, r = c.getBoundingClientRect();
+            c.width = Math.round(r.width * dpr); c.height = Math.round(r.height * dpr);
+            const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            return [ctx, r.width, r.height];
+        }
+        const xOf = (nm, w) => (nm - L0) / (L1 - L0) * w;
+        function drawSpectrum(canvas, lines, mode) {
+            const [ctx, w, h] = setupCanvas(canvas);
+            if (mode === 'ab') {
+                for (let x = 0; x < w; x++) { const nm = L0 + x / w * (L1 - L0); ctx.fillStyle = css(wlRgb(nm), 0.9); ctx.fillRect(x, 0, 1, h); }
+                lines.forEach(({ nm, rel }) => { if (rel < 0.002) return; ctx.fillStyle = `rgba(0,0,0,${Math.min(1, 0.1 + Math.sqrt(rel))})`; ctx.fillRect(xOf(nm, w) - 1, 0, 2.2, h); });
+            } else {
+                ctx.fillStyle = '#000'; ctx.fillRect(0, 0, w, h);
+                lines.forEach(({ nm, rel }) => {
+                    if (rel < 0.002) return;                          // por debajo del 0,2 %: invisible junto a las demás
+                    const x = xOf(nm, w), a = Math.min(1, 0.04 + Math.sqrt(rel)), c = wlRgb(nm);
+                    const grd = ctx.createLinearGradient(x - 4, 0, x + 4, 0);
+                    grd.addColorStop(0, css(c, 0)); grd.addColorStop(0.5, css(c, a)); grd.addColorStop(1, css(c, 0));
+                    ctx.fillStyle = grd; ctx.fillRect(x - 4, 0, 8, h);
+                    ctx.fillStyle = css(c, a); ctx.fillRect(x - 0.9, 0, 1.8, h);
+                });
+            }
+            canvas._lines = lines;
+        }
+        function attachTip(canvas, tip) {
+            canvas.addEventListener('pointermove', ev => {
+                const r = canvas.getBoundingClientRect(), x = ev.clientX - r.left;
+                const nm = L0 + x / r.width * (L1 - L0);
+                const near = (canvas._lines || []).reduce((best, l) => Math.abs(l.nm - nm) < Math.abs(best.nm - nm) ? l : best, { nm: 1e9 });
+                if (Math.abs(xOf(near.nm, r.width) - x) < 8) {
+                    tip.style.display = 'block'; tip.style.left = Math.min(x + 10, r.width - 150) + 'px'; tip.style.top = '6px';
+                    tip.textContent = `${near.nm.toFixed(3)} nm · int. rel. ${near.rel.toFixed(3)}`;
+                } else tip.style.display = 'none';
+            });
+            canvas.addEventListener('pointerleave', () => { tip.style.display = 'none'; });
+        }
+
+        // ------------------------------------------------------------ pestaña Explorar
+        const state = { a: 'Ne', b: null, mode: 'em', pickB: false };
+        function picker(container, onPick, cls = '') {
+            container.innerHTML = SYMS.map(s => `<button class="el ${cls}" data-s="${s}" aria-pressed="false"><span class="s">${s}</span><span class="z">${BY_SYM[s].z}</span></button>`).join('');
+            container.addEventListener('click', ev => { const b = ev.target.closest('.el'); if (b) onPick(b.dataset.s, ev); });
+        }
+        picker($('picker'), (s, ev) => {
+            if (ev.shiftKey || state.pickB) { state.b = s === state.a ? null : s; state.pickB = false; }
+            else state.a = s;
+            renderExplore();
+        });
+        $('m-em').addEventListener('click', () => { state.mode = 'em'; renderExplore(); });
+        $('m-ab').addEventListener('click', () => { state.mode = 'ab'; renderExplore(); });
+        $('compare').addEventListener('click', () => { state.pickB = !state.pickB; renderExplore(); });
+        $('b-clear').addEventListener('click', () => { state.b = null; renderExplore(); });
+        $('i-th').addEventListener('click', () => { imodel.mode = 'termico'; renderExplore(); });
+        $('i-ob').addEventListener('click', () => { imodel.mode = 'observado'; renderExplore(); });
+        $('temp').addEventListener('input', ev => { imodel.T = +ev.target.value; renderExplore(); });
+        attachTip($('specA'), $('tipA')); attachTip($('specB'), $('tipB')); attachTip($('specM'), $('tipM'));
+
+        const LAMP_NOTES = {
+            Ne: 'El rojo anaranjado de los rótulos de «neón»: decenas de líneas entre 585 y 700 nm.',
+            Na: 'Las farolas de vapor de sodio: casi toda la luz está en el doblete D (589,0 y 589,6 nm).',
+            Hg: 'Lámparas de mercurio: violeta, azul y verde intensos. Los fluorescentes convierten su ultravioleta con un recubrimiento.',
+            H: 'Rosa violáceo: la roja Hα domina, con la azul Hβ y las violetas Hγ y Hδ.',
+            He: 'Melocotón pálido. La línea amarilla de 587,6 nm delató al helio en el Sol.',
+            Ar: 'Violeta azulado en un tubo de descarga.',
+            Sr: 'El estroncio <b>atómico</b> emite sobre todo en azul (460,7 nm). El rojo de los fuegos artificiales es de la molécula SrOH.',
+            Ca: 'Su línea atómica más intensa es violeta (422,7 nm); el naranja de la llama de calcio es molecular (CaOH).',
+            Cu: 'Líneas atómicas verdes (510–522 nm). El verde azulado de la llama de cobre procede sobre todo de CuCl.',
+            Ba: 'Línea atómica verde-amarilla a 553,5 nm; en llama, el verde se debe también a BaOH y BaCl.',
+            K: 'El doblete rojo (766,5 y 769,9 nm) más la línea violeta (404 nm) dan el lila del potasio.',
+            Li: 'Rojo carmín: domina la línea de 670,8 nm.',
+        };
+        function renderExplore() {
+            const A = linesFor(state.a), e = BY_SYM[state.a];
+            $('i-th').setAttribute('aria-pressed', imodel.mode === 'termico'); $('i-ob').setAttribute('aria-pressed', imodel.mode === 'observado');
+            $('t-box').style.opacity = imodel.mode === 'termico' ? 1 : .4; $('tval').textContent = imodel.T + ' K';
+            document.querySelectorAll('#picker .el').forEach(b => {
+                b.setAttribute('aria-pressed', b.dataset.s === state.a || b.dataset.s === state.b);
+                b.classList.toggle('b', b.dataset.s === state.b);
+            });
+            $('m-em').setAttribute('aria-pressed', state.mode === 'em'); $('m-ab').setAttribute('aria-pressed', state.mode === 'ab');
+            $('compare').textContent = state.pickB ? 'Elige el segundo elemento…' : 'Comparar con…';
+            $('cmp-hint').textContent = state.pickB ? 'toca un elemento de la lista' : '';
+            $('a-name').textContent = `${e.nombre} (${e.sym})`;
+            $('a-meta').textContent = `· Z = ${e.z} · ${e.config}`;
+            $('a-count').textContent = imodel.mode === 'termico' && !thermalOK(state.a)
+                ? 'sin probabilidades A suficientes: intensidad observada' : `${A.length} líneas`;
+            drawSpectrum($('specA'), A, state.mode);
+            $('b-block').hidden = !state.b; $('lampB-box').hidden = !state.b;
+            const la = lampRgb(A);
+            $('lampA').style.background = css(la); $('lampA').style.setProperty('--glow', css(la, .6));
+            $('lamp-text').innerHTML = `<b>${e.nombre}</b>: ${LAMP_NOTES[state.a] || 'Color resultante de sus líneas visibles.'}`;
+            if (state.b) {
+                const B = linesFor(state.b);
+                $('b-name').textContent = `${BY_SYM[state.b].nombre} (${state.b})`;
+                drawSpectrum($('specB'), B, state.mode);
+                const lb = lampRgb(B); $('lampB').style.background = css(lb); $('lampB').style.setProperty('--glow', css(lb, .6));
+            }
+        }
+
+        // ------------------------------------------------------------ pestaña Hidrógeno
+        const HS = SP.hidrogeno_series, RH = SP['rydberg_H_m-1'];
+        const SERIES = { Lyman: 1, Balmer: 2, Paschen: 3 };
+        const hstate = { serie: 'Balmer', nu: 3 };
+        $('series').innerHTML = Object.keys(SERIES).map(s => `<button class="btn" data-serie="${s}">${s} (n → ${SERIES[s]})</button>`).join('');
+        $('series').addEventListener('click', ev => { const b = ev.target.closest('[data-serie]'); if (!b) return; hstate.serie = b.dataset.serie; hstate.nu = SERIES[b.dataset.serie] + 1; renderH(); });
+        const E = n => -13.598 / (n * n);    // eV (aproximación de Bohr; la energía de ionización medida es 13,598 eV)
+        // Escala vertical ∝ 1/√n (no lineal en energía) para que los niveles altos no se amontonen
+        function levelsGeom(w, h) {
+            const top = 22, bot = h - 20, span = 1 - 1 / Math.sqrt(7);
+            // t = 0 en n = 1 y t = 1 en n = 7; la ionización (n = ∞) se dibuja un poco por encima
+            const yOfN = n => { const t = n === Infinity ? 1.1 : (1 - 1 / Math.sqrt(n)) / span; return bot - t / 1.1 * (bot - top); };
+            return { yOfN, x0: 70, x1: w - 20 };
+        }
+        function renderH() {
+            const c = $('levels'), [ctx, w, h] = setupCanvas(c), G = levelsGeom(w, h), nl = SERIES[hstate.serie];
+            ctx.clearRect(0, 0, w, h); ctx.font = '11px Fira Code, monospace';
+            for (let n = 1; n <= 7; n++) {
+                const y = G.yOfN(n);
+                ctx.strokeStyle = n === nl || n === hstate.nu ? '#22d3ee' : '#334155'; ctx.lineWidth = n === nl || n === hstate.nu ? 2 : 1;
+                ctx.beginPath(); ctx.moveTo(G.x0, y); ctx.lineTo(G.x1, y); ctx.stroke();
+                ctx.fillStyle = '#94a3b8'; ctx.fillText(`n=${n}`, 8, y + 4);
+                if (n <= 5 || n === hstate.nu) { ctx.fillStyle = '#64748b'; ctx.fillText(`${E(n).toFixed(2)} eV`, G.x1 - 74, y - 4); }
+            }
+            ctx.strokeStyle = '#334155'; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(G.x0, G.yOfN(Infinity)); ctx.lineTo(G.x1, G.yOfN(Infinity)); ctx.stroke(); ctx.setLineDash([]);
+            ctx.fillStyle = '#64748b'; ctx.fillText('n=∞ · 0 eV (ionización)', G.x0 + 4, G.yOfN(Infinity) - 6);
+            ctx.fillText('escala no lineal (∝ 1/√n)', 8, h - 4);
+            const lines = HS.filter(l => l.serie === hstate.serie && l.n_sup <= 7);
+            c._arrows = [];
+            lines.forEach((l, i) => {
+                const x = G.x0 + 30 + i * ((G.x1 - G.x0 - 110) / Math.max(1, lines.length - 1));
+                const y1 = G.yOfN(l.n_sup), y2 = G.yOfN(l.n_inf);
+                const nm = l.aire_nm || l.vacio_nm;
+                const col = nm >= 380 && nm <= 750 ? css(wlRgb(nm)) : '#64748b';
+                const sel = l.n_sup === hstate.nu;
+                ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = sel ? 3.5 : 1.8;
+                ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x, y2 - 6); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(x - 5, y2 - 8); ctx.lineTo(x + 5, y2 - 8); ctx.lineTo(x, y2); ctx.fill();
+                c._arrows.push({ x, nu: l.n_sup });
+            });
+            const l = HS.find(x => x.serie === hstate.serie && x.n_sup === hstate.nu);
+            const inv = RH * (1 / (nl * nl) - 1 / (hstate.nu * hstate.nu));
+            const nm = l.aire_nm || l.vacio_nm, vis = nm >= 380 && nm <= 750;
+            $('formula').innerHTML = `1/λ = R<sub>H</sub> (1/n₁² − 1/n₂²)<br>
+                1/λ = ${RH.toFixed(1)} m⁻¹ × (1/${nl}² − 1/${hstate.nu}²) = <span class="v">${inv.toExponential(5)} m⁻¹</span><br>
+                λ (vacío) = <span class="v">${l.vacio_nm.toFixed(3)} nm</span>${l.aire_nm ? ` · λ (aire) = <span class="v">${l.aire_nm.toFixed(3)} nm</span>` : ''}<br>
+                E<sub>fotón</sub> = hc/λ = <span class="v">${(1239.84198 / l.vacio_nm).toFixed(3)} eV</span>`;
+            const sw = vis ? wlRgb(nm) : [40, 40, 60];
+            $('lineSwatch').style.background = css(sw); $('lineSwatch').style.setProperty('--glow', vis ? css(sw, .6) : 'transparent');
+            const names = { 3: 'Hα', 4: 'Hβ', 5: 'Hγ', 6: 'Hδ' };
+            $('line-text').innerHTML = `<b>${hstate.serie} ${hstate.nu} → ${nl}</b>${hstate.serie === 'Balmer' && names[hstate.nu] ? ` (${names[hstate.nu]})` : ''}: ` +
+                (vis ? 'luz visible.' : nm < 380 ? '<b>ultravioleta</b>, invisible al ojo.' : '<b>infrarrojo</b>, invisible al ojo.');
+            document.querySelectorAll('[data-serie]').forEach(b => b.classList.toggle('primary', b.dataset.serie === hstate.serie));
+            renderWide();
+        }
+        $('levels').addEventListener('click', ev => {
+            const c = $('levels'), r = c.getBoundingClientRect(), x = ev.clientX - r.left;
+            const a = (c._arrows || []).reduce((best, a2) => Math.abs(a2.x - x) < Math.abs(best.x - x) ? a2 : best, { x: 1e9 });
+            if (Math.abs(a.x - x) < 20) { hstate.nu = a.nu; renderH(); }
+        });
+        function renderWide() {
+            const c = $('wide'), [ctx, w, h] = setupCanvas(c);
+            const lo = Math.log10(90), hi = Math.log10(2000), X = nm => (Math.log10(nm) - lo) / (hi - lo) * w;
+            ctx.fillStyle = '#0d0d24'; ctx.fillRect(0, 0, w, h);
+            for (let x = X(380); x < X(750); x++) { const nm = 10 ** (lo + x / w * (hi - lo)); ctx.fillStyle = css(wlRgb(nm), .18); ctx.fillRect(x, 0, 1, h); }
+            HS.forEach(l => {
+                const nm = l.aire_nm || l.vacio_nm, x = X(nm), vis = nm >= 380 && nm <= 750;
+                const sel = l.serie === hstate.serie && l.n_sup === hstate.nu;
+                ctx.fillStyle = vis ? css(wlRgb(nm)) : ({ Lyman: '#a78bfa', Balmer: '#94a3b8', Paschen: '#f87171' })[l.serie];
+                ctx.globalAlpha = l.serie === hstate.serie ? 1 : 0.35;
+                ctx.fillRect(x - (sel ? 1.5 : 0.6), sel ? 0 : h * 0.25, sel ? 3 : 1.2, sel ? h : h * 0.5);
+            });
+            ctx.globalAlpha = 1;
+            $('bands').innerHTML = [[90, 380, 'ultravioleta'], [380, 750, 'visible'], [750, 2000, 'infrarrojo']].map(([a, b, t]) =>
+                `<span style="width:${(Math.log10(b) - Math.log10(a)) / (hi - lo) * 100}%;text-align:center">${t}</span>`).join('');
+        }
+
+        // ------------------------------------------------------------ pestaña Misterio
+        const mstate = { answer: [], mix: false, ok: 0, total: 0, hint: false, done: false, picked: new Set() };
+        picker($('guess'), s => guess(s));
+        function newMystery() {
+            const pool = SYMS.slice(); const pick = () => pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
+            mstate.answer = mstate.mix ? [pick(), pick()] : [pick()];
+            mstate.hint = false; mstate.done = false; mstate.picked = new Set();
+            const lines = mstate.answer.flatMap(s => linesFor(s).map(l => ({ nm: l.nm, rel: l.rel * (mstate.mix ? 0.8 : 1) })));
+            drawSpectrum($('specM'), lines, 'em');
+            $('result').innerHTML = mstate.mix ? 'Identifica los <b>dos</b> elementos de la mezcla.' : 'Compara las líneas con las de los elementos que conozcas.';
+            document.querySelectorAll('#guess .el').forEach(b => { b.setAttribute('aria-pressed', 'false'); b.disabled = false; });
+        }
+        function guess(s) {
+            if (mstate.done || mstate.picked.has(s)) return;
+            mstate.picked.add(s);
+            const btn = document.querySelector(`#guess .el[data-s="${s}"]`);
+            const right = mstate.answer.includes(s);
+            btn.setAttribute('aria-pressed', right); btn.disabled = !right;
+            if (!right) { $('result').innerHTML = `<span class="ko">No es ${BY_SYM[s].nombre}.</span> Fíjate en las líneas más brillantes.`; mstate.total++; }
+            const found = mstate.answer.filter(a => mstate.picked.has(a));
+            if (found.length === mstate.answer.length) {
+                mstate.done = true; mstate.ok++; mstate.total++;
+                $('result').innerHTML = `<span class="ok">¡Correcto!</span> ${mstate.answer.map(a => BY_SYM[a].nombre).join(' + ')}.`;
+            } else if (right) $('result').innerHTML = `<span class="ok">${BY_SYM[s].nombre} está en la mezcla.</span> Falta otro.`;
+            $('score').textContent = `aciertos ${mstate.ok} · intentos ${mstate.total}`;
+        }
+        $('new').addEventListener('click', newMystery);
+        $('d1').addEventListener('click', () => { mstate.mix = false; $('d1').setAttribute('aria-pressed', true); $('d2').setAttribute('aria-pressed', false); newMystery(); });
+        $('d2').addEventListener('click', () => { mstate.mix = true; $('d2').setAttribute('aria-pressed', true); $('d1').setAttribute('aria-pressed', false); newMystery(); });
+        $('hint').addEventListener('click', () => {
+            document.querySelector('[data-tab="explorar"]').click();
+            $('result').innerHTML = '';
+        });
+
+        // ------------------------------------------------------------ pestañas y arranque
+        let mysteryReady = false;
+        document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x === t));
+            document.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== t.dataset.tab; });
+            if (t.dataset.tab === 'explorar') renderExplore();
+            if (t.dataset.tab === 'hidrogeno') renderH();
+            if (t.dataset.tab === 'misterio' && !mysteryReady) { mysteryReady = true; newMystery(); } else if (t.dataset.tab === 'misterio') drawSpectrum($('specM'), $('specM')._lines, 'em');
+            history.replaceState(null, '', '#' + t.dataset.tab);
+        }));
+        let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => {
+            const tab = document.querySelector('.tab[aria-selected="true"]').dataset.tab;
+            if (tab === 'explorar') renderExplore(); else if (tab === 'hidrogeno') renderH(); else drawSpectrum($('specM'), $('specM')._lines, 'em');
+        }, 120); });
+        const q = new URLSearchParams(location.search).get('el');
+        if (q && SP.lineas[q]) state.a = q;
+        const start = location.hash.slice(1);
+        (document.querySelector(`.tab[data-tab="${start}"]`) || document.querySelector('.tab')).click();
+    })();
+    </script>
+</body>
+</html>
