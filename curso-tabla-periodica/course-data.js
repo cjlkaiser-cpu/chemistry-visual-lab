@@ -82,6 +82,21 @@ window.EIGENLAB_COURSE = {
          "objetivos": ["Explicar la química uniforme de los lantánidos", "Relacionar la contracción lantánida con su separación", "Distinguir el comportamiento de los primeros actínidos"]}
       ]
     },
-    {"n": 6, "titulo": "Más allá de la tabla", "proximamente": true, "resumen": "Origen cósmico, efectos relativistas, superpesados y los elementos de la tecnología.", "lecciones": []}
+    {
+      "n": 6, "titulo": "Más allá de la tabla",
+      "resumen": "Origen cósmico, efectos relativistas, superpesados y los elementos de la tecnología.",
+      "lecciones": [
+        {"n": 1, "titulo": "De dónde vienen los elementos", "min": 20,
+         "objetivos": ["Identificar las fuentes de los elementos: Big Bang, estrellas, supernovas, rayos cósmicos", "Explicar por qué la fusión estelar se detiene en el grupo del hierro", "Interpretar la curva de abundancias del sistema solar"]},
+        {"n": 2, "titulo": "Más allá del hierro: captura de neutrones", "min": 20,
+         "objetivos": ["Explicar la captura de neutrones y la desintegración β⁻", "Distinguir los procesos s y r", "Relacionar los picos de abundancia con los números mágicos"]},
+        {"n": 3, "titulo": "Efectos relativistas", "min": 20,
+         "objetivos": ["Estimar la velocidad del electrón 1s con v/c ≈ Zα", "Explicar la contracción de los orbitales s y p", "Relacionar la relatividad con el color del oro y el mercurio líquido"]},
+        {"n": 4, "titulo": "Los superpesados", "min": 15,
+         "objetivos": ["Describir cómo se sintetizan los elementos superpesados", "Conocer los últimos elementos nombrados", "Explicar qué es la isla de estabilidad"]},
+        {"n": 5, "titulo": "Los elementos de la tecnología", "min": 15,
+         "objetivos": ["Identificar los elementos de un teléfono móvil y su función", "Conocer el concepto de materia prima crítica", "Relacionar la escasez y el reciclado con la química de los elementos"]}
+      ]
+    }
   ]
 };

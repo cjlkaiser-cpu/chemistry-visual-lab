@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.3 Efectos relativistas · Curso de la Tabla Periódica</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Estimar la velocidad del electrón 1s con v/c ≈ Zα; Explicar la contracción de los orbitales s y p; Relacionar la relatividad con el color del oro y el mercurio…">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="6.3 Efectos relativistas · Curso">
+    <meta property="og:description" content="Lección del curso «La Tabla Periódica, de dentro afuera». Estimar la velocidad del electrón 1s con v/c ≈ Zα; Explicar la contracción de los orbitales s y p; Relacionar la relatividad con el color del oro y el mercurio…">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../curso.css">
+</head>
+<body>
+    <article class="lesson" data-mod="6" data-lesson="3">
+
+        <div class="box predict" data-answer="b"><span class="label">Predice antes de seguir</span>
+            <p>¿Por qué el oro es amarillo y la plata es blanca, si están en el mismo grupo?</p><ul class="options"><li data-k="a">Por impurezas de cobre en el oro</li><li data-k="b">Por efectos de la relatividad especial en sus electrones</li><li data-k="c">Porque el oro es más denso</li></ul>
+            <div class="reveal"><p>En el oro, los electrones internos se mueven a más de la mitad de la velocidad de la luz. La relatividad contrae el orbital 6s y expande el 5d; la diferencia de energía entre ambos baja hasta el visible y el oro absorbe el azul.</p></div>
+        </div>
+
+        <h2>Electrones rápidos</h2>
+        <p>En el modelo del átomo de hidrógeno, el electrón 1s de un átomo de número atómico Z se mueve a una velocidad v ≈ Zα·c, donde α ≈ 1/137 es la constante de estructura fina. En el hidrógeno es menos del 1 % de c; en el oro (Z = 79), el 58 %. A esas velocidades la masa efectiva del electrón aumenta en el factor de Lorentz γ, y como el radio del orbital es inversamente proporcional a la masa, el orbital se contrae.</p>
+        <div class="eq">v/c ≈ Zα      γ = 1/√(1 − (Zα)²)      contracción ≈ 1 − 1/γ</div>
+        <p>Para el oro, γ ≈ 1,22 y el 1s se contrae un 18 %. Los orbitales s y p de valencia, que penetran hasta el núcleo, se contraen también (el 6s del oro, alrededor del 17 %). Los d y f, en cambio, quedan mejor apantallados y se expanden.</p>
+
+        <h2>Consecuencias</h2>
+        <p>Estos efectos cambian la química del periodo 6 y siguientes. El oro es amarillo; el mercurio es líquido (sin relatividad fundiría unos 105 K más arriba); unos 1,7 de los 2,1 V de la batería de plomo de un coche se deben a la relatividad; el talio, el plomo y el bismuto prefieren no usar sus electrones 6s² (efecto del par inerte). En los superpesados los efectos son aún mayores.</p>
+
+        <figure class="sim" data-src="../../efectos-relativistas.html?z=79" data-title="Efectos Relativistas" data-h="900">
+            <figcaption><span class="task">Tarea</span><ol><li>Mueve Z desde el cobre (29) hasta el oro (79): ¿cuánto cambia la contracción?</li><li>Pulsa las tarjetas del mercurio y del plomo y lee qué propiedad cambia.</li><li>Lleva Z a 118: ¿qué fracción de c alcanza el electrón 1s?</li></ol></figcaption>
+        </figure>
+
+        <div class="box idea"><span class="label">Idea clave</span><p>En los átomos pesados la relatividad contrae los orbitales s y p y expande los d y f. Eso explica el color del oro, el mercurio líquido y el par inerte.</p></div>
+        <div class="box mistake"><span class="label">Error frecuente</span><p>«La relatividad solo importa en astronomía». En química pesada es imprescindible: los cálculos que la ignoran fallan en propiedades tan cotidianas como el color de un anillo o el voltaje de una batería.</p></div>
+        <details class="deep"><summary>Profundizar: el máximo del oro</summary><div><p>La contracción relativista del orbital de valencia no crece de forma monótona con Z: depende de cuánto penetre el orbital y de la subcapa d que tenga debajo. Los cálculos de Dirac-Fock muestran un máximo local en el oro (P. Pyykkö lo llamó «el máximo del oro»). Por eso el oro es tan singular dentro de su grupo: forma el anión Au⁻ (afinidad electrónica 2,31 eV) y enlaces Au–Au llamativamente fuertes (aurofilia).</p></div></details>
+
+        <h2>Autoevaluación</h2>
+        <div class="quiz"><div class="q" data-answer="c"><p>¿A qué fracción de la velocidad de la luz se mueve aproximadamente el electrón 1s del oro?</p><ul class="options"><li data-k="a" data-why="Es mucho, pero no tanto.">99 %</li><li data-k="b" data-why="Eso corresponde al hidrógeno.">1 %</li><li data-k="c" data-why="Correcto: Zα = 79/137.">58 %</li></ul></div><div class="q" data-answer="b"><p>¿Qué les ocurre a los orbitales s por efectos relativistas?</p><ul class="options"><li data-k="a" data-why="En los átomos pesados el efecto es grande.">Nada</li><li data-k="b" data-why="Correcto.">Se contraen y se estabilizan</li><li data-k="c" data-why="Esos son los d y f.">Se expanden</li></ul></div><div class="q" data-answer="b"><p>¿Qué propiedad del mercurio se debe en gran parte a la relatividad?</p><ul class="options"><li data-k="a" data-why="La relatividad no es la causa principal.">Su densidad</li><li data-k="b" data-why="Correcto: baja su punto de fusión unos 105 K.">Que sea líquido a temperatura ambiente</li><li data-k="c" data-why="No es la propiedad estudiada.">Su toxicidad</li></ul></div><div class="q" data-answer="a"><p>¿Por qué el talio forma Tl⁺ con más facilidad que Tl³⁺?</p><ul class="options"><li data-k="a" data-why="Correcto.">Porque su par 6s², contraído, se retiene con fuerza (efecto del par inerte)</li><li data-k="b" data-why="Tiene tres: 6s² 6p¹.">Porque solo tiene un electrón de valencia</li><li data-k="c" data-why="Es un metal del grupo 13.">Porque es un gas noble</li></ul></div></div>
+        <div class="box summary"><span class="label">En resumen</span><ul><li>En átomos pesados los electrones internos alcanzan fracciones apreciables de c: v/c ≈ Zα.</li><li>Los orbitales s y p se contraen; los d y f se expanden.</li><li>Consecuencias: color del oro, mercurio líquido, batería de plomo, par inerte.</li></ul></div>
+        <p class="sources">Fuentes: P. Pyykkö, Chem. Rev. 88, 563 (1988); F. Calvo y cols., Angew. Chem. Int. Ed. 52, 7583 (2013); R. Ahuja y cols., Phys. Rev. Lett. 106, 018301 (2011).</p>
+
+    </article>
+    <script src="../course-data.js"></script>
+    <script src="../course.js"></script>
+</body>
+</html>

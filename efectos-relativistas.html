@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Efectos Relativistas - Chemistry Visual Lab</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Electrones al 58 % de la velocidad de la luz: por qué el oro es amarillo, el mercurio líquido y la batería de plomo funciona.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="Efectos Relativistas · Chemistry Visual Lab">
+    <meta property="og:description" content="Electrones al 58 % de la velocidad de la luz: por qué el oro es amarillo, el mercurio líquido y la batería de plomo funciona.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0a1a; --panel: #111127; --panel-2: #16163a; --border: #262650; --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b; --accent: #22d3ee; --gold: #fbbf24; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        a { color: var(--accent); }
+        header { padding: 18px 24px 8px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+        .crumbs { width: 100%; font-size: .8rem; color: var(--dim); }
+        .crumbs a { color: var(--dim); text-decoration: none; }
+        .crumbs a:hover { color: var(--accent); }
+        h1 { font-size: 1.6rem; font-weight: 600; color: var(--accent); }
+        .subtitle { color: var(--muted); font-size: .9rem; }
+        .guide-link { margin-left: auto; font-size: .85rem; text-decoration: none; border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; }
+        main { padding: 8px 24px 28px; }
+        .grid2 { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+        .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; min-width: 0; }
+        .panel h2 { font-size: .8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+        .zrow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .zrow input[type=range] { flex: 1; min-width: 180px; accent-color: var(--gold); touch-action: pan-y; }
+        .tile { width: 70px; height: 74px; border-radius: 10px; border: 1px solid var(--gold); background: rgba(251,191,36,.08); padding: 6px; display: flex; flex-direction: column; justify-content: space-between; flex: none; }
+        .tile .z { font-family: 'Fira Code', monospace; font-size: .72rem; color: var(--muted); }
+        .tile .s { font-size: 1.7rem; font-weight: 700; line-height: 1; }
+        .name { font-size: 1.1rem; font-weight: 600; }
+        .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 14px 0 4px; }
+        .kpi { background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px; }
+        .kpi .l { font-size: .72rem; color: var(--muted); }
+        .kpi .v { font-family: 'Fira Code', monospace; font-size: 1.35rem; color: var(--gold); margin-top: 3px; }
+        .kpi .d { font-size: .7rem; color: var(--dim); margin-top: 2px; }
+        canvas#c { width: 100%; height: 260px; display: block; margin-top: 12px; touch-action: pan-y; }
+        canvas#orb { width: 100%; height: 150px; display: block; margin-top: 6px; }
+        .eq { font-family: 'Fira Code', monospace; font-size: .9rem; background: var(--panel-2); border-radius: 8px; padding: 10px 12px; margin: 10px 0; color: #cbd5e1; line-height: 1.7; }
+        .cards { display: grid; gap: 10px; }
+        .card { background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 11px 13px; cursor: pointer; text-align: left; color: var(--text); font: inherit; width: 100%; }
+        .card:hover, .card[aria-pressed="true"] { border-color: var(--gold); }
+        .card h3 { font-size: .9rem; font-weight: 600; display: flex; justify-content: space-between; gap: 8px; }
+        .card h3 span { font-family: 'Fira Code', monospace; font-size: .75rem; color: var(--gold); font-weight: 400; white-space: nowrap; }
+        .card p { font-size: .8rem; color: var(--muted); line-height: 1.55; margin-top: 5px; }
+        .card .ref { font-size: .68rem; color: var(--dim); margin-top: 5px; }
+        .note { font-size: .8rem; color: var(--muted); background: var(--panel-2); border-left: 3px solid #fbbf24; padding: 9px 12px; border-radius: 0 7px 7px 0; line-height: 1.55; margin-top: 12px; }
+        .src { font-size: .7rem; color: var(--dim); margin-top: 12px; line-height: 1.5; }
+        @media (max-width: 1000px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+        @media (max-width: 640px) { header, main { padding-left: 14px; padding-right: 14px; } h1 { font-size: 1.3rem; } .guide-link { margin-left: 0; }
+            .kpis { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .kpi .v { font-size: 1.1rem; } canvas#c { height: 220px; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="crumbs"><a href="../../_portal/index.html">EigenLab</a> / <a href="index.html">Chemistry Visual Lab</a> / <a href="tabla-periodica.html">Tabla Periódica</a> / Efectos relativistas</div>
+        <h1>Efectos Relativistas</h1>
+        <p class="subtitle">En los átomos pesados, los electrones internos van a una fracción apreciable de la velocidad de la luz.</p>
+        <a class="guide-link" href="guides/efectos-relativistas.html">📖 Guía teórica</a>
+    </header>
+    <main>
+        <div class="grid2">
+            <section class="panel">
+                <h2>El electrón 1s según Z</h2>
+                <div class="zrow">
+                    <div class="tile"><span class="z" id="t-z"></span><span class="s" id="t-s"></span></div>
+                    <div><div class="name" id="t-name"></div><div style="color:var(--muted);font-size:.8rem">Arrastra para cambiar el elemento</div></div>
+                    <input type="range" id="z" min="1" max="118" value="79" aria-label="Número atómico">
+                </div>
+                <div class="kpis">
+                    <div class="kpi"><div class="l">velocidad del 1s</div><div class="v" id="k-v"></div><div class="d">v/c ≈ Zα</div></div>
+                    <div class="kpi"><div class="l">factor de Lorentz γ</div><div class="v" id="k-g"></div><div class="d">masa efectiva = γ·mₑ</div></div>
+                    <div class="kpi"><div class="l">contracción del 1s</div><div class="v" id="k-c"></div><div class="d">radio ∝ 1/m → 1 − 1/γ</div></div>
+                </div>
+                <canvas id="orb" aria-label="Radio del orbital 1s con y sin relatividad"></canvas>
+                <canvas id="c" aria-label="Contracción relativista del 1s frente a Z"></canvas>
+                <div class="eq" id="eq"></div>
+                <p class="note">Es una estimación con el modelo del átomo de hidrógeno: el electrón 1s apenas está apantallado y siente casi toda la carga Z. Los electrones de valencia (el 6s del oro) también se contraen, porque su orbital penetra hasta el núcleo; cálculos de Dirac-Fock dan para el 6s del oro una contracción de alrededor del 17 %, y el efecto alcanza un máximo en el oro dentro de su entorno de la tabla.</p>
+                <p class="src">α = 1/137,036 (constante de estructura fina). Energía de Dirac del estado 1s de un ion hidrogenoide: E = mₑc²(√(1 − (Zα)²) − 1).</p>
+            </section>
+            <section class="panel">
+                <h2>Consecuencias · pulsa para ir al elemento</h2>
+                <div class="cards" id="cards"></div>
+            </section>
+        </div>
+    </main>
+
+    <script src="data/elements.js"></script>
+    <script>
+    (() => {
+        const $ = id => document.getElementById(id);
+        const E = window.EIGENLAB_ELEMENTS.elementos;
+        const ALPHA = 1 / 137.035999, MC2 = 510998.95;   // eV
+        const CARDS = [
+            { z: 79, t: 'El color del oro', k: 'Au · Z = 79', p: 'La plata absorbe en el ultravioleta (salto 4d → 5s, unos 3,7 eV) y refleja todo el visible: es blanca. En el oro, la contracción del 6s y la expansión del 5d acercan esos niveles a unos 2,4 eV: absorbe el azul y refleja amarillo. Sin relatividad, el oro sería blanco como la plata.', r: 'P. Pyykkö, Chem. Rev. 88, 563 (1988).' },
+            { z: 80, t: 'El mercurio es líquido', k: 'Hg · Z = 80', p: 'Sus electrones 6s², contraídos y muy retenidos, apenas participan en el enlace metálico. Los cálculos atribuyen a la relatividad un descenso del punto de fusión de unos 105 K: sin ella, el mercurio sería sólido a temperatura ambiente (funde a 234 K).', r: 'F. Calvo y cols., Angew. Chem. Int. Ed. 52, 7583 (2013).' },
+            { z: 82, t: 'La batería del coche', k: 'Pb · Z = 82', p: 'De los 2,1 V de una celda de plomo-ácido, unos 1,7–1,8 V se deben a efectos relativistas, que estabilizan el PbO₂. Un coche «no relativista» no arrancaría con esa batería.', r: 'R. Ahuja y cols., Phys. Rev. Lett. 106, 018301 (2011).' },
+            { z: 81, t: 'El par inerte', k: 'Tl · Pb · Bi', p: 'Tras el oro, los elementos del periodo 6 prefieren no usar sus electrones 6s²: el talio forma Tl⁺ más que Tl³⁺, el plomo Pb²⁺ más que Pb⁴⁺ y el bismuto Bi³⁺ más que Bi⁵⁺. Es el par 6s², contraído y estabilizado.', r: 'N. N. Greenwood y A. Earnshaw, «Chemistry of the Elements».' },
+            { z: 79, t: 'El oro como anión', k: 'Au⁻', p: 'El oro tiene una afinidad electrónica de 2,31 eV, la mayor de los metales: el orbital 6s contraído acoge bien un electrón más. Forma compuestos con el ion Au⁻, como el CsAu (auriduro de cesio), un sólido iónico semiconductor.', r: 'Afinidad electrónica: PubChem (NIST).' },
+            { z: 118, t: 'El oganesón, ¿un gas noble sólido?', k: 'Og · Z = 118', p: 'Los cálculos predicen que el último elemento de la tabla, con efectos relativistas enormes, sería sólido a temperatura ambiente (fusión hacia 325 K) y semiconductor. Solo se han producido unos pocos átomos: nada de esto se ha medido.', r: 'O. R. Smits, J.-M. Mewes y cols., Angew. Chem. Int. Ed. 59, 23636 (2020).' },
+        ];
+        const state = { z: 79, card: null };
+        const q = new URLSearchParams(location.search).get('z'); if (q && +q >= 1 && +q <= 118) state.z = +q;
+
+        const calc = z => { const za = z * ALPHA, g = 1 / Math.sqrt(1 - za * za);
+            return { za, g, contr: 1 - 1 / g, eBohr: 13.605693 * z * z, eDirac: MC2 * (1 - Math.sqrt(1 - za * za)) }; };
+        const fmt = (v, d = 2) => v.toFixed(d).replace('.', ',');
+        const fmtE = e => e >= 1000 ? fmt(e / 1000, 1) + ' keV' : fmt(e, 1) + ' eV';
+
+        function setup(c) { const dpr = devicePixelRatio || 1, W = c.clientWidth, H = c.clientHeight; c.width = W * dpr; c.height = H * dpr;
+            const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H); return [ctx, W, H]; }
+
+        function drawCurve() {
+            const [ctx, W, H] = setup($('c')), pad = { l: 40, r: 12, t: 12, b: 24 }, top = 0.5;
+            const X = z => pad.l + (z - 1) / 117 * (W - pad.l - pad.r), Y = v => H - pad.b - v / top * (H - pad.t - pad.b);
+            ctx.font = '10px Fira Code, monospace';
+            [0, .1, .2, .3, .4, .5].forEach(v => { ctx.strokeStyle = '#1e1e44'; ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(W - pad.r, Y(v)); ctx.stroke(); ctx.fillStyle = '#64748b'; ctx.fillText(Math.round(v * 100) + ' %', 2, Y(v) + 3); });
+            [20, 40, 60, 80, 100, 118].forEach(z => { ctx.fillStyle = '#64748b'; ctx.fillText(z, X(z) - 7, H - 8); });
+            // periodos
+            [2, 10, 18, 36, 54, 86].forEach(z => { ctx.strokeStyle = '#1a1a3e'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(z), pad.t); ctx.lineTo(X(z), H - pad.b); ctx.stroke(); ctx.setLineDash([]); });
+            ctx.strokeStyle = '#fbbf24'; ctx.lineWidth = 2; ctx.beginPath();
+            for (let z = 1; z <= 118; z++) { const y = Y(calc(z).contr); z === 1 ? ctx.moveTo(X(z), y) : ctx.lineTo(X(z), y); } ctx.stroke(); ctx.lineWidth = 1;
+            [[29, 'Cu'], [47, 'Ag'], [79, 'Au']].forEach(([z, s]) => { const x = X(z), y = Y(calc(z).contr); ctx.fillStyle = '#e2e8f0'; ctx.beginPath(); ctx.arc(x, y, 3, 0, 7); ctx.fill(); ctx.fillText(s, x - 8, y - 8); });
+            const z = state.z, c = calc(z); ctx.fillStyle = '#fbbf24'; ctx.beginPath(); ctx.arc(X(z), Y(c.contr), 6, 0, 7); ctx.fill();
+            ctx.fillStyle = '#94a3b8'; ctx.font = '11px Inter'; ctx.fillText('contracción del radio del 1s', pad.l + 6, pad.t + 12);
+        }
+
+        function drawOrb() {
+            const [ctx, W, H] = setup($('orb')), c = calc(state.z), cy = H / 2, R = Math.min(H * 0.44, W * 0.2);
+            const cx1 = W * 0.28, cx2 = W * 0.72;
+            const blob = (cx, r, col) => { const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r); g.addColorStop(0, col + 'cc'); g.addColorStop(1, col + '00'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.fill(); };
+            blob(cx1, R, '#64748b'); blob(cx2, R / c.g, '#fbbf24');
+            [cx1, cx2].forEach(cx => { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(cx, cy, 2.5, 0, 7); ctx.fill(); });
+            ctx.strokeStyle = '#64748b88'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.arc(cx2, cy, R, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+            ctx.font = '11px Inter'; ctx.fillStyle = '#94a3b8'; ctx.textAlign = 'center';
+            ctx.fillText('sin relatividad', cx1, H - 4); ctx.fillText(`con relatividad (${fmt(1 / c.g * 100, 0)} %)`, cx2, H - 4); ctx.textAlign = 'start';
+        }
+
+        function render() {
+            const e = E[state.z - 1], c = calc(state.z);
+            $('z').value = state.z; $('t-z').textContent = e.z; $('t-s').textContent = e.sym; $('t-name').textContent = e.nombre;
+            $('k-v').textContent = fmt(c.za * 100, c.za < .1 ? 1 : 0) + ' % c'; $('k-g').textContent = fmt(c.g, 3); $('k-c').textContent = fmt(c.contr * 100, 1) + ' %';
+            $('eq').innerHTML = `Zα = ${state.z}/137,036 = ${fmt(c.za, 3)} · γ = 1/√(1 − (Zα)²) = ${fmt(c.g, 3)}<br>Energía de ligadura del 1s sin apantallar: Bohr ${fmtE(c.eBohr)} · Dirac ${fmtE(c.eDirac)} (${c.eDirac / c.eBohr > 1.0005 ? '+' + fmt((c.eDirac / c.eBohr - 1) * 100, 1) + ' %' : 'igual'})`;
+            document.querySelectorAll('.card').forEach((b, i) => b.setAttribute('aria-pressed', i === state.card));
+            drawCurve(); drawOrb();
+        }
+
+        $('cards').innerHTML = CARDS.map((c, i) => `<button class="card" data-i="${i}" aria-pressed="false"><h3>${c.t}<span>${c.k}</span></h3><p>${c.p}</p><p class="ref">${c.r}</p></button>`).join('');
+        $('cards').addEventListener('click', ev => { const b = ev.target.closest('.card'); if (!b) return; state.card = +b.dataset.i; state.z = CARDS[state.card].z; render(); });
+        $('z').addEventListener('input', ev => { state.z = +ev.target.value; state.card = null; render(); });
+        let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(render, 120); });
+        render();
+    })();
+    </script>
+</body>
+</html>

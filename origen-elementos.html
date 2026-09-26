@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Origen de los Elementos - Chemistry Visual Lab</title>
+    <!-- eigenlab:meta -->
+    <meta name="description" content="Big Bang, estrellas, supernovas y fusiones de estrellas de neutrones: de dónde viene cada elemento del sistema solar y cuántos átomos hay de cada uno.">
+    <meta property="og:site_name" content="EigenLab">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:title" content="Origen de los Elementos · Chemistry Visual Lab">
+    <meta property="og:description" content="Big Bang, estrellas, supernovas y fusiones de estrellas de neutrones: de dónde viene cada elemento del sistema solar y cuántos átomos hay de cada uno.">
+    <meta property="og:image" content="https://cjlkaiser-cpu.github.io/eigenlab/_portal/og/chemistry-visual-lab.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#030712">
+    <!-- /eigenlab:meta -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0a0a1a; --panel: #111127; --panel-2: #16163a; --border: #262650; --text: #e2e8f0; --muted: #94a3b8; --dim: #64748b; --accent: #22d3ee; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        a { color: var(--accent); }
+        header { padding: 18px 24px 8px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+        .crumbs { width: 100%; font-size: .8rem; color: var(--dim); }
+        .crumbs a { color: var(--dim); text-decoration: none; }
+        .crumbs a:hover { color: var(--accent); }
+        h1 { font-size: 1.6rem; font-weight: 600; color: var(--accent); }
+        .subtitle { color: var(--muted); font-size: .9rem; }
+        .guide-link { margin-left: auto; font-size: .85rem; text-decoration: none; border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; }
+        .tabs { display: flex; gap: 6px; padding: 6px 24px 12px; flex-wrap: wrap; }
+        .tab { background: var(--panel); border: 1px solid var(--border); color: var(--muted); border-radius: 999px; padding: 7px 14px; font: inherit; font-size: .85rem; cursor: pointer; }
+        .tab[aria-selected="true"] { background: rgba(34,211,238,.12); border-color: var(--accent); color: var(--accent); }
+        main { padding: 0 24px 28px; }
+        .grid2 { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+        .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 16px; min-width: 0; }
+        .panel h2 { font-size: .8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; }
+        .legend { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .src-btn { display: flex; align-items: center; gap: 7px; background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 999px; padding: 5px 11px; font: inherit; font-size: .78rem; cursor: pointer; }
+        .src-btn .sw { width: 11px; height: 11px; border-radius: 3px; }
+        .src-btn[aria-pressed="true"] { border-color: var(--text); background: #26264f; }
+        .scroll { overflow-x: auto; padding-bottom: 4px; }
+        .pt { display: grid; grid-template-columns: repeat(18, minmax(34px, 1fr)); gap: 3px; min-width: 640px; }
+        .cell { position: relative; aspect-ratio: 1 / 1.05; border-radius: 4px; overflow: hidden; cursor: pointer; border: 1px solid transparent; display: flex; flex-direction: column; background: #1a1a33; transition: opacity .2s; }
+        .cell .bands { position: absolute; inset: 0; display: flex; flex-direction: column-reverse; }
+        .cell .s { position: relative; font-weight: 700; font-size: .82rem; text-align: center; margin-top: 16%; color: #fff; text-shadow: 0 1px 2px #000c, 0 0 4px #000a; }
+        .cell .z { position: relative; font-family: 'Fira Code', monospace; font-size: .52rem; color: #fffc; text-align: center; text-shadow: 0 1px 2px #000; }
+        .cell.dim { opacity: .16; }
+        .cell.sel { border-color: #fff; box-shadow: 0 0 0 1px #fff; }
+        .cell:focus-visible { outline: 2px solid var(--accent); }
+        .gap { grid-column: 1 / -1; height: 8px; }
+        .bar { display: flex; height: 16px; border-radius: 5px; overflow: hidden; margin: 6px 0 2px; }
+        .row { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; gap: 8px; align-items: baseline; font-size: .84rem; padding: 7px 0; border-bottom: 1px solid var(--border); }
+        .row .sw { width: 11px; height: 11px; border-radius: 3px; margin-top: 3px; }
+        .row .pc { font-family: 'Fira Code', monospace; color: var(--text); }
+        .row p { color: var(--muted); font-size: .78rem; line-height: 1.5; margin-top: 3px; }
+        .elname { font-size: 1.25rem; font-weight: 600; }
+        .elsub { color: var(--muted); font-size: .82rem; margin-bottom: 6px; }
+        .note { font-size: .8rem; color: var(--muted); background: var(--panel-2); border-left: 3px solid var(--accent); padding: 9px 12px; border-radius: 0 7px 7px 0; line-height: 1.55; margin-top: 12px; }
+        .note.warn { border-left-color: #fbbf24; }
+        .stats { list-style: none; display: grid; gap: 6px; font-size: .84rem; color: #cbd5e1; margin-top: 8px; }
+        .stats b { font-family: 'Fira Code', monospace; font-weight: 500; }
+        canvas#ab { width: 100%; height: 440px; display: block; touch-action: pan-y; }
+        .opts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+        .opt { background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 9px; padding: 6px 11px; font: inherit; font-size: .8rem; cursor: pointer; }
+        .opt[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+        .tip { position: fixed; pointer-events: none; background: #000d; border: 1px solid var(--border); border-radius: 7px; padding: 6px 9px; font-family: 'Fira Code', monospace; font-size: .75rem; display: none; z-index: 10; line-height: 1.5; }
+        .src { font-size: .7rem; color: var(--dim); margin-top: 14px; line-height: 1.5; }
+        [hidden] { display: none !important; }
+        @media (max-width: 1000px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+        @media (max-width: 640px) { header, .tabs, main { padding-left: 14px; padding-right: 14px; } h1 { font-size: 1.3rem; } .guide-link { margin-left: 0; } canvas#ab { height: 340px; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="crumbs"><a href="../../_portal/index.html">EigenLab</a> / <a href="index.html">Chemistry Visual Lab</a> / <a href="tabla-periodica.html">Tabla Periódica</a> / Origen</div>
+        <h1>Origen de los Elementos</h1>
+        <p class="subtitle">Dónde se formó cada átomo del sistema solar, y cuántos hay de cada uno.</p>
+        <a class="guide-link" href="guides/origen-elementos.html">📖 Guía teórica</a>
+    </header>
+    <nav class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="origen" aria-selected="true">¿Dónde se formó cada elemento?</button>
+        <button class="tab" role="tab" data-tab="abundancia" aria-selected="false">Abundancia en el sistema solar</button>
+    </nav>
+    <main>
+        <section id="v-origen">
+            <div class="grid2">
+                <div class="panel">
+                    <h2>Tabla por origen · pulsa una fuente para filtrar</h2>
+                    <div class="legend" id="legend"></div>
+                    <div class="scroll"><div class="pt" id="pt"></div></div>
+                    <p class="src">Cada casilla se rellena de abajo arriba en proporción a la contribución de cada fuente. Elementos del sistema solar en el momento de su formación.</p>
+                </div>
+                <div class="panel" id="info"></div>
+            </div>
+        </section>
+        <section id="v-abundancia" hidden>
+            <div class="grid2">
+                <div class="panel">
+                    <h2>Átomos por cada millón de átomos de silicio (escala logarítmica)</h2>
+                    <div class="opts">
+                        <button class="opt" id="o-color" aria-pressed="true">Color por origen dominante</button>
+                        <button class="opt" id="o-par" aria-pressed="false">Destacar Z par / impar</button>
+                        <button class="opt" id="o-picos" aria-pressed="false">Picos de captura de neutrones</button>
+                    </div>
+                    <canvas id="ab"></canvas>
+                </div>
+                <div class="panel">
+                    <h2>Qué muestra la curva</h2>
+                    <ul class="stats" id="ab-stats"></ul>
+                    <p class="note warn">Las abundancias proceden de meteoritos (condritas carbonáceas) y, para H, He, C, N, O y gases nobles, del espectro del Sol. Incertidumbre típica: 3–15 %; faltan los elementos sin isótopos de vida larga.</p>
+                    <p class="src" id="ab-src"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div class="tip" id="tip"></div>
+
+    <script src="data/elements.js"></script>
+    <script src="data/origin.js"></script>
+    <script>
+    (() => {
+        const $ = id => document.getElementById(id);
+        const E = window.EIGENLAB_ELEMENTS.elementos, BY = Object.fromEntries(E.map(e => [e.sym, e]));
+        const O = window.EIGENLAB_ORIGIN;
+        const SRC = [
+            ['bigbang', '#38bdf8', 'Big Bang', 'En los primeros minutos del universo se formaron el hidrógeno, casi todo el helio y parte del litio. Nada más pesado: el universo se enfrió y expandió demasiado rápido.'],
+            ['rayos', '#fb7185', 'Rayos cósmicos', 'Protones muy rápidos chocan con núcleos de C, N y O del gas interestelar y los rompen (espalación). Así se forman casi todo el berilio y el boro, y parte del litio.'],
+            ['baja', '#4ade80', 'Estrellas de baja masa', 'Estrellas como el Sol, en su fase de gigante (AGB), producen carbono y nitrógeno y, por captura lenta de neutrones (proceso s), la mitad de los elementos pesados. Los expulsan al formar una nebulosa planetaria.'],
+            ['masivas', '#facc15', 'Supernovas de estrellas masivas', 'Estrellas de más de unas 8 masas solares fusionan elementos hasta el hierro en su núcleo, que después colapsa. La supernova expulsa oxígeno, neón, magnesio, silicio, azufre, calcio…'],
+            ['enanas', '#e2e8f0', 'Explosión de enanas blancas', 'Una enana blanca que acumula materia de una compañera hasta unas 1,4 masas solares estalla (supernova de tipo Ia). Produce sobre todo níquel-56, que se desintegra en hierro: el origen de la mayor parte del hierro y el manganeso.'],
+            ['neutrones', '#c084fc', 'Fusión de estrellas de neutrones', 'Cuando dos estrellas de neutrones se fusionan, la materia expulsada captura neutrones muy deprisa (proceso r): europio, platino, oro, uranio. Se observó en 2017 (GW170817). Podría haber otros escenarios que contribuyan al proceso r.'],
+            ['desintegracion', '#94a3b8', 'Desintegración de U y Th', 'No tienen isótopos de vida larga: en la Tierra solo existen porque el uranio y el torio se desintegran continuamente, pasando por ellos en sus cadenas radiactivas.'],
+            ['sintetico', '#57534e', 'Sin isótopos de vida larga', 'Tecnecio, prometio y los transuránidos: solo trazas naturales o producidos en reactores y aceleradores.'],
+        ];
+        const COL = Object.fromEntries(SRC.map(s => [s[0], s[1]])), NAME = Object.fromEntries(SRC.map(s => [s[0], s[2]])), DESC = Object.fromEntries(SRC.map(s => [s[0], s[3]]));
+        const org = sym => O.origen[sym] || null;
+        const dominant = sym => { const o = org(sym); return o ? Object.entries(o).sort((a, b) => b[1] - a[1])[0][0] : null; };
+        const pct = v => v >= 0.995 ? '100 %' : v < 0.01 ? '<1 %' : Math.round(v * 100) + ' %';
+        // Elementos donde la digitalización de 2017 difiere de modelos posteriores (Kobayashi, Karakas y Lugaro 2020, ApJ 900, 179)
+        const KNU = 'Según modelos posteriores (Kobayashi, Karakas y Lugaro, 2020), la mayor parte procede de supernovas de estrellas masivas; la contribución de las enanas blancas sería menor que la que muestra esta tabla.';
+        const NOTES = { Ti: KNU, V: KNU, Co: KNU, Cu: KNU, Zn: KNU,
+            Pb: 'El reparto del plomo entre los procesos s y r es incierto: otros cálculos (Kobayashi y cols., 2020) lo atribuyen sobre todo al proceso s de estrellas de baja masa.',
+            Li: 'El litio que no viene del Big Bang es un problema abierto: se discute el peso de las gigantes AGB y de las novas. Además, el Big Bang debería haber producido unas tres veces más litio del que se observa en las estrellas más viejas (el «problema del litio cosmológico»).' };
+        const state = { filter: null, sel: null };
+
+        // ------------------------------------------------------------- tabla
+        const pt = $('pt');
+        const cells = {};
+        const place = e => [e.fila > 7 ? e.fila + 1 : e.fila, e.col];   // fila 8 = hueco antes del bloque f
+        const occupied = {};
+        E.filter(e => e.z <= 103).forEach(e => { const [r, c] = place(e); occupied[r + ',' + c] = e; });
+        for (let r = 1; r <= 11; r++) {
+            if (r === 8) { pt.insertAdjacentHTML('beforeend', '<div class="gap"></div>'); continue; }
+            if (r === 9) continue;   // el bloque f empieza en la fila 10 tras el hueco
+            for (let c = 1; c <= 18; c++) {
+                const e = occupied[r + ',' + c];
+                if (!e) { pt.insertAdjacentHTML('beforeend', '<div></div>'); continue; }
+                const o = org(e.sym) || {};
+                const bands = SRC.filter(s => o[s[0]]).map(s => `<div style="flex:${o[s[0]]};background:${s[1]}"></div>`).join('');
+                pt.insertAdjacentHTML('beforeend', `<div class="cell" tabindex="0" data-s="${e.sym}" aria-label="${e.nombre}"><div class="bands">${bands}</div><span class="s">${e.sym}</span><span class="z">${e.z}</span></div>`);
+            }
+        }
+        // las filas del bloque f están en fila 9 y 10 del JSON → aquí 10 y 11
+        pt.querySelectorAll('.cell').forEach(c => cells[c.dataset.s] = c);
+
+        $('legend').innerHTML = SRC.map(s => `<button class="src-btn" data-k="${s[0]}" aria-pressed="false"><span class="sw" style="background:${s[1]}"></span>${s[2]}</button>`).join('');
+        $('legend').addEventListener('click', ev => { const b = ev.target.closest('.src-btn'); if (!b) return;
+            state.filter = state.filter === b.dataset.k ? null : b.dataset.k; state.sel = null; renderTable(); renderInfo(); });
+        pt.addEventListener('click', ev => { const c = ev.target.closest('.cell'); if (!c) return;
+            state.sel = state.sel === c.dataset.s ? null : c.dataset.s; renderTable(); renderInfo();
+            history.replaceState(null, '', state.sel ? '#' + state.sel : location.pathname + location.search);
+            if (state.sel && innerWidth <= 1000) $('info').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+        pt.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); ev.target.click(); } });
+
+        function renderTable() {
+            document.querySelectorAll('.src-btn').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === state.filter));
+            Object.entries(cells).forEach(([s, c]) => {
+                c.classList.toggle('dim', !!state.filter && !((org(s) || {})[state.filter] > 0));
+                c.classList.toggle('sel', s === state.sel);
+            });
+        }
+
+        function renderInfo() {
+            const info = $('info');
+            if (state.sel) {
+                const e = BY[state.sel], o = org(e.sym) || {}, ab = O.abundancia[e.sym];
+                const parts = SRC.filter(s => o[s[0]]).sort((a, b) => o[b[0]] - o[a[0]]);
+                info.innerHTML = `<h2>Elemento</h2><div class="elname">${e.nombre} <span style="color:var(--dim);font-weight:400">${e.sym} · Z = ${e.z}</span></div>
+                    <div class="elsub">${ab ? `Abundancia: ${fmtN(ab.n)} átomos por cada 10⁶ de Si${ab.inc ? ` (± ${ab.inc} %)` : ''}` : 'Sin abundancia medida en el sistema solar'}</div>
+                    <div class="bar">${parts.map(s => `<div style="flex:${o[s[0]]};background:${s[1]}"></div>`).join('')}</div>
+                    ${parts.map(s => `<div class="row"><span class="sw" style="background:${s[1]}"></span><div><b style="font-weight:500">${s[2]}</b><p>${s[3]}</p></div><span class="pc">${pct(o[s[0]])}</span></div>`).join('')}
+                    ${NOTES[e.sym] ? `<div class="note warn">${NOTES[e.sym]}</div>` : ''}
+                    <p class="src">Pulsa otra vez el elemento para volver al resumen. <a href="tabla-periodica.html#${e.sym}">Ficha completa →</a></p>`;
+                return;
+            }
+            if (state.filter) {
+                const k = state.filter, els = E.filter(e => (org(e.sym) || {})[k] > 0);
+                const dom = els.filter(e => dominant(e.sym) === k);
+                info.innerHTML = `<h2>${NAME[k]}</h2><p style="font-size:.88rem;line-height:1.6;color:#cbd5e1">${DESC[k]}</p>
+                    <ul class="stats"><li>Contribuye a <b>${els.length}</b> elementos.</li><li>Es la fuente principal de <b>${dom.length}</b>${dom.length ? ': ' + dom.map(e => e.sym).join(', ') : ''}.</li></ul>
+                    <p class="src">Pulsa de nuevo la fuente para quitar el filtro, o un elemento para ver su desglose.</p>`;
+                return;
+            }
+            const counts = SRC.map(s => [s, E.filter(e => dominant(e.sym) === s[0]).length]).filter(x => x[1]);
+            info.innerHTML = `<h2>De qué están hechos los átomos</h2>
+                <p style="font-size:.88rem;line-height:1.6;color:#cbd5e1">El Big Bang solo produjo los elementos más ligeros. Todos los demás se formaron después, en estrellas y en sus explosiones, y se mezclaron en la nube de gas de la que nació el sistema solar hace 4 570 millones de años.</p>
+                <ul class="stats">${counts.map(([s, n]) => `<li><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${s[1]};margin-right:6px"></span>${s[2]}: fuente principal de <b>${n}</b> elementos</li>`).join('')}</ul>
+                <div class="note">Pulsa un elemento para ver de dónde viene, o una fuente de la leyenda para ver qué elementos produce. Prueba con el carbono, el hierro, la plata y el oro.</div>
+                <div class="note warn">Las fracciones son aproximadas (unos pocos puntos porcentuales) y hay procesos aún en debate: el reparto de los elementos pesados entre los procesos s y r, y el origen de varios elementos del grupo del hierro (Ti–Zn), que modelos posteriores atribuyen más a las estrellas masivas. Los elementos con aviso lo indican en su ficha. Datos de ${O.fuente_origen}.</div>
+                <p class="src"><a href="../../Astronomy/Astronomy%20Visual%20Lab/nucleosintesis.html">Dentro de una estrella: Nucleosíntesis Estelar →</a></p>`;
+        }
+
+        // ------------------------------------------------------------- abundancia
+        const fmtN = n => n >= 1e5 ? n.toExponential(2).replace('e+', '·10^').replace(/\^(\d+)/, (_, d) => sup(d)) : n >= 1 ? (n >= 100 ? Math.round(n).toLocaleString('es') : n.toPrecision(3).replace('.', ',')) : n.toPrecision(3).replace('.', ',');
+        const SUPS = '⁰¹²³⁴⁵⁶⁷⁸⁹'; const sup = d => [...d].map(c => SUPS[+c]).join('');
+        const AB = E.filter(e => O.abundancia[e.sym]).map(e => ({ e, n: O.abundancia[e.sym].n, lg: Math.log10(O.abundancia[e.sym].n) }));
+        const ab = { color: true, par: false, picos: false };
+        const PEAKS = [['Sr', 's', 'N = 50'], ['Ba', 's', 'N = 82'], ['Pb', 's', 'N = 126'], ['Xe', 'r', ''], ['Pt', 'r', '']];
+
+        function abStats() {
+            const byZ = Object.fromEntries(AB.map(p => [p.e.z, p]));
+            // regla de Oddo-Harkins: ¿cuántos Z pares superan a sus dos vecinos impares?
+            let tot = 0, win = 0;
+            AB.forEach(p => { if (p.e.z % 2 || p.e.z < 6) return; const a = byZ[p.e.z - 1], b = byZ[p.e.z + 1]; if (!a || !b) return; tot++; if (p.n > a.n && p.n > b.n) win++; });
+            const libeb = ['Li', 'Be', 'B'].map(s => byZ[BY[s].z].n), c = byZ[6].n;
+            const fe = byZ[26], local = AB.filter(p => p.e.z >= 20 && p.e.z <= 32).every(p => p.n <= fe.n);
+            const heavy = AB.filter(p => p.e.z > 30), heavyTot = heavy.reduce((a, p) => a + p.n, 0), all = AB.reduce((a, p) => a + p.n, 0);
+            const hhe = (byZ[1].n + byZ[2].n) / all;
+            $('ab-stats').innerHTML = [
+                `El hidrógeno y el helio son el <b>${(hhe * 100).toFixed(1).replace('.', ',')} %</b> de todos los átomos: la huella del Big Bang.`,
+                `Hueco de Li, Be y B: son entre <b>${fmtPow(c / Math.max(...libeb))}</b> y <b>${fmtPow(c / Math.min(...libeb))}</b> veces menos abundantes que el carbono. Las estrellas los destruyen en lugar de producirlos.`,
+                `Pico del hierro${local ? ': el Fe es el más abundante entre el calcio y el germanio' : ''}. Sus núcleos están entre los más fuertemente ligados, y en las supernovas se acumulan.`,
+                `Efecto par-impar (regla de Oddo-Harkins): <b>${win} de ${tot}</b> elementos de Z par son más abundantes que sus dos vecinos impares.`,
+                `Más allá del zinc (Z > 30), todos los elementos juntos suman solo 1 de cada <b>${fmtPow(all / heavyTot)}</b> átomos. Se forman sobre todo por captura de neutrones, no por fusión.`,
+            ].map(t => `<li>${t}</li>`).join('');
+            $('ab-src').textContent = 'Datos: ' + O.fuente_abundancia + '.';
+        }
+        const fmtPow = x => { const p = Math.floor(Math.log10(x)); const m = x / 10 ** p; return p < 3 ? Math.round(x).toLocaleString('es') : `${m.toFixed(1).replace('.', ',')}·10${sup(String(p))}`; };
+        const comma = x => String(x).replace('.', ',');
+
+        function drawAb() {
+            const c = $('ab'), dpr = devicePixelRatio || 1, W = c.clientWidth, H = c.clientHeight;
+            c.width = W * dpr; c.height = H * dpr; const ctx = c.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+            const pad = { l: 44, r: 10, t: 14, b: 26 }, lo = -3, hi = 11, maxZ = 92;
+            const X = z => pad.l + (z - 1) / (maxZ - 1) * (W - pad.l - pad.r), Y = v => H - pad.b - (v - lo) / (hi - lo) * (H - pad.t - pad.b);
+            ctx.font = '10px Fira Code, monospace';
+            for (let v = lo; v <= hi; v++) { ctx.strokeStyle = v % 2 ? '#15153a' : '#1e1e44'; ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(W - pad.r, Y(v)); ctx.stroke();
+                if (!(v % 2)) { ctx.fillStyle = '#64748b'; ctx.fillText('10' + sup(String(Math.abs(v))).replace(/^/, v < 0 ? '⁻' : ''), 4, Y(v) + 3); } }
+            [10, 20, 30, 40, 50, 60, 70, 80, 90].forEach(z => { ctx.fillStyle = '#64748b'; ctx.fillText(String(z), X(z) - 6, H - 8); });
+            ctx.fillText('Z', W - 16, H - 8);
+            // línea
+            ctx.strokeStyle = '#334155'; ctx.lineWidth = 1; ctx.beginPath();
+            let prev = null; AB.forEach(p => { const x = X(p.e.z), y = Y(p.lg); prev && p.e.z === prev + 1 ? ctx.lineTo(x, y) : ctx.moveTo(x, y); prev = p.e.z; }); ctx.stroke();
+            if (ab.par) { ['#22d3ee', '#f472b6'].forEach((col, odd) => { ctx.strokeStyle = col; ctx.lineWidth = 1.4; ctx.beginPath(); let started = false;
+                AB.filter(p => p.e.z % 2 === odd).forEach(p => { const x = X(p.e.z), y = Y(p.lg); started ? ctx.lineTo(x, y) : ctx.moveTo(x, y); started = true; }); ctx.stroke(); }); }
+            AB.forEach(p => { ctx.beginPath(); ctx.arc(X(p.e.z), Y(p.lg), 3.3, 0, 2 * Math.PI);
+                ctx.fillStyle = ab.par ? (p.e.z % 2 ? '#f472b6' : '#22d3ee') : ab.color ? COL[dominant(p.e.sym)] : '#94a3b8'; ctx.fill(); });
+            // etiquetas fijas
+            const label = (s, dy, col = '#cbd5e1') => { const p = AB.find(q => q.e.sym === s); if (!p) return; ctx.fillStyle = col; ctx.font = '11px Inter'; ctx.fillText(s, X(p.e.z) - 5, Y(p.lg) + dy); };
+            ['H', 'He', 'O', 'Fe'].forEach(s => label(s, -8)); ['Li', 'Be', 'B'].forEach(s => label(s, 16));
+            if (ab.picos) PEAKS.forEach(([s, k, n]) => { const p = AB.find(q => q.e.sym === s); const x = X(p.e.z), y = Y(p.lg);
+                ctx.strokeStyle = k === 's' ? '#4ade80' : '#c084fc'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x, y, 8, 0, 2 * Math.PI); ctx.stroke();
+                ctx.fillStyle = ctx.strokeStyle; ctx.font = '11px Inter'; ctx.fillText(`${s} (${k}${n ? ', ' + n : ''})`, x - 16, k === 'r' ? y + 22 : y - 13); });
+            if (ab.par) { ctx.font = '11px Inter'; ctx.fillStyle = '#22d3ee'; ctx.fillText('● Z par', W - 150, pad.t + 10); ctx.fillStyle = '#f472b6'; ctx.fillText('● Z impar', W - 80, pad.t + 10); }
+            c._X = X; c._Y = Y;
+        }
+        $('ab').addEventListener('pointermove', ev => {
+            const c = $('ab'), r = c.getBoundingClientRect(), x = ev.clientX - r.left, y = ev.clientY - r.top;
+            let best = null, bd = 1e9; AB.forEach(p => { const d = Math.hypot(c._X(p.e.z) - x, c._Y(p.lg) - y); if (d < bd) { bd = d; best = p; } });
+            const tip = $('tip'); if (!best || bd > 18) { tip.style.display = 'none'; return; }
+            const d = dominant(best.e.sym);
+            tip.innerHTML = `${best.e.sym} (Z = ${best.e.z})<br>${fmtN(best.n)} por 10⁶ Si<br>origen principal: ${NAME[d]}`;
+            tip.style.display = 'block'; tip.style.left = Math.min(ev.clientX + 12, innerWidth - tip.offsetWidth - 8) + 'px'; tip.style.top = (ev.clientY + 12) + 'px';
+        });
+        $('ab').addEventListener('pointerleave', () => $('tip').style.display = 'none');
+        [['o-color', 'color'], ['o-par', 'par'], ['o-picos', 'picos']].forEach(([id, k]) => $(id).addEventListener('click', () => {
+            ab[k] = !ab[k]; $(id).setAttribute('aria-pressed', ab[k]); drawAb(); }));
+
+        // ------------------------------------------------------------- pestañas
+        document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x === t));
+            $('v-origen').hidden = t.dataset.tab !== 'origen'; $('v-abundancia').hidden = t.dataset.tab !== 'abundancia';
+            if (t.dataset.tab === 'abundancia') { drawAb(); history.replaceState(null, '', '#abundancia'); }
+            else history.replaceState(null, '', state.sel ? '#' + state.sel : location.pathname + location.search);
+        }));
+        let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if (!$('v-abundancia').hidden) drawAb(); }, 120); });
+
+        const f = new URLSearchParams(location.search).get('fuente'); if (f && COL[f]) state.filter = f;
+        const h = location.hash.slice(1);
+        abStats();
+        if (h === 'abundancia') document.querySelector('.tab[data-tab="abundancia"]').click();
+        else if (BY[h] && org(h)) state.sel = h;
+        renderTable(); renderInfo();
+    })();
+    </script>
+</body>
+</html>
